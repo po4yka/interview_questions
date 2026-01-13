@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-find-object-without-references--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-find-object-without-references--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-071
-title: "Find Object Without References / Поиск объектов без ссылок"
-aliases: [Find Object Without References, Поиск объектов без ссылок]
-topic: kotlin
-subtopics: [debugging, memory-management, profiling]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-memory-management]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [debugging, difficulty/medium, memory-management, memory-profiler, profiling, programming-languages]
----\
-# Вопрос (RU)
-> Как найти объект, если на него нет ссылок?
-
----
-
 # Question (EN)
 > How to find an object if there are no references to it?
 

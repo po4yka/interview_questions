@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-properties--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-properties--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-064
-title: "Kotlin Properties / Свойства в Kotlin"
-aliases: ["Kotlin Properties", "Свойства в Kotlin"]
-
-# Classification
-topic: kotlin
-subtopics: [getters, lateinit, setters]
-question_kind: theory
-difficulty: easy
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive guide on Kotlin properties
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-kotlin-constructors--kotlin--easy, q-kotlin-lateinit--kotlin--medium, q-kotlin-val-vs-var--kotlin--easy, q-property-delegates--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [backing-field, delegated-properties, difficulty/easy, getters, kotlin, lateinit, lazy, properties, setters]
----\
-# Вопрос (RU)
-> Что такое свойства в Kotlin? Объясните val vs var, пользовательские геттеры и сеттеры, backing fields, lateinit и основы делегирования свойств.
-
----
-
 # Question (EN)
 > What are properties in Kotlin? Explain val vs var, custom getters and setters, backing fields, lateinit, and property delegation basics.
 

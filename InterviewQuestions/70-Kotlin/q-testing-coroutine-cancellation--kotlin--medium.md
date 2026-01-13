@@ -1,31 +1,50 @@
 ---
----
----id: kotlin-126
-title: "Testing Coroutine Cancellation Scenarios / Тестирование сценариев отмены корутин"
-aliases: ["Testing Coroutine Cancellation Scenarios", "Тестирование сценариев отмены корутин"]
-
-# Classification
+'---id': kotlin-126
+title: Testing Coroutine Cancellation Scenarios / Тестирование сценариев отмены корутин
+aliases:
+- Testing Coroutine Cancellation Scenarios
+- Тестирование сценариев отмены корутин
 topic: kotlin
-subtopics: [coroutines, testing]
+subtopics:
+- coroutines
+- testing
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Coroutine Cancellation Testing Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-stateflow, q-coroutine-cancellation-cooperation--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
-
-# Timestamps
+related:
+- c-coroutines
+- c-stateflow
+- q-coroutine-cancellation-cooperation--kotlin--medium
+- q-coroutine-cancellation-mechanisms--kotlin--medium
+- q-testing-coroutines-runtest--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-11
-
-tags: [cancellation, coroutines, difficulty/medium, kotlin, testing]
+tags:
+- cancellation
+- coroutines
+- difficulty/medium
+- kotlin
+- testing
+anki_cards:
+- slug: q-testing-coroutine-cancellation--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-testing-coroutine-cancellation--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как тестировать сценарии отмены корутин? Покрыть тестирование кооперативной отмены, timeout, ensureActive, CancellationException и очистки ресурсов с NonCancellable.

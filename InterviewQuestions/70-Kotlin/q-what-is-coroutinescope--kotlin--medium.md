@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-what-is-coroutinescope--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-what-is-coroutinescope--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-090
-title: "What Is CoroutineScope / Что такое CoroutineScope"
-aliases: [What Is CoroutineScope, Что такое CoroutineScope]
-topic: kotlin
-subtopics: [coroutines, lifecycle, scope-management]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin]
-created: 2025-10-15
-updated: 2025-11-10
-tags: [coroutines, difficulty/medium, kotlin, scope]
----\
-# Вопрос (RU)
-> Что такое CoroutineScope?
-
----
-
 # Question (EN)
 > What is CoroutineScope?
 

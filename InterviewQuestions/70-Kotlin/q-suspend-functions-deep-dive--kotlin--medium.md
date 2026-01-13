@@ -1,20 +1,50 @@
 ---
----
----id: kotlin-196
-title: "Suspend Functions Deep Dive / Suspend функции детальный разбор"
-aliases: [Coroutine Suspension, Deep Dive, Suspend Functions, Suspend функции]
+'---id': kotlin-196
+title: Suspend Functions Deep Dive / Suspend функции детальный разбор
+aliases:
+- Coroutine Suspension
+- Deep Dive
+- Suspend Functions
+- Suspend функции
 topic: kotlin
-subtopics: [coroutines, suspend-functions]
+subtopics:
+- coroutines
+- suspend-functions
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-destructuring-declarations--kotlin--medium]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-destructuring-declarations--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [concurrency, continuation, coroutines, difficulty/medium, kotlin, suspend-functions]
+tags:
+- concurrency
+- continuation
+- coroutines
+- difficulty/medium
+- kotlin
+- suspend-functions
+anki_cards:
+- slug: q-suspend-functions-deep-dive--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-suspend-functions-deep-dive--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 

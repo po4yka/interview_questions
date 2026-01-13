@@ -1,11 +1,6 @@
 ---
 '---id': kotlin-060
 title: Channel Pipelines in Kotlin / Конвейеры каналов в Kotlin
-anki_cards:
-- slug: q-channel-pipelines-0-en
-  language: en
-- slug: q-channel-pipelines-0-ru
-  language: ru
 aliases:
 - Channel Pipelines in Kotlin
 - Конвейеры каналов в Kotlin
@@ -44,6 +39,25 @@ tags:
 - fan-out
 - kotlin
 - pipelines
+anki_cards:
+- slug: q-channel-pipelines--kotlin--hard-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - channels
+  - coroutines
+  - pipelines
+- slug: q-channel-pipelines--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - channels
+  - coroutines
+  - pipelines
 ---
 # Вопрос (RU)
 > Объясните конвейеры каналов в корутинах Kotlin. Как реализовать паттерны производитель-потребитель, fan-out, fan-in и стратегии буферизации? Приведите примеры реальных архитектур конвейеров.

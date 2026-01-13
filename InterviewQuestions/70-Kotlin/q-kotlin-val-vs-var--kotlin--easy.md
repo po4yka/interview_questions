@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-val-vs-var--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-val-vs-var--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-120
-title: "Val vs Var in Kotlin / Разница между val и var в Kotlin"
-aliases: ["Val vs Var in Kotlin"]
-
-# Classification
-topic: kotlin
-subtopics: [immutability, val, var]
-question_kind: theory
-difficulty: easy
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Deep dive into val vs var in Kotlin
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-kotlin-const--kotlin--easy, q-kotlin-constructors--kotlin--easy, q-kotlin-properties--kotlin--easy]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [constants, difficulty/easy, immutability, kotlin, mutability, read-only, val, var]
----\
-# Вопрос (RU)
-> В чём разница между val и var в Kotlin? Когда использовать каждый из них?
-
----
-
 # Question (EN)
 > What's the difference between val and var in Kotlin? When should you use each?
 

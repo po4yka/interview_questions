@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-suspend-cancellable-coroutine--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-suspend-cancellable-coroutine--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-095
-title: "Converting callbacks with suspendCancellableCoroutine / Преобразование callback с suspendCancellableCoroutine"
-topic: kotlin
-difficulty: hard
-original_language: en
-language_tags: [en, ru]
-status: draft
-created: 2025-10-12
-updated: 2025-11-09
-tags: [callbacks, cancellation, coroutines, difficulty/hard, integration, kotlin, suspend]
-aliases: ["Converting callbacks with suspendCancellableCoroutine", "Преобразование callback с suspendCancellableCoroutine"]
-moc: moc-kotlin
-related: [c-coroutines, q-channelflow-callbackflow-flow--kotlin--medium, q-continuation-cps-internals--kotlin--hard, q-coroutine-exception-handler--kotlin--medium]
-subtopics: [callbacks, cancellation, coroutines]
-question_kind: coding
----\
-# Вопрос (RU)
-> Как преобразовать API на основе callback в suspend функции используя `suspendCancellableCoroutine`? Как обрабатывать отмену, ошибки и состояния гонки?
-
----
-
 # Question (EN)
 > How do you convert callback-based APIs to suspend functions using `suspendCancellableCoroutine`? How do you handle cancellation, errors, and race conditions?
 

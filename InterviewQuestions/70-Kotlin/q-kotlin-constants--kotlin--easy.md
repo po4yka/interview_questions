@@ -1,21 +1,40 @@
 ---
----
----id: lang-207
-title: "Kotlin Constants / Константы в Kotlin"
+'---id': lang-207
+title: Kotlin Constants / Константы в Kotlin
 aliases: []
 topic: kotlin
-subtopics: [functions, types]
+subtopics:
+- functions
+- types
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-inline-function-limitations--kotlin--medium, q-kotlin-native--kotlin--hard]
+related:
+- c-kotlin
+- q-inline-function-limitations--kotlin--medium
+- q-kotlin-native--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/easy]
-
+tags:
+- difficulty/easy
+anki_cards:
+- slug: q-kotlin-constants--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-constants--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое константы и можно ли их изменять?

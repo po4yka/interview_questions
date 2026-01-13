@@ -1,20 +1,42 @@
 ---
----
----id: lang-211
-title: "Kotlin Constructor Types / Типы конструкторов Kotlin"
-aliases: ["Kotlin constructor types", "Типы конструкторов Kotlin"]
+'---id': lang-211
+title: Kotlin Constructor Types / Типы конструкторов Kotlin
+aliases:
+- Kotlin constructor types
+- Типы конструкторов Kotlin
 topic: kotlin
-subtopics: [type-system]
+subtopics:
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium, q-advanced-coroutine-patterns--kotlin--hard]
+related:
+- c-kotlin
+- q-abstract-class-vs-interface--kotlin--medium
+- q-advanced-coroutine-patterns--kotlin--hard
 created: 2024-10-15
 updated: 2025-11-11
-tags: [difficulty/medium, kotlin/type-system]
+tags:
+- difficulty/medium
+- kotlin/type-system
+anki_cards:
+- slug: q-kotlin-constructor-types--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-constructor-types--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Какие типы конструкторов есть у классов в Kotlin?

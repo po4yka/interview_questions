@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-flow-performance--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-performance--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-109
-title: "Flow Performance Optimization / Оптимизация производительности Flow"
-aliases: ["Flow Performance Optimization", "Оптимизация производительности Flow"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, flow, performance]
-question_kind: theory
-difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Coroutines Guide - Question 140023
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin, q-flow-backpressure--kotlin--hard]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [coroutines, difficulty/hard, kotlin]
----\
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140023
-
----
-
 # Question (EN)
 > Kotlin Coroutines advanced topic 140023
 

@@ -1,20 +1,45 @@
 ---
----
----id: lang-031
-title: "Launch Vs Async Error Handling / Launch против Async: обработка ошибок"
-aliases: ["Launch Vs Async Error Handling", "Launch против Async Обработка"]
+'---id': lang-031
+title: 'Launch Vs Async Error Handling / Launch против Async: обработка ошибок'
+aliases:
+- Launch Vs Async Error Handling
+- Launch против Async Обработка
 topic: kotlin
-subtopics: [coroutines]
+subtopics:
+- coroutines
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-kotlin, c-stateflow]
+related:
+- c-concurrency
+- c-kotlin
+- c-stateflow
 created: 2024-10-15
 updated: 2025-11-11
-tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin]
+tags:
+- coroutines
+- difficulty/medium
+- error-handling
+- exception-handling
+- kotlin
+anki_cards:
+- slug: q-launch-vs-async-error-handling--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-launch-vs-async-error-handling--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Обрабатываются ли ошибки по-разному в launch и async?

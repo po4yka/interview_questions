@@ -1,21 +1,52 @@
 ---
----
----id: kotlin-165
-title: "Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизненного цикла ViewModelScope и LifecycleScope"
-aliases: [Lifecycle Scopes, LifecycleScope, ViewModelScope]
+'---id': kotlin-165
+title: Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизненного цикла ViewModelScope
+  и LifecycleScope
+aliases:
+- Lifecycle Scopes
+- LifecycleScope
+- ViewModelScope
 topic: kotlin
-subtopics: [coroutines, lifecycle]
+subtopics:
+- coroutines
+- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutines--kotlin--hard]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-coroutine-context-detailed--kotlin--hard
+- q-race-conditions-coroutines--kotlin--hard
 created: 2023-10-15
 updated: 2025-11-09
-tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]
-
+tags:
+- android
+- coroutines
+- difficulty/medium
+- kotlin
+- lifecycle
+- lifecyclescope
+- viewmodelscope
+anki_cards:
+- slug: q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > В чём разница между viewModelScope и lifecycleScope? Когда использовать каждый из них?

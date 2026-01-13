@@ -1,23 +1,44 @@
 ---
----
----id: kotlin-101
-title: "Flow Combining: zip, combine, merge / Комбинирование Flow: zip, combine, merge"
+'---id': kotlin-101
+title: 'Flow Combining: zip, combine, merge / Комбинирование Flow: zip, combine, merge'
 aliases: []
 topic: kotlin
-subtopics: [coroutines]
+subtopics:
+- coroutines
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140020
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, c-stateflow, q-kotlin-collections--kotlin--easy]
+related:
+- c-flow
+- c-kotlin
+- c-stateflow
+- q-kotlin-collections--kotlin--easy
 created: 2025-10-12
 updated: 2025-11-11
-tags: [coroutines, difficulty/medium, kotlin]
-
+tags:
+- coroutines
+- difficulty/medium
+- kotlin
+anki_cards:
+- slug: q-flow-combining-zip-combine--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-combining-zip-combine--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140020

@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-sharedflow-stateflow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-sharedflow-stateflow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-111
-title: "SharedFlow vs StateFlow / SharedFlow против StateFlow"
-aliases: ["SharedFlow vs StateFlow", "SharedFlow против StateFlow"]
-
-# Classification
-topic: kotlin
-subtopics: [flow, sharedflow, stateflow]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive comparison of SharedFlow and StateFlow
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin, q-flow-basics--kotlin--easy]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharedflow, state-management, stateflow]
----\
-# Вопрос (RU)
-> В чём разница между `SharedFlow` и `StateFlow`? Когда использовать каждый из них?
-
----
-
 # Question (EN)
 > What's the difference between `SharedFlow` and `StateFlow`? When should you use each?
 

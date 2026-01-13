@@ -1,20 +1,41 @@
 ---
----
----id: lang-204
-title: "Kotlin Delegation By Restriction / Ограничения делегирования в Kotlin"
+'---id': lang-204
+title: Kotlin Delegation By Restriction / Ограничения делегирования в Kotlin
 aliases: []
 topic: kotlin
-subtopics: [functions]
+subtopics:
+- functions
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-init-block--kotlin--easy, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium, q-sequences-detailed--kotlin--medium]
+related:
+- c-kotlin
+- q-kotlin-init-block--kotlin--easy
+- q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium
+- q-sequences-detailed--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/medium, kotlin/functions]
+tags:
+- difficulty/medium
+- kotlin/functions
+anki_cards:
+- slug: q-kotlin-delegation-by-restriction--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-delegation-by-restriction--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Можно ли после `by` вызвать функцию или конструктор?

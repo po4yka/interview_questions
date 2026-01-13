@@ -1,31 +1,18 @@
 ---
+anki_cards:
+- slug: q-object-singleton-companion--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-object-singleton-companion--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-234
-title: "Object, Companion Object, and Singleton Pattern / object, companion object и паттерн Singleton"
-aliases: ["Object Singleton Companion", "Объект Singleton Companion"]
-topic: kotlin
-subtopics: [companion-object, object-keyword, singleton-pattern]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
-created: 2025-10-12
-updated: 2025-11-09
-tags: [companion-object, difficulty/medium, kotlin, kotlin-features, object-keyword, singleton-pattern]
-sources: ["https://kotlinlang.org/docs/object-declarations.html"]
----\
-# Вопрос (RU)
-> Как работают object, companion object и паттерн singleton в Kotlin?
-
-# Question (EN)
-> How do object, companion object, and singleton pattern work in Kotlin?
-
----
-
 ## Ответ (RU)
 
 **Теория object и companion object:**

@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-noncancellable-context-cleanup--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-noncancellable-context-cleanup--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-119
-title: "NonCancellable context for critical cleanup operations / NonCancellable контекст для критических операций"
-aliases: [Cancellation, Cleanup, NonCancellable, NonCancellable контекст, Resource Management]
-topic: kotlin
-subtopics: [coroutines]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-sealed-class-sealed-interface--kotlin--medium]
-created: 2025-10-12
-updated: 2025-11-09
-tags: [cancellation, cleanup, coroutines, difficulty/medium, kotlin, noncancellable, resource-management]
----\
-# Вопрос (RU)
-
-> Что такое `NonCancellable` в корутинах Kotlin? Когда следует его использовать? Объясните, как использовать его в блоках `finally` для критической очистки, связанные риски и лучшие практики с реальными примерами.
-
----
-
 # Question (EN)
 
 > What is `NonCancellable` in Kotlin coroutines? When should you use it? Explain how to use it in `finally` blocks for critical cleanup, the risks involved, and best practices with real-world examples.

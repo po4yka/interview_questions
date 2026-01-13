@@ -31,6 +31,23 @@ tags:
 - switch
 - syntax
 - when
+anki_cards:
+- slug: kotlin-186-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - control-flow
+  - syntax
+- slug: kotlin-186-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - control-flow
+  - syntax
 ---
 # Вопрос (RU)
 > Какой оператор используется вместо switch в Kotlin?

@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-coroutines-threads-android-differences--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutines-threads-android-differences--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-219
-title: "Coroutines vs Threads on Android / Корутины vs Потоки на Android"
-aliases: [Coroutines vs Threads, Корутины против потоков]
-topic: kotlin
-subtopics: [coroutines, threading]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [q-rxjava-to-coroutines-migration--kotlin--medium, q-callsuper-annotation--kotlin--medium, q-kotlin-sam-interfaces--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [kotlin, coroutines, threads, performance, android, comparison, difficulty/easy]
-source: Kotlin Coroutines Interview Questions PDF
----\
-# Вопрос (RU)
-> Каковы ключевые различия между корутинами и потоками в Android разработке?
-
----
-
 # Question (EN)
 > What are the key differences between coroutines and threads in Android development?
 ## Ответ (RU)

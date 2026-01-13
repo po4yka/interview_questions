@@ -1,33 +1,18 @@
 ---
----
----\
-id: kotlin-205
 anki_cards:
-- slug: q-coroutine-cancellation-mechanisms-0-en
+- slug: q-coroutine-cancellation-mechanisms--kotlin--medium-0-en
   language: en
-- slug: q-coroutine-cancellation-mechanisms-0-ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-cancellation-mechanisms--kotlin--medium-0-ru
   language: ru
-title: "Coroutine Cancellation Mechanisms / Механизмы Отмены Корутин"
-aliases: [Coroutine Cancellation, Механизмы отмены корутин]
-topic: kotlin
-subtopics: [coroutines, cancellation]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-structured-concurrency]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [kotlin, coroutines, cancellation, cooperative, isactive, cancellationexception, difficulty/medium]
-source: Kotlin Coroutines Interview Questions PDF
----\
-# Вопрос (RU)
-> Как работает отмена корутин и чем она отличается от отмены потока?
-
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
-
 # Question (EN)
 > How does coroutine cancellation work, and how is it different from canceling a `Thread`?
 ## Ответ (RU)

@@ -1,14 +1,22 @@
 ---
 id: kotlin-133
 title: Advanced Coroutine Patterns / Продвинутые паттерны корутин
-anki_cards:
-- slug: q-advanced-coroutine-patterns-0-en
-  language: en
-- slug: q-advanced-coroutine-patterns-0-ru
-  language: ru
 aliases:
 - Advanced Coroutine Patterns
 - Продвинутые паттерны корутин
+anki_cards:
+- slug: kotlin-133-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: kotlin-133-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Classification
 topic: kotlin
@@ -32,7 +40,40 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [coroutines, difficulty/hard, kotlin, mutex, patterns, pipeline, producer-consumer, semaphore]
----\
+anki_cards:
+  - slug: kotlin-133-0-en
+    language: en
+    front: "What is the Pipeline pattern in Kotlin coroutines?"
+    back: |
+      **Pipeline**: chain of coroutines where each stage processes data and passes to next.
+      **Implementation**: Use `Channel` to connect stages.
+      ```kotlin
+      produce { send(data) }  // Stage 1
+        .map { transform(it) } // Stage 2
+        .filter { valid(it) }  // Stage 3
+      ```
+      Benefits: backpressure, composable stages, concurrent processing.
+    tags:
+      - Kotlin::Coroutines
+      - pipeline-pattern
+      - channels
+  - slug: kotlin-133-0-ru
+    language: ru
+    front: "Что такое паттерн Pipeline в корутинах Kotlin?"
+    back: |
+      **Pipeline**: цепочка корутин, где каждая стадия обрабатывает данные и передаёт дальше.
+      **Реализация**: используйте `Channel` для связи стадий.
+      ```kotlin
+      produce { send(data) }  // Стадия 1
+        .map { transform(it) } // Стадия 2
+        .filter { valid(it) }  // Стадия 3
+      ```
+      Преимущества: backpressure, композиция стадий, параллельная обработка.
+    tags:
+      - Kotlin::Coroutines
+      - pipeline-pattern
+      - channels
+---
 # Вопрос (RU)
 > Что такое продвинутые паттерны корутин в Kotlin? Объясните паттерн pipeline, producer-consumer с несколькими стадиями, пулинг ресурсов с Mutex/Semaphore, кастомные scope builders и паттерны rate limiting.
 

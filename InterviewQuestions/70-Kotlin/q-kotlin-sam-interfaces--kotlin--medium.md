@@ -31,6 +31,25 @@ tags:
 - kotlin
 - lambdas
 - sam
+anki_cards:
+- slug: kotlin-025-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - interfaces
+  - lambdas
+- slug: kotlin-025-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - interfaces
+  - lambdas
 ---
 # Вопрос (RU)
 > Что вы знаете о функциональных (SAM) интерфейсах в Kotlin?

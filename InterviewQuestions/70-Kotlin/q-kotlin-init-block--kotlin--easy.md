@@ -32,6 +32,25 @@ tags:
 - init-block
 - initialization
 - kotlin
+anki_cards:
+- slug: kotlin-001-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - constructors
+  - init-block
+  - initialization
+- slug: kotlin-001-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - constructors
+  - init-block
+  - initialization
 ---
 # Вопрос (RU)
 > Что такое блок init в Kotlin?

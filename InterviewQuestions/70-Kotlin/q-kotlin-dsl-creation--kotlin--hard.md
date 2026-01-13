@@ -1,20 +1,43 @@
 ---
----
----id: kotlin-192
-title: "Kotlin Dsl Creation / Создание DSL в Kotlin"
-aliases: [Creation, Dsl, Kotlin]
+'---id': kotlin-192
+title: Kotlin Dsl Creation / Создание DSL в Kotlin
+aliases:
+- Creation
+- Dsl
+- Kotlin
 topic: kotlin
-subtopics: [coroutines, extensions]
+subtopics:
+- coroutines
+- extensions
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-dsl, q-array-vs-list-kotlin--kotlin--easy]
+related:
+- c-kotlin
+- c-kotlin-dsl
+- q-array-vs-list-kotlin--kotlin--easy
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/hard]
+tags:
+- difficulty/hard
+anki_cards:
+- slug: q-kotlin-dsl-creation--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-dsl-creation--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Разработайте и реализуйте типобезопасный DSL для построения UI компонентов. Используйте контроль области видимости, extension-лямбды и `@DslMarker`.

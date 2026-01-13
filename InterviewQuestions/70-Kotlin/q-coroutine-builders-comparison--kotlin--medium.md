@@ -1,11 +1,6 @@
 ---
 '---id': kotlin-238
 title: Comparison of all coroutine builders / Сравнение всех builders корутин
-anki_cards:
-- slug: q-coroutine-builders-comparison-0-en
-  language: en
-- slug: q-coroutine-builders-comparison-0-ru
-  language: ru
 aliases:
 - Coroutine Builders Comparison
 - Сравнение coroutine builders
@@ -38,6 +33,23 @@ related:
 - c-kotlin
 - c-stateflow
 - q-dispatcher-performance--kotlin--hard
+anki_cards:
+- slug: q-coroutine-builders-comparison--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - builders
+  - coroutines
+- slug: q-coroutine-builders-comparison--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - builders
+  - coroutines
 ---
 # Вопрос (RU)
 

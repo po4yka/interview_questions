@@ -1,21 +1,43 @@
 ---
----
----id: lang-023
-title: "Suspend Function Return Type After Compilation / suspend"
-aliases: [suspend, Suspend Function Return Type After Compilation]
+'---id': lang-023
+title: Suspend Function Return Type After Compilation / suspend
+aliases:
+- suspend
+- Suspend Function Return Type After Compilation
 topic: kotlin
-subtopics: [coroutines]
+subtopics:
+- coroutines
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
 created: 2024-10-15
 updated: 2025-11-11
-tags: [coroutines, difficulty/hard, kotlin]
-
+tags:
+- coroutines
+- difficulty/hard
+- kotlin
+anki_cards:
+- slug: q-suspend-function-return-type-after-compilation--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-suspend-function-return-type-after-compilation--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Каким становится тип возврата suspend-функции после компиляции?

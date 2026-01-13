@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-testing-flow-operators--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-testing-flow-operators--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-082
-title: "Testing Flow Operators and Transformations / Тестирование операторов и трансформаций Flow"
-aliases: ["Testing Flow Operators and Transformations", "Тестирование операторов и трансформаций Flow"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, flow, operators]
-question_kind: theory
-difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Advanced Flow Testing Techniques
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-testing, q-flow-operators-deep-dive--kotlin--hard, q-testing-coroutines-runtest--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [coroutines, difficulty/hard, flow, kotlin, operators, testing]
----\
-# Вопрос (RU)
-> Как тестировать операторы и трансформации `Flow` такие как `flatMap`, `debounce`, `retry` и `combine`? Покрыть тестирование виртуального времени, использование Turbine и стратегии тестирования сложных цепочек `Flow`.
-
----
-
 # Question (EN)
 > How to test `Flow` operators and transformations like `flatMap`, `debounce`, `retry`, and `combine`? Cover virtual time testing, Turbine usage, and complex `Flow` chain testing strategies.
 

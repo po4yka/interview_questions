@@ -1,23 +1,47 @@
 ---
----
 id: kotlin-117
-title: "Creating custom CoroutineDispatchers with limitedParallelism / Создание пользовательских CoroutineDispatchers с limitedParallelism"
-aliases: ["Custom Dispatchers", "limitedParallelism"]
+title: Creating custom CoroutineDispatchers with limitedParallelism / Создание пользовательских
+  CoroutineDispatchers с limitedParallelism
+aliases:
+- Custom Dispatchers
+- limitedParallelism
+anki_cards:
+- slug: kotlin117-0-en
+  language: en
+  anki_id: 1768327343516
+  synced_at: '2026-01-13T22:02:23.569497'
+- slug: kotlin117-1-ru
+  language: ru
+  anki_id: 1768327343566
+  synced_at: '2026-01-13T22:02:23.573710'
 topic: kotlin
-subtopics: [coroutines, dispatchers]
+subtopics:
+- coroutines
+- dispatchers
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en]
+language_tags:
+- en
 status: draft
 created: 2025-10-12
 updated: 2025-10-31
-category: "coroutines-advanced"
-tags: ["concurrency", "difficulty/hard", "dispatchers", "limitedparallelism", "performance", "resource-management", "threading"]
-description: "Deep dive into creating custom dispatchers, limitedParallelism API, thread pool sizing, and resource-specific dispatchers"
+category: coroutines-advanced
+tags:
+- concurrency
+- difficulty/hard
+- dispatchers
+- limitedparallelism
+- performance
+- resource-management
+- threading
+description: Deep dive into creating custom dispatchers, limitedParallelism API, thread
+  pool sizing, and resource-specific dispatchers
 moc: moc-kotlin
-related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
----\
+related:
+- q-supervisor-scope-vs-coroutine-scope--kotlin--medium
+- q-visibility-modifiers-kotlin--kotlin--medium
+---
 # Вопрос (RU)
 
 Когда и как следует создавать пользовательские CoroutineDispatchers в Kotlin? Объясните API `limitedParallelism()`, интеграцию с ExecutorService, стратегии определения размера пула потоков и реальные сценарии для dispatcher-ов специфичных ресурсов.

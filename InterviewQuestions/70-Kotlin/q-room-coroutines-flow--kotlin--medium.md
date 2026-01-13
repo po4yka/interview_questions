@@ -1,30 +1,18 @@
 ---
+anki_cards:
+- slug: q-room-coroutines-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-room-coroutines-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-115
-title: "Room Database with Coroutines and Flow / Room БД с корутинами и Flow"
-aliases: ["Room Database with Coroutines and Flow", "Room БД с корутинами и Flow"]
-topic: kotlin
-subtopics: [coroutines]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Room Coroutines Flow Guide
-status: draft
-moc: moc-kotlin
-related: [q-kotlin-flow-basics--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
-created: 2025-10-12
-updated: 2025-11-11
-tags: [coroutines, difficulty/medium, flow, kotlin, room]
-
----\
-# Вопрос (RU)
-> Как использовать `Room` БД с корутинами и `Flow`? Объясните suspend функции в DAO, `Flow` для реактивных запросов, обработку транзакций и лучшие практики.
-
----
-
 # Question (EN)
 > How to use `Room` database with coroutines and `Flow`? Explain suspend functions in DAO, `Flow` for reactive queries, transaction handling, and best practices.
 

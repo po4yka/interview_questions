@@ -1,41 +1,18 @@
 ---
+anki_cards:
+- slug: q-viewmodel-coroutines-lifecycle--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-viewmodel-coroutines-lifecycle--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-121
-title: "ViewModel Coroutines and Lifecycle / Корутины в ViewModel и жизненный цикл"
-aliases: ["ViewModel Coroutines and Lifecycle", "Корутины в ViewModel и жизненный цикл"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, lifecycle]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Android Coroutines ViewModel Guide
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, viewmodel, viewmodelscope]
----\
-# Вопрос (RU)
-> Как использовать корутины в `ViewModel`? Объясните `viewModelScope`, автоматическую отмену при `onCleared()`, лучшие практики запуска корутин и обработку изменений конфигурации.
-
-# Question (EN)
-> How to use coroutines in `ViewModel`? Explain `viewModelScope`, automatic cancellation on `onCleared()`, best practices for launching coroutines, and handling configuration changes.
-
----
-
 ## Ответ (RU)
 
 `ViewModel` с корутинами обеспечивает мощный и безопасный паттерн для управления асинхронными операциями с учётом жизненного цикла.

@@ -1,32 +1,18 @@
 ---
----
----\
-id: kotlin-091
 anki_cards:
-- slug: q-coroutine-exception-handler-0-en
+- slug: q-coroutine-exception-handler--kotlin--medium-0-en
   language: en
-- slug: q-coroutine-exception-handler-0-ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-exception-handler--kotlin--medium-0-ru
   language: ru
-title: "CoroutineExceptionHandler: installation and usage / CoroutineExceptionHandler: установка и использование"
-topic: kotlin
-question_kind: coding
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-created: 2025-10-12
-updated: 2025-11-09
-aliases: ["CoroutineExceptionHandler installation and usage", "CoroutineExceptionHandler установка и использование"]
-tags: [ceh, coroutines, difficulty/medium, error-handling, exception-handling, kotlin]
-moc: moc-kotlin
-related: [c-coroutines, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
-subtopics: [ceh, coroutines, error-handling]
----\
-# Вопрос (RU)
-> Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?
-
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
-
 # Question (EN)
 > What is CoroutineExceptionHandler, where can it be installed, and how does it work with different coroutine builders (launch vs async)?
 

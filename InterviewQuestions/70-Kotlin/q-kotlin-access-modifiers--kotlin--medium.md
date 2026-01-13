@@ -1,20 +1,40 @@
 ---
----
----id: lang-213
-title: "Kotlin Access Modifiers / Модификаторы доступа Kotlin"
+'---id': lang-213
+title: Kotlin Access Modifiers / Модификаторы доступа Kotlin
 aliases: []
 topic: kotlin
-subtopics: [functions]
+subtopics:
+- functions
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-semaphore-rate-limiting--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
+related:
+- c-kotlin
+- q-semaphore-rate-limiting--kotlin--medium
+- q-suspend-functions-deep-dive--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/medium, kotlin/functions]
+tags:
+- difficulty/medium
+- kotlin/functions
+anki_cards:
+- slug: q-kotlin-access-modifiers--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-access-modifiers--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что известно про модификаторы доступа в Kotlin?

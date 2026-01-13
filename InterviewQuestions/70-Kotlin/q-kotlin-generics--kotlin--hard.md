@@ -31,6 +31,23 @@ tags:
 - type-erasure
 - types
 - variance
+anki_cards:
+- slug: kotlin-029-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - types
+- slug: kotlin-029-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - types
 ---
 # Вопрос (RU)
 > Что вы знаете об обобщениях (Generics) в Kotlin?

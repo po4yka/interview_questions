@@ -1,11 +1,6 @@
 ---
 '---id': kotlin-038
 title: Back Pressure в Kotlin Flow / Back Pressure in Kotlin Flow
-anki_cards:
-- slug: q-backpressure-in-kotlin-flow-0-en
-  language: en
-- slug: q-backpressure-in-kotlin-flow-0-ru
-  language: ru
 aliases:
 - Back Pressure in Kotlin Flow
 - Back Pressure в Kotlin Flow
@@ -40,6 +35,25 @@ tags:
 - flow
 - kotlin
 - operators
+anki_cards:
+- slug: q-backpressure-in-kotlin-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - backpressure
+  - buffer
+  - conflate
+- slug: q-backpressure-in-kotlin-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - backpressure
+  - buffer
+  - conflate
 ---
 # Вопрос (RU)
 > Что такое Back Pressure в Kotlin `Flow`? Какие стратегии существуют для его обработки?

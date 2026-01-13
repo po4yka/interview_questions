@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-debounce-throttle-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-debounce-throttle-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-046
-title: "Debounce vs Throttle in Flow / Debounce vs Throttle в Flow"
-aliases: []
-
-# Classification
-topic: kotlin
-subtopics: [flow, operators]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin, q-request-coalescing-deduplication--kotlin--hard]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-11-10
-
-tags: [debounce, difficulty/medium, flow, kotlin, operators, throttle]
----\
-# Вопрос (RU)
-> В чем разница между `debounce` и `throttle` в Kotlin `Flow`? Когда использовать каждый?
-
----
-
 # Question (EN)
 > What is the difference between `debounce` and `throttle` in Kotlin `Flow`? When to use each?
 

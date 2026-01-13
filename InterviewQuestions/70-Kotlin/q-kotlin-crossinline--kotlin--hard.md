@@ -1,20 +1,43 @@
 ---
----
----id: lang-205
-title: "Kotlin crossinline / crossinline в Kotlin"
-aliases: ["crossinline в Kotlin", "Kotlin crossinline"]
+'---id': lang-205
+title: Kotlin crossinline / crossinline в Kotlin
+aliases:
+- crossinline в Kotlin
+- Kotlin crossinline
 topic: kotlin
-subtopics: [functions]
+subtopics:
+- functions
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-data-class-detailed--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
+related:
+- c-kotlin
+- q-data-class-detailed--kotlin--medium
+- q-object-singleton-companion--kotlin--medium
+- q-semaphore-rate-limiting--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/hard, kotlin/functions]
+tags:
+- difficulty/hard
+- kotlin/functions
+anki_cards:
+- slug: q-kotlin-crossinline--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-crossinline--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Зачем нужен `crossinline`?

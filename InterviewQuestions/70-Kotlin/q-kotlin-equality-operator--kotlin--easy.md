@@ -1,21 +1,39 @@
 ---
----
----id: lang-208
-title: "Kotlin Equality Operator / Оператор равенства в Kotlin"
+'---id': lang-208
+title: Kotlin Equality Operator / Оператор равенства в Kotlin
 aliases: []
 topic: kotlin
-subtopics: [null-safety, type-system]
+subtopics:
+- null-safety
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-callback-to-coroutine-conversion--kotlin--medium]
+related:
+- c-kotlin
+- q-callback-to-coroutine-conversion--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/easy]
-
+tags:
+- difficulty/easy
+anki_cards:
+- slug: q-kotlin-equality-operator--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-equality-operator--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что происходит когда делаешь ==?

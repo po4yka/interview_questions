@@ -1,11 +1,6 @@
 ---
 '---id': kotlin-242
 title: Parent-child relationships in structured concurrency / Отношения родитель-дитя
-anki_cards:
-- slug: q-coroutine-parent-child-relationship-0-en
-  language: en
-- slug: q-coroutine-parent-child-relationship-0-ru
-  language: ru
 aliases:
 - Parent-Child Relationships
 - Отношения родитель-дитя
@@ -37,6 +32,21 @@ related:
 - q-retry-operators-flow--kotlin--medium
 subtopics:
 - coroutines
+anki_cards:
+- slug: q-coroutine-parent-child-relationship--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+- slug: q-coroutine-parent-child-relationship--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
 ---
 # Вопрос (RU)
 

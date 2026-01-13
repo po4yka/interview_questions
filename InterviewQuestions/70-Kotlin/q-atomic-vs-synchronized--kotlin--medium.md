@@ -1,11 +1,6 @@
 ---
 id: kotlin-146
 title: Atomic vs Synchronized / Atomic против Synchronized
-anki_cards:
-- slug: q-atomic-vs-synchronized-0-en
-  language: en
-- slug: q-atomic-vs-synchronized-0-ru
-  language: ru
 aliases:
 - Atomic vs Synchronized
 - Atomic против Synchronized
@@ -35,6 +30,23 @@ tags:
 - kotlin
 - synchronized
 - thread-safety
+anki_cards:
+- slug: kotlin-146-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - concurrency
+  - thread-safety
+- slug: kotlin-146-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - concurrency
+  - thread-safety
 ---
 # Вопрос (RU)
 

@@ -1,20 +1,53 @@
 ---
----
----id: kotlin-176
-title: "Sequences Vs Collections Performance / Sequences vs Collections Performance"
-aliases: [Collections Performance, Lazy Evaluation, Performance Comparison, Sequences]
+'---id': kotlin-176
+title: Sequences Vs Collections Performance / Sequences vs Collections Performance
+aliases:
+- Collections Performance
+- Lazy Evaluation
+- Performance Comparison
+- Sequences
 topic: kotlin
-subtopics: [collections, performance]
+subtopics:
+- collections
+- performance
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, q-callsuper-annotation--kotlin--medium]
+related:
+- c-collections
+- c-compose-recomposition
+- c-kotlin
+- c-perfetto
+- c-power-profiling
+- q-callsuper-annotation--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, difficulty/medium, kotlin, lazy-evaluation, optimization, performance, sequences]
+tags:
+- collections
+- difficulty/medium
+- kotlin
+- lazy-evaluation
+- optimization
+- performance
+- sequences
+anki_cards:
+- slug: q-sequences-vs-collections-performance--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-sequences-vs-collections-performance--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Когда следует использовать Sequences вместо Collections? Объясните промежуточные против терминальных операций и влияние на производительность.

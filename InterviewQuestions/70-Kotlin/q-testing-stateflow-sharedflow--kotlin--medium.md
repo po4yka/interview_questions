@@ -1,23 +1,54 @@
 ---
----
----id: kotlin-062
-title: "Testing StateFlow and SharedFlow in ViewModels / Тестирование StateFlow и SharedFlow в ViewModels"
-aliases: ["Testing StateFlow and SharedFlow in ViewModels", "Тестирование StateFlow и SharedFlow в ViewModels"]
+'---id': kotlin-062
+title: Testing StateFlow and SharedFlow in ViewModels / Тестирование StateFlow и SharedFlow
+  в ViewModels
+aliases:
+- Testing StateFlow and SharedFlow in ViewModels
+- Тестирование StateFlow и SharedFlow в ViewModels
 topic: kotlin
-subtopics: [coroutines, sharedflow, stateflow]
+subtopics:
+- coroutines
+- sharedflow
+- stateflow
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Flow Testing Guide
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, c-stateflow, q-stateflow-sharedflow-differences--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
+related:
+- c-flow
+- c-kotlin
+- c-stateflow
+- q-stateflow-sharedflow-differences--kotlin--medium
+- q-testing-coroutines-runtest--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09
-tags: [coroutines, difficulty/medium, kotlin, sharedflow, stateflow, testing, viewmodel]
-
+tags:
+- coroutines
+- difficulty/medium
+- kotlin
+- sharedflow
+- stateflow
+- testing
+- viewmodel
+anki_cards:
+- slug: q-testing-stateflow-sharedflow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-testing-stateflow-sharedflow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как тестировать `StateFlow` и `SharedFlow` в `ViewModel`? Покрыть стратегии коллекции, библиотеку Turbine, `TestScope`, утверждения и граничные случаи вроде replay cache и семантики "latest value wins".

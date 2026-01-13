@@ -1,20 +1,45 @@
 ---
----
----id: kotlin-203
-title: "Interface Properties / Свойства интерфейсов"
-aliases: ["Interface Properties", "Свойства интерфейсов"]
+'---id': kotlin-203
+title: Interface Properties / Свойства интерфейсов
+aliases:
+- Interface Properties
+- Свойства интерфейсов
 topic: kotlin
-subtopics: [null-safety, type-system]
+subtopics:
+- null-safety
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, c-properties, q-inline-functions--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- c-properties
+- q-inline-functions--kotlin--medium
+- q-kotlin-delegation-detailed--kotlin--medium
+- q-statein-sharein-flow--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium]
+tags:
+- difficulty/medium
+anki_cards:
+- slug: q-interface-properties--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-interface-properties--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как работать со свойствами в интерфейсах в Kotlin?

@@ -1,23 +1,50 @@
 ---
----
----id: kotlin-056
-title: "Advanced Flow Testing / Продвинутое тестирование Flow"
-aliases: ["Advanced Flow Testing", "Продвинутое тестирование Flow"]
+'---id': kotlin-056
+title: Advanced Flow Testing / Продвинутое тестирование Flow
+aliases:
+- Advanced Flow Testing
+- Продвинутое тестирование Flow
 topic: kotlin
-subtopics: [coroutines, flow]
+subtopics:
+- coroutines
+- flow
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-stateflow, q-kotlin-flow-basics--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
+related:
+- c-flow
+- c-stateflow
+- q-kotlin-flow-basics--kotlin--medium
+- q-testing-viewmodels-coroutines--kotlin--medium
 created: 2025-10-11
 updated: 2025-11-11
-tags: [async, difficulty/hard, flow, kotlin, testing, testscope]
-
+tags:
+- async
+- difficulty/hard
+- flow
+- kotlin
+- testing
+- testscope
+anki_cards:
+- slug: q-flow-testing-advanced--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-testing-advanced--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Протестируйте сложные цепочки `Flow` с задержками и множественными испусканиями. Используйте `TestScope`, `TestDispatcher` и виртуальное время для детерминированного тестирования.

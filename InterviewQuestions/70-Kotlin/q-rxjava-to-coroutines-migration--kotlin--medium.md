@@ -1,41 +1,18 @@
 ---
+anki_cards:
+- slug: q-rxjava-to-coroutines-migration--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-rxjava-to-coroutines-migration--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-188
-title: "Migrating from RxJava to Kotlin Coroutines / Миграция сRxJava на Kotlin корутины"
-aliases: [Coroutines Migration, Reactive Programming, RxJava Migration, RxJava to Coroutines]
-topic: kotlin
-subtopics: [coroutines, functions, reactive-programming]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-testing-flow-operators--kotlin--hard]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [coroutines, difficulty/medium, kotlin, migration, reactive-programming, refactoring, rxjava]
-
----\
-# Вопрос (RU)
-
-> Как грамотно мигрировать с RxJava на Kotlin Coroutines/`Flow` в Android/Kotlin-проекте: какие соответствия типов (`Observable`/Single/Completable/Maybe/Flowable ↔ `Flow`/suspend/`StateFlow`/`SharedFlow`), как заменить операторы, настроить потоки выполнения, обработку ошибок и backpressure, обеспечить совместимость и поэтапную миграцию, а также каких подводных камней избегать?
-
-# Question (EN)
-
-> How do you correctly migrate from RxJava to Kotlin Coroutines/`Flow` in an Android/Kotlin project: what are the type mappings (`Observable`/Single/Completable/Maybe/Flowable ↔ `Flow`/suspend/`StateFlow`/`SharedFlow`), how to map operators, configure threading, error handling, and backpressure, ensure interoperability and phased migration, and which pitfalls to avoid?
-
-## Ответ (RU)
-
-Ниже приведено подробное руководство по миграции с RxJava на Kotlin Coroutines/`Flow`, включая сопоставление типов, операторов, потоков выполнения, обработку ошибок, стратегии backpressure, примеры репозиториев и `ViewModel`, тестирование, поэтапную стратегию миграции и список подводных камней.
-
-## Answer (EN)
-
-Below is a detailed guide for migrating from RxJava to Kotlin Coroutines/`Flow`, including type mappings, operator mapping, threading, error handling, backpressure strategies, complete repository/`ViewModel` examples, testing, gradual migration strategy, and pitfalls checklist.
-
----
-
 # Миграция С RxJava На Kotlin Корутины
 
 **Русский** | [English](#migrating-from-rxjava-to-kotlin-coroutines)

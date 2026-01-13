@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-garbage-collector-roots--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-garbage-collector-roots--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-080
-title: "Garbage Collector Roots / Корни Garbage Collector"
-aliases: [Garbage Collector Roots, Корни Garbage Collector]
-topic: kotlin
-subtopics: [garbage-collection, jvm, memory-management]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-garbage-collection]
-created: 2025-10-15
-updated: 2025-11-11
-tags: [difficulty/medium, garbage-collection, jvm, memory-management, programming-languages]
-
----\
-# Вопрос (RU)
-> Что такое Garbage Collector Roots?
-
----
-
 # Question (EN)
 > What are Garbage Collector Roots?
 

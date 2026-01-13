@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-suspend-functions-basics--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-suspend-functions-basics--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-075
-title: "Suspend Functions Basics / Основы suspend функций"
-aliases: ["Suspend Functions Basics", "Основы suspend функций"]
-
-# Classification
-topic: kotlin
-subtopics: [c-kotlin-coroutines-basics, coroutines, functions]
-question_kind: theory
-difficulty: easy
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Coroutines Guide - Question 140028
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-launch-vs-async-vs-runblocking--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [coroutines, difficulty/easy, kotlin]
----\
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140028
-
----
-
 # Question (EN)
 > Kotlin Coroutines advanced topic 140028
 

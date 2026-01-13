@@ -30,6 +30,23 @@ tags:
 - kotlin
 - reified
 - type-system
+anki_cards:
+- slug: kotlin-155-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - inline-functions
+  - type-system
+- slug: kotlin-155-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - inline-functions
+  - type-system
 ---
 # Вопрос (RU)
 

@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-instant-search-flow-operators--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-instant-search-flow-operators--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-036
-title: "How to implement instant search using Flow operators? / Как реализовать мгновенный поиск с помощью Flow операторов?"
-aliases: ["How to implement instant search using Flow operators?", "Как реализовать мгновенный поиск с помощью Flow операторов?"]
-
-# Classification
-topic: kotlin
-subtopics: [flow]
-question_kind: coding
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
-source_note: Amit Shekhar Android Interview Questions repository
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-11-09
-
-tags: [debounce, difficulty/medium, flow, kotlin, operators, performance, search]
----\
-# Вопрос (RU)
-> Как реализовать функциональность мгновенного/реального поиска с помощью операторов Kotlin `Flow`?
-
----
-
 # Question (EN)
 > How do you implement instant/real-time search functionality using Kotlin `Flow` operators?
 

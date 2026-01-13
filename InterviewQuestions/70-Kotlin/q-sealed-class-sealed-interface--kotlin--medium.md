@@ -33,6 +33,25 @@ tags:
 - sealed-classes
 - sealed-interfaces
 - when-expression
+anki_cards:
+- slug: kotlin-113-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - polymorphism
+  - sealed-classes
+- slug: kotlin-113-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - polymorphism
+  - sealed-classes
 ---
 # Вопрос (RU)
 

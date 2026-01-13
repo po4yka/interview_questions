@@ -1,32 +1,18 @@
 ---
----
----\
-id: kotlin-142
 anki_cards:
-- slug: q-context-receivers-0-en
+- slug: q-context-receivers--kotlin--hard-0-en
   language: en
-- slug: q-context-receivers-0-ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-context-receivers--kotlin--hard-0-ru
   language: ru
-title: "Context Receivers / Context Receivers"
-aliases: ["Context Receivers in Kotlin", "Context Receivers", "Контекстные получатели в Kotlin", "Контекстные получатели"]
-topic: kotlin
-subtopics: [c-kotlin, c-kotlin-features]
-question_kind: theory
-difficulty: hard
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-actor-pattern--kotlin--hard]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [advanced, context-receivers, difficulty/hard, dsl, kotlin, receivers, scope-functions]
----\
-# Вопрос (RU)
-> Объясните context receivers в Kotlin. Чем они отличаются от extension receivers? Приведите примеры DSL.
-
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
-
 # Question (EN)
 > Explain context receivers in Kotlin. How do they differ from extension receivers? Provide DSL examples.
 

@@ -1,20 +1,43 @@
 ---
----
----id: kotlin-145
-title: "Inline Value Classes Performance / Производительность value-классов"
-aliases: [Classes, Inline, Performance, Value]
+'---id': kotlin-145
+title: Inline Value Classes Performance / Производительность value-классов
+aliases:
+- Classes
+- Inline
+- Performance
+- Value
 topic: kotlin
-subtopics: [object-comparison]
+subtopics:
+- object-comparison
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-value-classes, q-expect-actual-kotlin--kotlin--medium]
+related:
+- c-kotlin
+- c-value-classes
+- q-expect-actual-kotlin--kotlin--medium
 created: 2024-10-15
 updated: 2025-11-11
-tags: [difficulty/medium]
+tags:
+- difficulty/medium
+anki_cards:
+- slug: q-inline-value-classes-performance--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-inline-value-classes-performance--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как работают inline value классы? Когда следует использовать их для производительности? Каковы ограничения?

@@ -1,21 +1,46 @@
 ---
----
----id: lang-042
-title: "Kotlin Serialization / Сериализация в Kotlin"
-aliases: [Kotlin Serialization, Сериализация в Kotlin]
+'---id': lang-042
+title: Kotlin Serialization / Сериализация в Kotlin
+aliases:
+- Kotlin Serialization
+- Сериализация в Kotlin
 topic: kotlin
-subtopics: [serialization, type-system]
+subtopics:
+- serialization
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-serialization, q-functional-interfaces-vs-type-aliases--kotlin--medium]
+related:
+- c-kotlin
+- c-serialization
+- q-functional-interfaces-vs-type-aliases--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [data-persistence, difficulty/easy, json, kotlin, serialization]
-
+tags:
+- data-persistence
+- difficulty/easy
+- json
+- kotlin
+- serialization
+anki_cards:
+- slug: q-kotlin-serialization--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-serialization--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое сериализация?

@@ -1,20 +1,52 @@
 ---
----
----id: lang-079
-title: "Kotlin Favorite Features / Любимые возможности Kotlin"
-aliases: [Kotlin Favorite Features, Любимые возможности Kotlin]
+'---id': lang-079
+title: Kotlin Favorite Features / Любимые возможности Kotlin
+aliases:
+- Kotlin Favorite Features
+- Любимые возможности Kotlin
 topic: kotlin
-subtopics: [coroutines, extensions, null-safety]
+subtopics:
+- coroutines
+- extensions
+- null-safety
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, c-stateflow, q-class-initialization-order--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- c-stateflow
+- q-class-initialization-order--kotlin--medium
+- q-fan-in-fan-out-channels--kotlin--hard
+- q-flow-operators-map-filter--kotlin--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [coroutines, difficulty/easy, extensions, features, kotlin, null-safety, overview]
+tags:
+- coroutines
+- difficulty/easy
+- extensions
+- features
+- kotlin
+- null-safety
+- overview
+anki_cards:
+- slug: q-kotlin-favorite-features--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-favorite-features--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Расскажи Про Три Любимых Фичи В Kotlin
 

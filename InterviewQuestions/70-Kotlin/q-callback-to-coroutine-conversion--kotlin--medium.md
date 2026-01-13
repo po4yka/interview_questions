@@ -2,11 +2,6 @@
 '---id': kotlin-049
 title: How to convert callback-based APIs to coroutines? / Как конвертировать callback-based
   API в корутины?
-anki_cards:
-- slug: q-callback-to-coroutine-conversion-0-en
-  language: en
-- slug: q-callback-to-coroutine-conversion-0-ru
-  language: ru
 aliases:
 - How to convert callback-based APIs to coroutines?
 - Как конвертировать callback-based API в корутины?
@@ -38,6 +33,21 @@ tags:
 - kotlin
 - migration
 - suspendcoroutine
+anki_cards:
+- slug: q-callback-to-coroutine-conversion--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+- slug: q-callback-to-coroutine-conversion--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
 ---
 # Вопрос (RU)
 > Как конвертировать callback-based API в корутины в Kotlin?

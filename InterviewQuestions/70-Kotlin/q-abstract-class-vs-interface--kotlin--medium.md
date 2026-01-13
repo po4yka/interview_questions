@@ -1,11 +1,6 @@
 ---
 id: kotlin-012
 title: Abstract Class vs Interface / Абстрактный класс vs интерфейс
-anki_cards:
-- slug: q-abstract-class-vs-interface-0-en
-  language: en
-- slug: q-abstract-class-vs-interface-0-ru
-  language: ru
 aliases:
 - Abstract Class vs Interface
 - Абстрактный класс vs интерфейс
@@ -38,6 +33,25 @@ tags:
 - oop
 sources:
 - https://kotlinlang.org/docs/interfaces.html
+anki_cards:
+- slug: kotlin-012-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - inheritance
+  - interfaces
+- slug: kotlin-012-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - inheritance
+  - interfaces
 ---
 # Вопрос (RU)
 > В чём разница между абстрактным классом и интерфейсом в Kotlin?

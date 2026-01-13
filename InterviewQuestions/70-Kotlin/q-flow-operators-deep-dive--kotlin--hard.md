@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-flow-operators-deep-dive--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-operators-deep-dive--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-054
-title: "Flow Operators Deep Dive / Глубокое погружение в операторы Flow"
-aliases: ["Flow Operators Deep Dive", "Глубокое погружение в операторы Flow"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, flow, operators]
-question_kind: theory
-difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Phase 1 Coroutines & Flow Advanced Questions
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
-
-# Timestamps
-created: 2025-10-11
-updated: 2025-11-09
-
-tags: [async, difficulty/hard, flow, kotlin, operators, transformation]
----\
-# Вопрос (RU)
-> Реализуйте пользовательские операторы `Flow`. Объясните `flatMapConcat` vs `flatMapMerge` vs `flatMapLatest` с практическими примерами и характеристиками производительности.
-
----
-
 # Question (EN)
 > Implement custom `Flow` operators. Explain `flatMapConcat` vs `flatMapMerge` vs `flatMapLatest` with practical examples and performance characteristics.
 

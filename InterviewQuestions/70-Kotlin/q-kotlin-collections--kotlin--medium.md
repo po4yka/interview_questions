@@ -1,31 +1,56 @@
 ---
----
----id: kotlin-100
-title: "Kotlin Collections / Коллекции в Kotlin"
-aliases: ["Kotlin Collections", "Коллекции в Kotlin"]
-
-# Classification
+'---id': kotlin-100
+title: Kotlin Collections / Коллекции в Kotlin
+aliases:
+- Kotlin Collections
+- Коллекции в Kotlin
 topic: kotlin
-subtopics: [collections, list, sequences]
+subtopics:
+- collections
+- list
+- sequences
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive guide on Kotlin Collections
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-expect-actual-kotlin--kotlin--medium, q-flow-basics--kotlin--easy, q-kotlin-val-vs-var--kotlin--easy]
-
-# Timestamps
+related:
+- c-collections
+- c-kotlin
+- q-expect-actual-kotlin--kotlin--medium
+- q-flow-basics--kotlin--easy
+- q-kotlin-val-vs-var--kotlin--easy
 created: 2025-10-12
 updated: 2025-11-09
-
-tags: [collections, difficulty/medium, filter, flatmap, kotlin, list, map, operators, sequences, set]
+tags:
+- collections
+- difficulty/medium
+- filter
+- flatmap
+- kotlin
+- list
+- map
+- operators
+- sequences
+- set
+anki_cards:
+- slug: q-kotlin-collections--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-collections--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое коллекции в Kotlin? Объясните `List`, `Set`, `Map`, их изменяемые варианты, операторы коллекций и разницу между Collections и Sequences.

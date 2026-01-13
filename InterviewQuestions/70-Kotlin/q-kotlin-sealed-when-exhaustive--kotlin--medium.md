@@ -29,6 +29,21 @@ tags:
 - sealed-classes
 - state-machine
 - when-expression
+anki_cards:
+- slug: kotlin-149-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - sealed-classes
+- slug: kotlin-149-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - sealed-classes
 ---
 # Вопрос (RU)
 

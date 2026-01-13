@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-java-type-differences--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-java-type-differences--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-051
-title: "Kotlin Java Type Differences / Различия типов Kotlin и Java"
-aliases: [Kotlin Java Type Differences, Различия типов Kotlin и Java]
-topic: kotlin
-subtopics: [null-safety, type-system]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-executor-service-java--kotlin--medium]
-created: 2024-10-15
-updated: 2025-11-09
-tags: [collections, comparison, difficulty/medium, java, kotlin, null-safety, type-inference, type-system]
----\
-# Вопрос (RU)
-> Чем типы в Kotlin отличаются от типов в Java?
-
----
-
 # Question (EN)
 > How do Kotlin types differ from Java types?
 

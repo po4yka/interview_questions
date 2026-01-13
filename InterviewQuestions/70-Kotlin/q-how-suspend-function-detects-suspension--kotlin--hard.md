@@ -1,20 +1,47 @@
 ---
----
----id: lang-056
-title: "How Suspend Function Detects Suspension / Как suspend функция определяет приостановку"
-aliases: [How Suspend Function Detects Suspension, Как suspend функция определяет приостановку]
+'---id': lang-056
+title: How Suspend Function Detects Suspension / Как suspend функция определяет приостановку
+aliases:
+- How Suspend Function Detects Suspension
+- Как suspend функция определяет приостановку
 topic: kotlin
-subtopics: [coroutines, functions, types]
+subtopics:
+- coroutines
+- functions
+- types
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
 created: 2025-10-15
 updated: 2025-11-11
-tags: [concurrency, coroutines, difficulty/hard, kotlin, suspension]
+tags:
+- concurrency
+- coroutines
+- difficulty/hard
+- kotlin
+- suspension
+anki_cards:
+- slug: q-how-suspend-function-detects-suspension--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-how-suspend-function-detects-suspension--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как suspend функция определяет приостановку?

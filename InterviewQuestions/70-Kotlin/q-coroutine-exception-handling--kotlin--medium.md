@@ -1,11 +1,6 @@
 ---
 '---id': kotlin-042
 title: Coroutine Exception Handling / Обработка исключений в корутинах
-anki_cards:
-- slug: q-coroutine-exception-handling-0-en
-  language: en
-- slug: q-coroutine-exception-handling-0-ru
-  language: ru
 aliases:
 - Coroutine Exception Handling
 - Обработка исключений в корутинах
@@ -34,6 +29,23 @@ tags:
 - difficulty/medium
 - error-handling
 - kotlin
+anki_cards:
+- slug: q-coroutine-exception-handling--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - error-handling
+- slug: q-coroutine-exception-handling--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - error-handling
 ---
 # Вопрос (RU)
 > Как работает обработка исключений в Kotlin корутинах? В чем разница между coroutineScope и supervisorScope?

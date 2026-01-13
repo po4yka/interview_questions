@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-channelflow-callbackflow-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-channelflow-callbackflow-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-061
-title: "channelFlow vs callbackFlow vs flow: when to use each / channelFlow vs callbackFlow vs flow: когда использовать"
-topic: kotlin
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-created: 2025-10-12
-updated: 2025-11-09
-tags: [builders, callbackflow, channelflow, coroutines, difficulty/medium, flow, kotlin]
-moc: moc-kotlin
-aliases: ["channelFlow vs callbackFlow vs flow: когда использовать", "channelFlow vs callbackFlow vs flow"]
-question_kind: coding
-related: [c-coroutines, c-flow, c-kotlin, q-channels-vs-flow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
-subtopics: [builders, coroutines, flow]
----\
-# Вопрос (RU)
-> В чем разница между `flow{}`, `channelFlow{}`, и `callbackFlow{}`? Когда следует использовать каждый билдер?
-
----
-
 # Question (EN)
 > What's the difference between `flow{}`, `channelFlow{}`, and `callbackFlow{}`? When should you use each builder?
 

@@ -1,22 +1,56 @@
 ---
----
----id: kotlin-080
-title: "SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера"
-aliases: [Hot Flow, Replay Buffer, SharedFlow, SharedFlow Configuration]
+'---id': kotlin-080
+title: SharedFlow replay cache and buffer configuration / SharedFlow replay cache
+  и конфигурация буфера
+aliases:
+- Hot Flow
+- Replay Buffer
+- SharedFlow
+- SharedFlow Configuration
 topic: kotlin
-subtopics: [coroutines, flow]
+subtopics:
+- coroutines
+- flow
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, c-stateflow, q-channels-vs-flow--kotlin--medium]
+related:
+- c-flow
+- c-kotlin
+- c-stateflow
+- q-channels-vs-flow--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09
-tags: [backpressure, buffer, configuration, coroutines, difficulty/medium, flow, hot-flow, kotlin, replay, sharedflow]
+tags:
+- backpressure
+- buffer
+- configuration
+- coroutines
+- difficulty/medium
+- flow
+- hot-flow
+- kotlin
+- replay
+- sharedflow
 contributors: []
-
+anki_cards:
+- slug: q-sharedflow-replay-buffer-config--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-sharedflow-replay-buffer-config--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как настроить replay cache и buffer в `SharedFlow`? Объясните параметры `replay`, `extraBufferCapacity` и `onBufferOverflow`, их взаимодействие и реальные сценарии использования с учётом производительности.

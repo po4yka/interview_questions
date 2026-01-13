@@ -1,33 +1,18 @@
 ---
+anki_cards:
+- slug: q-repeatonlifecycle-android--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-repeatonlifecycle-android--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-118
-title: "repeatOnLifecycle in Android / repeatOnLifecycle в Android"
-aliases: ["repeatOnLifecycle in Android", "repeatOnLifecycle в Android"]
-topic: kotlin
-subtopics: [coroutines, flow, lifecycle]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Android repeatOnLifecycle Guide
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-lifecycle-aware-coroutines--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium]
-created: 2025-10-12
-updated: 2025-11-09
-tags: [android, coroutines, difficulty/medium, flow, kotlin, lifecycle, repeatonlifecycle]
-
----\
-# Вопрос (RU)
-> Что такое `repeatOnLifecycle` и почему это важно? Объясните как он предотвращает утечки памяти при подписке на `Flow`, сравнение с `launchWhenStarted` и лучшие практики.
-
-# Question (EN)
-> What is `repeatOnLifecycle` and why is it important? Explain how it prevents memory leaks when collecting `Flow`s, comparison with `launchWhenStarted`, and best practices.
-
----
-
 ## Ответ (RU)
 
 `repeatOnLifecycle` — это lifecycle-aware API из AndroidX `Lifecycle` (lifecycle-runtime-ktx), которое автоматически запускает и отменяет корутины/подписки на `Flow` в зависимости от состояния жизненного цикла `LifecycleOwner`. Это помогает избежать утечек памяти и обращения к уничтоженным `View` при сборе `Flow` в Android.

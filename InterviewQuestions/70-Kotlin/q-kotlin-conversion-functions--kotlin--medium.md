@@ -1,31 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-conversion-functions--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-conversion-functions--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-206
-title: "Kotlin Conversion Functions / Kotlin Conversion Функции"
-aliases: ["Kotlin Conversion Функции"]
-topic: kotlin
-subtopics: [functions, null-safety, types]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [q-coroutine-cancellation-mechanisms--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [difficulty/medium]
-
----\
-# Вопрос (RU)
-> Как в Kotlin называется функция, которая вызывается на объекте для преобразования его в другой тип?
-
-# Question (EN)
-> What is the function called in Kotlin that is invoked on an object to convert it to another type?
-
----
-
 ## Ответ (RU)
 
 В Kotlin такие функции обычно называют функциями преобразования (conversion functions), которые следуют шаблону `toTargetType()` ("to"-функции), например: `toInt()`, `toLong()`, `toString()`, `toList()` и т.п.

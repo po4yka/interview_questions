@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-parallel-network-calls-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-parallel-network-calls-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-037
-title: "How to make parallel network calls using coroutines? / Как выполнять параллельные сетевые запросы с помощью корутин?"
-aliases: ["How to make parallel network calls using coroutines?", "Как выполнять параллельные сетевые запросы с помощью корутин?"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines]
-question_kind: coding
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
-source_note: Amit Shekhar Android Interview Questions repository
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-kotlin-coroutines-introduction--kotlin--medium]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-11-09
-
-tags: [async, coroutines, difficulty/medium, kotlin, networking, parallel, performance]
----\
-# Вопрос (RU)
-> Как выполнить несколько сетевых запросов параллельно с помощью Kotlin корутин?
-
----
-
 # Question (EN)
 > How do you make multiple network calls in parallel using Kotlin coroutines?
 

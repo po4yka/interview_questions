@@ -1,39 +1,18 @@
 ---
----
----\
-id: kotlin-239
 anki_cards:
-- slug: q-coroutine-context-elements-0-en
+- slug: q-coroutine-context-elements--kotlin--hard-0-en
   language: en
-- slug: q-coroutine-context-elements-0-ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-context-elements--kotlin--hard-0-ru
   language: ru
-title: "What are CoroutineContext elements and how do they combine? / Элементы CoroutineContext и их комбинирование"
-aliases: [CoroutineContext Elements, Элементы CoroutineContext]
-topic: kotlin
-subtopics: [coroutines]
-question_kind: theory
-difficulty: hard
-original_language: en
-language_tags: [en, ru]
-status: draft
-created: "2025-10-12"
-updated: "2025-11-11"
-tags: [coroutines, difficulty/hard, kotlin]
-description: "Comprehensive guide to CoroutineContext elements and how they combine in Kotlin coroutines"
-moc: moc-kotlin
-related: [c-concurrency, q-coroutine-job-lifecycle--kotlin--medium]
-
----\
-# Вопрос (RU)
-
-> Что такое элементы CoroutineContext и как они комбинируются? Объясните Job, CoroutineDispatcher, CoroutineName, CoroutineExceptionHandler и как работает оператор +.
-
-# Question (EN)
-
-> What are CoroutineContext elements and how do they combine? Explain Job, CoroutineDispatcher, CoroutineName, CoroutineExceptionHandler, and how the + operator works.
-
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
-
 ## Ответ (RU)
 
 **CoroutineContext** — это постоянный индексированный набор элементов `Element`, которые предоставляют конфигурацию и поведение для корутин. Это фундаментальная концепция в Kotlin-корутинах, управляющая контекстом выполнения, иерархией задач, обработкой ошибок и отладкой.

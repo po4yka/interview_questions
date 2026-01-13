@@ -1,22 +1,45 @@
 ---
----
 id: kotlin-245
-title: "Data classes in Kotlin: features, limitations, and best practices / Data classes в Kotlin"
-aliases: [Data classes Kotlin, Data Classes Kotlin]
+title: 'Data classes in Kotlin: features, limitations, and best practices / Data classes
+  в Kotlin'
+aliases:
+- Data classes Kotlin
+- Data Classes Kotlin
+anki_cards:
+- slug: kotlin245-0-en
+  language: en
+  anki_id: 1768327344586
+  synced_at: '2026-01-13T22:02:24.637269'
+- slug: kotlin245-1-ru
+  language: ru
+  anki_id: 1768327344635
+  synced_at: '2026-01-13T22:02:24.640287'
 topic: kotlin
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 question_kind: theory
 status: draft
-created: "2025-10-12"
-updated: "2025-11-09"
-tags: [classes, data-classes, difficulty/medium, kotlin-features, kotlin]
-description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
+created: '2025-10-12'
+updated: '2025-11-09'
+tags:
+- classes
+- data-classes
+- difficulty/medium
+- kotlin-features
+- kotlin
+description: Comprehensive guide to Kotlin data classes covering generated methods,
+  copy(), componentN(), destructuring, limitations, and when to use them
 moc: moc-kotlin
-related: [c-equality, c-kotlin-features, q-sealed-class-sealed-interface--kotlin--medium]
-subtopics: [data-classes]
----\
+related:
+- c-equality
+- c-kotlin-features
+- q-sealed-class-sealed-interface--kotlin--medium
+subtopics:
+- data-classes
+---
 # Вопрос (RU)
 
 Что такое data классы в Kotlin, какие методы для них автоматически генерируются, как работают `copy()` и `componentN()`/деструктуризация, какие есть ограничения и лучшие практики использования?

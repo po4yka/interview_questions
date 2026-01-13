@@ -29,6 +29,23 @@ tags:
 - functions
 - kotlin
 - language-features
+anki_cards:
+- slug: kotlin-033-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - language-features
+- slug: kotlin-033-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - language-features
 ---
 # Вопрос (RU)
 > Что вы знаете о расширениях в Kotlin?

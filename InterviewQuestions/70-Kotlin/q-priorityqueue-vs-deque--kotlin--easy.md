@@ -28,6 +28,23 @@ tags:
 - kotlin
 - priority-queue
 - queue
+anki_cards:
+- slug: lang-070-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - queues
+- slug: lang-070-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - queues
 ---
 # Вопрос (RU)
 > Какова разница между `PriorityQueue` и `Deque`?

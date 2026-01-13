@@ -1,23 +1,54 @@
 ---
----
----id: kotlin-041
-title: "stateIn and shareIn operators in Flow / Операторы stateIn и shareIn во Flow"
-aliases: ["stateIn and shareIn operators in Flow", "Операторы stateIn и shareIn во Flow"]
+'---id': kotlin-041
+title: stateIn and shareIn operators in Flow / Операторы stateIn и shareIn во Flow
+aliases:
+- stateIn and shareIn operators in Flow
+- Операторы stateIn и shareIn во Flow
 topic: kotlin
-subtopics: [coroutines, flow, hot-flow]
+subtopics:
+- coroutines
+- flow
+- hot-flow
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, c-stateflow, q-kotlin-type-aliases-inline--kotlin--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-retry-exponential-backoff-flow--kotlin--medium]
+related:
+- c-flow
+- c-kotlin
+- c-stateflow
+- q-kotlin-type-aliases-inline--kotlin--medium
+- q-parallel-network-calls-coroutines--kotlin--medium
+- q-retry-exponential-backoff-flow--kotlin--medium
 created: 2025-10-06
 updated: 2025-11-11
-tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharein, statein]
-
+tags:
+- coroutines
+- difficulty/medium
+- flow
+- hot-flow
+- kotlin
+- sharein
+- statein
+anki_cards:
+- slug: q-statein-sharein-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-statein-sharein-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое операторы `stateIn` и `shareIn` в Kotlin `Flow`? Когда использовать каждый?

@@ -1,21 +1,46 @@
 ---
----
----id: lang-216
-title: "Kotlin Any Class Methods / Методы класса Any в Kotlin"
-aliases: ["Kotlin Any methods", "Методы Any в Kotlin"]
+'---id': lang-216
+title: Kotlin Any Class Methods / Методы класса Any в Kotlin
+aliases:
+- Kotlin Any methods
+- Методы Any в Kotlin
 topic: kotlin
-subtopics: [classes, functions, types]
+subtopics:
+- classes
+- functions
+- types
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-computer-science, c-kotlin, q-debugging-coroutines-techniques--kotlin--medium]
+related:
+- c-computer-science
+- c-kotlin
+- q-debugging-coroutines-techniques--kotlin--medium
 created: 2024-10-15
 updated: 2025-11-11
-tags: [difficulty/medium, kotlin/classes, kotlin/functions, kotlin/types]
-
+tags:
+- difficulty/medium
+- kotlin/classes
+- kotlin/functions
+- kotlin/types
+anki_cards:
+- slug: q-kotlin-any-class-methods--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-any-class-methods--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Какие в базовом классе Kotlin `Any` есть методы и что они делают?

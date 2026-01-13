@@ -31,6 +31,23 @@ tags:
 - kotlin
 - open
 - syntax
+anki_cards:
+- slug: lang-074-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - inheritance
+  - type-system
+- slug: lang-074-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - inheritance
+  - type-system
 ---
 # Вопрос (RU)
 > Какой модификатор в Kotlin делает класс нерасширяемым?

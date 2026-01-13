@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-lazy-vs-lateinit--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-lazy-vs-lateinit--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-024
-title: "lazy vs lateinit / lazy против lateinit"
-aliases: ["lazy vs lateinit", "lazy против lateinit"]
-
-# Classification
-topic: kotlin
-subtopics: [delegation, initialization, lateinit]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
-source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-kotlin-lateinit--kotlin--medium, q-property-delegates--kotlin--medium]
-
-# Timestamps
-created: 2025-10-05
-updated: 2025-11-09
-
-tags: [delegation, difficulty/medium, initialization, kotlin, lateinit, lazy]
----\
-# Вопрос (RU)
-> В чем разница между `lazy` и `lateinit` в Kotlin?
-
----
-
 # Question (EN)
 > What is the difference between `lazy` and `lateinit` in Kotlin?
 

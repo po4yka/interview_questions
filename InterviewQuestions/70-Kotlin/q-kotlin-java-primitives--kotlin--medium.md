@@ -26,6 +26,21 @@ tags:
 - primitives
 - types
 - wrappers
+anki_cards:
+- slug: lang-094-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - type-system
+- slug: lang-094-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - type-system
 ---
 # Вопрос (RU)
 > Какие примитивы есть в Kotlin, а какие в Java?

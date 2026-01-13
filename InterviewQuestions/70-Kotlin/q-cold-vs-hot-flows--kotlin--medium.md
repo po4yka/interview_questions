@@ -1,23 +1,50 @@
 ---
----
----id: kotlin-059
-title: "Cold vs Hot Flows / Холодные и горячие потоки"
-aliases: ["Cold vs Hot Flows", "Холодные и горячие потоки"]
+'---id': kotlin-059
+title: Cold vs Hot Flows / Холодные и горячие потоки
+aliases:
+- Cold vs Hot Flows
+- Холодные и горячие потоки
 topic: kotlin
-subtopics: [flow]
+subtopics:
+- flow
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-stateflow, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
+related:
+- c-concurrency
+- c-stateflow
+- q-kotlin-flow-basics--kotlin--medium
+- q-stateflow-sharedflow-differences--kotlin--medium
 created: 2025-10-11
 updated: 2025-11-11
-tags: [cold-flows, difficulty/medium, flow, hot-flows, kotlin, shareIn, stateIn]
-
+tags:
+- cold-flows
+- difficulty/medium
+- flow
+- hot-flows
+- kotlin
+- shareIn
+- stateIn
+anki_cards:
+- slug: q-cold-vs-hot-flows--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-cold-vs-hot-flows--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Объясните холодные и горячие потоки. Как `shareIn` и `stateIn` конвертируют холодные в горячие? Как правильно настроить параметры `replay` и `started`?

@@ -1,4 +1,20 @@
 ---
+anki_cards:
+- slug: q-expect-actual-kotlin--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-expect-actual-kotlin--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
+
+---
 ---
 ---\
 id: kotlin-134

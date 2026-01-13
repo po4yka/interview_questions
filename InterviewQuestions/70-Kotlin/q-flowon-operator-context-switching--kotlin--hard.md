@@ -1,21 +1,60 @@
 ---
----
----id: kotlin-125
-title: "Оператор flowOn и переключение контекста во Flow / flowOn operator and context switching in flows"
-aliases: [flow-context-switching, flowon-operator, flowon-vs-withcontext, kotlin-flowon]
+'---id': kotlin-125
+title: Оператор flowOn и переключение контекста во Flow / flowOn operator and context
+  switching in flows
+aliases:
+- flow-context-switching
+- flowon-operator
+- flowon-vs-withcontext
+- kotlin-flowon
 topic: kotlin
-subtopics: [coroutines, flow, performance]
+subtopics:
+- coroutines
+- flow
+- performance
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-compose-recomposition, c-coroutines, c-flow, c-perfetto, c-power-profiling, c-stateflow, q-coroutine-context-elements--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
+related:
+- c-compose-recomposition
+- c-coroutines
+- c-flow
+- c-perfetto
+- c-power-profiling
+- c-stateflow
+- q-coroutine-context-elements--kotlin--hard
+- q-flow-operators-map-filter--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: ["buffer", "context-switching", "coroutines", "difficulty/hard", "dispatchers", "flow-operators", "flow", "flowon", "kotlin", "performance"]
-
+tags:
+- buffer
+- context-switching
+- coroutines
+- difficulty/hard
+- dispatchers
+- flow-operators
+- flow
+- flowon
+- kotlin
+- performance
+anki_cards:
+- slug: q-flowon-operator-context-switching--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flowon-operator-context-switching--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что делает оператор `flowOn` в `Flow` в Kotlin? Чем он отличается от `withContext`? Объясните сохранение контекста, поведение буферизации, использование нескольких `flowOn` в цепочке и влияние на производительность с реальными примерами.

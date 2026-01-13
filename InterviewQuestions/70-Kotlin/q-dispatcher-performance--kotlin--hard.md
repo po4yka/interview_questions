@@ -1,32 +1,43 @@
 ---
----
 id: kotlin-112
-title: "Dispatcher Performance and Selection / Производительность и выбор диспетчеров"
-aliases: ["Dispatcher Performance and Selection", "Производительность и выбор диспетчеров"]
-
-# Classification
+title: Dispatcher Performance and Selection / Производительность и выбор диспетчеров
+aliases:
+- Dispatcher Performance and Selection
+- Производительность и выбор диспетчеров
+anki_cards:
+- slug: kotlin112-0-en
+  language: en
+  anki_id: 1768327345663
+  synced_at: '2026-01-13T22:02:25.711135'
+- slug: kotlin112-1-ru
+  language: ru
+  anki_id: 1768327345708
+  synced_at: '2026-01-13T22:02:25.713879'
 topic: kotlin
-subtopics: [coroutines, dispatchers, performance]
+subtopics:
+- coroutines
+- dispatchers
+- performance
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140022
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-crossinline-keyword--kotlin--medium]
-
-# Timestamps
+related:
+- c-kotlin
+- q-crossinline-keyword--kotlin--medium
 created: 2025-10-12
 updated: 2025-10-12
-
-tags: [coroutines, difficulty/hard, kotlin]
----\
+tags:
+- coroutines
+- difficulty/hard
+- kotlin
+---
 # Вопрос (RU)
 
 Как выбрать правильный dispatcher для задачи в Kotlin корутинах? Объясните модели пула потоков различных dispatcher-ов (Default, IO, Main), паттерны производительности, использование limitedParallelism, создание кастомных dispatcher-ов и как избежать чрезмерных переключений контекста и блокировок.

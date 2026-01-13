@@ -1,30 +1,18 @@
 ---
+anki_cards:
+- slug: q-stateflow-sharedflow-differences--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-stateflow-sharedflow-differences--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-016
-title: "StateFlow and SharedFlow / StateFlow и SharedFlow"
-aliases: ["StateFlow and SharedFlow", "StateFlow и SharedFlow"]
-topic: kotlin
-subtopics: [coroutines, flow]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
-source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
-status: draft
-moc: moc-kotlin
-related: [c-concurrency, c-kotlin, q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
-created: 2025-10-05
-updated: 2025-11-11
-tags: [coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
-
----\
-# Вопрос (RU)
-> Что такое `StateFlow` и `SharedFlow` в Kotlin? В чем их отличия?
-
----
-
 # Question (EN)
 > What are `StateFlow` and `SharedFlow` in Kotlin? What are the differences between them?
 

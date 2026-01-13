@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-stateflow-sharedflow-android--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-stateflow-sharedflow-android--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-084
-title: "StateFlow and SharedFlow in Android / StateFlow и SharedFlow в Android"
-aliases: ["StateFlow and SharedFlow in Android", "StateFlow и SharedFlow в Android"]
-
-# Classification
-topic: kotlin
-subtopics: [android, coroutines, flow]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Android StateFlow SharedFlow Guide
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin, q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [android, coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
----\
-# Вопрос (RU)
-> Как использовать `StateFlow` и `SharedFlow` в Android? Объясните разницу, replay cache, когда использовать каждый и паттерны для `ViewModel`.
-
----
-
 # Question (EN)
 > How to use `StateFlow` and `SharedFlow` in Android? Explain the difference, replay cache, when to use each, and patterns for `ViewModel`s.
 

@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-flow-operators--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-operators--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-103
-title: "Flow Operators in Kotlin / Операторы Flow в Kotlin"
-aliases: ["Flow Operators in Kotlin", "Операторы Flow в Kotlin"]
-
-# Classification
-topic: kotlin
-subtopics: [combining, filtering, flow]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Created for vault completeness
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, q-flow-backpressure-strategies--kotlin--hard, q-flow-operators-deep-dive--kotlin--hard, q-instant-search-flow-operators--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [combining, difficulty/medium, filtering, flow, kotlin, operators, transformation]
----\
-# Вопрос (RU)
-> Что такое операторы `Flow` в Kotlin? Объясните категории: трансформации (`map`, `flatMap`), фильтрации (`filter`, `distinctUntilChanged`), комбинирования (`zip`, `combine`) и терминальные операторы (`collect`, `toList`). Приведите практические примеры.
-
----
-
 # Question (EN)
 > What are `Flow` operators in Kotlin? Explain categories: transformation (`map`, `flatMap`), filtering (`filter`, `distinctUntilChanged`), combining (`zip`, `combine`), and collection (`collect`, `toList`). Provide practical examples.
 

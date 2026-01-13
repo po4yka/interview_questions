@@ -1,43 +1,18 @@
 ---
----
----\
-id: kotlin-102
 anki_cards:
-- slug: q-coroutine-builders-basics-0-en
+- slug: q-coroutine-builders-basics--kotlin--easy-0-en
   language: en
-- slug: q-coroutine-builders-basics-0-ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-builders-basics--kotlin--easy-0-ru
   language: ru
-title: "Coroutine Builders: launch, async, runBlocking / Билдеры корутин: launch, async, runBlocking"
-aliases: ["Coroutine Builders: launch, async, runBlocking", "Билдеры корутин: launch, async, runBlocking"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, patterns]
-question_kind: theory
-difficulty: easy
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Coroutines Guide - Question 140029
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-kotlin-coroutines-basics, q-data-class-detailed--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [coroutines, difficulty/easy, kotlin]
----\
-# Вопрос (RU)
-> Базовая тема корутин Kotlin 140029 (билдеры `launch`, `async`, `runBlocking`)
-
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
-
 # Question (EN)
 > Kotlin Coroutines basic topic 140029 (builders `launch`, `async`, `runBlocking`)
 

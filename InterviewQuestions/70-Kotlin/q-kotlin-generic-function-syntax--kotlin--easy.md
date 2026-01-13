@@ -28,6 +28,23 @@ tags:
 - kotlin
 - syntax
 - type-parameters
+anki_cards:
+- slug: lang-059-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - generics
+  - type-system
+- slug: lang-059-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - generics
+  - type-system
 ---
 # Вопрос (RU)
 > Какой синтаксис используется для объявления обобщенной функции в Kotlin?

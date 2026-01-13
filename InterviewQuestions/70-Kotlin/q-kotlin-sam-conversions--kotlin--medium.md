@@ -1,29 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-sam-conversions--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-sam-conversions--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-039
-title: "Kotlin Sam Conversions / SAM конверсии в Kotlin"
-aliases: [Kotlin Sam Conversions, SAM конверсии в Kotlin]
-topic: kotlin
-subtopics: [functional-programming, type-system]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-infix-functions--kotlin--medium]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [difficulty/medium, lambda, lambda-functions, programming-languages, sam]
----\
-# Как Работают SAM (Single Abstract Method)?
-
-# Вопрос (RU)
-> Как работают SAM (Single Abstract Method)?
-
----
-
 # Question (EN)
 > How do SAM (Single Abstract Method) conversions work?
 

@@ -1,23 +1,52 @@
 ---
----
----id: kotlin-055
-title: "Flow Backpressure Strategies / Стратегии противодавления Flow"
-aliases: ["Flow Backpressure Strategies", "Стратегии противодавления Flow"]
+'---id': kotlin-055
+title: Flow Backpressure Strategies / Стратегии противодавления Flow
+aliases:
+- Flow Backpressure Strategies
+- Стратегии противодавления Flow
 topic: kotlin
-subtopics: [flow, performance]
+subtopics:
+- flow
+- performance
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
 status: draft
 moc: moc-kotlin
-related: [c-compose-recomposition, c-concurrency, c-kotlin, c-perfetto, c-power-profiling, c-stateflow, q-kotlin-flow-basics--kotlin--medium]
+related:
+- c-compose-recomposition
+- c-concurrency
+- c-kotlin
+- c-perfetto
+- c-power-profiling
+- c-stateflow
+- q-kotlin-flow-basics--kotlin--medium
 created: 2023-10-11
 updated: 2025-11-09
-tags: [concurrency, difficulty/hard, flow, kotlin, performance]
-
+tags:
+- concurrency
+- difficulty/hard
+- flow
+- kotlin
+- performance
+anki_cards:
+- slug: q-flow-backpressure-strategies--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-backpressure-strategies--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Реализуйте обработку противодавления в `Flow`. Сравните стратегии `buffer`, `conflate` и `collectLatest` с производительными бенчмарками.

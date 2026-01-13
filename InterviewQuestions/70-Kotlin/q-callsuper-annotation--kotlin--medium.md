@@ -1,11 +1,6 @@
 ---
 id: kotlin-197
 title: Callsuper Annotation / Аннотация CallSuper
-anki_cards:
-- slug: q-callsuper-annotation-0-en
-  language: en
-- slug: q-callsuper-annotation-0-ru
-  language: ru
 aliases:
 - CallSuper Annotation
 - Аннотация CallSuper
@@ -32,6 +27,21 @@ tags:
 - difficulty/medium
 - kotlin
 - lifecycle
+anki_cards:
+- slug: kotlin-197-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - annotations
+- slug: kotlin-197-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - annotations
 ---
 # Вопрос (RU)
 > Что такое аннотация `@CallSuper` и когда её следует использовать?

@@ -1,11 +1,6 @@
 ---
 id: kotlin-045
 title: Access Modifiers in Kotlin / Модификаторы доступа в Kotlin
-anki_cards:
-- slug: q-access-modifiers-0-en
-  language: en
-- slug: q-access-modifiers-0-ru
-  language: ru
 aliases:
 - Access Modifiers in Kotlin
 - Модификаторы доступа в Kotlin
@@ -36,6 +31,25 @@ tags:
 - kotlin
 - oop
 - visibility
+anki_cards:
+- slug: kotlin-045-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - access-modifiers
+  - encapsulation
+  - visibility
+- slug: kotlin-045-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - access-modifiers
+  - encapsulation
+  - visibility
 ---
 # Вопрос (RU)
 > Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?

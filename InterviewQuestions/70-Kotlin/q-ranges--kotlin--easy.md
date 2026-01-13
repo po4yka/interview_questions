@@ -27,6 +27,25 @@ tags:
 - difficulty/easy
 - kotlin
 - ranges
+anki_cards:
+- slug: kotlin-022-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - iteration
+  - ranges
+  - step
+- slug: kotlin-022-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - iteration
+  - ranges
+  - step
 ---
 # Вопрос (RU)
 > Что такое диапазоны в Kotlin и как их использовать?

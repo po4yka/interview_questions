@@ -28,6 +28,21 @@ tags:
 - delegates
 - difficulty/hard
 - kotlin
+anki_cards:
+- slug: kotlin-169-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - delegation
+- slug: kotlin-169-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - delegation
 ---
 # Вопрос (RU)
 > Как делегаты Kotlin работают на уровне компиляции? Какой bytecode и вспомогательные структуры генерируются?

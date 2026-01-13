@@ -1,21 +1,49 @@
 ---
----
----id: kotlin-183
-title: "Kotlin Unit Singleton / Unit как синглтон в Kotlin"
-aliases: [Kotlin Unit, Unit, Unit Singleton, Unit Объект]
+'---id': kotlin-183
+title: Kotlin Unit Singleton / Unit как синглтон в Kotlin
+aliases:
+- Kotlin Unit
+- Unit
+- Unit Singleton
+- Unit Объект
 topic: kotlin
-subtopics: [type-system, unit]
+subtopics:
+- type-system
+- unit
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-channel-buffer-strategies-comparison--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
+related:
+- c-kotlin
+- q-channel-buffer-strategies-comparison--kotlin--hard
+- q-suspend-functions-basics--kotlin--easy
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/easy, kotlin, singleton, type-system, unit, void]
-
+tags:
+- difficulty/easy
+- kotlin
+- singleton
+- type-system
+- unit
+- void
+anki_cards:
+- slug: q-kotlin-unit-singleton--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-unit-singleton--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Сколько инстансов `Unit` существует в одном приложении?

@@ -29,6 +29,23 @@ tags:
 - initialization
 - kotlin
 - oop
+anki_cards:
+- slug: lang-033-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - initialization
+  - type-system
+- slug: lang-033-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - initialization
+  - type-system
 ---
 # Вопрос (RU)
 > Есть какие-то особенности использования `init` блока?

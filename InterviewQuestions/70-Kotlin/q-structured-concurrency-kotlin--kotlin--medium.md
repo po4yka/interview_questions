@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-structured-concurrency-kotlin--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-structured-concurrency-kotlin--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-185
-title: "Structured Concurrency in Kotlin Coroutines / Структурированная параллельность"
-aliases: [Structured Concurrency, Coroutine Scope, Lifecycle, Структурированная параллельность]
-topic: kotlin
-subtopics: [coroutines, structured-concurrency]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [q-debugging-coroutines-techniques--kotlin--medium, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-default-inheritance-type--kotlin--easy]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [kotlin, coroutines, structured-concurrency, scope, lifecycle, memory-leaks, difficulty/medium]
-source: Kotlin Coroutines Interview Questions PDF
----\
-# Вопрос (RU)
-> Что такое структурированная конкурентность и почему она важна при использовании корутин в Android?
-
----
-
 # Question (EN)
 > What is structured concurrency and why is it important in Android coroutine usage?
 ## Ответ (RU)

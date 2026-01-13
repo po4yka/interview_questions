@@ -1,11 +1,6 @@
 ---
 '---id': kotlin-090
 title: Coroutine Memory Leaks and Prevention / Утечки памяти в корутинах и их предотвращение
-anki_cards:
-- slug: q-coroutine-memory-leaks-0-en
-  language: en
-- slug: q-coroutine-memory-leaks-0-ru
-  language: ru
 aliases:
 - Coroutine Memory Leaks and Prevention
 - Утечки памяти в корутинах и их предотвращение
@@ -34,6 +29,21 @@ tags:
 - coroutines
 - difficulty/hard
 - kotlin
+anki_cards:
+- slug: q-coroutine-memory-leaks--kotlin--hard-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
+- slug: q-coroutine-memory-leaks--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140024

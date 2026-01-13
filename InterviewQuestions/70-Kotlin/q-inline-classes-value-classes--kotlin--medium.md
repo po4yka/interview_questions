@@ -1,31 +1,52 @@
 ---
----
----id: kotlin-018
-title: "Inline Classes (Value Classes) / Встроенные классы (Value классы)"
-aliases: ["Inline Classes (Value Classes)", "Встроенные классы (Value классы)"]
-
-# Classification
+'---id': kotlin-018
+title: Inline Classes (Value Classes) / Встроенные классы (Value классы)
+aliases:
+- Inline Classes (Value Classes)
+- Встроенные классы (Value классы)
 topic: kotlin
-subtopics: [optimization, performance]
+subtopics:
+- optimization
+- performance
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, c-value-classes, q-inline-value-classes-performance--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
-
-# Timestamps
+related:
+- c-compose-recomposition
+- c-kotlin
+- c-perfetto
+- c-power-profiling
+- c-value-classes
+- q-inline-value-classes-performance--kotlin--medium
+- q-kotlin-inline-functions--kotlin--medium
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [difficulty/medium, kotlin, optimization, performance, value-class]
+tags:
+- difficulty/medium
+- kotlin
+- optimization
+- performance
+- value-class
+anki_cards:
+- slug: q-inline-classes-value-classes--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-inline-classes-value-classes--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое встроенные классы (value классы) в Kotlin?

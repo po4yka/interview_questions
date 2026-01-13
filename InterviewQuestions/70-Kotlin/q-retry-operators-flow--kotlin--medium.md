@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-retry-operators-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-retry-operators-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-044
-title: "Retry and RetryWhen operators in Flow / Операторы Retry и RetryWhen во `Flow`"
-aliases: ["Retry and RetryWhen operators in Flow", "Операторы Retry и RetryWhen во Flow"]
-
-# Classification
-topic: kotlin
-subtopics: [error-handling, flow]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, q-race-conditions-coroutines--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-11-09
-
-tags: [difficulty/medium, error-handling, flow, kotlin, operators, retry]
----\
-# Вопрос (RU)
-> Что такое операторы `retry` и `retryWhen` в Kotlin `Flow`? Как они работают?
-
----
-
 # Question (EN)
 > What are `retry` and `retryWhen` operators in Kotlin `Flow`? How do they work?
 

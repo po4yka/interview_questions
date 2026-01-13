@@ -1,30 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-flow-basics--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-flow-basics--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-035
-title: "Kotlin Flow Basics / Основы Flow в Kotlin"
-aliases: ["Kotlin Flow Basics", "Основы Flow в Kotlin"]
-topic: kotlin
-subtopics: [coroutines, flow]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
-source_note: Kirchhoff Android Interview Questions repository
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin, q-channels-vs-flow--kotlin--medium]
-created: 2025-10-05
-updated: 2025-11-10
-tags: [async, coroutines, difficulty/medium, flow, kotlin, reactive-streams]
-
----\
-# Вопрос (RU)
-> Что вы знаете о `Flow` в Kotlin?
-
----
-
 # Question (EN)
 > What do you know about `Flow` in Kotlin?
 

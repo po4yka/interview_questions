@@ -1,20 +1,46 @@
 ---
----
----id: lang-063
-title: "How To Create Suspend Function / Как создать suspend функцию"
-aliases: [How To Create Suspend Function, Как создать suspend функцию]
+'---id': lang-063
+title: How To Create Suspend Function / Как создать suspend функцию
+aliases:
+- How To Create Suspend Function
+- Как создать suspend функцию
 topic: kotlin
-subtopics: [coroutines, functions, kotlin]
+subtopics:
+- coroutines
+- functions
+- kotlin
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
 created: 2025-10-15
 updated: 2025-11-09
-tags: [coroutines, difficulty/medium, functions, kotlin]
+tags:
+- coroutines
+- difficulty/medium
+- functions
+- kotlin
+anki_cards:
+- slug: q-how-to-create-suspend-function--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-how-to-create-suspend-function--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как создать suspend функцию?

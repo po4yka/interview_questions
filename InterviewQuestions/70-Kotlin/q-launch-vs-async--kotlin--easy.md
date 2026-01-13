@@ -1,31 +1,48 @@
 ---
----
----id: kotlin-135
-title: "launch vs async: When to Use Each / launch против async: когда использовать"
-aliases: ["launch vs async: When to Use Each", "launch против async: когда использовать"]
-
-# Classification
+'---id': kotlin-135
+title: 'launch vs async: When to Use Each / launch против async: когда использовать'
+aliases:
+- 'launch vs async: When to Use Each'
+- 'launch против async: когда использовать'
 topic: kotlin
-subtopics: [coroutines, patterns]
+subtopics:
+- coroutines
+- patterns
 question_kind: theory
 difficulty: easy
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140027
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-coroutines-basics, c-stateflow, q-coroutine-context-elements--kotlin--hard, q-kotlin-multiplatform-overview--kotlin--hard]
-
-# Timestamps
+related:
+- c-kotlin
+- c-kotlin-coroutines-basics
+- c-stateflow
+- q-coroutine-context-elements--kotlin--hard
+- q-kotlin-multiplatform-overview--kotlin--hard
 created: 2025-10-12
 updated: 2025-11-10
-
-tags: [coroutines, difficulty/easy, kotlin]
+tags:
+- coroutines
+- difficulty/easy
+- kotlin
+anki_cards:
+- slug: q-launch-vs-async--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-launch-vs-async--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140027

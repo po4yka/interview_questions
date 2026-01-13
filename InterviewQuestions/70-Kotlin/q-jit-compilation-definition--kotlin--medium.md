@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-jit-compilation-definition--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-jit-compilation-definition--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-221
-title: "Jit Compilation Definition / Определение JIT компиляции"
-aliases: ["Jit Compilation Definition, Определение JIT компиляции"]
-topic: kotlin
-subtopics: [access-modifiers, class-features, type-system]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [q-kotlin-reified-types--kotlin--hard, q-testing-coroutine-cancellation--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [difficulty/medium]
----\
-# Вопрос (RU)
-
-> Что Такое JIT?
-
----
-
 # Question (EN)
 
 > What is JIT?

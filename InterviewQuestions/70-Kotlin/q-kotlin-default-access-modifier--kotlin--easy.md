@@ -1,20 +1,43 @@
 ---
----
----id: lang-201
-title: "Kotlin Default Access Modifier / Модификатор доступа по умолчанию в Kotlin"
-aliases: ["Kotlin Default Access Modifier", "Модификатор доступа по умолчанию в Kotlin"]
+'---id': lang-201
+title: Kotlin Default Access Modifier / Модификатор доступа по умолчанию в Kotlin
+aliases:
+- Kotlin Default Access Modifier
+- Модификатор доступа по умолчанию в Kotlin
 topic: kotlin
-subtopics: [access-modifiers]
+subtopics:
+- access-modifiers
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-debounce-search-coroutines--kotlin--medium, q-dispatcher-performance--kotlin--hard]
+related:
+- c-kotlin
+- q-debounce-search-coroutines--kotlin--medium
+- q-dispatcher-performance--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/easy, kotlin, kotlin/access-modifiers]
+tags:
+- difficulty/easy
+- kotlin
+- kotlin/access-modifiers
+anki_cards:
+- slug: q-kotlin-default-access-modifier--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-default-access-modifier--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Какой модификатор доступа по умолчанию используется в Kotlin?

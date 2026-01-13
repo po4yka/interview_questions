@@ -1,41 +1,18 @@
 ---
+anki_cards:
+- slug: q-produce-actor-builders--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-produce-actor-builders--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-065
-title: "produce and actor Channel Builders / Билдеры каналов produce и actor"
-aliases: ["produce and actor Channel Builders", "Билдеры каналов produce и actor"]
-
-# Classification
-topic: kotlin
-subtopics: [channels, coroutines, functions]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Coroutines Channel Builders Guide
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-actor-pattern--kotlin--hard, q-channel-closing-completion--kotlin--medium, q-channels-basics-types--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [actor, builders, channels, coroutines, difficulty/medium, kotlin, produce]
----\
-# Вопрос (RU)
-> Что такое билдеры каналов `produce` и `actor`? Объясните их назначение, автоматическое управление ресурсами, особенности привязки к `CoroutineScope` и когда использовать каждый паттерн билдера.
-
-# Question (EN)
-> What are `produce` and `actor` channel builders? Explain their purpose, automatic resource management, scope-binding semantics, and when to use each builder pattern.
-
----
-
 ## Ответ (RU)
 
 Билдеры `produce` и `actor` — это высокоуровневые функции (`CoroutineScope.produce` и `CoroutineScope.actor`) из `kotlinx.coroutines.channels`, которые упрощают типичные паттерны взаимодействия корутин через каналы и обеспечивают автоматическое управление ресурсами при использовании в рамках структурированной конкуренции.

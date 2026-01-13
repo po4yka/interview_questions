@@ -1,43 +1,18 @@
 ---
----
----\
-id: kotlin-048
 anki_cards:
-- slug: q-coroutine-context-detailed-0-en
+- slug: q-coroutine-context-detailed--kotlin--hard-0-en
   language: en
-- slug: q-coroutine-context-detailed-0-ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-context-detailed--kotlin--hard-0-ru
   language: ru
-title: "CoroutineContext explained in detail / CoroutineContext детально"
-aliases: ["CoroutineContext explained in detail", "CoroutineContext детально"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, dispatchers, flow]
-question_kind: theory
-difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-flow-backpressure--kotlin--hard]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-11-10
-
-tags: [coroutinecontext, coroutines, difficulty/hard, dispatchers, job, kotlin]
----\
-# Вопрос (RU)
-> Что такое CoroutineContext в Kotlin? Как он работает и какие его ключевые элементы?
-
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
-
 # Question (EN)
 > What is CoroutineContext in Kotlin? How does it work and what are its key elements?
 

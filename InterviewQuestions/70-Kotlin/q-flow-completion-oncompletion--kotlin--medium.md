@@ -1,21 +1,43 @@
 ---
----
 id: kotlin-148
-title: "Flow completion with onCompletion operator / Завершение Flow с onCompletion оператором"
-aliases: [Completion, Flow, onCompletion]
+title: Flow completion with onCompletion operator / Завершение Flow с onCompletion
+  оператором
+aliases:
+- Completion
+- Flow
+- onCompletion
+anki_cards:
+- slug: kotlin148-0-en
+  language: en
+  anki_id: 1768327346737
+  synced_at: '2026-01-13T22:02:26.787530'
+- slug: kotlin148-1-ru
+  language: ru
+  anki_id: 1768327346785
+  synced_at: '2026-01-13T22:02:26.790514'
 topic: kotlin
-subtopics: [c-coroutines, c-flow, c-kotlin]
+subtopics:
+- c-coroutines
+- c-flow
+- c-kotlin
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, q-kotlin-extension-functions--kotlin--medium, q-kotlin-type-system--kotlin--medium]
+related:
+- c-flow
+- c-kotlin
+- q-kotlin-extension-functions--kotlin--medium
+- q-kotlin-type-system--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium]
----\
+tags:
+- difficulty/medium
+---
 # Вопрос (RU)
 Что такое оператор `onCompletion` в `Kotlin Flow` и чем он отличается от блоков `finally`? Как обрабатывать завершение для успешных случаев, исключений и отмены? Приведите production-примеры очистки, логирования, обновления UI-состояния и аналитики с корректными стратегиями тестирования.
 

@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-flow-flatmap-operator--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-flatmap-operator--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-081
-title: "Flow Flatmap Operator / Оператор flatMap для Flow"
-aliases: [Flow Flatmap Operator, Оператор flatMap для Flow]
-topic: kotlin
-subtopics: [coroutines, flow, operators]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-flow]
-created: 2025-10-15
-updated: 2025-11-10
-tags: [coroutines, difficulty/easy, flow, kotlin, operators, programming-languages, reactive]
----\
-# Вопрос (RU)
-> Чем в Kotlin `Flow` воспользоваться, если нужно преобразовать один поток данных в другой поток данных?
-
----
-
 # Question (EN)
 > In Kotlin `Flow`, what should you use if you need to transform one data stream into another data stream?
 

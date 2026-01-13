@@ -1,20 +1,43 @@
 ---
----
----id: lang-202
-title: "Kotlin Class Initializers / Инициализаторы классов Kotlin"
-aliases: ["Kotlin Class Initializers", "Инициализаторы классов Kotlin"]
+'---id': lang-202
+title: Kotlin Class Initializers / Инициализаторы классов Kotlin
+aliases:
+- Kotlin Class Initializers
+- Инициализаторы классов Kotlin
 topic: kotlin
-subtopics: ["classes", "functions", "types"]
+subtopics:
+- classes
+- functions
+- types
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-actor-pattern--kotlin--hard]
+related:
+- c-kotlin
+- q-actor-pattern--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/medium, kotlin]
+tags:
+- difficulty/medium
+- kotlin
+anki_cards:
+- slug: q-kotlin-class-initializers--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-class-initializers--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Расскажи про инициализаторы в классах в Kotlin

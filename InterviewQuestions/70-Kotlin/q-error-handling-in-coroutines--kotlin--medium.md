@@ -1,20 +1,47 @@
 ---
----
----id: lang-057
-title: "Error Handling In Coroutines / Обработка ошибок в корутинах"
-aliases: [Error Handling In Coroutines, Обработка ошибок в корутинах]
+'---id': lang-057
+title: Error Handling In Coroutines / Обработка ошибок в корутинах
+aliases:
+- Error Handling In Coroutines
+- Обработка ошибок в корутинах
 topic: kotlin
-subtopics: [concurrency, coroutines, error-handling]
+subtopics:
+- concurrency
+- coroutines
+- error-handling
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
 created: 2025-10-15
 updated: 2025-11-09
-tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin]
+tags:
+- coroutines
+- difficulty/medium
+- error-handling
+- exception-handling
+- kotlin
+anki_cards:
+- slug: q-error-handling-in-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-error-handling-in-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Какие известны способы обработки ошибок в корутинах?

@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-java-all-classes-inherit-from-object--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-java-all-classes-inherit-from-object--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: algo-070
-title: "Java All Classes Inherit From Object / В Java все классы наследуются от Object"
-aliases: [Java All Classes Inherit From Object, В Java все классы наследуются от Object]
-topic: kotlin
-subtopics: [inheritance]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-algorithms, c-computer-science]
-created: 2025-10-13
-updated: 2025-11-11
-tags: [difficulty/easy, java, object-class, oop, programming-languages/inheritance]
----\
-# Вопрос (RU)
-> От какого объекта наследуются все классы в Java?
-
----
-
 # Question (EN)
 > From which object do all classes in Java inherit?
 

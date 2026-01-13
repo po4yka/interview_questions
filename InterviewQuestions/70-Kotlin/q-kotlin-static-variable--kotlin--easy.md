@@ -1,20 +1,48 @@
 ---
----
----id: lang-093
-title: "Kotlin Static Variable / Статические переменные в Kotlin"
-aliases: [Kotlin Static Variable, Статические переменные в Kotlin]
+'---id': lang-093
+title: Kotlin Static Variable / Статические переменные в Kotlin
+aliases:
+- Kotlin Static Variable
+- Статические переменные в Kotlin
 topic: kotlin
-subtopics: [companion-object, jvm-interop]
+subtopics:
+- companion-object
+- jvm-interop
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, c-variable, q-enum-class-advanced--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- c-variable
+- q-enum-class-advanced--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [companion-object, const, difficulty/easy, jvmstatic, kotlin, static]
+tags:
+- companion-object
+- const
+- difficulty/easy
+- jvmstatic
+- kotlin
+- static
+anki_cards:
+- slug: q-kotlin-static-variable--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-static-variable--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как сделать статическую переменную?

@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-type-aliases--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-type-aliases--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-021
-title: "Type Aliases in Kotlin / Псевдонимы типов в Kotlin"
-aliases: ["Type Aliases in Kotlin", "Псевдонимы типов в Kotlin"]
-
-# Classification
-topic: kotlin
-subtopics: [dsl, readability, type-aliases]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
-source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-inline-classes-value-classes--kotlin--medium, q-kotlin-generics--kotlin--hard]
-
-# Timestamps
-created: 2025-10-05
-updated: 2025-11-09
-
-tags: [difficulty/medium, kotlin, type-aliases, types]
----\
-# Вопрос (RU)
-> Что такое псевдонимы типов (type aliases) в Kotlin и когда их использовать?
-
----
-
 # Question (EN)
 > What are type aliases in Kotlin and when should you use them?
 

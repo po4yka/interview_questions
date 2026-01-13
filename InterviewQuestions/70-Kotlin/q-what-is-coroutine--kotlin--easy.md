@@ -1,86 +1,18 @@
 ---
+anki_cards:
+- slug: q-what-is-coroutine--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-what-is-coroutine--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-072
-title: "What is a Coroutine? Basic Concepts / Что такое корутина? Основные концепции"
-aliases: ["What is a Coroutine? Basic Concepts", "Что такое корутина? Основные концепции"]
-topic: kotlin
-subtopics: [concurrency, coroutines]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Coroutines Guide
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-coroutine-scope-basics--kotlin--easy, q-suspend-functions-basics--kotlin--easy]
-created: 2025-10-12
-updated: 2025-11-11
-tags: [async, concurrency, coroutines, difficulty/easy, kotlin]
-
----\
-# Вопрос (RU)
-> Что такое корутина в Kotlin? Объясните её основные концепции и чем она отличается от потока.
-
-# Question (EN)
-> What is a coroutine in Kotlin? Explain its basic concepts and how it differs from a thread.
-
-## Ответ (RU)
-
-**Корутина** (или сопрограмма) — это экземпляр **приостанавливаемого вычисления**. Концептуально она похожа на поток, так как выполняет блок кода конкурентно (точнее — асинхронно/конкурентно) с остальной частью программы. Однако корутина не привязана к какому-либо конкретному потоку. Она может приостановить свое выполнение в одном потоке и возобновить в другом.
-
-См. также: [[c-kotlin]], [[c-coroutines]].
-
-### Ключевые Концепции
-
-1.  **Приостанавливаемость (Suspendable)**: Корутины можно приостанавливать в определенных точках, не блокируя при этом поток, в котором они выполняются. Это ключевая особенность, делающая их эффективными.
-2.  **Легковесность**: Вы можете запустить тысячи или даже миллионы корутин поверх небольшого числа потоков, в то время как потоки дороги в создании и поддержании.
-3.  **Структурированная конкуррентность (Structured Concurrency)**: Корутины запускаются в пределах `CoroutineScope`, что позволяет управлять их жизненным циклом, отменой и обработкой ошибок.
-
-### Корутина vs. Поток
-
-| Характеристика | Корутина | Поток |
-| :--- | :--- | :--- |
-| **Затраты ресурсов**| Очень дешевые (легковесные) | Дорогие (тяжеловесные) |
-| **Блокировка** | Неблокирующий стиль (используют приостановку вместо блокировки для асинхронных операций) | Часто блокирующие (операции блокируют поток) |
-| **Управление** | Планируются и управляются диспетчером корутин (библиотекой/рантаймом поверх потоков ОС) | Управляются операционной системой |
-| **Создание** | Быстрое | Медленное |
-| **Переключение контекста**| Быстрое (между корутинами внутри процесса) | Медленное (на уровне ОС) |
-
-### Пример
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun main() = runBlocking { // Создает CoroutineScope и блокирует текущий поток до завершения всех корутин внутри
-    println("Основная программа стартует: ${Thread.currentThread().name}")
-
-    launch { // Запускает новую корутину в том же scope
-        println("Фейковая работа стартует: ${Thread.currentThread().name}")
-        delay(1000) // Приостанавливает корутину на 1 секунду, не блокируя поток
-        println("Фейковая работа завершена: ${Thread.currentThread().name}")
-    }
-
-    println("Основная программа продолжается: ${Thread.currentThread().name}")
-    delay(2000) // Приостанавливает корутину main на 2 секунды, давая времени дочерней корутине завершиться
-    println("Основная программа завершается: ${Thread.currentThread().name}")
-}
-```
-
-**Вывод:**
-```text
-Основная программа стартует: main
-Основная программа продолжается: main
-Фейковая работа стартует: main
-Фейковая работа завершена: main
-Основная программа завершается: main
-```
-
-В этом примере `delay()` — это `suspend`-функция. Когда корутина вызывает `delay()`, она приостанавливается, но поток `main` не блокируется этой корутиной и может быть использован для выполнения других задач или корутин.
-
----
-
 ## Answer (EN)
 
 A **coroutine** is an instance of a **suspendable computation**. It is conceptually similar to a thread in that it runs a block of code that can execute concurrently (more precisely, asynchronously/concurrently) with the rest of the program. However, a coroutine is not bound to any particular thread. It may suspend its execution in one thread and resume in another.

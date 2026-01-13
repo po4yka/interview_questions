@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-null-checks-methods--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-null-checks-methods--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-058
-title: "Kotlin Null Checks Methods / Методы проверки на null в Kotlin"
-aliases: [Kotlin Null Checks Methods, Методы проверки на null в Kotlin]
-topic: kotlin
-subtopics: [null-safety, operators]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-catch-operator-flow--kotlin--medium, q-coroutine-scope-basics--kotlin--easy]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [difficulty/easy, elvis, kotlin, null-checks, null-safety, operators, safe-call]
----\
-# Вопрос (RU)
-> Каким образом осуществлять проверки на null?
-
----
-
 # Question (EN)
 > How to perform null checks?
 

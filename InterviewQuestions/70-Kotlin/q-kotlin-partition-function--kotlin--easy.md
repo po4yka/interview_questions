@@ -1,21 +1,45 @@
 ---
----
----id: lang-055
-title: "Kotlin Partition Function / Функция partition в Kotlin"
-aliases: [Kotlin Partition Function, Функция partition в Kotlin]
+'---id': lang-055
+title: Kotlin Partition Function / Функция partition в Kotlin
+aliases:
+- Kotlin Partition Function
+- Функция partition в Kotlin
 topic: kotlin
-subtopics: [c-collections]
+subtopics:
+- c-collections
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-continuation-cps-internals--kotlin--hard, q-fan-in-fan-out-channels--kotlin--hard]
+related:
+- c-collections
+- c-kotlin
+- q-continuation-cps-internals--kotlin--hard
+- q-fan-in-fan-out-channels--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-11
-tags: [collections, difficulty/easy, functions, kotlin]
-
+tags:
+- collections
+- difficulty/easy
+- functions
+- kotlin
+anki_cards:
+- slug: q-kotlin-partition-function--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-partition-function--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что делает функция коллекций `partition()`?

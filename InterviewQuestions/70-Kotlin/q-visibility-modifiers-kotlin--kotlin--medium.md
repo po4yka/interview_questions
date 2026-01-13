@@ -27,6 +27,21 @@ tags:
 - visibility-modifiers
 sources:
 - https://kotlinlang.org/docs/visibility-modifiers.html
+anki_cards:
+- slug: kotlin-236-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - visibility-modifiers
+- slug: kotlin-236-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - visibility-modifiers
 ---
 # Вопрос (RU)
 > Какие модификаторы видимости есть в Kotlin и чем они отличаются?

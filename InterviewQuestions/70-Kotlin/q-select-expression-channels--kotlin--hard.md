@@ -1,31 +1,48 @@
 ---
----
----id: kotlin-071
-title: "select Expression with Channels / Выражение select с каналами"
-aliases: ["select Expression with Channels", "Выражение select с каналами"]
-
-# Classification
+'---id': kotlin-071
+title: select Expression with Channels / Выражение select с каналами
+aliases:
+- select Expression with Channels
+- Выражение select с каналами
 topic: kotlin
-subtopics: [channels, coroutines]
+subtopics:
+- channels
+- coroutines
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines select Expression Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-kotlin, c-stateflow, q-advanced-coroutine-patterns--kotlin--hard]
-
-# Timestamps
+related:
+- c-concurrency
+- c-kotlin
+- c-stateflow
+- q-advanced-coroutine-patterns--kotlin--hard
 created: 2025-10-12
 updated: 2025-11-11
-
-tags: [channels, coroutines, difficulty/hard, kotlin]
+tags:
+- channels
+- coroutines
+- difficulty/hard
+- kotlin
+anki_cards:
+- slug: q-select-expression-channels--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-select-expression-channels--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое выражение `select` для каналов в Kotlin? Объясните, как мультиплексировать несколько каналов, обрабатывать таймауты с `onTimeout`, реализовать приоритетный выбор и продвинутые паттерны fan-in/fan-out.

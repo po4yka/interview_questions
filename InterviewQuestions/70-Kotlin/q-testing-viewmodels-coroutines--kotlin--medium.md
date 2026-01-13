@@ -1,20 +1,51 @@
 ---
----
----id: kotlin-199
-title: "Testing Viewmodels Coroutines / Тестирование Viewmodels Coroutines"
-aliases: [Testing Coroutines, Unit Testing, ViewModel Testing, Тестирование ViewModel]
+'---id': kotlin-199
+title: Testing Viewmodels Coroutines / Тестирование Viewmodels Coroutines
+aliases:
+- Testing Coroutines
+- Unit Testing
+- ViewModel Testing
+- Тестирование ViewModel
 topic: kotlin
-subtopics: [coroutines, testing]
+subtopics:
+- coroutines
+- testing
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-flowon-operator-context-switching--kotlin--hard]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-flowon-operator-context-switching--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-09
-tags: [android, coroutines, difficulty/medium, kotlin, testing, testing-unit, viewmodel]
+tags:
+- android
+- coroutines
+- difficulty/medium
+- kotlin
+- testing
+- testing-unit
+- viewmodel
+anki_cards:
+- slug: q-testing-viewmodels-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-testing-viewmodels-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 

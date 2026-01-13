@@ -28,6 +28,25 @@ tags:
 - equality
 - kotlin
 - object-methods
+anki_cards:
+- slug: lang-083-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - collections
+  - equality
+  - object-methods
+- slug: lang-083-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - collections
+  - equality
+  - object-methods
 ---
 # Вопрос (RU)
 > Зачем нужны методы `equals()` и `hashCode()` в Kotlin и Java?

@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-extension-functions-advanced--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-extension-functions-advanced--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-229
-title: "Kotlin Extension Functions Advanced / Продвинутые Extension-функции в Kotlin"
-aliases: ["Advanced Extension Functions", "Kotlin Extension Functions Advanced"]
-topic: kotlin
-subtopics: [dsl, extensions, generics]
-question_kind: theory
-difficulty: hard
-original_language: en
-language_tags: [en]
-status: draft
-moc: moc-kotlin
-related: [q-crossinline-keyword--kotlin--medium, q-object-singleton-companion--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [difficulty/hard, dsl, extensions, generics, kotlin, receivers]
----\
-# Вопрос (RU)
-
-> Реализуйте extension-функции с receivers, generic extensions и nullable receivers. Разберитесь с разрешением вызовов и областью видимости.
-
----
-
 # Question (EN)
 
 > Implement extension functions with receivers, generic extensions, and nullable receivers. Understand resolution and scope.

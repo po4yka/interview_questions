@@ -1,31 +1,53 @@
 ---
----
----id: kotlin-068
-title: "Testing ViewModels with Coroutines / Тестирование ViewModel с корутинами"
-aliases: ["Testing ViewModels with Coroutines", "Тестирование ViewModel с корутинами"]
-
-# Classification
+'---id': kotlin-068
+title: Testing ViewModels with Coroutines / Тестирование ViewModel с корутинами
+aliases:
+- Testing ViewModels with Coroutines
+- Тестирование ViewModel с корутинами
 topic: kotlin
-subtopics: [coroutines, stateflow, viewmodel]
+subtopics:
+- coroutines
+- stateflow
+- viewmodel
 question_kind: coding
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Guide to testing coroutines in ViewModels
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
-
-# Timestamps
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09
-
-tags: [coroutines, difficulty/medium, kotlin, stateflow, testing, turbine, testing-unit, viewmodel]
+tags:
+- coroutines
+- difficulty/medium
+- kotlin
+- stateflow
+- testing
+- turbine
+- testing-unit
+- viewmodel
+anki_cards:
+- slug: q-testing-viewmodel-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-testing-viewmodel-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как тестировать `ViewModel` с корутинами? Объясните `TestCoroutineDispatcher`, `StandardTestDispatcher`, тестирование `StateFlow`/`SharedFlow` и мокирование suspend функций.

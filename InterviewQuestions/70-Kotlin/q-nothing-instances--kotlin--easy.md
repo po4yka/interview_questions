@@ -28,6 +28,21 @@ tags:
 - kotlin
 - nothing
 - type-system
+anki_cards:
+- slug: kotlin-178-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - type-system
+- slug: kotlin-178-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - type-system
 ---
 # Вопрос (RU)
 > Сколько экземпляров имеет тип Nothing в Kotlin?

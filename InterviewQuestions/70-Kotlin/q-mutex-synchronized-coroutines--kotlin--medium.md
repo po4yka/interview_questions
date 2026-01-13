@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-mutex-synchronized-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-mutex-synchronized-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-081
-title: "Mutex vs synchronized in Kotlin coroutines / Mutex vs synchronized в Kotlin корутинах"
-topic: kotlin
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-created: 2025-10-12
-updated: 2025-11-09
-aliases: ["Mutex vs synchronized in Kotlin coroutines", "Mutex vs synchronized в Kotlin корутинах"]
-question_kind: coding
-tags: [concurrency, coroutines, difficulty/medium, kotlin, mutex, synchronization, thread-safety]
-moc: moc-kotlin
-related: [c-kotlin, q-channelflow-callbackflow-flow--kotlin--medium, q-debounce-throttle-flow--kotlin--medium, q-race-conditions-coroutines--kotlin--hard, q-semaphore-rate-limiting--kotlin--medium]
-subtopics: [concurrency, coroutines, mutex]
----\
-# Вопрос (RU)
-> В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?
-
----
-
 # Question (EN)
 > What is the difference between `Mutex` and `synchronized` in Kotlin coroutines, and when should you use each?
 

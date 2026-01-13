@@ -1,20 +1,48 @@
 ---
----
----id: lang-027
-title: "Flow Shopping Cart Implementation / Реализация корзины покупок с Flow"
-aliases: [Flow Shopping Cart Implementation, Реализация корзины покупок с Flow]
+'---id': lang-027
+title: Flow Shopping Cart Implementation / Реализация корзины покупок с Flow
+aliases:
+- Flow Shopping Cart Implementation
+- Реализация корзины покупок с Flow
 topic: kotlin
-subtopics: [coroutines, flow, state-management]
+subtopics:
+- coroutines
+- flow
+- state-management
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, c-stateflow]
+related:
+- c-flow
+- c-kotlin
+- c-stateflow
 created: 2025-10-15
 updated: 2025-11-09
-tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management]
+tags:
+- coroutines
+- difficulty/medium
+- flow
+- kotlin
+- reactive
+- state-management
+anki_cards:
+- slug: q-flow-shopping-cart-implementation--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-shopping-cart-implementation--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как реализовать работу `Flow` в приложении, когда нужно самостоятельно управлять всей корзиной на устройстве?

@@ -1,20 +1,44 @@
 ---
----
----id: kotlin-194
-title: "Kotlin Coroutines Overview / Обзор корутин Kotlin"
-aliases: ["Kotlin Coroutines Overview", "Обзор корутин Kotlin"]
+'---id': kotlin-194
+title: Kotlin Coroutines Overview / Обзор корутин Kotlin
+aliases:
+- Kotlin Coroutines Overview
+- Обзор корутин Kotlin
 topic: kotlin
-subtopics: [c-coroutines, c-kotlin-coroutines-basics]
+subtopics:
+- c-coroutines
+- c-kotlin-coroutines-basics
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-kotlin-coroutines, q-debounce-throttle-flow--kotlin--medium, q-flow-performance--kotlin--hard]
+related:
+- c-coroutines
+- c-kotlin
+- c-kotlin-coroutines
+- q-debounce-throttle-flow--kotlin--medium
+- q-flow-performance--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium]
+tags:
+- difficulty/medium
+anki_cards:
+- slug: q-kotlin-coroutines-overview--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-coroutines-overview--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что вы знаете о корутинах в Kotlin?

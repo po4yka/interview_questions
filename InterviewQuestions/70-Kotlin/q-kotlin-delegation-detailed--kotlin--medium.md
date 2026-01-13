@@ -1,45 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-delegation-detailed--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-delegation-detailed--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-043
-title: "Kotlin Delegation Pattern Deep Dive / Паттерн делегирования в Kotlin - детально"
-aliases: ["Kotlin Delegation Pattern Deep Dive", "Паттерн делегирования в Kotlin -
-      детально"]
-
-# Classification
-topic: kotlin
-subtopics: [by-keyword, delegates]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM
-  priority
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-destructuring-declarations--kotlin--medium, q-infix-functions--kotlin--medium]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-11-09
-
-tags: [by-keyword, delegates, delegation, difficulty/medium, kotlin, patterns]
-anki_synced: true
-anki_slugs:
-  - 70-kotlin-q-kotlin-delegation-detailed-kotlin-medium-p01-en
-  - 70-kotlin-q-kotlin-delegation-detailed-kotlin-medium-p01-ru
-anki_last_sync: '2025-11-27T09:56:33.839728'
----\
-# Вопрос (RU)
-> Объясните паттерн делегирования в Kotlin детально. Что такое делегирование классов и делегирование свойств?
-
----
-
 # Question (EN)
 > Explain the delegation pattern in Kotlin in detail. What are class delegation and property delegation?
 ## Ответ (RU)

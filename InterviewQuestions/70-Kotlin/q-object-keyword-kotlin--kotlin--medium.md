@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-object-keyword-kotlin--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-object-keyword-kotlin--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-166
-title: "Object Keyword Kotlin / Ключевое слово object в Kotlin"
-aliases: [Object Declaration, Object Keyword, Object в Kotlin, Singleton]
-topic: kotlin
-subtopics: [classes, singleton]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-flow-backpressure--kotlin--hard]
-created: 2025-10-15
-updated: 2025-11-11
-tags: [classes, difficulty/medium, kotlin, object-keyword, singleton]
-
----\
-# Вопрос (RU)
-> Расскажите про ключевое слово `object` в Kotlin. Каковы его применения и характеристики?
-
----
-
 # Question (EN)
 > Tell about the `object` keyword in Kotlin. What are its use cases and characteristics?
 

@@ -1,31 +1,52 @@
 ---
----
----id: kotlin-110
-title: "Structured Concurrency Patterns / Паттерны структурированной конкурентности"
-aliases: ["Structured Concurrency Patterns", "Паттерны структурированной конкурентности"]
-
-# Classification
+'---id': kotlin-110
+title: Structured Concurrency Patterns / Паттерны структурированной конкурентности
+aliases:
+- Structured Concurrency Patterns
+- Паттерны структурированной конкурентности
 topic: kotlin
-subtopics: [coroutines, coroutinescope]
+subtopics:
+- coroutines
+- coroutinescope
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Structured Concurrency Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-coroutines, c-stateflow, c-structured-concurrency, q-advanced-coroutine-patterns--kotlin--hard]
-
-# Timestamps
+related:
+- c-concurrency
+- c-coroutines
+- c-stateflow
+- c-structured-concurrency
+- q-advanced-coroutine-patterns--kotlin--hard
 created: 2025-10-12
 updated: 2025-11-09
-
-tags: [advanced, coroutines, coroutinescope, difficulty/hard, kotlin, structured-concurrency, supervision]
+tags:
+- advanced
+- coroutines
+- coroutinescope
+- difficulty/hard
+- kotlin
+- structured-concurrency
+- supervision
+anki_cards:
+- slug: q-structured-concurrency-patterns--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-structured-concurrency-patterns--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое структурированная конкурентность? Объясните различия coroutineScope и supervisorScope, отношения родитель-потомок, распространение отмены и продвинутые паттерны, включая withContext и координацию async/await.

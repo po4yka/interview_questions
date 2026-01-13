@@ -1,20 +1,43 @@
 ---
----
----id: lang-209
-title: "Kotlin Constructor Keyword / Ключевое слово constructor в Kotlin"
+'---id': lang-209
+title: Kotlin Constructor Keyword / Ключевое слово constructor в Kotlin
 aliases: []
 topic: kotlin
-subtopics: [classes, functions, types]
+subtopics:
+- classes
+- functions
+- types
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium]
+related:
+- c-kotlin
+- q-abstract-class-vs-interface--kotlin--medium
+- q-lifecyclescope-viewmodelscope--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/easy, kotlin/classes, kotlin/functions]
+tags:
+- difficulty/easy
+- kotlin/classes
+- kotlin/functions
+anki_cards:
+- slug: q-kotlin-constructor-keyword--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-constructor-keyword--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Какое ключевое слово используется в Kotlin при объявлении параметров конструктора и когда необходимо явно указывать `constructor`?

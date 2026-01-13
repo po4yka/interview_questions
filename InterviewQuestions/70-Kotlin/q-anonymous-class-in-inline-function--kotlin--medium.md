@@ -1,11 +1,6 @@
 ---
 id: kotlin-047
 title: Anonymous Class in Inline Function / Анонимный класс в inline функции
-anki_cards:
-- slug: q-anonymous-class-in-inline-function-0-en
-  language: en
-- slug: q-anonymous-class-in-inline-function-0-ru
-  language: ru
 aliases:
 - Anonymous Class in Inline Function
 - Анонимный класс в inline функции
@@ -42,6 +37,25 @@ tags:
 - lambdas
 - object-expressions
 - performance
+anki_cards:
+- slug: kotlin-047-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - anonymous-classes
+  - inline
+  - lambdas
+- slug: kotlin-047-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - anonymous-classes
+  - inline
+  - lambdas
 ---
 # Вопрос (RU)
 > Можно ли создать анонимный класс внутри inline функции в Kotlin?

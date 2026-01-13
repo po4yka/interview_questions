@@ -1,21 +1,52 @@
 ---
----
----id: kotlin-170
-title: "Coroutines and side effects in Jetpack Compose / Корутины и side effects в Jetpack Compose"
-aliases: [Coroutines Side Effects Compose, Корутины side effects Jetpack Compose]
+'---id': kotlin-170
+title: Coroutines and side effects in Jetpack Compose / Корутины и side effects в
+  Jetpack Compose
+aliases:
+- Coroutines Side Effects Compose
+- Корутины side effects Jetpack Compose
 topic: kotlin
-subtopics: [coroutines]
+subtopics:
+- coroutines
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android, coroutines, difficulty/medium, android/ui-compose, kotlin, launchedeffect, lifecycle, rememberCoroutineScope, side-effects, state-management]
+tags:
+- android
+- coroutines
+- difficulty/medium
+- android/ui-compose
+- kotlin
+- launchedeffect
+- lifecycle
+- rememberCoroutineScope
+- side-effects
+- state-management
 moc: moc-kotlin
-related: [c-compose-recomposition, c-recomposition, c-stateflow, q-testing-stateflow-sharedflow--kotlin--medium]
-
+related:
+- c-compose-recomposition
+- c-recomposition
+- c-stateflow
+- q-testing-stateflow-sharedflow--kotlin--medium
+anki_cards:
+- slug: q-compose-side-effects-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-compose-side-effects-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое side effects в Jetpack Compose и как с ними интегрируются корутины? Объясните `LaunchedEffect`, `rememberCoroutineScope`, `DisposableEffect`, `produceState` и другие обработчики побочных эффектов. Когда какой использовать? Приведите production-примеры загрузки данных, анимаций, обработки событий и коллекции `Flow` с корректным управлением жизненным циклом и стратегиями тестирования.

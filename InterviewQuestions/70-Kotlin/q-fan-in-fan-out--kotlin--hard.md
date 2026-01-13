@@ -1,32 +1,51 @@
 ---
----
----id: kotlin-092
-title: "Fan-in Fan-out Pattern / Паттерн Fan-in Fan-out"
-
-# Classification
+'---id': kotlin-092
+title: Fan-in Fan-out Pattern / Паттерн Fan-in Fan-out
 topic: kotlin
-subtopics: [channels, concurrency, coroutines]
+subtopics:
+- channels
+- concurrency
+- coroutines
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive guide on Fan-in Fan-out patterns
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-stateflow, q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--hard]
-
-# Timestamps
+related:
+- c-kotlin
+- c-stateflow
+- q-actor-pattern--kotlin--hard
+- q-advanced-coroutine-patterns--kotlin--hard
 created: 2025-10-12
 updated: 2025-11-11
-
 aliases: []
-
-tags: [channels, coroutines, difficulty/hard, fan-in, fan-out, kotlin, load-balancing, parallel-processing]
+tags:
+- channels
+- coroutines
+- difficulty/hard
+- fan-in
+- fan-out
+- kotlin
+- load-balancing
+- parallel-processing
+anki_cards:
+- slug: q-fan-in-fan-out--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-fan-in-fan-out--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое паттерны Fan-in и Fan-out в корутинах Kotlin? Объясните как распределять работу между несколькими воркерами и агрегировать результаты из множества источников.

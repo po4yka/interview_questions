@@ -1,41 +1,18 @@
 ---
+anki_cards:
+- slug: q-retrofit-coroutines-best-practices--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-retrofit-coroutines-best-practices--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-184
-title: "Retrofit with coroutines: best practices / Retrofit с корутинами: лучшие практики"
-aliases: [Coroutines Retrofit, Networking, REST API, Retrofit, Retrofit с корутинами]
-topic: kotlin
-subtopics: [coroutines, networking]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, q-flow-basics--kotlin--easy]
-created: 2025-10-15
-updated: 2025-11-11
-tags: [android, best-practices, coroutines, difficulty/medium, error-handling, kotlin, networking, okhttp, rest-api, retrofit]
-
----\
-# Вопрос (RU)
-
-> Лучшие практики использования `Retrofit` с корутинами в Kotlin для реальных Android-приложений.
-
-# Question (EN)
-
-> Best practices for using `Retrofit` with coroutines in Kotlin for real-world Android apps.
-
-## Ответ (RU)
-
-Ниже приведено детальное двуязычное руководство. Русская секция эквивалентна английской по структуре и коду; все ключевые примеры и практики представлены.
-
-## Answer (EN)
-
-Detailed best-practices guide follows below. English and Russian sections are structurally equivalent with identical code where provided.
-
----
-
 # Retrofit with Coroutines: Best Practices
 
 **English** | [Русский](#retrofit-с-корутинами-лучшие-практики)

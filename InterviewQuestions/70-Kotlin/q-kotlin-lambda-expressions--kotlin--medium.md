@@ -1,31 +1,50 @@
 ---
----
----id: kotlin-007
-title: "Lambda Expressions in Kotlin / Лямбда-выражения в Kotlin"
-aliases: ["Lambda Expressions in Kotlin", "Лямбда-выражения в Kotlin"]
-
-# Classification
+'---id': kotlin-007
+title: Lambda Expressions in Kotlin / Лямбда-выражения в Kotlin
+aliases:
+- Lambda Expressions in Kotlin
+- Лямбда-выражения в Kotlin
 topic: kotlin
-subtopics: [higher-order-functions, lambda-expressions]
+subtopics:
+- higher-order-functions
+- lambda-expressions
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
-source_note: Kirchhoff Android Interview Questions repository - adapted from functional interfaces content
-
-# Workflow & relations
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
+source_note: Kirchhoff Android Interview Questions repository - adapted from functional
+  interfaces content
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, c-lambda-expressions, q-kotlin-higher-order-functions--kotlin--medium]
-
-# Timestamps
+related:
+- c-kotlin
+- c-kotlin-features
+- c-lambda-expressions
+- q-kotlin-higher-order-functions--kotlin--medium
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [difficulty/medium, functional-programming, kotlin, lambda-expressions, sam-conversion]
+tags:
+- difficulty/medium
+- functional-programming
+- kotlin
+- lambda-expressions
+- sam-conversion
+anki_cards:
+- slug: q-kotlin-lambda-expressions--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-lambda-expressions--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое лямбда-выражения в Kotlin и как они работают?

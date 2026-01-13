@@ -33,6 +33,25 @@ tags:
 - run
 - scope-functions
 - with
+anki_cards:
+- slug: kotlin-014-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - apply
+  - let
+  - scope-functions
+- slug: kotlin-014-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - apply
+  - let
+  - scope-functions
 ---
 # Вопрос (RU)
 > Что такое функции области видимости (scope functions) в Kotlin?

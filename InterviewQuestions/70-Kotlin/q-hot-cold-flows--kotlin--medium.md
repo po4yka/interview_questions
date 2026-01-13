@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-hot-cold-flows--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-hot-cold-flows--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-076
-title: "Hot vs Cold Flows / Горячие и холодные потоки"
-aliases: ["Hot vs Cold Flows", "Горячие и холодные потоки"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, flow, hot-flows]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Hot Cold Flows Guide
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin, q-kotlin-flow-basics--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [cold-flows, coroutines, difficulty/medium, flow, hot-flows, kotlin]
----\
-# Вопрос (RU)
-> В чем разница между горячими и холодными потоками? Объясните `Flow` (холодный), `SharedFlow`, `StateFlow` (горячие), когда использовать каждый и как конвертировать между ними.
-
----
-
 # Question (EN)
 > What's the difference between hot and cold Flows? Explain `Flow` (cold), `SharedFlow`, `StateFlow` (hot), when to use each, and how to convert between them.
 

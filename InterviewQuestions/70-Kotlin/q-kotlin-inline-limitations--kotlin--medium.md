@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-inline-limitations--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-inline-limitations--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-054
-title: "Kotlin Inline Limitations / Ограничения inline в Kotlin"
-aliases: [Kotlin Inline Limitations, Ограничения inline в Kotlin]
-topic: kotlin
-subtopics: [inline-functions, performance]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-context-receivers--kotlin--hard]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [difficulty/medium, inline, kotlin, lambdas, optimization, performance]
----\
-# Вопрос (RU)
-> Бывают ли случаи, когда нельзя использовать inline?
-
----
-
 # Question (EN)
 > Are there cases when inline cannot be used?
 

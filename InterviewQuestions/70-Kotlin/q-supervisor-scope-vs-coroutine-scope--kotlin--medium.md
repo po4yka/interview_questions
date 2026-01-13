@@ -1,22 +1,48 @@
 ---
----
----id: kotlin-053
-title: "supervisorScope vs coroutineScope / supervisorScope против coroutineScope"
-aliases: ["supervisorScope vs coroutineScope"]
+'---id': kotlin-053
+title: supervisorScope vs coroutineScope / supervisorScope против coroutineScope
+aliases:
+- supervisorScope vs coroutineScope
 topic: kotlin
-subtopics: [coroutines, error-handling, scopes]
+subtopics:
+- coroutines
+- error-handling
+- scopes
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en]
+language_tags:
+- en
 source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
 status: draft
 moc: moc-kotlin
-related: [c-stateflow, q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-vs-supervisorjob--kotlin--medium]
+related:
+- c-stateflow
+- q-coroutinescope-vs-supervisorscope--kotlin--medium
+- q-job-vs-supervisorjob--kotlin--medium
 created: 2025-10-11
 updated: 2025-10-11
-tags: [coroutines, difficulty/medium, error-handling, kotlin, scopes, supervisor]
+tags:
+- coroutines
+- difficulty/medium
+- error-handling
+- kotlin
+- scopes
+- supervisor
+anki_cards:
+- slug: q-supervisor-scope-vs-coroutine-scope--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-supervisor-scope-vs-coroutine-scope--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 

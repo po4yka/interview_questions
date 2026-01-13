@@ -1,43 +1,18 @@
 ---
----
----\
-id: kotlin-096
 anki_cards:
-- slug: q-coroutine-dispatchers-0-en
+- slug: q-coroutine-dispatchers--kotlin--medium-0-en
   language: en
-- slug: q-coroutine-dispatchers-0-ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-dispatchers--kotlin--medium-0-ru
   language: ru
-title: "Coroutine Dispatchers / Диспетчеры корутин"
-aliases: ["Coroutine Dispatchers", "Диспетчеры корутин"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, dispatchers, threading]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive guide to Kotlin Coroutine Dispatchers
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-coroutine-context-explained--kotlin--medium, q-dispatchers-io-vs-default--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, threading, unconfined]
----\
-# Вопрос (RU)
-> Что такое диспетчеры корутин в Kotlin? Объясните диспетчеры Main, IO, Default и Unconfined и когда использовать каждый.
-
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
-
 # Question (EN)
 > What are coroutine dispatchers in Kotlin? Explain Main, IO, Default, and Unconfined dispatchers and when to use each.
 

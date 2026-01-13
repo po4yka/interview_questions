@@ -1,23 +1,50 @@
 ---
----
----id: kotlin-124
-title: "Channels Basics and Types / Основы и типы каналов"
-aliases: ["Channels Basics and Types", "Основы и типы каналов"]
+'---id': kotlin-124
+title: Channels Basics and Types / Основы и типы каналов
+aliases:
+- Channels Basics and Types
+- Основы и типы каналов
 topic: kotlin
-subtopics: [channels]
+subtopics:
+- channels
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines Channel Guide
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-channel-buffering-strategies--kotlin--hard]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-channel-buffering-strategies--kotlin--hard
 created: 2025-10-12
 updated: 2025-11-09
-tags: [buffered, channel-types, channels, coroutines, difficulty/medium, kotlin, rendezvous]
-
+tags:
+- buffered
+- channel-types
+- channels
+- coroutines
+- difficulty/medium
+- kotlin
+- rendezvous
+anki_cards:
+- slug: q-channels-basics-types--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-channels-basics-types--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое каналы в корутинах Kotlin? Объясните различные типы каналов (Rendezvous, Buffered, Unlimited, Conflated), их характеристики и когда использовать каждый тип.

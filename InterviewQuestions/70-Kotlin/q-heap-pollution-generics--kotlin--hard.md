@@ -29,6 +29,25 @@ tags:
 - kotlin/collections
 - kotlin/functions
 - kotlin/types
+anki_cards:
+- slug: kotlin-177-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - collections
+  - functions
+  - types
+- slug: kotlin-177-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - collections
+  - functions
+  - types
 ---
 # Вопрос (RU)
 > Что такое heap pollution (загрязнение кучи) в дженериках Kotlin/Java? Как это происходит и как можно предотвратить?

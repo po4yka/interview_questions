@@ -1,11 +1,6 @@
 ---
 '---id': kotlin-085
 title: Channel vs Flow Comparison / Сравнение Channel и Flow
-anki_cards:
-- slug: q-channel-flow-comparison-0-en
-  language: en
-- slug: q-channel-flow-comparison-0-ru
-  language: ru
 aliases:
 - Channel vs Flow Comparison
 - Сравнение Channel и Flow
@@ -40,6 +35,23 @@ tags:
 - flow
 - hot-stream
 - kotlin
+anki_cards:
+- slug: q-channel-flow-comparison--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - channels
+  - coroutines
+- slug: q-channel-flow-comparison--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - channels
+  - coroutines
 ---
 # Вопрос (RU)
 > В чем разница между `Channel` и `Flow`? Объясните горячие и холодные потоки, обработку backpressure и когда выбирать каждый подход.

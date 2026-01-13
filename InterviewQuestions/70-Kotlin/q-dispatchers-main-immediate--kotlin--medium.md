@@ -1,20 +1,56 @@
 ---
----
----id: kotlin-217
-title: "Dispatchers.Main.immediate vs Dispatchers.Main / Dispatchers.Main.immediate vs Main"
-aliases: [Dispatchers Main Immediate, Dispatchers.Main.immediate vs Main]
+'---id': kotlin-217
+title: Dispatchers.Main.immediate vs Dispatchers.Main / Dispatchers.Main.immediate
+  vs Main
+aliases:
+- Dispatchers Main Immediate
+- Dispatchers.Main.immediate vs Main
 topic: kotlin
-subtopics: [coroutines, dispatchers]
+subtopics:
+- coroutines
+- dispatchers
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-15
 updated: 2025-11-09
-tags: [android, coroutines, difficulty/medium, dispatchers, immediate, kotlin, main, optimization, performance, ui-thread]
+tags:
+- android
+- coroutines
+- difficulty/medium
+- dispatchers
+- immediate
+- kotlin
+- main
+- optimization
+- performance
+- ui-thread
 moc: moc-kotlin
-related: [c-compose-recomposition, c-coroutines, c-kotlin, c-perfetto, c-power-profiling, c-stateflow, q-flowon-operator-context-switching--kotlin--hard]
+related:
+- c-compose-recomposition
+- c-coroutines
+- c-kotlin
+- c-perfetto
+- c-power-profiling
+- c-stateflow
+- q-flowon-operator-context-switching--kotlin--hard
+anki_cards:
+- slug: q-dispatchers-main-immediate--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-dispatchers-main-immediate--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое `Dispatchers.Main.immediate`, чем он отличается от `Dispatchers.Main`? В каких случаях `Main.immediate` избегает дополнительной диспетчеризации и как это влияет на производительность? Приведите примеры из практики: обновление UI, изменение состояния представления, измерение производительности и стратегии тестирования.

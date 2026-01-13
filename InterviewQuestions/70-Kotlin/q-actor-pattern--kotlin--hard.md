@@ -1,14 +1,22 @@
 ---
 id: kotlin-066
 title: Actor Pattern with Coroutines / Паттерн Actor с корутинами
-anki_cards:
-- slug: q-actor-pattern-0-en
-  language: en
-- slug: q-actor-pattern-0-ru
-  language: ru
 aliases:
 - Actor Pattern with Coroutines
 - Паттерн Actor с корутинами
+anki_cards:
+- slug: kotlin-066-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: kotlin-066-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Classification
 topic: kotlin
@@ -32,7 +40,36 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, message-passing, state-encapsulation]
----\
+anki_cards:
+  - slug: kotlin-066-0-en
+    language: en
+    front: "What is the Actor pattern in Kotlin coroutines and why is it useful?"
+    back: |
+      **Actor**: isolated unit that processes messages sequentially via Channel.
+      **Benefits**:
+      - No shared mutable state
+      - No explicit locks needed
+      - Messages processed one at a time in actor's coroutine
+      Note: `actor` builder is deprecated; build manually with `Channel` + `launch`.
+    tags:
+      - Kotlin::Coroutines
+      - actor-pattern
+      - concurrency
+  - slug: kotlin-066-0-ru
+    language: ru
+    front: "Что такое паттерн Actor в корутинах Kotlin и зачем он нужен?"
+    back: |
+      **Actor**: изолированная единица, обрабатывающая сообщения последовательно через Channel.
+      **Преимущества**:
+      - Нет общего изменяемого состояния
+      - Не нужны явные блокировки
+      - Сообщения обрабатываются по одному в корутине актора
+      Примечание: `actor` builder deprecated; используйте `Channel` + `launch`.
+    tags:
+      - Kotlin::Coroutines
+      - actor-pattern
+      - concurrency
+---
 # Вопрос (RU)
 > Что такое паттерн Actor в корутинах Kotlin? Объясните передачу сообщений через каналы, инкапсуляцию состояния и приведите реальные примеры акторов.
 

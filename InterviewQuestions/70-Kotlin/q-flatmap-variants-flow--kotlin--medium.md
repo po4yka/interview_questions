@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-flatmap-variants-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flatmap-variants-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-050
-title: "flatMapConcat vs flatMapMerge vs flatMapLatest / flatMapConcat против flatMapMerge против flatMapLatest"
-aliases: ["flatMapConcat vs flatMapMerge vs flatMapLatest", "flatMapConcat против flatMapMerge против flatMapLatest"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, flow]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin, q-kotlin-inline-functions--kotlin--medium, q-test-dispatcher-types--kotlin--medium]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-11-10
-
-tags: [coroutines, difficulty/medium, flatmap, flow, kotlin, operators]
----\
-# Вопрос (RU)
-> В чем разница между `flatMapConcat`, `flatMapMerge` и `flatMapLatest` в Kotlin `Flow`?
-
----
-
 # Question (EN)
 > What is the difference between `flatMapConcat`, `flatMapMerge`, and `flatMapLatest` in Kotlin `Flow`?
 

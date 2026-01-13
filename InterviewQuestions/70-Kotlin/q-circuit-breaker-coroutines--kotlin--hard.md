@@ -1,41 +1,18 @@
 ---
+anki_cards:
+- slug: q-circuit-breaker-coroutines--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-circuit-breaker-coroutines--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-172
-title: "Circuit breaker pattern with coroutines / Circuit breaker паттерн с корутинами"
-aliases: [Circuit Breaker Pattern, Circuit breaker паттерн]
-topic: kotlin
-subtopics: [coroutines]
-question_kind: theory
-difficulty: hard
-original_language: en
-language_tags: [en, ru]
-status: draft
-created: 2025-10-15
-updated: 2025-11-09
-tags: [circuit-breaker, coroutines, difficulty/hard, error-handling, kotlin, microservices, patterns, production, resilience]
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
-
----\
-# Вопрос (RU)
-
-> Как реализовать и использовать паттерн circuit breaker с использованием Kotlin coroutines в продакшене: состояния (Closed/Open/Half-Open), конфигурация порогов, потокобезопасность, мониторинг и интеграция с retry/timeout для разных сервисов?
-
-# Question (EN)
-
-> How do you implement and use the circuit breaker pattern with Kotlin coroutines in production: states (Closed/Open/Half-Open), threshold configuration, thread safety, monitoring, and integration with retry/timeout for different services?
-
-## Ответ (RU)
-
-Ниже приведено детальное объяснение и практические примеры реализации circuit breaker с корутинами, включая состояния, конфигурацию, потокобезопасность, мониторинг, интеграцию с retry/timeout и примеры для разных сервисов. Примеры кода демонстрационные; для реального продакшена потребуются дополнительные проверки и тестирование под нагрузкой.
-
-## Answer (EN)
-
-Below is a detailed explanation and practical implementation examples of a coroutine-based circuit breaker, covering states, configuration, thread safety, monitoring, integration with retry/timeout, and usage for different services. Code snippets are illustrative; a production-ready implementation requires additional validation and concurrency testing.
-
----
-
 ## Follow-ups
 
 1. What is the difference between circuit breaker and retry pattern?

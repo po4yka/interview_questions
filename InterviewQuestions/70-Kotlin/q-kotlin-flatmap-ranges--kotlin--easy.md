@@ -28,6 +28,23 @@ tags:
 - flatMap
 - kotlin
 - ranges
+anki_cards:
+- slug: lang-038-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - functional-programming
+- slug: lang-038-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - functional-programming
 ---
 # Вопрос (RU)
 > Какой результат выполнения выражения `val result = (1..3).flatMap { listOf(it, it * 2) }`?

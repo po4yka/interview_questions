@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-reference-types-criteria--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-reference-types-criteria--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-047
-title: "Reference Types Criteria / Критерии типов ссылок"
-aliases: [Reference Types Criteria, Критерии типов ссылок]
-topic: kotlin
-subtopics: [immutability, object-model, type-design]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [best-practices, design, difficulty/medium, immutability, kotlin, programming-languages, reference-types]
----\
-# Вопрос (RU)
-> Каким критериям должны соответствовать ссылочные типы?
-
----
-
 # Question (EN)
 > What criteria should reference types meet?
 

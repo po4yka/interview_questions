@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-globalscope-antipattern--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-globalscope-antipattern--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-193
-title: "GlobalScope Anti-Pattern / Анти-Паттерн GlobalScope"
-aliases: [GlobalScope Anti-Pattern, GlobalScope Antipattern]
-topic: kotlin
-subtopics: [coroutines, structured-concurrency]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, q-object-companion-object--kotlin--medium, q-test-dispatcher-types--kotlin--medium]
-created: 2024-10-15
-updated: 2025-11-09
-tags: [difficulty/easy]
----\
-# Вопрос (RU)
-> Почему следует избегать использования `GlobalScope` в Android приложениях?
-
----
-
 # Question (EN)
 > Why should you avoid using `GlobalScope` in Android applications?
 

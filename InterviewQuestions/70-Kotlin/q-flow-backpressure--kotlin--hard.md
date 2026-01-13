@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-flow-backpressure--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-backpressure--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-123
-title: "Flow Backpressure / Противодавление в Flow"
-aliases: ["Flow Backpressure", "Противодавление в Flow"]
-
-# Classification
-topic: kotlin
-subtopics: [backpressure, buffer, flow]
-question_kind: theory
-difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive guide on Flow backpressure handling
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-flow, q-advanced-coroutine-patterns--kotlin--hard]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [backpressure, buffer, collectlatest, conflate, difficulty/hard, flow, kotlin, performance]
----\
-# Вопрос (RU)
-> Что такое противодавление в Kotlin `Flow`? Объясните операторы `buffer()`, `conflate()` и `collectLatest()` и когда использовать каждую стратегию.
-
----
-
 # Question (EN)
 > What is backpressure in Kotlin `Flow`? Explain `buffer()`, `conflate()`, and `collectLatest()` operators and when to use each strategy.
 

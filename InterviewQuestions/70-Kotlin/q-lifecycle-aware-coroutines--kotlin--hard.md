@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-lifecycle-aware-coroutines--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-lifecycle-aware-coroutines--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-130
-title: "Lifecycle-Aware Coroutines / Корутины с учетом жизненного цикла"
-aliases: ["Lifecycle-Aware Coroutines", "Корутины с учетом жизненного цикла"]
-
-# Classification
-topic: kotlin
-subtopics: [android, coroutines, lifecycle]
-question_kind: theory
-difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Created for vault completeness
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-10
-
-tags: [android, coroutines, difficulty/hard, kotlin, lifecycle, lifecyclescope, viewmodelscope]
----\
-# Вопрос (RU)
-> Объясните корутины с учетом жизненного цикла в Android. Как работают viewModelScope, lifecycleScope и repeatOnLifecycle? Каковы лучшие практики для обработки изменений конфигурации, process death и утечек памяти? Приведите подробные примеры.
-
----
-
 # Question (EN)
 > Explain lifecycle-aware coroutines in Android. How do viewModelScope, lifecycleScope, and repeatOnLifecycle work? What are best practices for handling configuration changes, process death, and memory leaks? Provide comprehensive examples.
 

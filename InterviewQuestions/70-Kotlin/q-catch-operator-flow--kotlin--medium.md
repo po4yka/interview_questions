@@ -1,11 +1,6 @@
 ---
 id: kotlin-070
 title: Catch Operator in Kotlin Flow / Оператор catch в Kotlin Flow
-anki_cards:
-- slug: q-catch-operator-flow-0-en
-  language: en
-- slug: q-catch-operator-flow-0-ru
-  language: ru
 aliases:
 - Catch Operator in Kotlin Flow
 - Оператор catch в Kotlin Flow
@@ -38,6 +33,25 @@ tags:
 - flow
 - lang/kotlin
 - topic/kotlin
+anki_cards:
+- slug: kotlin-070-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - error-handling
+  - flow
+- slug: kotlin-070-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - error-handling
+  - flow
 ---
 # Вопрос (RU)
 

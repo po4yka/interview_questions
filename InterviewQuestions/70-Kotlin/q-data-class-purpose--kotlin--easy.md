@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-data-class-purpose--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-data-class-purpose--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-228
-title: "Data Class Purpose / Назначение data class"
-aliases: [Data Class Purpose, Назначение data class]
-topic: kotlin
-subtopics: [data-classes]
-question_kind: theory
-difficulty: easy
-original_language: ru
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features]
-created: 2025-10-15
-updated: 2025-11-10
-tags: [code-generation, data-classes, difficulty/easy, kotlin]
----\
-# Вопрос (RU)
-> Что такое data class в Kotlin и для чего он нужен?
-
----
-
 # Question (EN)
 > What is a data class in Kotlin and what is it used for?
 

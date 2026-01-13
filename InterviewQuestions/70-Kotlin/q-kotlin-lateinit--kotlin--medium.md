@@ -1,105 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-lateinit--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-lateinit--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-073
-title: "Kotlin Lateinit / lateinit в Kotlin"
-aliases: [Kotlin Lateinit, lateinit в Kotlin]
-topic: kotlin
-subtopics: [null-safety, type-system]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-kotlin-advantages-for-android--kotlin--easy, q-kotlin-map-flatmap--kotlin--medium]
-created: 2025-10-15
-updated: 2025-11-11
-tags: [dependency-injection, difficulty/medium, initialization, lateinit, programming-languages, properties]
----\
-# Вопрос (RU)
-> Что известно о `lateinit`?
-
-# Question (EN)
-> What do you know about `lateinit`?
-
-## Ответ (RU)
-
-`lateinit` используется для отложенной инициализации свойств в Kotlin, когда вы гарантированно знаете, что значение будет присвоено до первого чтения, и не хотите использовать nullable-тип.
-
-Ключевые моменты:
-
-1. Только для `var`-свойств: нельзя использовать с `val`.
-2. Только для ненулевых ссылочных типов: нельзя использовать с типами вида `String?` и с примитивами вроде `Int` (для них используются `Int?` или делегаты).
-3. Только для свойств и локальных переменных:
-   - Разрешён для топ-левел свойств и свойств классов/объектов.
-   - Разрешён для локальных переменных (начиная с Kotlin 1.2).
-   - Нельзя использовать в параметрах первичного конструктора.
-4. Должно быть проинициализировано до первого чтения, иначе будет выброшено `UninitializedPropertyAccessException`.
-5. Смещает проверку инициализации на рантайм: помогает избежать nullable-типов в API, но при ошибке вы получаете исключение во время выполнения, а не ошибку компиляции.
-
-Синтаксис (отложенная инициализация в классе):
-```kotlin
-class MyClass {
-    lateinit var name: String
-
-    fun initialize() {
-        name = "John"  // Инициализируем позже
-    }
-
-    fun use() {
-        println(name)  // К этому моменту свойство должно быть инициализировано
-    }
-}
-```
-
-Типичные случаи использования:
-
-1. Dependency Injection: свойство инициализируется DI-фреймворком.
-```kotlin
-class MyActivity : Activity() {
-    @Inject lateinit var repository: Repository
-}
-```
-
-2. Тесты: инициализация в `@Before` методах.
-```kotlin
-class MyTest {
-    lateinit var subject: SubjectUnderTest
-
-    @Before
-    fun setUp() {
-        subject = SubjectUnderTest()
-    }
-}
-```
-
-3. Android: вьюхи или binding-объекты, инициализируемые в колбэках жизненного цикла.
-```kotlin
-class MyFragment : Fragment() {
-    lateinit var binding: FragmentBinding
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding = FragmentBinding.bind(view)
-    }
-}
-```
-
-Проверка, инициализировано ли свойство:
-```kotlin
-if (::name.isInitialized) {
-    println(name)
-}
-```
-
-Ограничения:
-- Нельзя использовать с nullable-типами.
-- Нельзя использовать в параметрах первичного конструктора.
-- Нельзя использовать с `val`.
-
----
-
 ## Answer (EN)
 
 `lateinit` is used for deferred initialization of properties in Kotlin when you know the value will be assigned before first read and you don't want the property type to be nullable.

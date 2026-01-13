@@ -25,6 +25,25 @@ created: 2025-10-15
 updated: 2025-11-11
 tags:
 - difficulty/hard
+anki_cards:
+- slug: kotlin-181-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
+  - flow
+  - structured-concurrency
+- slug: kotlin-181-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
+  - flow
+  - structured-concurrency
 ---
 # Вопрос (RU)
 > Что такое паттерны fan-out и fan-in в Kotlin Coroutines с каналами? Как реализовать распределение работы (fan-out) и агрегацию результатов (fan-in)? Приведите production-примеры параллельной обработки изображений, распределенных очередей задач и агрегации логов.

@@ -1,43 +1,18 @@
 ---
----
----\
-id: kotlin-083
 anki_cards:
-- slug: q-coroutine-performance-optimization-0-en
+- slug: q-coroutine-performance-optimization--kotlin--hard-0-en
   language: en
-- slug: q-coroutine-performance-optimization-0-ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-performance-optimization--kotlin--hard-0-ru
   language: ru
-title: "Coroutine Performance Optimization / Оптимизация производительности корутин"
-aliases: ["Coroutine Performance Optimization", "Оптимизация производительности корутин"]
-
-# Classification
-topic: kotlin
-subtopics: [advanced, coroutines, patterns]
-question_kind: theory
-difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Coroutines Guide - Question 140021
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-delegates-compilation--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [coroutines, difficulty/hard, kotlin]
----\
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140021
-
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
-
 # Question (EN)
 > Kotlin Coroutines advanced topic 140021
 

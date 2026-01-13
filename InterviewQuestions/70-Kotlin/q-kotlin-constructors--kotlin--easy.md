@@ -34,6 +34,25 @@ tags:
 - kotlin
 - primary-constructor
 - secondary-constructor
+anki_cards:
+- slug: kotlin-088-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - constructors
+  - init-block
+  - initialization
+- slug: kotlin-088-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - constructors
+  - init-block
+  - initialization
 ---
 # Вопрос (RU)
 > Что такое конструкторы в Kotlin? Объясните первичные конструкторы, вторичные конструкторы и блоки init.

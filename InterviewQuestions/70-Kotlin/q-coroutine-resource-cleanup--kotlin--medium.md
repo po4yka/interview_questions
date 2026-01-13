@@ -1,33 +1,18 @@
 ---
----
----\
-id: kotlin-210
 anki_cards:
-- slug: q-coroutine-resource-cleanup-0-en
+- slug: q-coroutine-resource-cleanup--kotlin--medium-0-en
   language: en
-- slug: q-coroutine-resource-cleanup-0-ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-resource-cleanup--kotlin--medium-0-ru
   language: ru
-title: "Resource Cleanup in Coroutines / Очистка Ресурсов в Корутинах"
-aliases: [Resource Cleanup Coroutines, Очистка ресурсов в корутинах]
-topic: kotlin
-subtopics: [coroutines, resource-management]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-structured-concurrency]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [kotlin, coroutines, resource-cleanup, try-finally, noncancellable, cancellation, difficulty/medium]
-source: Kotlin Coroutines Interview Questions PDF
----\
-# Вопрос (RU)
-> Как обеспечить правильную очистку ресурсов при отмене корутины?
-
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
-
 # Question (EN)
 > How do you ensure proper resource cleanup when a coroutine is cancelled?
 ## Ответ (RU)

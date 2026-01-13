@@ -1,21 +1,43 @@
 ---
----
----id: lang-212
-title: "Kotlin Double Bang Operator / Оператор !! в Kotlin"
-aliases: ["Kotlin Double Bang Operator", "Оператор !! в Kotlin"]
+'---id': lang-212
+title: Kotlin Double Bang Operator / Оператор !! в Kotlin
+aliases:
+- Kotlin Double Bang Operator
+- Оператор !! в Kotlin
 topic: kotlin
-subtopics: ["null-safety", "type-system"]
+subtopics:
+- null-safety
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-dispatchers-main-immediate--kotlin--medium, q-inline-value-classes-performance--kotlin--medium]
+related:
+- c-kotlin
+- q-dispatchers-main-immediate--kotlin--medium
+- q-inline-value-classes-performance--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/medium, kotlin/null-safety]
-
+tags:
+- difficulty/medium
+- kotlin/null-safety
+anki_cards:
+- slug: q-kotlin-double-bang-operator--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-double-bang-operator--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что известно о операторе double bang `!!` в Kotlin?

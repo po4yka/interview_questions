@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-debugging-coroutines-techniques--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-debugging-coroutines-techniques--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-069
-title: "Debugging Kotlin coroutines: tools and techniques / Отладка Kotlin корутин: инструменты и техники"
-topic: kotlin
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-created: 2025-10-12
-updated: 2025-11-09
-tags: [coroutines, debugging, difficulty/medium, kotlin, profiling, tools, troubleshooting]
-moc: moc-kotlin
-aliases: []
-question_kind: coding
-related: [c-kotlin, q-common-coroutine-mistakes--kotlin--medium, q-coroutine-exception-handler--kotlin--medium, q-kotlin-null-safety--kotlin--medium, q-produce-actor-builders--kotlin--medium]
-subtopics: [coroutines, debugging, profiling]
-
----\
-# Вопрос (RU)
-> Какие инструменты и техники доступны для отладки Kotlin корутин? Как идентифицировать deadlock, утечки и проблемы производительности?
-
----
-
 # Question (EN)
 > What tools and techniques are available for debugging Kotlin coroutines? How do you identify deadlocks, leaks, and performance issues?
 

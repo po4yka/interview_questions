@@ -1,31 +1,51 @@
 ---
----
----id: kotlin-087
-title: "lifecycleScope vs viewModelScope / lifecycleScope против viewModelScope"
-aliases: ["lifecycleScope vs viewModelScope", "lifecycleScope против viewModelScope"]
-
-# Classification
+'---id': kotlin-087
+title: lifecycleScope vs viewModelScope / lifecycleScope против viewModelScope
+aliases:
+- lifecycleScope vs viewModelScope
+- lifecycleScope против viewModelScope
 topic: kotlin
-subtopics: [coroutines, lifecycle]
+subtopics:
+- coroutines
+- lifecycle
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Android Lifecycle Scopes Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-lifecycle-aware-coroutines--kotlin--hard]
-
-# Timestamps
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-lifecycle-aware-coroutines--kotlin--hard
 created: 2025-10-12
 updated: 2025-11-09
-
-tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]
+tags:
+- android
+- coroutines
+- difficulty/medium
+- kotlin
+- lifecycle
+- lifecyclescope
+- viewmodelscope
+anki_cards:
+- slug: q-lifecyclescope-viewmodelscope--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-lifecyclescope-viewmodelscope--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > В чем разница между lifecycleScope и viewModelScope? Когда использовать каждый, как они обрабатывают события жизненного цикла и какие есть лучшие практики для Android coroutine scopes.

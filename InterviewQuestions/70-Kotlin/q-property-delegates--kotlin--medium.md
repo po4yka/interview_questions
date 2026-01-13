@@ -28,6 +28,21 @@ tags:
 - difficulty/medium
 - kotlin
 - properties
+anki_cards:
+- slug: kotlin-147-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - delegates
+- slug: kotlin-147-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - delegates
 ---
 # Вопрос (RU)
 

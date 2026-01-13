@@ -1,20 +1,40 @@
 ---
----
----id: lang-214
-title: "Kotlin Any Inheritance / Наследование от Any в Kotlin"
+'---id': lang-214
+title: Kotlin Any Inheritance / Наследование от Any в Kotlin
 aliases: []
 topic: kotlin
-subtopics: [type-system]
+subtopics:
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-inheritance, c-kotlin, q-abstract-class-vs-interface--kotlin--medium]
+related:
+- c-inheritance
+- c-kotlin
+- q-abstract-class-vs-interface--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/easy, kotlin/type-system]
+tags:
+- difficulty/easy
+- kotlin/type-system
+anki_cards:
+- slug: q-kotlin-any-inheritance--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-any-inheritance--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Все классы Kotlin наследуются от `Any`

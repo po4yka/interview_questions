@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-test-dispatcher-types--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-test-dispatcher-types--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-067
-title: "StandardTestDispatcher vs UnconfinedTestDispatcher / StandardTestDispatcher против UnconfinedTestDispatcher"
-aliases: ["StandardTestDispatcher vs UnconfinedTestDispatcher", "StandardTestDispatcher против UnconfinedTestDispatcher"]
-topic: kotlin
-question_kind: coding
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-created: 2025-10-12
-updated: 2025-11-09
-tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
-moc: moc-kotlin
-related: [c-coroutines, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
-subtopics: [coroutines, runtest, testing]
----\
-# Вопрос (RU)
-> В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?
-
----
-
 # Question (EN)
 > What's the difference between StandardTestDispatcher and UnconfinedTestDispatcher? When should you use each?
 

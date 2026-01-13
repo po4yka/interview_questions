@@ -1,21 +1,46 @@
 ---
----
----id: lang-019
-title: "SharedFlow Vs StateFlow / SharedFlow против StateFlow"
-aliases: [SharedFlow Vs StateFlow, SharedFlow против StateFlow]
+'---id': lang-019
+title: SharedFlow Vs StateFlow / SharedFlow против StateFlow
+aliases:
+- SharedFlow Vs StateFlow
+- SharedFlow против StateFlow
 topic: kotlin
-subtopics: [coroutines, flow]
+subtopics:
+- coroutines
+- flow
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-stateflow]
+related:
+- c-concurrency
+- c-stateflow
 created: 2025-10-15
 updated: 2025-11-11
-tags: [coroutines, difficulty/easy, flow, kotlin, sharedflow, stateflow]
-
+tags:
+- coroutines
+- difficulty/easy
+- flow
+- kotlin
+- sharedflow
+- stateflow
+anki_cards:
+- slug: q-sharedflow-vs-stateflow--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-sharedflow-vs-stateflow--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Какие различия между `SharedFlow` и `StateFlow`?

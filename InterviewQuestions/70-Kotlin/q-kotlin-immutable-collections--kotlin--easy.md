@@ -26,6 +26,23 @@ tags:
 - difficulty/easy
 - immutability
 - kotlin
+anki_cards:
+- slug: lang-096-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - type-system
+- slug: lang-096-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - type-system
 ---
 # Вопрос (RU)
 > Какой механизм позволяет создавать неизменяемые (только для чтения) коллекции в Kotlin?

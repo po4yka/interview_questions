@@ -1,21 +1,46 @@
 ---
----
----id: kotlin-223
-title: "coroutineScope vs supervisorScope / coroutineScope против supervisorScope"
-aliases: ["coroutineScope vs supervisorScope", "coroutineScope против supervisorScope"]
+'---id': kotlin-223
+title: coroutineScope vs supervisorScope / coroutineScope против supervisorScope
+aliases:
+- coroutineScope vs supervisorScope
+- coroutineScope против supervisorScope
 topic: kotlin
-subtopics: [coroutines, scope]
+subtopics:
+- coroutines
+- scope
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-stateflow, q-channel-pipelines--kotlin--hard]
+related:
+- c-concurrency
+- c-stateflow
+- q-channel-pipelines--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-11
-tags: [coroutines, difficulty/medium, error-handling, kotlin, scope]
-
+tags:
+- coroutines
+- difficulty/medium
+- error-handling
+- kotlin
+- scope
+anki_cards:
+- slug: q-coroutinescope-vs-supervisorscope--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutinescope-vs-supervisorscope--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > В чём разница между `coroutineScope` и `supervisorScope` в корутинах Kotlin?

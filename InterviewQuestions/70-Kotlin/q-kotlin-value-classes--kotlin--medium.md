@@ -1,23 +1,54 @@
 ---
----
----id: android-647
+'---id': android-647
 title: Kotlin Value Classes (Inline Classes) / Value классы в Kotlin
-aliases: [Kotlin Value Classes (Inline Classes), Value классы в Kotlin]
+aliases:
+- Kotlin Value Classes (Inline Classes)
+- Value классы в Kotlin
 topic: kotlin
-subtopics: [type-system]
+subtopics:
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, c-value-classes, q-android-runtime-art--android--medium, q-inline-classes-value-classes--kotlin--medium, q-inline-value-classes-performance--kotlin--medium, q-value-classes-inline-classes--kotlin--medium]
+related:
+- c-compose-recomposition
+- c-kotlin
+- c-perfetto
+- c-power-profiling
+- c-value-classes
+- q-android-runtime-art--android--medium
+- q-inline-classes-value-classes--kotlin--medium
+- q-inline-value-classes-performance--kotlin--medium
+- q-value-classes-inline-classes--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-10
-tags: [difficulty/medium, inline-classes, kotlin/types, performance, type-safety, value-classes]
+tags:
+- difficulty/medium
+- inline-classes
+- kotlin/types
+- performance
+- type-safety
+- value-classes
 sources:
-- "https://kotlinlang.org/docs/inline-classes.html"
-
+- https://kotlinlang.org/docs/inline-classes.html
+anki_cards:
+- slug: q-kotlin-value-classes--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-value-classes--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Что такое value классы в Kotlin и как они работают?

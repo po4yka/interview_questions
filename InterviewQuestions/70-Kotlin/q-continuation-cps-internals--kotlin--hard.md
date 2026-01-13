@@ -2,11 +2,6 @@
 '---id': kotlin-122
 title: 'Continuation and CPS: how suspend functions work internally / Continuation
   и CPS: как работают suspend функции внутри'
-anki_cards:
-- slug: q-continuation-cps-internals-0-en
-  language: en
-- slug: q-continuation-cps-internals-0-ru
-  language: ru
 topic: kotlin
 difficulty: hard
 original_language: en
@@ -41,6 +36,25 @@ subtopics:
 - continuation
 - coroutines
 - state-machine
+anki_cards:
+- slug: q-continuation-cps-internals--kotlin--hard-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - continuation
+  - coroutines
+  - state-machine
+- slug: q-continuation-cps-internals--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - continuation
+  - coroutines
+  - state-machine
 ---
 # Вопрос (RU)
 > Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?

@@ -26,6 +26,23 @@ created: 2025-10-15
 updated: 2025-11-09
 tags:
 - difficulty/medium
+anki_cards:
+- slug: kotlin-174-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - type-system
+- slug: kotlin-174-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - type-system
 ---
 # Вопрос (RU)
 > Какие виды дженериков существуют в Kotlin и Java?

@@ -4,10 +4,14 @@ id: kotlin-097
 title: 'Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии
   буферизации каналов'
 anki_cards:
-- slug: q-channel-buffer-strategies-comparison-0-en
+- slug: kotlin097-0-en
   language: en
-- slug: q-channel-buffer-strategies-comparison-0-ru
+  anki_id: 1768327256861
+  synced_at: '2026-01-13T22:00:56.885276'
+- slug: kotlin097-1-ru
   language: ru
+  anki_id: 1768327256883
+  synced_at: '2026-01-13T22:00:56.887453'
 aliases:
 - Channel Buffer Strategies
 - Стратегии буферизации каналов

@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-channels-vs-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-channels-vs-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-058
-title: "Channels vs Flow / Channels против Flow"
-aliases: ["Channels vs Flow", "Channels против Flow"]
-
-# Classification
-topic: kotlin
-subtopics: [channels, coroutines, flow]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Phase 1 Coroutines & Flow Advanced Questions
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-kotlin-channels--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
-
-# Timestamps
-created: 2025-10-11
-updated: 2025-11-10
-
-tags: [async, buffering, channels, difficulty/medium, flow, kotlin]
----\
-# Вопрос (RU)
-> Когда следует использовать Channels или `Flow`? Реализуйте буферизованный канал с различными стратегиями емкости и объясните их поведение.
-
----
-
 # Question (EN)
 > When should you use Channels vs `Flow`? Implement a buffered channel with different capacity strategies and explain their behavior.
 

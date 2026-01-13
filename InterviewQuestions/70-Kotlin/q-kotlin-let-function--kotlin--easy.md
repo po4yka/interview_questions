@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-let-function--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-let-function--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-097
-title: "Kotlin Let Function / Функция let в Kotlin"
-aliases: [Kotlin Let Function, Функция let в Kotlin]
-topic: kotlin
-subtopics: [null-safety, scope-functions]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-kotlin-higher-order-functions--kotlin--medium, q-kotlin-type-system--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [difficulty/easy, kotlin, let, null-safety, scope-functions]
----\
-# Вопрос (RU)
-> Для чего нужна функция `let` в Kotlin?
-
----
-
 # Question (EN)
 > What is the `let` function used for in Kotlin?
 

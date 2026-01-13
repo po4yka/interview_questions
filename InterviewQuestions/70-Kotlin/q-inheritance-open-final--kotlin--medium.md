@@ -1,21 +1,52 @@
 ---
----
----id: kotlin-232
-title: "Inheritance in Kotlin: open, final, abstract, override / Наследование в Kotlin: open, final, abstract, override"
-aliases: ["Inheritance in Kotlin", "Наследование в Kotlin"]
+'---id': kotlin-232
+title: 'Inheritance in Kotlin: open, final, abstract, override / Наследование в Kotlin:
+  open, final, abstract, override'
+aliases:
+- Inheritance in Kotlin
+- Наследование в Kotlin
 topic: kotlin
-subtopics: [inheritance, kotlin-features]
+subtopics:
+- inheritance
+- kotlin-features
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-inheritance, c-kotlin, q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium]
+related:
+- c-inheritance
+- c-kotlin
+- q-class-initialization-order--kotlin--medium
+- q-data-class-detailed--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-10
-tags: [abstract, classes, difficulty/medium, inheritance, kotlin, kotlin-features, open-final]
-sources: ["https://kotlinlang.org/docs/inheritance.html"]
+tags:
+- abstract
+- classes
+- difficulty/medium
+- inheritance
+- kotlin
+- kotlin-features
+- open-final
+sources:
+- https://kotlinlang.org/docs/inheritance.html
+anki_cards:
+- slug: q-inheritance-open-final--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-inheritance-open-final--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как работают ключевые слова open, final, abstract и override в наследовании Kotlin?

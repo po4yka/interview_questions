@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-common-coroutine-mistakes--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-common-coroutine-mistakes--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-098
-title: "Top 10 common Kotlin coroutines mistakes and anti-patterns / 10 частых ошибок с Kotlin корутинами"
-topic: kotlin
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-created: 2025-10-12
-updated: 2025-11-09
-aliases: []
-question_kind: theory
-tags: [anti-patterns, best-practices, code-review, coroutines, difficulty/medium, gotchas, kotlin, mistakes]
-moc: moc-kotlin
-related: [c-coroutines, q-coroutine-exception-handler--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
-subtopics: [anti-patterns, best-practices, coroutines]
-
----\
-# Вопрос (RU)
-> Какие самые распространенные ошибки при использовании Kotlin корутин, и как их исправить?
-
----
-
 # Question (EN)
 > What are the most common mistakes when using Kotlin coroutines, and how do you fix them?
 

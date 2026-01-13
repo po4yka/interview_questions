@@ -1,11 +1,6 @@
 ---
 id: kotlin-078
 title: Channel Closing and Completion / Закрытие и завершение каналов
-anki_cards:
-- slug: q-channel-closing-completion-0-en
-  language: en
-- slug: q-channel-closing-completion-0-ru
-  language: ru
 aliases:
 - Channel Closing and Completion
 - Закрытие и завершение каналов
@@ -39,6 +34,25 @@ tags:
 - coroutines
 - difficulty/medium
 - kotlin
+anki_cards:
+- slug: kotlin-078-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - channels
+  - cleanup
+  - coroutines
+- slug: kotlin-078-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - channels
+  - cleanup
+  - coroutines
 ---
 # Вопрос (RU)
 > Как правильно закрывать и завершать каналы? Объясните close(), cancel(), разницу между ClosedSendChannelException и ClosedReceiveChannelException и лучшие практики очистки ресурсов.

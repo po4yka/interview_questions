@@ -31,6 +31,25 @@ tags:
 - higher-order-functions
 - kotlin
 - lambda-expressions
+anki_cards:
+- slug: kotlin-005-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functional-programming
+  - higher-order-functions
+  - inline-functions
+- slug: kotlin-005-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functional-programming
+  - higher-order-functions
+  - inline-functions
 ---
 # Вопрос (RU)
 > Что такое функции высшего порядка в Kotlin?

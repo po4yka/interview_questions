@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-flow-map-operator--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-map-operator--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-065
-title: "Flow map operator / Оператор map для Flow"
-aliases: [Flow Map Operator, Оператор map для Flow]
-topic: kotlin
-subtopics: [coroutines, flow, operators]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-flow]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [coroutines, difficulty/medium, flow, kotlin, operators, reactive]
----\
-# Вопрос (RU)
-> Чем воспользоваться чтобы преобразовать внутри одного потока данных данные из одного типа в другой?
-
----
-
 # Question (EN)
 > What to use to transform data from one type to another within a single data stream?
 

@@ -24,6 +24,23 @@ created: 2025-10-15
 updated: 2025-11-09
 tags:
 - difficulty/medium
+anki_cards:
+- slug: kotlin-187-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - null-safety
+  - type-system
+- slug: kotlin-187-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - null-safety
+  - type-system
 ---
 # Вопрос (RU)
 > Как применяются расширения (Extensions) в Java? Поддерживает ли Java extension-функции как в Kotlin?

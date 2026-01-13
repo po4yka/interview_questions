@@ -1,32 +1,18 @@
 ---
+anki_cards:
+- slug: q-switch-float-double--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-switch-float-double--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-092
-title: "Switch Float Double / Switch float double"
-aliases: [Switch float double, Switch Float Double]
-topic: kotlin
-subtopics: [language-features, switch-statement, type-system]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [q-kotlin-type-system-features--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [difficulty/easy]
----\
-# Вопрос (RU)
-
-> Работает ли switch() с double/float?
-
-# Question (EN)
-
-> Does switch() work with double/float?
-
----
-
 ## Ответ (RU)
 
 Нет, в Java switch не работает с float и double. Для классического switch-выражения разрешены только целочисленные типы:

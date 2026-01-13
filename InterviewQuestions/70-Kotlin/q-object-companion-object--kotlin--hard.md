@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-object-companion-object--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-object-companion-object--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-159
-title: "Object Companion Object / Object и Companion Object Advanced"
-aliases: [Advanced, Advanced Object Patterns, Companion Object, Object]
-topic: kotlin
-subtopics: [classes, singleton]
-question_kind: theory
-difficulty: hard
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-equals-hashcode-purpose--kotlin--medium]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [classes, companion-object, difficulty/hard, kotlin, object-keyword, singleton]
----\
-# Вопрос (RU)
-> Что такое `object` / `companion object` в Kotlin? Объясните их характеристики, различия и продвинутые случаи использования.
-
----
-
 # Question (EN)
 > What is `object` / `companion object` in Kotlin? Explain their characteristics, differences, and advanced use cases.
 

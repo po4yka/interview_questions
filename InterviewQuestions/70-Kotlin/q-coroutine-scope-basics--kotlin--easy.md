@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-coroutine-scope-basics--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-scope-basics--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-116
-title: "CoroutineScope Basics and Usage / Основы CoroutineScope и использование"
-aliases: ["CoroutineScope Basics and Usage", "Основы CoroutineScope и использование"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, patterns]
-question_kind: theory
-difficulty: easy
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive Kotlin Coroutines Guide - Question 140030
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-kotlin-coroutines-basics, q-coroutinescope-vs-supervisorscope--kotlin--medium]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-09
-
-tags: [coroutines, difficulty/easy, kotlin]
----\
-# Вопрос (RU)
-> Базовый вопрос по `CoroutineScope` в Kotlin (на основе темы 140030)
-
----
-
 # Question (EN)
 > Basic question about `CoroutineScope` in Kotlin (based on topic 140030)
 

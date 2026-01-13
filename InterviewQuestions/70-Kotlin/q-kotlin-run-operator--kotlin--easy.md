@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-run-operator--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-run-operator--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-017
-title: "Kotlin Run Operator / Оператор run в Kotlin"
-aliases: [Kotlin Run Operator, Оператор run в Kotlin]
-topic: kotlin
-subtopics: [functions, scope-functions]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-compose-side-effects-coroutines--kotlin--medium]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [also, apply, difficulty/easy, kotlin, let, run, scope-functions, with]
----\
-# Вопрос (RU)
-> Какой оператор в Kotlin исполняет блок кода и возвращает его значение?
-
----
-
 # Question (EN)
 > Which operator in Kotlin executes a block of code and returns its value?
 

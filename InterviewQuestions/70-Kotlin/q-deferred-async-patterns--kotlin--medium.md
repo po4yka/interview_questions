@@ -1,23 +1,54 @@
 ---
----
----topic: kotlin
+'---topic': kotlin
 id: kotlin-063
-title: "Deferred and async patterns deep dive / Deferred и async паттерны подробно"
-aliases: [Deferred Async Patterns, Deferred и async паттерны]
-subtopics: [coroutines]
+title: Deferred and async patterns deep dive / Deferred и async паттерны подробно
+aliases:
+- Deferred Async Patterns
+- Deferred и async паттерны
+subtopics:
+- coroutines
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-12
 updated: 2025-11-11
-category: "coroutines-advanced"
-tags: ["async", "await", "concurrency", "coroutines", "deferred", "difficulty/medium", "parallel-execution", "performance"]
-description: "Complete guide to `Deferred<T>`, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
+category: coroutines-advanced
+tags:
+- async
+- await
+- concurrency
+- coroutines
+- deferred
+- difficulty/medium
+- parallel-execution
+- performance
+description: Complete guide to `Deferred<T>`, async patterns, parallel execution,
+  and advanced async/await usage in Kotlin coroutines
 moc: moc-kotlin
-related: [c-compose-recomposition, c-concurrency, c-perfetto, c-power-profiling, c-stateflow, q-lifecyclescope-viewmodelscope--kotlin--medium]
-
+related:
+- c-compose-recomposition
+- c-concurrency
+- c-perfetto
+- c-power-profiling
+- c-stateflow
+- q-lifecyclescope-viewmodelscope--kotlin--medium
+anki_cards:
+- slug: q-deferred-async-patterns--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-deferred-async-patterns--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 

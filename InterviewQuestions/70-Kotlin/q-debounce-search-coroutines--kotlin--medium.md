@@ -1,28 +1,18 @@
 ---
+anki_cards:
+- slug: q-debounce-search-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-debounce-search-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-156
-title: "Debouncing Search with Coroutines / Отложенный Поиск с Корутинами"
-aliases: [Debouncing Search, Отложенный поиск]
-topic: kotlin
-subtopics: [coroutines, flow]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [q-advanced-coroutine-patterns--kotlin--hard, q-flowon-operator-context-switching--kotlin--hard, q-inline-value-classes-performance--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [kotlin, coroutines, debouncing, search, job, cancellation, android, difficulty/medium, ru]
-source: Kotlin Coroutines Interview Questions PDF
----\
-# Вопрос (RU)
-> Как реализовать функцию поиска при вводе с отложенным выполнением (debouncing) используя Kotlin корутины?
-
----
-
 # Question (EN)
 > How would you implement a search-as-you-type feature with debouncing using Kotlin coroutines?
 ## Ответ (RU)

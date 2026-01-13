@@ -1,20 +1,51 @@
 ---
----
----id: lang-069
-title: "Inline All Functions / Inline функции"
-aliases: [Inline All Functions, Inline functions, Inline функции]
+'---id': lang-069
+title: Inline All Functions / Inline функции
+aliases:
+- Inline All Functions
+- Inline functions
+- Inline функции
 topic: kotlin
-subtopics: [kotlin, performance]
+subtopics:
+- kotlin
+- performance
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-compose-recomposition, c-kotlin, c-kotlin-features, c-perfetto, c-performance, c-power-profiling]
+related:
+- c-compose-recomposition
+- c-kotlin
+- c-kotlin-features
+- c-perfetto
+- c-performance
+- c-power-profiling
 created: 2025-10-15
 updated: 2025-11-09
-tags: [compiler-optimization, difficulty/medium, inline, inline-functions, kotlin, performance]
+tags:
+- compiler-optimization
+- difficulty/medium
+- inline
+- inline-functions
+- kotlin
+- performance
+anki_cards:
+- slug: q-inline-all-functions--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-inline-all-functions--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Можно ли на уровне компилятора сделать все функции inline?

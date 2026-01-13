@@ -1,31 +1,18 @@
 ---
+anki_cards:
+- slug: q-data-class-component-functions--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-data-class-component-functions--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: cs-016
-title: "Data Class Component Functions / Компонентные функции Data Class"
-aliases: ["Data Class Component Functions", "Компонентные функции Data Class"]
-topic: kotlin
-subtopics: [data-classes, destructuring, functions]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [q-abstract-class-purpose--cs--medium]
-created: 2025-10-15
-updated: 2025-11-11
-tags: [component-functions, data-classes, destructuring, difficulty/easy, kotlin]
-sources: ["https://kotlinlang.org/docs/data-classes.html"]
----\
-# Вопрос (RU)
-> Для чего служат `component` функции в `data class`? Как они работают и генерируются?
-
-# Question (EN)
-> What are `component` functions used for in a `data class`? How do they work and get generated?
-
----
-
 ## Ответ (RU)
 
 **Теория `Component` Functions:**

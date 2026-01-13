@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-what-is-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-what-is-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-076
-title: "What Is Flow / Что такое Flow"
-aliases: [What Is Flow, Что такое Flow]
-topic: kotlin
-subtopics: [coroutines, flow, reactive-programming]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages]
----\
-# Вопрос (RU)
-> Что такое `Flow` в Kotlin?
-
----
-
 # Question (EN)
 > What is `Flow` in Kotlin?
 

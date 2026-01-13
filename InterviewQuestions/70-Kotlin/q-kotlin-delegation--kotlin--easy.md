@@ -25,6 +25,25 @@ created: 2025-10-13
 updated: 2025-11-09
 tags:
 - difficulty/easy
+anki_cards:
+- slug: lang-005-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - c-kotlin
+  - c-kotlin-coroutines-basics
+  - c-kotlin-features
+- slug: lang-005-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - c-kotlin
+  - c-kotlin-coroutines-basics
+  - c-kotlin-features
 ---
 # Вопрос (RU)
 > Что известно о делегировании?

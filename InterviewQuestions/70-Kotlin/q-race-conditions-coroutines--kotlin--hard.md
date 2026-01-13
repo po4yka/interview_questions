@@ -1,4 +1,20 @@
 ---
+anki_cards:
+- slug: q-race-conditions-coroutines--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-race-conditions-coroutines--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
+
+---
 ---
 ---\
 id: kotlin-108

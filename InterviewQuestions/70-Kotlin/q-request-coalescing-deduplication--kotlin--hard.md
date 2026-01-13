@@ -1,36 +1,18 @@
 ---
+anki_cards:
+- slug: q-request-coalescing-deduplication--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-request-coalescing-deduplication--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-200
-title: "Request coalescing and deduplication patterns / Объединение и дедупликация запросов"
-aliases: [Caching, Deduplication, Optimization, Request Coalescing, Объединение запросов]
-topic: kotlin
-subtopics: [coroutines, performance]
-question_kind: theory
-difficulty: hard
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-job-vs-supervisorjob--kotlin--medium]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, optimization, patterns, performance]
----\
-# Вопрос (RU)
-
-> Объясните паттерны объединения запросов (request coalescing) и дедупликации в Kotlin: зачем они нужны, как реализуются (на базе корутин), какие существуют потокобезопасные варианты, как отличать от батчинга и кэширования, и в каких продакшн-сценариях они применяются.
-
-# Question (EN)
-
-> Explain request coalescing and deduplication patterns in Kotlin: why they are needed, how to implement them (with coroutines), how to build thread-safe variants, how they differ from batching and caching, and where to apply them in real production systems.
-
-## Ответ (RU)
-
-Ниже приведена русскоязычная версия, полностью соответствующая английской части по структуре и глубине, с сохранением всех ключевых примеров и паттернов.
-
----
-
 ## Оглавление
 
 - [Обзор](#обзор)

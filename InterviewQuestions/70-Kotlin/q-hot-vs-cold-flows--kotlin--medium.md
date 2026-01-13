@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-hot-vs-cold-flows--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-hot-vs-cold-flows--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-016
-title: "Hot Vs Cold Flows / Горячие и холодные потоки"
-aliases: [Hot Vs Cold Flows, Горячие и холодные потоки]
-topic: kotlin
-subtopics: [coroutines, flow, reactive-programming]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-flow, c-kotlin]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [coroutines, difficulty/medium, flow, kotlin, reactive]
----\
-# Вопрос (RU)
-> В чем разница между Hot и Cold Flows?
-
----
-
 # Question (EN)
 > What is the difference between Hot and Cold Flows?
 

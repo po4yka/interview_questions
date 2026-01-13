@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-garbage-collector-definition--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-garbage-collector-definition--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-021
-title: "Garbage Collector Definition / Определение Garbage Collector"
-aliases: [Garbage Collector Definition, Определение Garbage Collector]
-topic: kotlin
-subtopics: [garbage-collection, jvm, memory-management]
-question_kind: theory
-difficulty: easy
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-garbage-collection]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [difficulty/easy, garbage-collection, java, jvm, kotlin, memory-management, programming-languages]
----\
-# Вопрос (RU)
-> Что такое сборщик мусора?
-
----
-
 # Question (EN)
 > What is a garbage collector?
 

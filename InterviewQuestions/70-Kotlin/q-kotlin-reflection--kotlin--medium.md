@@ -1,27 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-reflection--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-reflection--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: lang-022
-title: "Kotlin Reflection / Рефлексия в Kotlin"
-aliases: [Kotlin Reflection, Рефлексия в Kotlin]
-topic: kotlin
-subtopics: [c-kotlin, c-kotlin-features]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-object-companion-object--kotlin--medium]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [difficulty/medium, kotlin-reflect, metaprogramming, programming-languages, reflection, runtime]
----\
-# Вопрос (RU)
-> Что такое рефлексия?
-
----
-
 # Question (EN)
 > What is reflection?
 

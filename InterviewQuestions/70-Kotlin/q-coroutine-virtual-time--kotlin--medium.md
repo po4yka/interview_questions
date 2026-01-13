@@ -1,31 +1,51 @@
 ---
----
----id: kotlin-073
-title: "Virtual Time in Coroutine Testing / Виртуальное время в тестировании корутин"
-aliases: ["Virtual Time in Coroutine Testing", "Виртуальное время в тестировании корутин"]
-
-# Classification
+'---id': kotlin-073
+title: Virtual Time in Coroutine Testing / Виртуальное время в тестировании корутин
+aliases:
+- Virtual Time in Coroutine Testing
+- Виртуальное время в тестировании корутин
 topic: kotlin
-subtopics: [coroutines, testing, virtual-time]
+subtopics:
+- coroutines
+- testing
+- virtual-time
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Virtual Time Testing Deep Dive
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-testing-coroutines-runtest--kotlin--medium, q-testing-flow-operators--kotlin--hard]
-
-# Timestamps
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-testing-coroutines-runtest--kotlin--medium
+- q-testing-flow-operators--kotlin--hard
 created: 2025-10-12
 updated: 2025-11-09
-
-tags: [coroutines, difficulty/medium, kotlin, testing, virtual-time]
+tags:
+- coroutines
+- difficulty/medium
+- kotlin
+- testing
+- virtual-time
+anki_cards:
+- slug: q-coroutine-virtual-time--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-virtual-time--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как работает виртуальное время в тестировании корутин? Объясните advanceTimeBy, runCurrent, advanceUntilIdle, currentTime, тестирование delay и как TestDispatcher контролирует время выполнения.

@@ -28,6 +28,23 @@ tags:
 - java
 - kotlin
 - operators
+anki_cards:
+- slug: lang-085-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - operators
+  - type-system
+- slug: lang-085-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - operators
+  - type-system
 ---
 # Вопрос (RU)
 > Чем отличаются двойное равно в Java и Kotlin?

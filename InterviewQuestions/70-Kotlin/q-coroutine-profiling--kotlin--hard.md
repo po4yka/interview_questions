@@ -1,11 +1,6 @@
 ---
 '---id': kotlin-077
 title: Coroutine Profiling and Debugging / Профилирование и отладка корутин
-anki_cards:
-- slug: q-coroutine-profiling-0-en
-  language: en
-- slug: q-coroutine-profiling-0-ru
-  language: ru
 aliases:
 - Coroutine Profiling and Debugging
 - Профилирование и отладка корутин
@@ -34,6 +29,21 @@ tags:
 - coroutines
 - difficulty/hard
 - kotlin
+anki_cards:
+- slug: q-coroutine-profiling--kotlin--hard-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
+- slug: q-coroutine-profiling--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
 ---
 # Вопрос (RU)
 > Профилирование и отладка корутин в Kotlin: какие инструменты и подходы использовать для эффективной диагностики, поиска утечек и оптимизации производительности?

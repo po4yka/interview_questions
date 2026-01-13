@@ -1,22 +1,50 @@
 ---
----
----id: kotlin-243
-title: "SupervisorJob: when and why to use it? / SupervisorJob и его применение"
-aliases: [SupervisorJob Use Cases, SupervisorJob применение]
+'---id': kotlin-243
+title: 'SupervisorJob: when and why to use it? / SupervisorJob и его применение'
+aliases:
+- SupervisorJob Use Cases
+- SupervisorJob применение
 topic: kotlin
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 question_kind: theory
 status: draft
-created: "2025-10-12"
-updated: "2025-11-11"
-tags: ["coroutines", "difficulty/medium", "error-handling", "job", "kotlin", "supervisorjob"]
-description: "Key use cases for SupervisorJob in Kotlin coroutines: independent failures, differences from Job, and Android patterns"
+created: '2025-10-12'
+updated: '2025-11-11'
+tags:
+- coroutines
+- difficulty/medium
+- error-handling
+- job
+- kotlin
+- supervisorjob
+description: 'Key use cases for SupervisorJob in Kotlin coroutines: independent failures,
+  differences from Job, and Android patterns'
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-structured-concurrency--kotlin--hard]
-subtopics: [coroutines, supervisorjob]
-
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-structured-concurrency--kotlin--hard
+subtopics:
+- coroutines
+- supervisorjob
+anki_cards:
+- slug: q-coroutine-supervisorjob-use-cases--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-supervisorjob-use-cases--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 

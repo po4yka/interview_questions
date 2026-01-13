@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-const--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-const--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-017
-title: "Const Keyword in Kotlin / Ключевое слово const в Kotlin"
-aliases: ["Const Keyword in Kotlin", "Ключевое слово const в Kotlin"]
-
-# Classification
-topic: kotlin
-subtopics: [compile-time-constants, const, properties]
-question_kind: theory
-difficulty: easy
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
-source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-structured-concurrency-kotlin--kotlin--medium]
-
-# Timestamps
-created: 2025-10-05
-updated: 2025-11-09
-
-tags: [compile-time-constants, const, difficulty/easy, kotlin, properties]
----\
-# Вопрос (RU)
-> Что такое ключевое слово `const` в Kotlin?
-
----
-
 # Question (EN)
 > What is the `const` keyword in Kotlin?
 

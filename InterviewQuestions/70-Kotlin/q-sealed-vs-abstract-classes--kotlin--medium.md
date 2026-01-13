@@ -31,6 +31,23 @@ tags:
 - kotlin
 - polymorphism
 - sealed-classes
+anki_cards:
+- slug: kotlin-209-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - sealed-classes
+- slug: kotlin-209-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - sealed-classes
 ---
 # Вопрос (RU)
 

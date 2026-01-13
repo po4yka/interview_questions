@@ -1,23 +1,48 @@
 ---
----
----id: kotlin-094
-title: "shareIn and stateIn Operators / Операторы shareIn и stateIn"
-aliases: ["shareIn and stateIn Operators", "Операторы shareIn и stateIn"]
+'---id': kotlin-094
+title: shareIn and stateIn Operators / Операторы shareIn и stateIn
+aliases:
+- shareIn and stateIn Operators
+- Операторы shareIn и stateIn
 topic: kotlin
-subtopics: [coroutines, flow, hot-flows]
+subtopics:
+- coroutines
+- flow
+- hot-flows
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140019
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, c-stateflow, q-statein-sharein-flow--kotlin--medium]
+related:
+- c-flow
+- c-kotlin
+- c-stateflow
+- q-statein-sharein-flow--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [coroutines, difficulty/medium, kotlin]
-
+tags:
+- coroutines
+- difficulty/medium
+- kotlin
+anki_cards:
+- slug: q-sharedin-statein--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-sharedin-statein--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Объясните назначение и различия операторов `shareIn` и `stateIn` в `Flow` корутинах Kotlin.

@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-kotlin-multiplatform-overview--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-multiplatform-overview--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-040
-title: "Kotlin Multiplatform - How does it work? / Kotlin Multiplatform - Как это работает?"
-aliases: ["Kotlin Multiplatform - How does it work?", "Kotlin Multiplatform - Как это работает?"]
-
-# Classification
-topic: kotlin
-subtopics: [kmp, kotlin-multiplatform]
-question_kind: theory
-difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-kotlin, q-enum-class-advanced--kotlin--medium, q-type-aliases--kotlin--medium]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-11-09
-
-tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, native]
----\
-# Вопрос (RU)
-> Kotlin Multiplatform - Как это работает?
-
----
-
 # Question (EN)
 > Kotlin Multiplatform - How does it work?
 

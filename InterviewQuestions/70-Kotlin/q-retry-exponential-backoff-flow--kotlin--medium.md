@@ -1,20 +1,56 @@
 ---
----
----id: kotlin-191
-title: "Retry and exponential Backoff Patterns in Flow / Retry и exponential backoff паттерны в Flow"
-aliases: [Error Handling, Exponential Backoff, Resilience, Retry, Retry Patterns]
+'---id': kotlin-191
+title: Retry and exponential Backoff Patterns in Flow / Retry и exponential backoff
+  паттерны в Flow
+aliases:
+- Error Handling
+- Exponential Backoff
+- Resilience
+- Retry
+- Retry Patterns
 topic: kotlin
-subtopics: [coroutines, flow]
+subtopics:
+- coroutines
+- flow
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, c-stateflow, q-advanced-coroutine-patterns--kotlin--hard]
+related:
+- c-flow
+- c-kotlin
+- c-stateflow
+- q-advanced-coroutine-patterns--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-09
-tags: [circuit-breaker, coroutines, difficulty/medium, error-handling, exponential-backoff, flow, kotlin, production, resilience, retry]
+tags:
+- circuit-breaker
+- coroutines
+- difficulty/medium
+- error-handling
+- exponential-backoff
+- flow
+- kotlin
+- production
+- resilience
+- retry
+anki_cards:
+- slug: q-retry-exponential-backoff-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-retry-exponential-backoff-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как реализовать retry логику с экспоненциальным backoff в Kotlin `Flow`? Объясните операторы `retry()` и `retryWhen()`, кастомные retry политики, jitter, интеграцию с circuit breaker и стратегии тестирования. Приведите production-ready примеры для сетевых запросов, операций с БД и устойчивых потоков данных.

@@ -1,21 +1,46 @@
 ---
----
----id: lang-089
-title: "Suspend Functions Under The Hood / Suspend функции в подробностях"
-aliases: [Suspend Functions Under The Hood, Suspend функции в подробностях]
+'---id': lang-089
+title: Suspend Functions Under The Hood / Suspend функции в подробностях
+aliases:
+- Suspend Functions Under The Hood
+- Suspend функции в подробностях
 topic: kotlin
-subtopics: [compiler, coroutines, implementation]
+subtopics:
+- compiler
+- coroutines
+- implementation
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
 created: 2025-10-15
 updated: 2025-11-11
-tags: [compiler, coroutines, difficulty/hard, kotlin]
-
+tags:
+- compiler
+- coroutines
+- difficulty/hard
+- kotlin
+anki_cards:
+- slug: q-suspend-functions-under-the-hood--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-suspend-functions-under-the-hood--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как работают suspend-функции под капотом?

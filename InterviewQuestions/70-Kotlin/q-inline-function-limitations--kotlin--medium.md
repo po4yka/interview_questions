@@ -27,6 +27,25 @@ created: 2025-10-15
 updated: 2025-11-09
 tags:
 - difficulty/medium
+anki_cards:
+- slug: kotlin-154-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - delegation
+  - flow
+- slug: kotlin-154-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - delegation
+  - flow
 ---
 # Вопрос (RU)
 > Когда нельзя или нежелательно использовать inline-функции в Kotlin, и какие ограничения при этом действуют?

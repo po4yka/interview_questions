@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-flow-time-operators--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-time-operators--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-127
-title: "Flow Time Operators: debounce, sample, throttle / Временные операторы Flow"
-aliases: ["Flow Time Operators: debounce, sample, throttle", "Временные операторы Flow"]
-
-# Classification
-topic: kotlin
-subtopics: [coroutines, flow, time-operators]
-question_kind: theory
-difficulty: medium
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Guide to time-based Flow operators
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-flow, q-flow-basics--kotlin--easy]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-10
-
-tags: [coroutines, debounce, difficulty/medium, flow, kotlin, sample, throttle, time-operators]
----\
-# Вопрос (RU)
-> Что такое операторы `debounce`, `sample` и throttle в Kotlin `Flow`? В чём различия и случаи использования?
-
----
-
 # Question (EN)
 > What are `debounce`, `sample`, and throttle operators in Kotlin `Flow`? What are the differences and use cases?
 

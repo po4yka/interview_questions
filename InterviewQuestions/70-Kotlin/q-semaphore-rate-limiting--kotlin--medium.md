@@ -1,20 +1,53 @@
 ---
----
----id: kotlin-107
-title: "Semaphore for rate limiting and resource pooling / Semaphore для ограничения скорости и пулов ресурсов"
+'---id': kotlin-107
+title: Semaphore for rate limiting and resource pooling / Semaphore для ограничения
+  скорости и пулов ресурсов
 topic: kotlin
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-12
 updated: 2025-11-09
-tags: [concurrency, coroutines, difficulty/medium, kotlin, rate-limiting, resource-management, semaphore]
-aliases: ["Semaphore rate limiting and resource pooling in Kotlin", "Semaphore для ограничения скорости и пулов ресурсов в Kotlin"]
+tags:
+- concurrency
+- coroutines
+- difficulty/medium
+- kotlin
+- rate-limiting
+- resource-management
+- semaphore
+aliases:
+- Semaphore rate limiting and resource pooling in Kotlin
+- Semaphore для ограничения скорости и пулов ресурсов в Kotlin
 moc: moc-kotlin
 question_kind: coding
-related: [c-coroutines, c-kotlin, c-stateflow, q-channelflow-callbackflow-flow--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-race-conditions-coroutines--kotlin--hard]
-subtopics: [concurrency, coroutines, semaphore]
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-channelflow-callbackflow-flow--kotlin--medium
+- q-mutex-synchronized-coroutines--kotlin--medium
+- q-race-conditions-coroutines--kotlin--hard
+subtopics:
+- concurrency
+- coroutines
+- semaphore
+anki_cards:
+- slug: q-semaphore-rate-limiting--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-semaphore-rate-limiting--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
 # Вопрос (RU)
 > Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?

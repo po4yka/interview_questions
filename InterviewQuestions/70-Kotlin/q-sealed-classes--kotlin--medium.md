@@ -28,6 +28,25 @@ subtopics:
 - enums
 - sealed-classes
 - when-expression
+anki_cards:
+- slug: kotlin-136-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - enums
+  - sealed-classes
+  - when-expression
+- slug: kotlin-136-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - enums
+  - sealed-classes
+  - when-expression
 ---
 # Вопрос (RU)
 > В чем особенность sealed классов в Kotlin?

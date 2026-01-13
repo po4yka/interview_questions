@@ -26,6 +26,21 @@ tags:
 - kotlin
 - lambda
 - non-local-returns
+anki_cards:
+- slug: kotlin-157-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - inline-functions
+- slug: kotlin-157-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - inline-functions
 ---
 # Вопрос (RU)
 > Для чего нужно ключевое слово `crossinline` в inline-функциях Kotlin?

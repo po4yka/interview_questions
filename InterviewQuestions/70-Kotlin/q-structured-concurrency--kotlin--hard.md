@@ -1,38 +1,18 @@
 ---
+anki_cards:
+- slug: q-structured-concurrency--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-structured-concurrency--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
 ---
----\
-id: kotlin-128
-title: "Structured Concurrency / Структурированная параллельность"
-aliases: ["Structured Concurrency", "Структурированная параллельность"]
-
-# Classification
-topic: kotlin
-subtopics: [cancellation, coroutines, structured-concurrency]
-question_kind: theory
-difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru]
-source: internal
-source_note: Comprehensive guide on Structured Concurrency
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--hard]
-
-# Timestamps
-created: 2025-10-12
-updated: 2025-11-10
-
-tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, scope, structured-concurrency]
----\
-# Вопрос (RU)
-> Что такое структурированная параллельность в Kotlin? Объясните иерархию родитель-потомок корутин, распространение отмены, распространение исключений и разницу между coroutineScope, supervisorScope и withContext.
-
----
-
 # Question (EN)
 > What is structured concurrency in Kotlin? Explain parent-child coroutine hierarchy, cancellation propagation, exception propagation, and differences between coroutineScope, supervisorScope, and withContext.
 
