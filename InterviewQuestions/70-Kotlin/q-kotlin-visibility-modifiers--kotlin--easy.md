@@ -32,25 +32,6 @@ tags:
 - kotlin
 - modifiers
 - visibility
-anki_cards:
-- slug: kotlin-023-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - access-control
-  - encapsulation
-  - modifiers
-- slug: kotlin-023-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - access-control
-  - encapsulation
-  - modifiers
 ---
 # Вопрос (RU)
 > Что такое модификаторы видимости в Kotlin?

@@ -2,18 +2,43 @@
 anki_cards:
 - slug: q-array-vs-list-kotlin--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
+  difficulty: 0.3
+  front: What is the difference between Array and List in Kotlin?
+  back: |
+    **Array:**
+    - Fixed size after creation
+    - Mutable elements, immutable length
+    - Use `IntArray` for primitives (no boxing)
+    - O(1) index access
+    **List/MutableList:**
+    - `List` is read-only interface
+    - `MutableList` allows add/remove (dynamic size)
+    - Richer collection API (map, filter, etc.)
+    Use Array for fixed-size, primitives; List for flexibility.
   tags:
   - Kotlin
-  - difficulty::medium
+  - collections
+  - arrays
 - slug: q-array-vs-list-kotlin--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
+  difficulty: 0.3
+  front: V chem raznitsa mezhdu Array i List v Kotlin?
+  back: |
+    **Array:**
+    - Fiksirovannyy razmer posle sozdaniya
+    - Elementy izmenyaemy, dlina - net
+    - `IntArray` dlya primitivov (bez boxing)
+    - O(1) dostup po indeksu
+    **List/MutableList:**
+    - `List` - read-only interface
+    - `MutableList` pozvolyaet add/remove (dinamicheskiy razmer)
+    - Bogatyy API kollektsiy (map, filter i dr.)
+    Array dlya fiksirovannogo razmera; List dlya gibkosti.
   tags:
   - Kotlin
-  - difficulty::medium
+  - collections
+  - arrays
 ---
----\
 id: kotlin-137
 title: Array vs List in Kotlin / Разница между Array и List в Kotlin
 topic: kotlin

@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-kotlin-sealed-classes-purpose--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-kotlin-sealed-classes-purpose--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-082
 title: "Kotlin Sealed Classes Purpose / Назначение sealed классов в Kotlin"

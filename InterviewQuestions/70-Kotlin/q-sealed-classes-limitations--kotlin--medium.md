@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-sealed-classes-limitations--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-sealed-classes-limitations--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-025
 title: "Sealed Classes Limitations / Ограничения Sealed Классов"

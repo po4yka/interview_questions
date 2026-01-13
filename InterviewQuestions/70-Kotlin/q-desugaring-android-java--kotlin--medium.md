@@ -27,21 +27,6 @@ tags:
 - difficulty/medium
 - java
 - kotlin
-anki_cards:
-- slug: kotlin-173-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - compilation
-- slug: kotlin-173-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - compilation
 ---
 # Вопрос (RU)
 > Что такое desugaring в Android и как он работает?

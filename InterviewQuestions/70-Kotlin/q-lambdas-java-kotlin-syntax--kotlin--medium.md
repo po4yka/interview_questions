@@ -30,25 +30,6 @@ tags:
 - kotlin
 - lambdas
 - syntax
-anki_cards:
-- slug: kotlin-139-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - lambdas
-  - syntax
-- slug: kotlin-139-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - lambdas
-  - syntax
 ---
 # Вопрос (RU)
 > Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?

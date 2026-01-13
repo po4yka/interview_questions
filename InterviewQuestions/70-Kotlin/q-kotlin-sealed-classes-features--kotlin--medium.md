@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-kotlin-sealed-classes-features--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-kotlin-sealed-classes-features--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-066
 title: "Kotlin Sealed Classes Features / Особенности sealed классов в Kotlin"

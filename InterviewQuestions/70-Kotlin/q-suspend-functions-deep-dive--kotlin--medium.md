@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-suspend-functions-deep-dive--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-suspend-functions-deep-dive--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-196
 title: "Suspend Functions Deep Dive / Suspend функции детальный разбор"

@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-kotlin-lambda-expressions--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-kotlin-lambda-expressions--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-007
 title: "Lambda Expressions in Kotlin / Лямбда-выражения в Kotlin"

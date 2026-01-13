@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-how-to-create-suspend-function--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-how-to-create-suspend-function--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-063
 title: "How To Create Suspend Function / Как создать suspend функцию"

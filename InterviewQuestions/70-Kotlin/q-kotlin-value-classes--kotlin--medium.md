@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-kotlin-value-classes--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-kotlin-value-classes--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: android-647
 title: Kotlin Value Classes (Inline Classes) / Value классы в Kotlin

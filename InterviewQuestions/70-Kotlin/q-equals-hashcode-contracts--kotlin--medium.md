@@ -29,25 +29,6 @@ tags:
 - equality
 - kotlin
 - object-methods
-anki_cards:
-- slug: lang-072-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - object-methods
-- slug: lang-072-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - object-methods
 ---
 # Вопрос (RU)
 > Расскажи о контрактах `equals` и `hashCode`

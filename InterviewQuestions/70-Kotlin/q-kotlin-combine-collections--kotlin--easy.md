@@ -23,21 +23,6 @@ created: 2025-10-13
 updated: 2025-11-09
 tags:
 - difficulty/easy
-anki_cards:
-- slug: lang-007-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-- slug: lang-007-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
 ---
 # Вопрос (RU)
 > Какая функция Kotlin используется для объединения двух коллекций?

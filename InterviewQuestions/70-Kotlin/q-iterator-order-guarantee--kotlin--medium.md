@@ -26,25 +26,6 @@ tags:
 - difficulty/medium
 - iterators
 - kotlin
-anki_cards:
-- slug: lang-067-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - iterators
-  - ordering
-- slug: lang-067-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - iterators
-  - ordering
 ---
 # Вопрос (RU)
 > После перебирания данных итератором, гарантируется ли очередность получения этих данных?

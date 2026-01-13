@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-kotlin-extension-functions-advanced--kotlin--hard-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-kotlin-extension-functions-advanced--kotlin--hard-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---\
 id: kotlin-229

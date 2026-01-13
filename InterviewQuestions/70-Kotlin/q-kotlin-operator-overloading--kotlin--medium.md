@@ -30,25 +30,6 @@ tags:
 - kotlin
 - operators
 - overloading
-anki_cards:
-- slug: kotlin-004-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - conventions
-  - language-features
-  - operators
-- slug: kotlin-004-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - conventions
-  - language-features
-  - operators
 ---
 # Вопрос (RU)
 > Что вы знаете о перегрузке операторов в Kotlin?

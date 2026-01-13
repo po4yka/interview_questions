@@ -29,21 +29,6 @@ tags:
 - list
 - map
 - set
-anki_cards:
-- slug: kotlin-175-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-- slug: kotlin-175-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
 ---
 # Вопрос (RU)
 > Расскажите отличия между `List`, `Set` и `Map`. Когда использовать каждый из них?

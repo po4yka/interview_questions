@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-dispatchers-main-immediate--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-dispatchers-main-immediate--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-217
 title: "Dispatchers.Main.immediate vs Dispatchers.Main / Dispatchers.Main.immediate vs Main"

@@ -33,23 +33,6 @@ tags:
 - kotlin-features
 sources:
 - https://kotlinlang.org/docs/delegation.html
-anki_cards:
-- slug: kotlin-237-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - delegation
-  - kotlin-features
-- slug: kotlin-237-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - delegation
-  - kotlin-features
 ---
 # Вопрос (RU)
 > Что такое делегирование класса с ключевым словом `by` в Kotlin?

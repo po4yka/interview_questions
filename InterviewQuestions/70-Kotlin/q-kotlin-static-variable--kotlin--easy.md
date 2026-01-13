@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-kotlin-static-variable--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-kotlin-static-variable--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-093
 title: "Kotlin Static Variable / Статические переменные в Kotlin"

@@ -25,23 +25,6 @@ tags:
 - data-classes
 - difficulty/medium
 - sealed-classes
-anki_cards:
-- slug: kotlin-213-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - data-classes
-  - sealed-classes
-- slug: kotlin-213-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - data-classes
-  - sealed-classes
 ---
 # Вопрос (RU)
 > Для чего используются `data` классы и `sealed` классы в Kotlin? Каковы их практические применения?

@@ -32,25 +32,6 @@ tags:
 - star-projection
 - type-safety
 - variance
-anki_cards:
-- slug: kotlin-027-0-en
-  language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - star-projection
-  - type-safety
-- slug: kotlin-027-0-ru
-  language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - star-projection
-  - type-safety
 ---
 # Вопрос (RU)
 > В чем разница между `*` (звездная проекция) и `Any` в обобщениях Kotlin?

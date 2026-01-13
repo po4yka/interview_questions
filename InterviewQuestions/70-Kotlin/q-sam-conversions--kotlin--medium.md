@@ -30,23 +30,6 @@ tags:
 - kotlin
 - lambda
 - sam
-anki_cards:
-- slug: kotlin-179-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - java-interop
-  - lambdas
-- slug: kotlin-179-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - java-interop
-  - lambdas
 ---
 # Вопрос (RU)
 

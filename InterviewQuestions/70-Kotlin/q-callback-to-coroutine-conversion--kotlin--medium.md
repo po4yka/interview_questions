@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-callback-to-coroutine-conversion--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-callback-to-coroutine-conversion--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-049
 title: "How to convert callback-based APIs to coroutines? / Как конвертировать callback-based API в корутины?"

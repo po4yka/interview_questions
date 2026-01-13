@@ -32,23 +32,6 @@ tags:
 - kotlin
 - object-keyword
 - singleton
-anki_cards:
-- slug: kotlin-143-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - singleton
-- slug: kotlin-143-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - singleton
 ---
 # Что Такое Object / Companion Object?
 

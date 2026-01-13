@@ -30,23 +30,6 @@ tags:
 - open
 - override
 - polymorphism
-anki_cards:
-- slug: lang-095-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - inheritance
-  - type-system
-- slug: lang-095-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - inheritance
-  - type-system
 ---
 # Вопрос (RU)
 > Какое ключевое слово используется для определения метода, который должен быть переопределен в подклассе?

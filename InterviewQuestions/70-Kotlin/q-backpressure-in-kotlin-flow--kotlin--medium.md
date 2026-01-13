@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-backpressure-in-kotlin-flow--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-backpressure-in-kotlin-flow--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-038
 title: "Back Pressure в Kotlin Flow / Back Pressure in Kotlin Flow"

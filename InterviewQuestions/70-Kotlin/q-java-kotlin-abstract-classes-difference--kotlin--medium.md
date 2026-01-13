@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-java-kotlin-abstract-classes-difference--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-java-kotlin-abstract-classes-difference--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-300
 title: "Java Kotlin Abstract Classes Difference / Главное отличие абстрактных классов в Java и Kotlin"

@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-continuation-cps-internals--kotlin--hard-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-continuation-cps-internals--kotlin--hard-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-122
 title: "Continuation and CPS: how suspend functions work internally / Continuation и CPS: как работают suspend функции внутри"

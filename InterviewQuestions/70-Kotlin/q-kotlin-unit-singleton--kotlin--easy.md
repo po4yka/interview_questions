@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-kotlin-unit-singleton--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-kotlin-unit-singleton--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-183
 title: "Kotlin Unit Singleton / Unit как синглтон в Kotlin"

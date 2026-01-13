@@ -30,23 +30,6 @@ tags:
 - safe-cast
 - type-conversion
 - type-safety
-anki_cards:
-- slug: lang-075-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - null-safety
-  - type-system
-- slug: lang-075-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - null-safety
-  - type-system
 ---
 # Вопрос (RU)
 > Как в Kotlin привести переменную типа `Any` к типу `String` безопасно, чтобы избежать исключения?

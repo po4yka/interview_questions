@@ -30,23 +30,6 @@ tags:
 - enums
 - kotlin
 - types
-anki_cards:
-- slug: kotlin-010-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - enums
-  - types
-- slug: kotlin-010-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - enums
-  - types
 ---
 # Вопрос (RU)
 > Что такое Enum в Kotlin?

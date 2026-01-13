@@ -29,23 +29,6 @@ tags:
 - equality
 - kotlin
 - operators
-anki_cards:
-- slug: kotlin-002-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - equality
-  - operators
-- slug: kotlin-002-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - equality
-  - operators
 ---
 # Вопрос (RU)
 > В чем разница между == и === в Kotlin?

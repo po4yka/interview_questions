@@ -28,21 +28,6 @@ tags:
 - kotlin
 - type-system
 - types
-anki_cards:
-- slug: kotlin-028-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - type-system
-- slug: kotlin-028-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - type-system
 ---
 # Вопрос (RU)
 > Что вы знаете о типах Any, Nothing, Unit в Kotlin?

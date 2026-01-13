@@ -31,23 +31,6 @@ tags:
 - difficulty/easy
 - kotlin
 - singleton
-anki_cards:
-- slug: kotlin-224-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - classes
-  - design
-- slug: kotlin-224-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - classes
-  - design
 ---
 # Вопрос (RU)
 

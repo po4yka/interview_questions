@@ -26,23 +26,6 @@ moc: moc-kotlin
 related:
 - c-collections
 - c-kotlin
-anki_cards:
-- slug: lang-008-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - types
-- slug: lang-008-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - types
 ---
 # Вопрос (RU)
 > Расскажи про коллекцию `Map`

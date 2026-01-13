@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-primitive-vs-reference-types--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-primitive-vs-reference-types--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-004
 title: "Primitive Vs Reference Types / Примитивные типы против ссылочных типов"

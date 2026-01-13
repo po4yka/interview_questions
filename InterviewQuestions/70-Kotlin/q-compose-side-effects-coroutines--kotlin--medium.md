@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-compose-side-effects-coroutines--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-compose-side-effects-coroutines--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-170
 title: "Coroutines and side effects in Jetpack Compose / Корутины и side effects в Jetpack Compose"

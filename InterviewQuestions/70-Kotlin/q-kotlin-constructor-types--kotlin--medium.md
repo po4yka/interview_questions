@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-kotlin-constructor-types--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-kotlin-constructor-types--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-211
 title: "Kotlin Constructor Types / Типы конструкторов Kotlin"

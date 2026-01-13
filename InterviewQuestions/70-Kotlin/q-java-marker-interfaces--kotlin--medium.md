@@ -28,23 +28,6 @@ tags:
 - marker-interface
 - randomaccess
 - serializable
-anki_cards:
-- slug: lang-003-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - interfaces
-  - java
-- slug: lang-003-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - interfaces
-  - java
 ---
 # Вопрос (RU)
 > Перечислите маркерные интерфейсы в Java.

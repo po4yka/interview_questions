@@ -28,23 +28,6 @@ tags:
 - difficulty/medium
 - kotlin
 - property-delegates
-anki_cards:
-- slug: lang-045-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - delegation
-  - type-system
-- slug: lang-045-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - delegation
-  - type-system
 ---
 # Вопрос (RU)
 > В чем особенность делегатов свойств?

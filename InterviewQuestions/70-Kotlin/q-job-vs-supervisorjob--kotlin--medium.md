@@ -22,21 +22,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags:
 - difficulty/medium
-anki_cards:
-- slug: kotlin-189-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
-- slug: kotlin-189-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
 ---
 # Вопрос (RU)
 > В чем отличие между Job и SupervisorJob?

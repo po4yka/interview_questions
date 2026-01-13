@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-how-gc-knows-object-can-be-destroyed--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-how-gc-knows-object-can-be-destroyed--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-046
 title: "How GC Knows Object Can Be Destroyed / Как GC знает что объект можно уничтожить"

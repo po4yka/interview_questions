@@ -30,21 +30,6 @@ tags:
 - kotlin
 - pair
 - partition
-anki_cards:
-- slug: kotlin-208-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-- slug: kotlin-208-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
 ---
 # Вопрос (RU)
 

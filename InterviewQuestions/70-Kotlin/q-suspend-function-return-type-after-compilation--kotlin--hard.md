@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-suspend-function-return-type-after-compilation--kotlin--hard-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-suspend-function-return-type-after-compilation--kotlin--hard-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-023
 title: "Suspend Function Return Type After Compilation / suspend"

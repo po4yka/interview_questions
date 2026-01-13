@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-interface-vs-abstract-class--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-interface-vs-abstract-class--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-301
 title: "Interface Vs Abstract Class / Интерфейс против абстрактного класса"

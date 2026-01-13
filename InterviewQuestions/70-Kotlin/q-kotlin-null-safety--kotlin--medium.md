@@ -30,23 +30,6 @@ tags:
 - nullable
 - operators
 - safe-call
-anki_cards:
-- slug: lang-078-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - null-safety
-  - type-system
-- slug: lang-078-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - null-safety
-  - type-system
 ---
 # Вопрос (RU)
 > Что такое null safety и как это пишется?

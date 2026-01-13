@@ -34,23 +34,6 @@ tags:
 - projections
 - type-system
 - variance
-anki_cards:
-- slug: kotlin-201-0-en
-  language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - type-system
-- slug: kotlin-201-0-ru
-  language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - type-system
 ---
 # Вопрос (RU)
 > Объясните variance на месте объявления против на месте использования в Kotlin. В чем разница между in, out и star проекциями?

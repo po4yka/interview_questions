@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-165
 title: "Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизненного цикла ViewModelScope и LifecycleScope"

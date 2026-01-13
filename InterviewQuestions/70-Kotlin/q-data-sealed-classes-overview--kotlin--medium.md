@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-data-sealed-classes-overview--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-data-sealed-classes-overview--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-206
 title: "Data Sealed Classes Overview / Data и Sealed классы обзор"

@@ -36,25 +36,6 @@ anki_synced: true
 anki_slugs:
 - 70-kotlin-q-why-data-sealed-classes-kotlin-medium-p01-ru
 anki_last_sync: '2025-11-26T22:32:40.783101'
-anki_cards:
-- slug: kotlin-226-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - data-classes
-  - sealed-classes
-- slug: kotlin-226-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - data-classes
-  - sealed-classes
 ---
 # Вопрос (RU)
 

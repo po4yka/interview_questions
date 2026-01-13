@@ -28,25 +28,6 @@ tags:
 - equality
 - kotlin
 - object-methods
-anki_cards:
-- slug: lang-049-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - object-methods
-- slug: lang-049-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - object-methods
 ---
 # Вопрос (RU)
 > Какие существуют правила для методов equals и hashcode?

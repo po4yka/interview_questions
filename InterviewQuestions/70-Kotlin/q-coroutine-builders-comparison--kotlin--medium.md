@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-coroutine-builders-comparison--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-coroutine-builders-comparison--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-238
 title: "Comparison of all coroutine builders / Сравнение всех builders корутин"

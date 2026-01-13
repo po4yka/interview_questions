@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-lifecyclescope-viewmodelscope--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-lifecyclescope-viewmodelscope--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-087
 title: "lifecycleScope vs viewModelScope / lifecycleScope против viewModelScope"

@@ -1,4 +1,42 @@
 ---
+anki_cards:
+- slug: q-atomic-vs-synchronized--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  front: When should you use Atomic variables vs synchronized in Kotlin?
+  back: |
+    **Atomic (AtomicInteger, etc.):**
+    - Single variable operations (counters, flags)
+    - CAS-based, lock-free, usually faster
+    - Only protects ONE value, not invariants across fields
+    **synchronized:**
+    - Multiple variables/complex logic
+    - Collections, caches, transfers
+    - Maintains invariants across fields
+    **Android:** Prefer coroutines + Mutex when possible.
+  tags:
+  - Kotlin
+  - concurrency
+  - thread-safety
+- slug: q-atomic-vs-synchronized--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  front: Kogda ispolzovat Atomic peremennye vs synchronized v Kotlin?
+  back: |
+    **Atomic (AtomicInteger i dr.):**
+    - Operatsii s odnoy peremennoy (schetchiki, flagi)
+    - CAS, bez blokirovok, obychno bystree
+    - Zashchishchaet ODNO znachenie, ne invarianty
+    **synchronized:**
+    - Neskolko peremennykh/slozhnaya logika
+    - Kollektsii, keshi, perevody
+    - Podderzhivaet invarianty mezhdu polyami
+    **Android:** Predpochitayte korutiny + Mutex.
+  tags:
+  - Kotlin
+  - concurrency
+  - thread-safety
+---
 id: kotlin-146
 title: Atomic vs Synchronized / Atomic против Synchronized
 aliases:
@@ -30,23 +68,6 @@ tags:
 - kotlin
 - synchronized
 - thread-safety
-anki_cards:
-- slug: kotlin-146-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - concurrency
-  - thread-safety
-- slug: kotlin-146-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - concurrency
-  - thread-safety
 ---
 # Вопрос (RU)
 

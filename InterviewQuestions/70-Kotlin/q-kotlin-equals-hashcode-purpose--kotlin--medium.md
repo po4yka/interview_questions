@@ -31,25 +31,6 @@ tags:
 - hashcode
 - kotlin
 - object-comparison
-anki_cards:
-- slug: lang-087-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - hash-tables
-- slug: lang-087-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - hash-tables
 ---
 # Вопрос (RU)
 > Зачем нужны методы equals и hashCode?

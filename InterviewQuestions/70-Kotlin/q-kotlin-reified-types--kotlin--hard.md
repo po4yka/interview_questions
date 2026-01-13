@@ -28,23 +28,6 @@ tags:
 - kotlin
 - reified
 - type-parameters
-anki_cards:
-- slug: kotlin-198-0-en
-  language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - type-system
-- slug: kotlin-198-0-ru
-  language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - type-system
 ---
 # Вопрос (RU)
 

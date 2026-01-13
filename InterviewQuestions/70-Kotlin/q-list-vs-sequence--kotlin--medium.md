@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-list-vs-sequence--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-list-vs-sequence--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-001
 title: "List Vs Sequence / List против Sequence"

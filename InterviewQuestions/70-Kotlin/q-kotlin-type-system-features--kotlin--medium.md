@@ -29,23 +29,6 @@ tags:
 - null-safety
 - type-inference
 - type-system
-anki_cards:
-- slug: kotlin-141-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - null-safety
-  - type-system
-- slug: kotlin-141-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - null-safety
-  - type-system
 ---
 # Вопрос (RU)
 > Какие особенности системы типов в Kotlin ты знаешь?

@@ -28,21 +28,6 @@ tags:
 - difficulty/medium
 - kotlin
 - type-aliases
-anki_cards:
-- slug: kotlin-006-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-- slug: kotlin-006-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
 ---
 # Вопрос (RU)
 > В чем разница между функциональными интерфейсами и псевдонимами типов в Kotlin?

@@ -1,21 +1,4 @@
 ---
-anki_cards:
-- slug: q-custom-dispatchers-limited-parallelism--kotlin--hard-0-en
-  language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - coroutines
-  - dispatchers
-  - difficulty::hard
-- slug: q-custom-dispatchers-limited-parallelism--kotlin--hard-0-ru
-  language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - coroutines
-  - dispatchers
-  - difficulty::hard
 ---
 id: kotlin-117
 title: "Creating custom CoroutineDispatchers with limitedParallelism / Создание пользовательских CoroutineDispatchers с limitedParallelism"

@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-runtime-generic-access--kotlin--hard-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-runtime-generic-access--kotlin--hard-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-024
 title: "Runtime Generic Access / Доступ к дженерикам во время выполнения"

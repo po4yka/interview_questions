@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-data-class-requirements--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-data-class-requirements--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-214
 title: "Data Class Requirements / Требования Data Class"

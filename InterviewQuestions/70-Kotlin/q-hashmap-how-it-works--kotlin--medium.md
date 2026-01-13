@@ -29,25 +29,6 @@ tags:
 - hash-tables
 - hashmap
 - kotlin
-anki_cards:
-- slug: lang-044-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - data-structures
-  - hash-tables
-- slug: lang-044-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - data-structures
-  - hash-tables
 ---
 # Вопрос (RU)
 > Как работает `HashMap`?

@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-collection-implementations--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-collection-implementations--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-202
 title: "Collection Implementations / Реализации коллекций"

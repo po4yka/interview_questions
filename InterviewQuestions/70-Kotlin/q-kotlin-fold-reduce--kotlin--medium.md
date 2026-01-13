@@ -30,23 +30,6 @@ tags:
 - functional-programming
 - kotlin
 - reduce
-anki_cards:
-- slug: kotlin-003-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - fold
-- slug: kotlin-003-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - fold
 ---
 # Вопрос (RU)
 > Какая разница между fold и reduce в Kotlin?

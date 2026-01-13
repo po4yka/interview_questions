@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-what-happens-to-unneeded-objects--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-what-happens-to-unneeded-objects--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---\
 id: lang-050

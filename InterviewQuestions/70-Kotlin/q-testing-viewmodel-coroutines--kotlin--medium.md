@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-testing-viewmodel-coroutines--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-testing-viewmodel-coroutines--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-068
 title: "Testing ViewModels with Coroutines / Тестирование ViewModel с корутинами"

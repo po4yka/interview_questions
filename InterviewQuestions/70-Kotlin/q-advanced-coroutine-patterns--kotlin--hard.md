@@ -2,18 +2,43 @@
 anki_cards:
 - slug: q-advanced-coroutine-patterns--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
+  difficulty: 0.7
+  front: What is the Pipeline pattern in Kotlin coroutines?
+  back: |
+    **Pipeline pattern** chains processing stages via Channels:
+    ```kotlin
+    val numbers = produceNumbers()
+    val squares = square(numbers)
+    val strings = toStringChannel(squares)
+    ```
+    Each stage: consumes from previous channel, transforms, produces to next.
+    Use `produce` for stages, cancel when done.
+    Key patterns: pipeline, producer-consumer, resource pooling with Semaphore/Mutex.
   tags:
   - Kotlin
-  - difficulty::medium
+  - coroutines
+  - pipeline
+  - channels
 - slug: q-advanced-coroutine-patterns--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
+  difficulty: 0.7
+  front: Chto takoe pattern Pipeline v korutinakh Kotlin?
+  back: |
+    **Pipeline pattern** svyazyvaet stadii obrabotki cherez Channels:
+    ```kotlin
+    val numbers = produceNumbers()
+    val squares = square(numbers)
+    val strings = toStringChannel(squares)
+    ```
+    Kazhdaya stadiya: chitaet iz predydushchego kanala, transformiruet, pishet v sleduyushchiy.
+    Ispolzuyte `produce` dlya stadiy, otmenyayte po zavershenii.
+    Klyuchevye patterny: pipeline, producer-consumer, pooling s Semaphore/Mutex.
   tags:
   - Kotlin
-  - difficulty::medium
+  - coroutines
+  - pipeline
+  - channels
 ---
----\
 id: kotlin-133
 title: "Advanced Coroutine Patterns / Продвинутые паттерны корутин"
 aliases: ["Advanced Coroutine Patterns", "Продвинутые паттерны корутин"]

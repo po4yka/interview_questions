@@ -32,23 +32,6 @@ tags:
 - kotlin-features
 sources:
 - https://kotlinlang.org/docs/enum-classes.html
-anki_cards:
-- slug: kotlin-231-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - enums
-  - kotlin-features
-- slug: kotlin-231-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - enums
-  - kotlin-features
 ---
 # Вопрос (RU)
 > Какие продвинутые возможности есть у enum классов в Kotlin?

@@ -1,19 +1,4 @@
 ---
-anki_cards:
-- slug: q-data-class-detailed--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - data-classes
-  - difficulty::medium
-- slug: q-data-class-detailed--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - data-classes
-  - difficulty::medium
 ---
 id: kotlin-245
 title: "Data classes in Kotlin: features, limitations, and best practices / Data classes в Kotlin"

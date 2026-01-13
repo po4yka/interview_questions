@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-semaphore-rate-limiting--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-semaphore-rate-limiting--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-107
 title: "Semaphore for rate limiting and resource pooling / Semaphore для ограничения скорости и пулов ресурсов"

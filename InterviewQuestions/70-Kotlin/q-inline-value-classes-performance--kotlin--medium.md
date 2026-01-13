@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-inline-value-classes-performance--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-inline-value-classes-performance--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-145
 title: "Inline Value Classes Performance / Производительность value-классов"

@@ -1,4 +1,38 @@
 ---
+anki_cards:
+- slug: q-associatewith-vs-associateby--kotlin--easy-0-en
+  language: en
+  difficulty: 0.3
+  front: What is the difference between associateBy and associateWith in Kotlin?
+  back: |
+    **associateBy:** Key computed, Value = element
+    `users.associateBy { it.id }` -> Map<Int, User>
+    **associateWith:** Key = element, Value computed
+    `names.associateWith { it.length }` -> Map<String, Int>
+    **associate:** Both computed via Pair
+    **groupBy:** Like associateBy but keeps all duplicates as List
+    Warning: associateBy overwrites on key collision!
+  tags:
+  - Kotlin
+  - collections
+  - transformation
+- slug: q-associatewith-vs-associateby--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.3
+  front: V chem raznitsa mezhdu associateBy i associateWith v Kotlin?
+  back: |
+    **associateBy:** Klyuch vychislyaetsya, Znachenie = element
+    `users.associateBy { it.id }` -> Map<Int, User>
+    **associateWith:** Klyuch = element, Znachenie vychislyaetsya
+    `names.associateWith { it.length }` -> Map<String, Int>
+    **associate:** Oba vychislyayutsya cherez Pair
+    **groupBy:** Kak associateBy, no sohranyaet vse dublikaty kak List
+    Vnimanie: associateBy perezapisyvaet pri kollizii klyuchey!
+  tags:
+  - Kotlin
+  - collections
+  - transformation
+---
 id: kotlin-140
 title: Associatewith Vs Associateby / associateWith против associateBy
 aliases:
@@ -27,21 +61,6 @@ tags:
 - kotlin
 - map
 - transformation
-anki_cards:
-- slug: kotlin-140-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-- slug: kotlin-140-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
 ---
 # Вопрос (RU)
 

@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-kotlin-dsl-creation--kotlin--hard-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-kotlin-dsl-creation--kotlin--hard-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-192
 title: "Kotlin Dsl Creation / Создание DSL в Kotlin"

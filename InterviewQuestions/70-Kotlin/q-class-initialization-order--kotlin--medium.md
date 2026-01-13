@@ -30,25 +30,6 @@ tags:
 - kotlin-features
 sources:
 - https://kotlinlang.org/docs/inheritance.html
-anki_cards:
-- slug: kotlin-230-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - initialization
-  - kotlin-features
-- slug: kotlin-230-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - initialization
-  - kotlin-features
 ---
 # Вопрос (RU)
 > В каком порядке происходит инициализация класса в Kotlin?

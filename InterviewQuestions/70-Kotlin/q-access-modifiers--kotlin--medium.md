@@ -1,4 +1,42 @@
 ---
+anki_cards:
+- slug: q-access-modifiers--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  front: What are Kotlin access modifiers and how do they differ from Java?
+  back: |
+    **Kotlin modifiers:**
+    - **public** (default) - visible everywhere
+    - **private** - file/class scope only
+    - **protected** - class + subclasses (not package!)
+    - **internal** - same module only
+    **Differences from Java:**
+    - Default is public (Java: package-private)
+    - internal replaces package-private
+    - protected doesn't include package visibility
+  tags:
+  - Kotlin
+  - access-modifiers
+  - visibility
+- slug: q-access-modifiers--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  front: Kakie modifikatory dostupa est v Kotlin i chem oni otlichayutsya ot Java?
+  back: |
+    **Modifikatory Kotlin:**
+    - **public** (po umolchaniyu) - viden vezde
+    - **private** - tolko v fayle/klasse
+    - **protected** - klass + nasledniki (ne paket!)
+    - **internal** - tolko v module
+    **Otlichiya ot Java:**
+    - Po umolchaniyu public (Java: package-private)
+    - internal zamenyaet package-private
+    - protected ne vklyuchaet vidimost paketa
+  tags:
+  - Kotlin
+  - access-modifiers
+  - visibility
+---
 id: kotlin-045
 title: Access Modifiers in Kotlin / Модификаторы доступа в Kotlin
 aliases:
@@ -31,25 +69,6 @@ tags:
 - kotlin
 - oop
 - visibility
-anki_cards:
-- slug: kotlin-045-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - access-modifiers
-  - encapsulation
-  - visibility
-- slug: kotlin-045-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - access-modifiers
-  - encapsulation
-  - visibility
 ---
 # Вопрос (RU)
 > Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?

@@ -24,23 +24,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags:
 - difficulty/easy
-anki_cards:
-- slug: kotlin-225-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - extensions
-  - null-safety
-- slug: kotlin-225-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - extensions
-  - null-safety
 ---
 # Вопрос (RU)
 > В чём преимущества Kotlin для разработки под Android?

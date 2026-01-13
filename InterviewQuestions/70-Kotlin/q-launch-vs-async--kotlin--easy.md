@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-launch-vs-async--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-launch-vs-async--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-135
 title: "launch vs async: When to Use Each / launch против async: когда использовать"

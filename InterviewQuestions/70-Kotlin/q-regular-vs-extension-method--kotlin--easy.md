@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-regular-vs-extension-method--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-regular-vs-extension-method--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-036
 title: "Regular Vs Extension Method / Обычный метод против Extension метода"

@@ -31,25 +31,6 @@ tags:
 - destructuring
 - difficulty/medium
 - kotlin
-anki_cards:
-- slug: kotlin-034-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - componentN
-  - data-classes
-  - destructuring
-- slug: kotlin-034-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - componentN
-  - data-classes
-  - destructuring
 ---
 # Вопрос (RU)
 > Что такое деструктурирующие объявления в Kotlin?

@@ -31,23 +31,6 @@ tags:
 - pattern-matching
 - syntax
 - when
-anki_cards:
-- slug: kotlin-190-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - control-flow
-  - syntax
-- slug: kotlin-190-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - control-flow
-  - syntax
 ---
 # Вопрос (RU)
 > Как использовать `when` в Kotlin вместо `switch`?

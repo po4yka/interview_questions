@@ -28,23 +28,6 @@ tags:
 - difficulty/easy
 - object
 - singleton
-anki_cards:
-- slug: lang-088-0-en
-  language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - c-kotlin
-  - c-kotlin-features
-- slug: lang-088-0-ru
-  language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - c-kotlin
-  - c-kotlin-features
 ---
 # Вопрос (RU)
 > Что такое object / companion object?

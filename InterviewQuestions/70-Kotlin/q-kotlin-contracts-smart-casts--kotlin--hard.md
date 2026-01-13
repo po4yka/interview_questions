@@ -27,25 +27,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags:
 - difficulty/hard
-anki_cards:
-- slug: kotlin-227-0-en
-  language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
-  - flow
-  - type-system
-- slug: kotlin-227-0-ru
-  language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
-  - flow
-  - type-system
 ---
 # Вопрос (RU)
 > Что такое контракты Kotlin? Как они обеспечивают умные приведения типов (smart casts)? Реализуйте пользовательский контракт для функции валидации.

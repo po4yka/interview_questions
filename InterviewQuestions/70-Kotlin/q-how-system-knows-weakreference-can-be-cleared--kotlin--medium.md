@@ -23,21 +23,6 @@ tags:
 - difficulty/medium
 - kotlin
 - references
-anki_cards:
-- slug: lang-086-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - references
-- slug: lang-086-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - references
 ---
 # Вопрос (RU)
 > Как система понимает, что WeakReference можно очистить?

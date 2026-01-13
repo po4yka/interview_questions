@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-by-keyword-function-call--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-by-keyword-function-call--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: kotlin-211
 title: "By Keyword Function Call / Ключевое слово by и вызов функции"

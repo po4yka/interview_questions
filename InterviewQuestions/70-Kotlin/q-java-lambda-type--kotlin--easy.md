@@ -1,17 +1,4 @@
 ---
-anki_cards:
-- slug: q-java-lambda-type--kotlin--easy-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-- slug: q-java-lambda-type--kotlin--easy-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
 ---
 ---id: lang-012
 title: "Java Lambda Type / Тип лямбд Java"

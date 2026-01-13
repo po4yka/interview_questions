@@ -1,4 +1,36 @@
 ---
+anki_cards:
+- slug: q-abstract-class-vs-interface--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  front: What is the difference between abstract class and interface in Kotlin?
+  back: |
+    **Key Differences:**
+    - **State**: Abstract class can have backing fields, interface cannot
+    - **Inheritance**: Abstract class = single inheritance, interface = multiple implementation
+    - **Constructors**: Abstract class can have constructors, interface cannot
+    - **Default methods**: Both can have default implementations
+    Use abstract class for shared state/implementation; interface for behavior contracts.
+  tags:
+  - Kotlin
+  - OOP
+  - inheritance
+- slug: q-abstract-class-vs-interface--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  front: V chem raznitsa mezhdu abstraktnym klassom i interfeysom v Kotlin?
+  back: |
+    **Osnovnye otlichiya:**
+    - **Sostoyanie**: Abstract class mozhet imet backing fields, interface - net
+    - **Nasledovanie**: Abstract class = odinochnoe, interface = mnozhestvennoe
+    - **Konstruktory**: Abstract class mozhet imet konstruktory, interface - net
+    - **Default metody**: Oba mogut imet realizatsii po umolchaniyu
+    Abstract class dlya obshchego sostoyaniya; interface dlya kontraktov povedeniya.
+  tags:
+  - Kotlin
+  - OOP
+  - inheritance
+---
 id: kotlin-012
 title: Abstract Class vs Interface / Абстрактный класс vs интерфейс
 aliases:
@@ -33,25 +65,6 @@ tags:
 - oop
 sources:
 - https://kotlinlang.org/docs/interfaces.html
-anki_cards:
-- slug: kotlin-012-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - inheritance
-  - interfaces
-- slug: kotlin-012-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - inheritance
-  - interfaces
 ---
 # Вопрос (RU)
 > В чём разница между абстрактным классом и интерфейсом в Kotlin?

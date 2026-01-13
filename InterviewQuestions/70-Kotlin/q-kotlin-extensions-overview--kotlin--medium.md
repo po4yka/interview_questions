@@ -28,23 +28,6 @@ tags:
 - extension-properties
 - extensions
 - kotlin
-anki_cards:
-- slug: lang-029-0-en
-  language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - extensions
-  - type-system
-- slug: lang-029-0-ru
-  language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - extensions
-  - type-system
 ---
 # Вопрос (RU)
 > Что известно про extension?
