@@ -1,4 +1,24 @@
----\
+---
+anki_cards:
+- slug: q-dispatcher-performance--kotlin--hard-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - coroutines
+  - dispatchers
+  - performance
+  - difficulty::hard
+- slug: q-dispatcher-performance--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - coroutines
+  - dispatchers
+  - performance
+  - difficulty::hard
+---
 id: kotlin-112
 title: "Dispatcher Performance and Selection / Производительность и выбор диспетчеров"
 aliases: ["Dispatcher Performance and Selection", "Производительность и выбор диспетчеров"]

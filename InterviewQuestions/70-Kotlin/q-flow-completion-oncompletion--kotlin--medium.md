@@ -1,4 +1,22 @@
----\
+---
+anki_cards:
+- slug: q-flow-completion-oncompletion--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - flow
+  - coroutines
+  - difficulty::medium
+- slug: q-flow-completion-oncompletion--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - flow
+  - coroutines
+  - difficulty::medium
+---
 id: kotlin-148
 title: "Flow completion with onCompletion operator / Завершение Flow с onCompletion оператором"
 aliases: [Completion, Flow, onCompletion]

@@ -1,4 +1,22 @@
----\
+---
+anki_cards:
+- slug: q-channel-buffer-strategies-comparison--kotlin--hard-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - coroutines
+  - channels
+  - difficulty::hard
+- slug: q-channel-buffer-strategies-comparison--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - coroutines
+  - channels
+  - difficulty::hard
+---
 topic: kotlin
 id: kotlin-097
 title: "Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии буферизации каналов"
