@@ -1,38 +1,3 @@
----
-anki_cards:
-- slug: q-anonymous-class-in-inline-function--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  front: Can you create an anonymous class inside an inline function in Kotlin?
-  back: |
-    **Yes, but with restrictions:**
-    - Cannot store inline lambda parameters in object that outlives the call
-    - Object expression allocates at runtime (defeats inline purpose)
-    **Solutions:**
-    - Mark parameter as `noinline` if you need to store it
-    - Use regular (non-inline) function for complex objects
-    - Prefer lambdas for single-method interfaces
-  tags:
-  - Kotlin
-  - inline
-  - anonymous-classes
-- slug: q-anonymous-class-in-inline-function--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  front: Mozhno li sozdat anonimnyy klass vnutri inline funktsii v Kotlin?
-  back: |
-    **Da, no s ogranicheniyami:**
-    - Nelzya sokhranyat inline lambda-parametry v objekte, perezhivayushchem vyzov
-    - Object expression sozdaet objekt v runtime (otmenyaet vygodu inline)
-    **Resheniya:**
-    - Pometit parametr kak `noinline` dlya sokhraneniya
-    - Ispolzovat obychnuyu (ne inline) funktsiyu dlya slozhnykh objektov
-    - Predpochitat lambdy dlya single-method interfaces
-  tags:
-  - Kotlin
-  - inline
-  - anonymous-classes
----
 id: kotlin-047
 title: Anonymous Class in Inline Function / Анонимный класс в inline функции
 aliases: [Anonymous Class in Inline Function, Анонимный класс в inline функции]

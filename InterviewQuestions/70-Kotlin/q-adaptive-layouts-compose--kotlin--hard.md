@@ -1,38 +1,3 @@
----
-anki_cards:
-- slug: q-adaptive-layouts-compose--kotlin--hard-0-en
-  language: en
-  difficulty: 0.7
-  front: What are Window Size Classes in Jetpack Compose?
-  back: |
-    **Window Size Classes** - Material 3 breakpoints for adaptive layouts:
-    - **Compact** (<600dp): phones portrait - use BottomNavigation
-    - **Medium** (600-840dp): tablets portrait - use NavigationRail
-    - **Expanded** (>=840dp): tablets landscape - use PermanentDrawer
-    Use `calculateWindowSizeClass(activity)` and adapt UI accordingly.
-    Combine with `BoxWithConstraints` for fine-grained control.
-  tags:
-  - Kotlin
-  - Compose
-  - adaptive-layouts
-  - Material3
-- slug: q-adaptive-layouts-compose--kotlin--hard-0-ru
-  language: ru
-  difficulty: 0.7
-  front: Chto takoe Window Size Classes v Jetpack Compose?
-  back: |
-    **Window Size Classes** - tochki ostanova Material 3 dlya adaptivnykh layouts:
-    - **Compact** (<600dp): telefony - BottomNavigation
-    - **Medium** (600-840dp): planshety portrait - NavigationRail
-    - **Expanded** (>=840dp): planshety landscape - PermanentDrawer
-    Ispolzuyte `calculateWindowSizeClass(activity)` i adaptiruyte UI.
-    Kombiniruyte s `BoxWithConstraints` dlya tonkoy nastroyki.
-  tags:
-  - Kotlin
-  - Compose
-  - adaptive-layouts
-  - Material3
----
 id: kotlin-079
 title: "Adaptive Layouts in Compose / Адаптивные layouts в Compose"
 aliases: [Adaptive Layouts Compose, Адаптивные layouts Compose]

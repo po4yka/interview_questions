@@ -1,38 +1,3 @@
----
-anki_cards:
-- slug: q-arraylist-linkedlist-vector-difference--kotlin--medium-0-en
-  language: en
-  difficulty: 0.5
-  front: What is the difference between ArrayList, LinkedList and Vector?
-  back: |
-    **ArrayList:** Dynamic array, O(1) random access, O(n) insert middle, not thread-safe
-    **LinkedList:** Doubly-linked, O(n) random access, O(1) add/remove ends, implements Deque
-    **Vector:** Legacy synchronized ArrayList - avoid in new code!
-    **Modern alternatives:**
-    - `Collections.synchronizedList(ArrayList())`
-    - `CopyOnWriteArrayList` for read-heavy
-    - `ConcurrentLinkedQueue` for queues
-  tags:
-  - Kotlin
-  - collections
-  - data-structures
-- slug: q-arraylist-linkedlist-vector-difference--kotlin--medium-0-ru
-  language: ru
-  difficulty: 0.5
-  front: V chem raznitsa mezhdu ArrayList, LinkedList i Vector?
-  back: |
-    **ArrayList:** Dinamicheskiy massiv, O(1) dostup, O(n) vstavka v seredinu, ne thread-safe
-    **LinkedList:** Dvusvyaznyy spisok, O(n) dostup, O(1) dobavlenie v kontsy, realizuet Deque
-    **Vector:** Ustarevshiy sinkhronizirovannyy ArrayList - ne ispolzovat!
-    **Sovremennye alternativy:**
-    - `Collections.synchronizedList(ArrayList())`
-    - `CopyOnWriteArrayList` dlya chteniya
-    - `ConcurrentLinkedQueue` dlya ocheredey
-  tags:
-  - Kotlin
-  - collections
-  - data-structures
----
 id: kotlin-160
 title: "ArrayList LinkedList Vector Difference / Разница ArrayList LinkedList и Vector"
 aliases: [ArrayList LinkedList Vector Difference, Разница ArrayList LinkedList Vector]
