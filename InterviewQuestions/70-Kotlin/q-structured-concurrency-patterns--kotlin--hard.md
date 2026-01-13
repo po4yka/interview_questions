@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-structured-concurrency-patterns--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-structured-concurrency-patterns--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-110
 title: "Structured Concurrency Patterns / Паттерны структурированной конкурентности"
 aliases: ["Structured Concurrency Patterns", "Паттерны структурированной конкурентности"]

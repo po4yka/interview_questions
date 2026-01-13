@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-room-coroutines-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-room-coroutines-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-115
 title: "Room Database with Coroutines and Flow / Room БД с корутинами и Flow"

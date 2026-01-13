@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-switch-float-double--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-switch-float-double--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-092
 title: "Switch Float Double / Switch float double"

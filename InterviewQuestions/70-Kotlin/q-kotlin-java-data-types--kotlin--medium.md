@@ -1,19 +1,49 @@
 ---
 id: lang-018
-title: "Kotlin Java Data Types / Типы данных Kotlin и Java"
-aliases: [Kotlin Java Data Types, Типы данных Kotlin и Java]
+title: Kotlin Java Data Types / Типы данных Kotlin и Java
+aliases:
+- Kotlin Java Data Types
+- Типы данных Kotlin и Java
 topic: kotlin
-subtopics: [type-system]
+subtopics:
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-delegates-compilation--kotlin--hard, q-job-state-machine-transitions--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
+related:
+- c-kotlin
+- q-delegates-compilation--kotlin--hard
+- q-job-state-machine-transitions--kotlin--medium
+- q-testing-coroutines-runtest--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [data-types, difficulty/medium, java, primitives, reference-types, type-system]
+tags:
+- data-types
+- difficulty/medium
+- java
+- primitives
+- reference-types
+- type-system
+anki_cards:
+- slug: lang-018-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - type-system
+- slug: lang-018-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - type-system
 ---
 # Вопрос (RU)
 > Какие типы данных существуют в Java и Kotlin?

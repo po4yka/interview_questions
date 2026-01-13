@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-extensions--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-extensions--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-041
 title: "Kotlin Extensions / Расширения Kotlin"
 aliases: [Kotlin Extensions, Расширения Kotlin]

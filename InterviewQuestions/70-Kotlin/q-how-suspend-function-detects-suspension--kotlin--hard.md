@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-how-suspend-function-detects-suspension--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-how-suspend-function-detects-suspension--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-056
 title: "How Suspend Function Detects Suspension / Как suspend функция определяет приостановку"
 aliases: [How Suspend Function Detects Suspension, Как suspend функция определяет приостановку]

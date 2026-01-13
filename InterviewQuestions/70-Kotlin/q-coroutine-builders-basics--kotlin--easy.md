@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-builders-basics--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-builders-basics--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-102
 title: "Coroutine Builders: launch, async, runBlocking / Билдеры корутин: launch, async, runBlocking"

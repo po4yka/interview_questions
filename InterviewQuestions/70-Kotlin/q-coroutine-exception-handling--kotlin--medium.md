@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-exception-handling--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-exception-handling--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-042
 title: "Coroutine Exception Handling / Обработка исключений в корутинах"
 aliases: ["Coroutine Exception Handling", "Обработка исключений в корутинах"]

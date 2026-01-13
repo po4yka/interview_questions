@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-delay-vs-thread-sleep--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-delay-vs-thread-sleep--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-240
 title: "delay() vs Thread.sleep(): what's the difference? / delay() против Thread.sleep()"

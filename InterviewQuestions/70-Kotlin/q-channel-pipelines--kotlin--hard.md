@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-channel-pipelines--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-channel-pipelines--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-060
 title: "Channel Pipelines in Kotlin / Конвейеры каналов в Kotlin"
 aliases: ["Channel Pipelines in Kotlin", "Конвейеры каналов в Kotlin"]

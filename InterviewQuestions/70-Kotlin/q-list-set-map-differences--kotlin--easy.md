@@ -1,20 +1,49 @@
 ---
 id: kotlin-175
-title: "List Set Map Differences / Различия List Set и Map"
-aliases: [Collection Types, Collections, List vs Set vs Map]
+title: List Set Map Differences / Различия List Set и Map
+aliases:
+- Collection Types
+- Collections
+- List vs Set vs Map
 topic: kotlin
-subtopics: [collections]
+subtopics:
+- collections
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-dispatchers-unconfined--kotlin--medium]
+related:
+- c-collections
+- c-kotlin
+- q-dispatchers-unconfined--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, difficulty/easy, kotlin, list, map, set]
-
+tags:
+- collections
+- difficulty/easy
+- kotlin
+- list
+- map
+- set
+anki_cards:
+- slug: kotlin-175-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+- slug: kotlin-175-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
 ---
 # Вопрос (RU)
 > Расскажите отличия между `List`, `Set` и `Map`. Когда использовать каждый из них?

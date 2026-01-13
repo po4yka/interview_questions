@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-default-inheritance-type--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-default-inheritance-type--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-215
 title: "Kotlin Default Inheritance Type / Тип наследования по умолчанию в Kotlin"
 aliases: []

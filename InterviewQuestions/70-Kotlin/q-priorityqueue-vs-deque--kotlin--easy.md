@@ -1,20 +1,50 @@
 ---
 id: lang-070
-title: "PriorityQueue Vs Deque / PriorityQueue против Deque"
-aliases: [PriorityQueue Vs Deque, PriorityQueue против Deque]
+title: PriorityQueue Vs Deque / PriorityQueue против Deque
+aliases:
+- PriorityQueue Vs Deque
+- PriorityQueue против Deque
 topic: kotlin
-subtopics: [collections, queues]
+subtopics:
+- collections
+- queues
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin]
+related:
+- c-collections
+- c-kotlin
 created: 2025-10-15
 updated: 2025-11-11
-tags: [collections, deque, difficulty/easy, kotlin, priority-queue, queue]
-
+tags:
+- collections
+- deque
+- difficulty/easy
+- kotlin
+- priority-queue
+- queue
+anki_cards:
+- slug: lang-070-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - queues
+- slug: lang-070-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - queues
 ---
 # Вопрос (RU)
 > Какова разница между `PriorityQueue` и `Deque`?

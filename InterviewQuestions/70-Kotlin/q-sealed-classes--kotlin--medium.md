@@ -1,19 +1,52 @@
 ---
 id: kotlin-136
-title: "Sealed Classes / Sealed классы в Kotlin"
+title: Sealed Classes / Sealed классы в Kotlin
 topic: kotlin
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-09
-tags: [difficulty/medium, kotlin, sealed-classes, type-safety]
+tags:
+- difficulty/medium
+- kotlin
+- sealed-classes
+- type-safety
 moc: moc-kotlin
-aliases: ["What is special about sealed classes in Kotlin?", "Особенности sealed классов в Kotlin"]
+aliases:
+- What is special about sealed classes in Kotlin?
+- Особенности sealed классов в Kotlin
 question_kind: theory
-related: [c-kotlin, c-sealed-classes, q-channelflow-callbackflow-flow--kotlin--medium]
-subtopics: [enums, sealed-classes, when-expression]
+related:
+- c-kotlin
+- c-sealed-classes
+- q-channelflow-callbackflow-flow--kotlin--medium
+subtopics:
+- enums
+- sealed-classes
+- when-expression
+anki_cards:
+- slug: kotlin-136-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - enums
+  - sealed-classes
+  - when-expression
+- slug: kotlin-136-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - enums
+  - sealed-classes
+  - when-expression
 ---
 # Вопрос (RU)
 > В чем особенность sealed классов в Kotlin?

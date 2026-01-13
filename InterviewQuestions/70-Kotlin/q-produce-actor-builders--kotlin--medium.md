@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-produce-actor-builders--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-produce-actor-builders--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-065
 title: "produce and actor Channel Builders / Билдеры каналов produce и actor"

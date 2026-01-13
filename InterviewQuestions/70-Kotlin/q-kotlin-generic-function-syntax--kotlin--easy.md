@@ -1,20 +1,50 @@
 ---
 id: lang-059
-title: "Kotlin Generic Function Syntax / Синтаксис обобщенных функций Kotlin"
-aliases: [Kotlin Generic Function Syntax, Синтаксис обобщенных функций Kotlin]
+title: Kotlin Generic Function Syntax / Синтаксис обобщенных функций Kotlin
+aliases:
+- Kotlin Generic Function Syntax
+- Синтаксис обобщенных функций Kotlin
 topic: kotlin
-subtopics: [generics, type-system]
+subtopics:
+- generics
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-retrofit-coroutines-best-practices--kotlin--medium]
+related:
+- c-kotlin
+- q-retrofit-coroutines-best-practices--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/easy, functions, generics, kotlin, syntax, type-parameters]
-
+tags:
+- difficulty/easy
+- functions
+- generics
+- kotlin
+- syntax
+- type-parameters
+anki_cards:
+- slug: lang-059-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - generics
+  - type-system
+- slug: lang-059-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - generics
+  - type-system
 ---
 # Вопрос (RU)
 > Какой синтаксис используется для объявления обобщенной функции в Kotlin?

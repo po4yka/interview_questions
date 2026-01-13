@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-val-vs-var--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-val-vs-var--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-120
 title: "Val vs Var in Kotlin / Разница между val и var в Kotlin"

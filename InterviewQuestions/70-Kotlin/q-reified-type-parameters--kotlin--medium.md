@@ -1,19 +1,52 @@
 ---
 id: kotlin-155
-title: "Reified Type Parameters / Reified параметры типов"
-aliases: [Reified, Reified Type Parameters, Type Parameters]
+title: Reified Type Parameters / Reified параметры типов
+aliases:
+- Reified
+- Reified Type Parameters
+- Type Parameters
 topic: kotlin
-subtopics: [inline-functions, type-system]
+subtopics:
+- inline-functions
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-inline-functions--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- q-inline-functions--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, generics, inline-functions, kotlin, reified, type-system]
+tags:
+- difficulty/medium
+- generics
+- inline-functions
+- kotlin
+- reified
+- type-system
+anki_cards:
+- slug: kotlin-155-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - inline-functions
+  - type-system
+- slug: kotlin-155-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - inline-functions
+  - type-system
 ---
 # Вопрос (RU)
 

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-inline-limitations--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-inline-limitations--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-054
 title: "Kotlin Inline Limitations / Ограничения inline в Kotlin"

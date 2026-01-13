@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-sealed-vs-enum-classes--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-sealed-vs-enum-classes--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-043
 title: "Sealed Vs Enum Classes / Sealed против Enum Классов"
 aliases: [Sealed Vs Enum Classes, Sealed против Enum Классов]

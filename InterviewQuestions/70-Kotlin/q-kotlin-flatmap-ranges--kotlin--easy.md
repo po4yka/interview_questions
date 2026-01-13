@@ -1,20 +1,50 @@
 ---
 id: lang-038
-title: "Kotlin Flatmap Ranges / flatMap и диапазоны в Kotlin"
-aliases: [flatMap и диапазоны в Kotlin, Kotlin Flatmap Ranges]
+title: Kotlin Flatmap Ranges / flatMap и диапазоны в Kotlin
+aliases:
+- flatMap и диапазоны в Kotlin
+- Kotlin Flatmap Ranges
 topic: kotlin
-subtopics: [collections, functional-programming]
+subtopics:
+- collections
+- functional-programming
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-inline-function-limitations--kotlin--medium, q-retry-exponential-backoff-flow--kotlin--medium]
+related:
+- c-kotlin
+- q-inline-function-limitations--kotlin--medium
+- q-retry-exponential-backoff-flow--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, difficulty/easy, flatMap, kotlin, ranges]
-
+tags:
+- collections
+- difficulty/easy
+- flatMap
+- kotlin
+- ranges
+anki_cards:
+- slug: lang-038-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - functional-programming
+- slug: lang-038-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - functional-programming
 ---
 # Вопрос (RU)
 > Какой результат выполнения выражения `val result = (1..3).flatMap { listOf(it, it * 2) }`?

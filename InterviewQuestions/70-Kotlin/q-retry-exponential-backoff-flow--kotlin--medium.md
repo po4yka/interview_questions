@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-retry-exponential-backoff-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-retry-exponential-backoff-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-191
 title: "Retry and exponential Backoff Patterns in Flow / Retry и exponential backoff паттерны в Flow"
 aliases: [Error Handling, Exponential Backoff, Resilience, Retry, Retry Patterns]

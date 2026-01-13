@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-double-bang-operator--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-double-bang-operator--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-212
 title: "Kotlin Double Bang Operator / Оператор !! в Kotlin"
 aliases: ["Kotlin Double Bang Operator", "Оператор !! в Kotlin"]

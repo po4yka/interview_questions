@@ -1,19 +1,53 @@
 ---
 id: lang-074
-title: "Kotlin Final Modifier / Модификатор final в Kotlin"
-aliases: [Kotlin Final Modifier, Модификатор final в Kotlin]
+title: Kotlin Final Modifier / Модификатор final в Kotlin
+aliases:
+- Kotlin Final Modifier
+- Модификатор final в Kotlin
 topic: kotlin
-subtopics: [inheritance, type-system]
+subtopics:
+- inheritance
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-infix-functions--kotlin--medium]
+related:
+- c-kotlin
+- q-flowon-operator-context-switching--kotlin--hard
+- q-infix-functions--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [class-modifiers, classes, difficulty/easy, final, inheritance, kotlin, open, syntax]
+tags:
+- class-modifiers
+- classes
+- difficulty/easy
+- final
+- inheritance
+- kotlin
+- open
+- syntax
+anki_cards:
+- slug: lang-074-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - inheritance
+  - type-system
+- slug: lang-074-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - inheritance
+  - type-system
 ---
 # Вопрос (RU)
 > Какой модификатор в Kotlin делает класс нерасширяемым?

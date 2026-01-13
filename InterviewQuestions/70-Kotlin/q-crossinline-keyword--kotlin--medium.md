@@ -1,19 +1,46 @@
 ---
 id: kotlin-157
-title: "Crossinline Keyword / Ключевое слово crossinline"
-aliases: [Crossinline Keyword, Crossinline ключевое слово]
+title: Crossinline Keyword / Ключевое слово crossinline
+aliases:
+- Crossinline Keyword
+- Crossinline ключевое слово
 topic: kotlin
-subtopics: [inline-functions]
+subtopics:
+- inline-functions
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features, q-abstract-class-vs-interface--kotlin--medium]
+related:
+- c-kotlin-features
+- q-abstract-class-vs-interface--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/medium, inline-functions, kotlin, lambda, non-local-returns]
+tags:
+- difficulty/medium
+- inline-functions
+- kotlin
+- lambda
+- non-local-returns
+anki_cards:
+- slug: kotlin-157-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - inline-functions
+- slug: kotlin-157-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - inline-functions
 ---
 # Вопрос (RU)
 > Для чего нужно ключевое слово `crossinline` в inline-функциях Kotlin?

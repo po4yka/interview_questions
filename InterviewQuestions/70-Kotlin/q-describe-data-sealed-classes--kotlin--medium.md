@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-describe-data-sealed-classes--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-describe-data-sealed-classes--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-152
 title: "Describe Data and Sealed Classes / Описание Data и Sealed классов"
 aliases: [Data и Sealed классы описание, Describe Data Sealed Classes]

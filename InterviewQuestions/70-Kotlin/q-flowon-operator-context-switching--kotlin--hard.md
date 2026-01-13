@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-flowon-operator-context-switching--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flowon-operator-context-switching--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-125
 title: "Оператор flowOn и переключение контекста во Flow / flowOn operator and context switching in flows"
 aliases: [flow-context-switching, flowon-operator, flowon-vs-withcontext, kotlin-flowon]

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-suspend-functions-basics--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-suspend-functions-basics--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-075
 title: "Suspend Functions Basics / Основы suspend функций"

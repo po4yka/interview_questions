@@ -1,19 +1,48 @@
 ---
 id: kotlin-174
-title: "Generics Types Overview / Обзор обобщенных типов"
-aliases: ["Generics Types Overview", "Kotlin generics types overview", "Обзор дженериков Kotlin", "Обзор обобщенных типов"]
+title: Generics Types Overview / Обзор обобщенных типов
+aliases:
+- Generics Types Overview
+- Kotlin generics types overview
+- Обзор дженериков Kotlin
+- Обзор обобщенных типов
 topic: kotlin
-subtopics: [functions, type-system]
+subtopics:
+- functions
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-coroutine-parent-child-relationship--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- q-coroutine-parent-child-relationship--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium]
+tags:
+- difficulty/medium
+anki_cards:
+- slug: kotlin-174-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - type-system
+- slug: kotlin-174-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - type-system
 ---
 # Вопрос (RU)
 > Какие виды дженериков существуют в Kotlin и Java?

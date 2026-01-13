@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-flow-cold-flow-fundamentals--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-cold-flow-fundamentals--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-089
 title: "Что делает Flow холодным потоком? / What makes Flow a cold stream?"

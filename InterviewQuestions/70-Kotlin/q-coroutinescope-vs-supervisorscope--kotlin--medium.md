@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutinescope-vs-supervisorscope--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutinescope-vs-supervisorscope--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-223
 title: "coroutineScope vs supervisorScope / coroutineScope против supervisorScope"
 aliases: ["coroutineScope vs supervisorScope", "coroutineScope против supervisorScope"]

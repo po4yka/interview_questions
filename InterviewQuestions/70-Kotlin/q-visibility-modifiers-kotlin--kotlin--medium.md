@@ -1,20 +1,47 @@
 ---
 id: kotlin-236
-title: "Visibility Modifiers in Kotlin / Модификаторы видимости в Kotlin"
-aliases: ["Visibility Modifiers", "Модификаторы видимости"]
+title: Visibility Modifiers in Kotlin / Модификаторы видимости в Kotlin
+aliases:
+- Visibility Modifiers
+- Модификаторы видимости
 topic: kotlin
-subtopics: [visibility-modifiers]
+subtopics:
+- visibility-modifiers
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-access-modifiers--kotlin--medium, q-inheritance-open-final--kotlin--medium]
-created: "2025-10-12"
-updated: "2025-11-11"
-tags: [difficulty/medium, kotlin, visibility-modifiers]
-sources: ["https://kotlinlang.org/docs/visibility-modifiers.html"]
+related:
+- c-kotlin
+- q-access-modifiers--kotlin--medium
+- q-inheritance-open-final--kotlin--medium
+created: '2025-10-12'
+updated: '2025-11-11'
+tags:
+- difficulty/medium
+- kotlin
+- visibility-modifiers
+sources:
+- https://kotlinlang.org/docs/visibility-modifiers.html
+anki_cards:
+- slug: kotlin-236-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - visibility-modifiers
+- slug: kotlin-236-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - visibility-modifiers
 ---
 # Вопрос (RU)
 > Какие модификаторы видимости есть в Kotlin и чем они отличаются?

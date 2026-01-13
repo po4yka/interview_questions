@@ -1,19 +1,52 @@
 ---
 id: kotlin-146
-title: "Atomic vs Synchronized / Atomic против Synchronized"
-aliases: [Atomic vs Synchronized, Atomic против Synchronized]
+title: Atomic vs Synchronized / Atomic против Synchronized
+aliases:
+- Atomic vs Synchronized
+- Atomic против Synchronized
 topic: kotlin
-subtopics: [concurrency, thread-safety]
+subtopics:
+- concurrency
+- thread-safety
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-continuation-cps-internals--kotlin--hard, q-kotlin-flow-basics--kotlin--medium]
+related:
+- c-kotlin
+- q-continuation-cps-internals--kotlin--hard
+- q-kotlin-flow-basics--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [atomic, concurrency, difficulty/medium, java, kotlin, synchronized, thread-safety]
+tags:
+- atomic
+- concurrency
+- difficulty/medium
+- java
+- kotlin
+- synchronized
+- thread-safety
+anki_cards:
+- slug: kotlin-146-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - concurrency
+  - thread-safety
+- slug: kotlin-146-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - concurrency
+  - thread-safety
 ---
 # Вопрос (RU)
 

@@ -1,19 +1,43 @@
 ---
 id: lang-086
-title: "How System Knows WeakReference Can Be Cleared"
-aliases: [How System Knows WeakReference Can Be Cleared, Как система знает что WeakReference можно очистить]
+title: How System Knows WeakReference Can Be Cleared
+aliases:
+- How System Knows WeakReference Can Be Cleared
+- Как система знает что WeakReference можно очистить
 topic: kotlin
-subtopics: [references]
+subtopics:
+- references
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections]
+related:
+- c-collections
 created: 2025-10-15
 updated: 2025-11-10
-tags: [difficulty/medium, kotlin, references]
+tags:
+- difficulty/medium
+- kotlin
+- references
+anki_cards:
+- slug: lang-086-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - references
+- slug: lang-086-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - references
 ---
 # Вопрос (RU)
 > Как система понимает, что WeakReference можно очистить?

@@ -1,19 +1,50 @@
 ---
 id: lang-045
-title: "Kotlin Property Delegates / Делегаты свойств Kotlin"
-aliases: [Kotlin Property Delegates, Делегаты свойств Kotlin]
+title: Kotlin Property Delegates / Делегаты свойств Kotlin
+aliases:
+- Kotlin Property Delegates
+- Делегаты свойств Kotlin
 topic: kotlin
-subtopics: [delegation, type-system]
+subtopics:
+- delegation
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-scope-basics--kotlin--easy, q-kotlin-channels--kotlin--medium, q-kotlin-map-flatmap--kotlin--medium]
+related:
+- c-kotlin
+- q-coroutine-scope-basics--kotlin--easy
+- q-kotlin-channels--kotlin--medium
+- q-kotlin-map-flatmap--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [delegates, difficulty/medium, kotlin, property-delegates]
+tags:
+- delegates
+- difficulty/medium
+- kotlin
+- property-delegates
+anki_cards:
+- slug: lang-045-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - delegation
+  - type-system
+- slug: lang-045-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - delegation
+  - type-system
 ---
 # Вопрос (RU)
 > В чем особенность делегатов свойств?

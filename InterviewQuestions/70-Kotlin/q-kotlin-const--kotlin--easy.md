@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-const--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-const--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-017
 title: "Const Keyword in Kotlin / Ключевое слово const в Kotlin"

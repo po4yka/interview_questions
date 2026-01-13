@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-debounce-throttle-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-debounce-throttle-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-046
 title: "Debounce vs Throttle in Flow / Debounce vs Throttle в Flow"

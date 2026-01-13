@@ -1,23 +1,60 @@
 ---
 id: kotlin-226
-title: "Why Data Sealed Classes / Зачем нужны Data и Sealed классы"
-aliases: [Class Design, Data Classes, Sealed Classes, Классы в Kotlin]
+title: Why Data Sealed Classes / Зачем нужны Data и Sealed классы
+aliases:
+- Class Design
+- Data Classes
+- Sealed Classes
+- Классы в Kotlin
 topic: kotlin
-subtopics: [classes, data-classes, sealed-classes]
+subtopics:
+- classes
+- data-classes
+- sealed-classes
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-fan-in-fan-out--kotlin--hard, q-kotlin-visibility-modifiers--kotlin--easy]
+related:
+- c-kotlin
+- q-fan-in-fan-out--kotlin--hard
+- q-kotlin-visibility-modifiers--kotlin--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]
+tags:
+- classes
+- data-classes
+- design
+- difficulty/medium
+- kotlin
+- sealed-classes
 anki_synced: true
 anki_slugs:
-  - 70-kotlin-q-why-data-sealed-classes-kotlin-medium-p01-ru
+- 70-kotlin-q-why-data-sealed-classes-kotlin-medium-p01-ru
 anki_last_sync: '2025-11-26T22:32:40.783101'
+anki_cards:
+- slug: kotlin-226-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - data-classes
+  - sealed-classes
+- slug: kotlin-226-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - data-classes
+  - sealed-classes
 ---
 # Вопрос (RU)
 

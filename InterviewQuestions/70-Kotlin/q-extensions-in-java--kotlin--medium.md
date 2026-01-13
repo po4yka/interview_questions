@@ -1,19 +1,46 @@
 ---
 id: kotlin-187
-title: "Extensions In Java / Расширения в Java"
-aliases: ["Extensions In Java", "Расширения в Java"]
+title: Extensions In Java / Расширения в Java
+aliases:
+- Extensions In Java
+- Расширения в Java
 topic: kotlin
-subtopics: [null-safety, type-system]
+subtopics:
+- null-safety
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-kotlin-delegation-detailed--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- q-kotlin-delegation-detailed--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium]
+tags:
+- difficulty/medium
+anki_cards:
+- slug: kotlin-187-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - null-safety
+  - type-system
+- slug: kotlin-187-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - null-safety
+  - type-system
 ---
 # Вопрос (RU)
 > Как применяются расширения (Extensions) в Java? Поддерживает ли Java extension-функции как в Kotlin?

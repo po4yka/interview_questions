@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-what-is-job-object--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-what-is-job-object--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-040
 title: "What Is Job Object / Что такое объект Job"

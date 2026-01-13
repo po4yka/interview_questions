@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-any-unit-nothing--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-any-unit-nothing--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-203
 title: "Kotlin Any Unit Nothing / Any Unit и Nothing в Kotlin"
 aliases: []

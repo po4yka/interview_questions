@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutines-vs-threads--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutines-vs-threads--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-182
 title: "Coroutines Vs Threads / Корутины против потоков"

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-java-object-comparison--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-java-object-comparison--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-011
 title: "Java Object Comparison / Сравнение объектов в Java"

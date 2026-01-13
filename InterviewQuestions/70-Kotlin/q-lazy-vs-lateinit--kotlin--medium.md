@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-lazy-vs-lateinit--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-lazy-vs-lateinit--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-024
 title: "lazy vs lateinit / lazy против lateinit"

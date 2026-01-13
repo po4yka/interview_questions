@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-context-elements--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-context-elements--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-239
 title: "What are CoroutineContext elements and how do they combine? / Элементы CoroutineContext и их комбинирование"

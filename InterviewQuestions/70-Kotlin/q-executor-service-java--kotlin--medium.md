@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-executor-service-java--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-executor-service-java--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-218
 title: "ExecutorService in Java: How It Works / ExecutorService в Java: как это работает"

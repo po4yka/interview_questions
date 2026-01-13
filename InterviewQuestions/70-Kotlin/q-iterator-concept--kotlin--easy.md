@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-iterator-concept--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-iterator-concept--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-030
 title: "Iterator Concept / Концепция Iterator"

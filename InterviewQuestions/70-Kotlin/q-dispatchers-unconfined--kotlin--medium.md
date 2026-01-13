@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-dispatchers-unconfined--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-dispatchers-unconfined--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-246
 title: "What is Dispatchers.Unconfined and when to use it? / Dispatchers.Unconfined применение"

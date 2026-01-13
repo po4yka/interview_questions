@@ -1,19 +1,48 @@
 ---
 id: kotlin-169
-title: "Delegates Compilation / Компиляция делегатов"
-aliases: [Delegates Compilation, Компиляция делегатов]
+title: Delegates Compilation / Компиляция делегатов
+aliases:
+- Delegates Compilation
+- Компиляция делегатов
 topic: kotlin
-subtopics: [delegation]
+subtopics:
+- delegation
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-flow-backpressure--kotlin--hard, q-kotlin-delegation-detailed--kotlin--medium]
+related:
+- c-kotlin
+- q-flow-backpressure--kotlin--hard
+- q-kotlin-delegation-detailed--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [advanced, bytecode, compilation, delegates, difficulty/hard, kotlin]
+tags:
+- advanced
+- bytecode
+- compilation
+- delegates
+- difficulty/hard
+- kotlin
+anki_cards:
+- slug: kotlin-169-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - delegation
+- slug: kotlin-169-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - delegation
 ---
 # Вопрос (RU)
 > Как делегаты Kotlin работают на уровне компиляции? Какой bytecode и вспомогательные структуры генерируются?

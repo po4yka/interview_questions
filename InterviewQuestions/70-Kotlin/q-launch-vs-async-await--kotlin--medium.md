@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-launch-vs-async-await--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-launch-vs-async-await--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-053
 title: "Launch Vs Async Await / Launch против Async Await"
 aliases: [Launch Vs Async Await, Launch против Async Await]

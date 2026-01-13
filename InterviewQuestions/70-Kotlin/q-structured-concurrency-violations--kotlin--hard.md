@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-structured-concurrency-violations--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-structured-concurrency-violations--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-086
 title: "Structured concurrency violations and escape hatches / Нарушения структурной конкурентности"

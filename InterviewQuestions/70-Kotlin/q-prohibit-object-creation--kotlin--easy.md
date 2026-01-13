@@ -1,19 +1,53 @@
 ---
 id: kotlin-224
-title: "Prohibit Object Creation / Запрет создания объектов"
-aliases: [Private Constructor, Prohibit Creation, Utility Classes, Запрет создания]
+title: Prohibit Object Creation / Запрет создания объектов
+aliases:
+- Private Constructor
+- Prohibit Creation
+- Utility Classes
+- Запрет создания
 topic: kotlin
-subtopics: [classes, design]
+subtopics:
+- classes
+- design
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-sequences-vs-collections-performance--kotlin--medium, q-structured-concurrency-violations--kotlin--hard]
+related:
+- c-kotlin
+- q-sequences-vs-collections-performance--kotlin--medium
+- q-structured-concurrency-violations--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [classes, constructors, design, difficulty/easy, kotlin, singleton]
+tags:
+- classes
+- constructors
+- design
+- difficulty/easy
+- kotlin
+- singleton
+anki_cards:
+- slug: kotlin-224-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - classes
+  - design
+- slug: kotlin-224-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - classes
+  - design
 ---
 # Вопрос (RU)
 

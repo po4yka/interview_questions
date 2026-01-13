@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-timeout-withtimeout--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-timeout-withtimeout--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-244
 title: "How to handle timeouts in coroutines: withTimeout vs withTimeoutOrNull / Таймауты в корутинах"

@@ -1,20 +1,53 @@
 ---
 id: kotlin-177
-title: "Heap Pollution Generics / Heap Pollution (Загрязнение кучи)"
-aliases: [Heap Pollution, Heap Pollution (Загрязнение кучи), Heap Pollution Generics]
+title: Heap Pollution Generics / Heap Pollution (Загрязнение кучи)
+aliases:
+- Heap Pollution
+- Heap Pollution (Загрязнение кучи)
+- Heap Pollution Generics
 topic: kotlin
-subtopics: [collections, functions, types]
+subtopics:
+- collections
+- functions
+- types
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-suspend-functions-basics--kotlin--easy]
+related:
+- c-collections
+- c-kotlin
+- q-suspend-functions-basics--kotlin--easy
 created: 2023-10-15
 updated: 2025-11-11
-tags: [difficulty/hard, kotlin/collections, kotlin/functions, kotlin/types]
-
+tags:
+- difficulty/hard
+- kotlin/collections
+- kotlin/functions
+- kotlin/types
+anki_cards:
+- slug: kotlin-177-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - collections
+  - functions
+  - types
+- slug: kotlin-177-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - collections
+  - functions
+  - types
 ---
 # Вопрос (RU)
 > Что такое heap pollution (загрязнение кучи) в дженериках Kotlin/Java? Как это происходит и как можно предотвратить?

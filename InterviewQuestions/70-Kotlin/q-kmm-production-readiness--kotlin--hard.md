@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kmm-production-readiness--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kmm-production-readiness--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-138
 title: "KMM Production Readiness / Готовность KMM к production"

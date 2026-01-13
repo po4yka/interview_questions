@@ -1,20 +1,47 @@
 ---
 id: kotlin-140
-title: "Associatewith Vs Associateby / associateWith против associateBy"
-aliases: [associateWith vs associateBy, associateWith против associateBy]
+title: Associatewith Vs Associateby / associateWith против associateBy
+aliases:
+- associateWith vs associateBy
+- associateWith против associateBy
 topic: kotlin
-subtopics: [collections]
+subtopics:
+- collections
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-inline-function-limitations--kotlin--medium]
+related:
+- c-collections
+- c-kotlin
+- q-inline-function-limitations--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, difficulty/easy, kotlin, map, transformation]
-
+tags:
+- collections
+- difficulty/easy
+- kotlin
+- map
+- transformation
+anki_cards:
+- slug: kotlin-140-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+- slug: kotlin-140-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
 ---
 # Вопрос (RU)
 

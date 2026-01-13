@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-profiling--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-profiling--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-077
 title: "Coroutine Profiling and Debugging / Профилирование и отладка корутин"
 aliases: ["Coroutine Profiling and Debugging", "Профилирование и отладка корутин"]

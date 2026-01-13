@@ -1,19 +1,52 @@
 ---
 id: lang-078
-title: "Kotlin Null Safety / Null Safety в Kotlin"
-aliases: [Kotlin Null Safety, Null Safety в Kotlin]
+title: Kotlin Null Safety / Null Safety в Kotlin
+aliases:
+- Kotlin Null Safety
+- Null Safety в Kotlin
 topic: kotlin
-subtopics: [null-safety, type-system]
+subtopics:
+- null-safety
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-coroutines-introduction--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
+related:
+- c-kotlin
+- q-kotlin-coroutines-introduction--kotlin--medium
+- q-testing-viewmodels-coroutines--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, elvis, kotlin, null-safety, nullable, operators, safe-call]
+tags:
+- difficulty/medium
+- elvis
+- kotlin
+- null-safety
+- nullable
+- operators
+- safe-call
+anki_cards:
+- slug: lang-078-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - null-safety
+  - type-system
+- slug: lang-078-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - null-safety
+  - type-system
 ---
 # Вопрос (RU)
 > Что такое null safety и как это пишется?

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-map-flatmap--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-map-flatmap--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-032
 title: "map() vs flatMap() in Kotlin / map() против flatMap() в Kotlin"

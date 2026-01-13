@@ -1,30 +1,56 @@
 ---
 id: kotlin-031
-title: "Nested Class vs Inner Class / Вложенный vs внутренний класс"
-aliases: ["Nested Class vs Inner Class", "Вложенный vs внутренний класс"]
-
-# Classification
+title: Nested Class vs Inner Class / Вложенный vs внутренний класс
+aliases:
+- Nested Class vs Inner Class
+- Вложенный vs внутренний класс
 topic: kotlin
-subtopics: [classes, inner-class, nested-class]
+subtopics:
+- classes
+- inner-class
+- nested-class
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-memory-leaks--kotlin--hard, q-retry-operators-flow--kotlin--medium]
-
-# Timestamps
+related:
+- c-kotlin
+- q-coroutine-memory-leaks--kotlin--hard
+- q-retry-operators-flow--kotlin--medium
 created: 2025-10-05
 updated: 2025-11-10
-
-tags: [classes, difficulty/medium, inner-classes, kotlin, nested-classes, oop]
+tags:
+- classes
+- difficulty/medium
+- inner-classes
+- kotlin
+- nested-classes
+- oop
+anki_cards:
+- slug: kotlin-031-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - inner-class
+  - nested-class
+- slug: kotlin-031-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - inner-class
+  - nested-class
 ---
 # Вопрос (RU)
 > В чем разница между вложенным (nested) и внутренним (inner) классом в Kotlin?

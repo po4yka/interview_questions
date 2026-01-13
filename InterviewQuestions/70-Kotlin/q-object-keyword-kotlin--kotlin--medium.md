@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-object-keyword-kotlin--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-object-keyword-kotlin--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-166
 title: "Object Keyword Kotlin / Ключевое слово object в Kotlin"

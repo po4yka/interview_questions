@@ -1,19 +1,52 @@
 ---
 id: lang-091
-title: "Kotlin Non Inheritable Class / Не наследуемый класс в Kotlin"
-aliases: [Kotlin Non Inheritable Class, Не наследуемый класс в Kotlin]
+title: Kotlin Non Inheritable Class / Не наследуемый класс в Kotlin
+aliases:
+- Kotlin Non Inheritable Class
+- Не наследуемый класс в Kotlin
 topic: kotlin
-subtopics: [inheritance, type-system]
+subtopics:
+- inheritance
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-common-coroutine-mistakes--kotlin--medium]
+related:
+- c-kotlin
+- q-common-coroutine-mistakes--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [class-design, classes, difficulty/easy, final, inheritance, keywords, kotlin, open]
+tags:
+- class-design
+- classes
+- difficulty/easy
+- final
+- inheritance
+- keywords
+- kotlin
+- open
+anki_cards:
+- slug: lang-091-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - inheritance
+  - type-system
+- slug: lang-091-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - inheritance
+  - type-system
 ---
 # Вопрос (RU)
 > Как в Kotlin определить класс, который не может быть унаследован?

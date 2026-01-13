@@ -1,30 +1,55 @@
 ---
 id: kotlin-025
-title: "Kotlin SAM Interfaces / SAM интерфейсы в Kotlin"
-aliases: ["Kotlin SAM Interfaces", "SAM интерфейсы в Kotlin"]
-
-# Classification
+title: Kotlin SAM Interfaces / SAM интерфейсы в Kotlin
+aliases:
+- Kotlin SAM Interfaces
+- SAM интерфейсы в Kotlin
 topic: kotlin
-subtopics: [functions, interfaces, lambdas]
+subtopics:
+- functions
+- interfaces
+- lambdas
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-semaphore-rate-limiting--kotlin--medium]
-
-# Timestamps
+related:
+- c-kotlin
+- q-semaphore-rate-limiting--kotlin--medium
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [difficulty/medium, functional-programming, interfaces, kotlin, lambdas, sam]
+tags:
+- difficulty/medium
+- functional-programming
+- interfaces
+- kotlin
+- lambdas
+- sam
+anki_cards:
+- slug: kotlin-025-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - interfaces
+  - lambdas
+- slug: kotlin-025-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - interfaces
+  - lambdas
 ---
 # Вопрос (RU)
 > Что вы знаете о функциональных (SAM) интерфейсах в Kotlin?

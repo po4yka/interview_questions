@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-array-vs-list-kotlin--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-array-vs-list-kotlin--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-137
 title: Array vs List in Kotlin / Разница между Array и List в Kotlin

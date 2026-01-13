@@ -1,19 +1,46 @@
 ---
 id: lang-094
-title: "Kotlin Java Primitives / Примитивы Kotlin и Java"
-aliases: [Kotlin Java Primitives, Примитивы Kotlin и Java]
+title: Kotlin Java Primitives / Примитивы Kotlin и Java
+aliases:
+- Kotlin Java Primitives
+- Примитивы Kotlin и Java
 topic: kotlin
-subtopics: [type-system]
+subtopics:
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard]
+related:
+- c-kotlin
+- q-flowon-operator-context-switching--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [difficulty/medium, java, primitives, types, wrappers]
+tags:
+- difficulty/medium
+- java
+- primitives
+- types
+- wrappers
+anki_cards:
+- slug: lang-094-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - type-system
+- slug: lang-094-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - type-system
 ---
 # Вопрос (RU)
 > Какие примитивы есть в Kotlin, а какие в Java?

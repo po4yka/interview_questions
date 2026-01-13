@@ -1,22 +1,48 @@
 ---
 id: kotlin-006
-title: "Functional Interfaces vs Type Aliases / Функциональные интерфейсы vs псевдонимы типов"
-aliases: ["Functional Interfaces vs Type Aliases", "Функциональные интерфейсы vs псевдонимы типов"]
+title: Functional Interfaces vs Type Aliases / Функциональные интерфейсы vs псевдонимы
+  типов
+aliases:
+- Functional Interfaces vs Type Aliases
+- Функциональные интерфейсы vs псевдонимы типов
 topic: kotlin
-subtopics: [functions]
+subtopics:
+- functions
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-sam-interfaces--kotlin--medium, q-type-aliases--kotlin--medium]
+related:
+- c-kotlin
+- q-kotlin-sam-interfaces--kotlin--medium
+- q-type-aliases--kotlin--medium
 created: 2025-10-05
 updated: 2025-11-11
-tags: [difficulty/medium, kotlin, type-aliases]
-
+tags:
+- difficulty/medium
+- kotlin
+- type-aliases
+anki_cards:
+- slug: kotlin-006-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+- slug: kotlin-006-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
 ---
 # Вопрос (RU)
 > В чем разница между функциональными интерфейсами и псевдонимами типов в Kotlin?

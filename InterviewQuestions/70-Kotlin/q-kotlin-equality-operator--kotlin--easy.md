@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-equality-operator--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-equality-operator--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-208
 title: "Kotlin Equality Operator / Оператор равенства в Kotlin"
 aliases: []

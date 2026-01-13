@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-why-data-sealed-classes-needed--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-why-data-sealed-classes-needed--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-220
 title: "Why Data Sealed Classes Needed / Зачем нужны Data и Sealed классы"

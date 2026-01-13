@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-inline-functions--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-inline-functions--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-034
 title: "Kotlin Inline Functions / Kotlin Inline Функции"
 aliases: [Kotlin Inline Functions, Kotlin Inline Функции]

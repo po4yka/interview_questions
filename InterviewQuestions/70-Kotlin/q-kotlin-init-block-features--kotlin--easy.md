@@ -1,19 +1,51 @@
 ---
 id: lang-033
-title: "Kotlin Init Block Features / Возможности блока init в Kotlin"
-aliases: [Kotlin Init Block Features, Возможности блока init в Kotlin]
+title: Kotlin Init Block Features / Возможности блока init в Kotlin
+aliases:
+- Kotlin Init Block Features
+- Возможности блока init в Kotlin
 topic: kotlin
-subtopics: [initialization, type-system]
+subtopics:
+- initialization
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-noncancellable-context-cleanup--kotlin--medium, q-room-coroutines-flow--kotlin--medium]
+related:
+- c-kotlin
+- q-noncancellable-context-cleanup--kotlin--medium
+- q-room-coroutines-flow--kotlin--medium
 created: 2024-10-15
 updated: 2025-11-09
-tags: [constructors, difficulty/easy, init, initialization, kotlin, oop]
+tags:
+- constructors
+- difficulty/easy
+- init
+- initialization
+- kotlin
+- oop
+anki_cards:
+- slug: lang-033-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - initialization
+  - type-system
+- slug: lang-033-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - initialization
+  - type-system
 ---
 # Вопрос (RU)
 > Есть какие-то особенности использования `init` блока?

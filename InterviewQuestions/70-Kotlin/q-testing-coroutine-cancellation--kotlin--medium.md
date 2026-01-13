@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-testing-coroutine-cancellation--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-testing-coroutine-cancellation--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-126
 title: "Testing Coroutine Cancellation Scenarios / Тестирование сценариев отмены корутин"
 aliases: ["Testing Coroutine Cancellation Scenarios", "Тестирование сценариев отмены корутин"]

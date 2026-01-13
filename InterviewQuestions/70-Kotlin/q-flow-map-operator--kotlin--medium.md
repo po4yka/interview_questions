@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-flow-map-operator--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-map-operator--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-065
 title: "Flow map operator / Оператор map для Flow"

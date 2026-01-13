@@ -1,20 +1,55 @@
 ---
 id: kotlin-237
-title: "Class Delegation with 'by' Keyword / Делегирование класса с ключевым словом 'by'"
-aliases: ["Class Delegation", "Делегирование класса"]
+title: Class Delegation with 'by' Keyword / Делегирование класса с ключевым словом
+  'by'
+aliases:
+- Class Delegation
+- Делегирование класса
 topic: kotlin
-subtopics: [delegation, kotlin-features]
+subtopics:
+- delegation
+- kotlin-features
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-kotlin-lateinit--kotlin--medium]
+related:
+- c-kotlin
+- q-data-class-detailed--kotlin--medium
+- q-inheritance-open-final--kotlin--medium
+- q-kotlin-lateinit--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09
-tags: [by-keyword, classes, delegation, difficulty/medium, kotlin, kotlin-features]
-sources: ["https://kotlinlang.org/docs/delegation.html"]
+tags:
+- by-keyword
+- classes
+- delegation
+- difficulty/medium
+- kotlin
+- kotlin-features
+sources:
+- https://kotlinlang.org/docs/delegation.html
+anki_cards:
+- slug: kotlin-237-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - delegation
+  - kotlin-features
+- slug: kotlin-237-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - delegation
+  - kotlin-features
 ---
 # Вопрос (RU)
 > Что такое делегирование класса с ключевым словом `by` в Kotlin?

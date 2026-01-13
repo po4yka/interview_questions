@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-workmanager-coroutine-worker--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-workmanager-coroutine-worker--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-168
 title: "Using CoroutineWorker with WorkManager / Использование CoroutineWorker с WorkManager"

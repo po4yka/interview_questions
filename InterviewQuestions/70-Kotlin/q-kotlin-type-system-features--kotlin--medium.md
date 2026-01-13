@@ -1,19 +1,51 @@
 ---
 id: kotlin-141
-title: "Kotlin Type System Features / Возможности системы типов Kotlin"
-aliases: [Null Safety, Type Safety, Type System]
+title: Kotlin Type System Features / Возможности системы типов Kotlin
+aliases:
+- Null Safety
+- Type Safety
+- Type System
 topic: kotlin
-subtopics: [null-safety, type-system]
+subtopics:
+- null-safety
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-kotlin-coroutines-introduction--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- q-kotlin-coroutines-introduction--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, kotlin, null-safety, type-inference, type-system]
+tags:
+- difficulty/medium
+- kotlin
+- null-safety
+- type-inference
+- type-system
+anki_cards:
+- slug: kotlin-141-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - null-safety
+  - type-system
+- slug: kotlin-141-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - null-safety
+  - type-system
 ---
 # Вопрос (RU)
 > Какие особенности системы типов в Kotlin ты знаешь?

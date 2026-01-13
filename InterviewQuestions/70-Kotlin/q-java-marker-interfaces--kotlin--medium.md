@@ -1,20 +1,50 @@
 ---
 id: lang-003
-title: "Java Marker Interfaces / Маркерные интерфейсы Java"
-aliases: [Java Marker Interfaces, Маркерные интерфейсы Java]
+title: Java Marker Interfaces / Маркерные интерфейсы Java
+aliases:
+- Java Marker Interfaces
+- Маркерные интерфейсы Java
 topic: kotlin
-subtopics: [interfaces, java]
+subtopics:
+- interfaces
+- java
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2024-10-13
 updated: 2025-11-11
-tags: [cloneable, difficulty/medium, interfaces, java, marker-interface, randomaccess, serializable]
-
+tags:
+- cloneable
+- difficulty/medium
+- interfaces
+- java
+- marker-interface
+- randomaccess
+- serializable
+anki_cards:
+- slug: lang-003-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - interfaces
+  - java
+- slug: lang-003-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - interfaces
+  - java
 ---
 # Вопрос (RU)
 > Перечислите маркерные интерфейсы в Java.

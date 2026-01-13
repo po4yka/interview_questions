@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-what-is-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-what-is-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-076
 title: "What Is Flow / Что такое Flow"

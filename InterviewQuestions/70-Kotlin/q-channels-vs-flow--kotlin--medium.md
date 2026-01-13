@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-channels-vs-flow--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-channels-vs-flow--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-058
 title: "Channels vs Flow / Channels против Flow"

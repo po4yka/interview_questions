@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-withcontext-use-cases--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-withcontext-use-cases--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-099
 title: "When to use withContext in Kotlin coroutines? / Когда использовать withContext"

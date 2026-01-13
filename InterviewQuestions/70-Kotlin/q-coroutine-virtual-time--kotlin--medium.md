@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-virtual-time--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-virtual-time--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-073
 title: "Virtual Time in Coroutine Testing / Виртуальное время в тестировании корутин"
 aliases: ["Virtual Time in Coroutine Testing", "Виртуальное время в тестировании корутин"]

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-context-explained--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-context-explained--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-039
 title: Coroutine Context Explained / CoroutineContext объяснение

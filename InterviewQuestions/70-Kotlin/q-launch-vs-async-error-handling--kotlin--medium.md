@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-launch-vs-async-error-handling--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-launch-vs-async-error-handling--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-031
 title: "Launch Vs Async Error Handling / Launch против Async: обработка ошибок"
 aliases: ["Launch Vs Async Error Handling", "Launch против Async Обработка"]

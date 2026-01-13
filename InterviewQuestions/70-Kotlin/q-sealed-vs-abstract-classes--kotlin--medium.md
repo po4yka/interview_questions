@@ -1,19 +1,53 @@
 ---
 id: kotlin-209
-title: "Sealed vs Abstract Classes / Sealed против абстрактных классов"
-aliases: [Abstract Classes, Class Hierarchies, Sealed Classes, Sealed vs Abstract]
+title: Sealed vs Abstract Classes / Sealed против абстрактных классов
+aliases:
+- Abstract Classes
+- Class Hierarchies
+- Sealed Classes
+- Sealed vs Abstract
 topic: kotlin
-subtopics: [classes, sealed-classes]
+subtopics:
+- classes
+- sealed-classes
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-sealed-classes, q-flow-operators-map-filter--kotlin--medium]
+related:
+- c-kotlin
+- c-sealed-classes
+- q-flow-operators-map-filter--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [abstract-classes, classes, difficulty/medium, kotlin, polymorphism, sealed-classes]
+tags:
+- abstract-classes
+- classes
+- difficulty/medium
+- kotlin
+- polymorphism
+- sealed-classes
+anki_cards:
+- slug: kotlin-209-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - sealed-classes
+- slug: kotlin-209-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - sealed-classes
 ---
 # Вопрос (RU)
 

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-scope-basics--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-scope-basics--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-116
 title: "CoroutineScope Basics and Usage / Основы CoroutineScope и использование"

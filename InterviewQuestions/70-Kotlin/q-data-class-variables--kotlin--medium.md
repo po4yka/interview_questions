@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-data-class-variables--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-data-class-variables--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-151
 title: "Data Class Variables / Переменные data class"
 aliases: [Data Class Variables, Переменные data class]

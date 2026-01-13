@@ -1,19 +1,53 @@
 ---
 id: kotlin-190
-title: "Kotlin When Expression / Выражение when в Kotlin"
-aliases: [Pattern Matching, When Expression, When Statement, When Выражение]
+title: Kotlin When Expression / Выражение when в Kotlin
+aliases:
+- Pattern Matching
+- When Expression
+- When Statement
+- When Выражение
 topic: kotlin
-subtopics: [control-flow, syntax]
+subtopics:
+- control-flow
+- syntax
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium, q-reified-type-parameters--kotlin--medium]
+related:
+- c-kotlin
+- q-coroutine-cancellation-mechanisms--kotlin--medium
+- q-reified-type-parameters--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [control-flow, difficulty/easy, kotlin, pattern-matching, syntax, when]
+tags:
+- control-flow
+- difficulty/easy
+- kotlin
+- pattern-matching
+- syntax
+- when
+anki_cards:
+- slug: kotlin-190-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - control-flow
+  - syntax
+- slug: kotlin-190-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - control-flow
+  - syntax
 ---
 # Вопрос (RU)
 > Как использовать `when` в Kotlin вместо `switch`?

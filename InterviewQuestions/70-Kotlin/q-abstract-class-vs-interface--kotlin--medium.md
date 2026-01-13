@@ -1,20 +1,57 @@
 ---
 id: kotlin-012
-title: "Abstract Class vs Interface / Абстрактный класс vs интерфейс"
-aliases: ["Abstract Class vs Interface", "Абстрактный класс vs интерфейс"]
+title: Abstract Class vs Interface / Абстрактный класс vs интерфейс
+aliases:
+- Abstract Class vs Interface
+- Абстрактный класс vs интерфейс
 topic: kotlin
-subtopics: [classes, inheritance, interfaces]
+subtopics:
+- classes
+- inheritance
+- interfaces
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
+related:
+- q-data-class-detailed--kotlin--medium
+- q-inheritance-open-final--kotlin--medium
+- q-inner-nested-classes--kotlin--medium
 created: 2025-10-05
 updated: 2025-11-11
-tags: [abstract-classes, difficulty/medium, inheritance, interfaces, kotlin, kotlin-features, oop]
-sources: ["https://kotlinlang.org/docs/interfaces.html"]
+tags:
+- abstract-classes
+- difficulty/medium
+- inheritance
+- interfaces
+- kotlin
+- kotlin-features
+- oop
+sources:
+- https://kotlinlang.org/docs/interfaces.html
+anki_cards:
+- slug: kotlin-012-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - inheritance
+  - interfaces
+- slug: kotlin-012-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - inheritance
+  - interfaces
 ---
 # Вопрос (RU)
 > В чём разница между абстрактным классом и интерфейсом в Kotlin?

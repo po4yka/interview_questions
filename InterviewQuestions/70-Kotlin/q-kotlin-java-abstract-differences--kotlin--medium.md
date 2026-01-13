@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-java-abstract-differences--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-java-abstract-differences--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-014
 title: "Kotlin Java Abstract Differences / Различия abstract в Kotlin и Java"
 aliases: [Kotlin Java Abstract Differences, Различия abstract в Kotlin и Java]

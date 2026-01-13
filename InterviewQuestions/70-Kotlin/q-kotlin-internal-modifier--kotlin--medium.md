@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-internal-modifier--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-internal-modifier--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-032
 title: "Kotlin Internal Modifier / Модификатор internal в Kotlin"

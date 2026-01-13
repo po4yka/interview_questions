@@ -1,20 +1,49 @@
 ---
 id: kotlin-181
-title: "Fan-in and fan-out patterns with Channels / Fan-in и fan-out паттерны с каналами"
-aliases: ["Fan-in and fan-out with channels", "Kotlin channels fan-in fan-out"]
+title: Fan-in and fan-out patterns with Channels / Fan-in и fan-out паттерны с каналами
+aliases:
+- Fan-in and fan-out with channels
+- Kotlin channels fan-in fan-out
 topic: kotlin
-subtopics: [coroutines, flow, structured-concurrency]
+subtopics:
+- coroutines
+- flow
+- structured-concurrency
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-delegation-by-keyword--kotlin--medium]
+related:
+- c-coroutines
+- c-kotlin
+- q-delegation-by-keyword--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/hard]
-
+tags:
+- difficulty/hard
+anki_cards:
+- slug: kotlin-181-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
+  - flow
+  - structured-concurrency
+- slug: kotlin-181-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
+  - flow
+  - structured-concurrency
 ---
 # Вопрос (RU)
 > Что такое паттерны fan-out и fan-in в Kotlin Coroutines с каналами? Как реализовать распределение работы (fan-out) и агрегацию результатов (fan-in)? Приведите production-примеры параллельной обработки изображений, распределенных очередей задач и агрегации логов.

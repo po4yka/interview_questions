@@ -1,19 +1,52 @@
 ---
 id: lang-075
-title: "Kotlin Safe Cast / Безопасное приведение типов в Kotlin"
-aliases: [Kotlin Safe Cast, Безопасное приведение типов в Kotlin]
+title: Kotlin Safe Cast / Безопасное приведение типов в Kotlin
+aliases:
+- Kotlin Safe Cast
+- Безопасное приведение типов в Kotlin
 topic: kotlin
-subtopics: [null-safety, type-system]
+subtopics:
+- null-safety
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-variance-type-projections--kotlin--hard]
+related:
+- c-kotlin
+- q-class-initialization-order--kotlin--medium
+- q-variance-type-projections--kotlin--hard
 created: 2025-10-15
 updated: 2025-10-31
-tags: [as, casting, difficulty/easy, kotlin, safe-cast, type-conversion, type-safety]
+tags:
+- as
+- casting
+- difficulty/easy
+- kotlin
+- safe-cast
+- type-conversion
+- type-safety
+anki_cards:
+- slug: lang-075-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - null-safety
+  - type-system
+- slug: lang-075-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - null-safety
+  - type-system
 ---
 # Вопрос (RU)
 > Как в Kotlin привести переменную типа `Any` к типу `String` безопасно, чтобы избежать исключения?

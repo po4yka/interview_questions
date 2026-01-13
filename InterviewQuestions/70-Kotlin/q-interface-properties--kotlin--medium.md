@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-interface-properties--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-interface-properties--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-203
 title: "Interface Properties / Свойства интерфейсов"
 aliases: ["Interface Properties", "Свойства интерфейсов"]

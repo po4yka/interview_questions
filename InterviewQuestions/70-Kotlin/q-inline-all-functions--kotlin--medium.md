@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-inline-all-functions--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-inline-all-functions--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-069
 title: "Inline All Functions / Inline функции"
 aliases: [Inline All Functions, Inline functions, Inline функции]

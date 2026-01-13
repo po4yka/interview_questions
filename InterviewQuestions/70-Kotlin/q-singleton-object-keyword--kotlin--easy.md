@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-singleton-object-keyword--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-singleton-object-keyword--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-180
 title: "Singleton Object Keyword / Синглтон с ключевым словом object"

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-inner-nested-classes--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-inner-nested-classes--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-233
 title: "Inner vs Nested Classes in Kotlin / Внутренние и вложенные классы в Kotlin"

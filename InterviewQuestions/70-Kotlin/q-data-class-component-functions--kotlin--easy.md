@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-data-class-component-functions--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-data-class-component-functions--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: cs-016
 title: "Data Class Component Functions / Компонентные функции Data Class"

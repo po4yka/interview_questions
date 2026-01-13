@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-properties--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-properties--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-064
 title: "Kotlin Properties / Свойства в Kotlin"

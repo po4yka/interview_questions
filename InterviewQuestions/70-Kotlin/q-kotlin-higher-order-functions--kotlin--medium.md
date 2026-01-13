@@ -1,30 +1,55 @@
 ---
 id: kotlin-005
-title: "Higher-Order Functions in Kotlin / Функции высшего порядка в Kotlin"
-aliases: ["Higher-Order Functions in Kotlin", "Функции высшего порядка в Kotlin"]
-
-# Classification
+title: Higher-Order Functions in Kotlin / Функции высшего порядка в Kotlin
+aliases:
+- Higher-Order Functions in Kotlin
+- Функции высшего порядка в Kotlin
 topic: kotlin
-subtopics: [functional-programming, higher-order-functions, inline-functions]
+subtopics:
+- functional-programming
+- higher-order-functions
+- inline-functions
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
-source_note: Kirchhoff Android Interview Questions repository - adapted from inline functions content
-
-# Workflow & relations
+source_note: Kirchhoff Android Interview Questions repository - adapted from inline
+  functions content
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-collections--kotlin--easy]
-
-# Timestamps
+related:
+- c-kotlin
+- q-kotlin-collections--kotlin--easy
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [difficulty/medium, functional-programming, higher-order-functions, kotlin, lambda-expressions]
+tags:
+- difficulty/medium
+- functional-programming
+- higher-order-functions
+- kotlin
+- lambda-expressions
+anki_cards:
+- slug: kotlin-005-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functional-programming
+  - higher-order-functions
+  - inline-functions
+- slug: kotlin-005-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functional-programming
+  - higher-order-functions
+  - inline-functions
 ---
 # Вопрос (RU)
 > Что такое функции высшего порядка в Kotlin?

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-constructor-keyword--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-constructor-keyword--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-209
 title: "Kotlin Constructor Keyword / Ключевое слово constructor в Kotlin"
 aliases: []

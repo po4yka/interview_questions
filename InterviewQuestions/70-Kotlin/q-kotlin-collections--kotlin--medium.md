@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-collections--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-collections--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-100
 title: "Kotlin Collections / Коллекции в Kotlin"
 aliases: ["Kotlin Collections", "Коллекции в Kotlin"]

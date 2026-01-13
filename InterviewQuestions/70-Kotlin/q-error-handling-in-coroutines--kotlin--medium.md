@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-error-handling-in-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-error-handling-in-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-057
 title: "Error Handling In Coroutines / Обработка ошибок в корутинах"
 aliases: [Error Handling In Coroutines, Обработка ошибок в корутинах]

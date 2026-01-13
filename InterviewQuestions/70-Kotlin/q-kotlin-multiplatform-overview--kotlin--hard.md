@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-multiplatform-overview--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-multiplatform-overview--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-040
 title: "Kotlin Multiplatform - How does it work? / Kotlin Multiplatform - Как это работает?"

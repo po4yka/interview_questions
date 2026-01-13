@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-arraylist-linkedlist-vector-difference--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-arraylist-linkedlist-vector-difference--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-160
 title: "ArrayList LinkedList Vector Difference / Разница ArrayList LinkedList и Vector"

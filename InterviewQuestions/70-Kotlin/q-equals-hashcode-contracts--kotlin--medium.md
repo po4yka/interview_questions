@@ -1,19 +1,53 @@
 ---
 id: lang-072
-title: "Equals Hashcode Contracts / Контракты equals и hashCode"
-aliases: [Equals Hashcode Contracts, Контракты equals и hashCode]
+title: Equals Hashcode Contracts / Контракты equals и hashCode
+aliases:
+- Equals Hashcode Contracts
+- Контракты equals и hashCode
 topic: kotlin
-subtopics: [collections, equality, object-methods]
+subtopics:
+- collections
+- equality
+- object-methods
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-equality, c-kotlin]
+related:
+- c-equality
+- c-kotlin
 created: 2025-10-15
 updated: 2025-11-11
-tags: [collections, contracts, difficulty/medium, equality, kotlin, object-methods]
+tags:
+- collections
+- contracts
+- difficulty/medium
+- equality
+- kotlin
+- object-methods
+anki_cards:
+- slug: lang-072-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - equality
+  - object-methods
+- slug: lang-072-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - equality
+  - object-methods
 ---
 # Вопрос (RU)
 > Расскажи о контрактах `equals` и `hashCode`

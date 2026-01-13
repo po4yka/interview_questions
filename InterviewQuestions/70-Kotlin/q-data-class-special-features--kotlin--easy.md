@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-data-class-special-features--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-data-class-special-features--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: cs-019
 title: "Data Class Special Features / Специальные возможности Data Class"
 aliases: ["Data Class Special Features", "Специальные возможности Data Class"]

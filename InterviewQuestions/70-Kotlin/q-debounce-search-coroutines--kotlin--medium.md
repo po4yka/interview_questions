@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-debounce-search-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-debounce-search-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-156
 title: "Debouncing Search with Coroutines / Отложенный Поиск с Корутинами"

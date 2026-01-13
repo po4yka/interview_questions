@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-testing-coroutine-timing-control--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-testing-coroutine-timing-control--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-093
 title: "Тестирование тайминга корутин: advanceTimeBy vs advanceUntilIdle / Testing coroutine timing: advanceTimeBy vs advanceUntilIdle"

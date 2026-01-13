@@ -1,19 +1,53 @@
 ---
 id: kotlin-186
-title: "Kotlin When Vs Switch / When vs Switch"
-aliases: [Control Flow, When Expression, When Operator, When vs Switch]
+title: Kotlin When Vs Switch / When vs Switch
+aliases:
+- Control Flow
+- When Expression
+- When Operator
+- When vs Switch
 topic: kotlin
-subtopics: [control-flow, syntax]
+subtopics:
+- control-flow
+- syntax
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-channel-buffering-strategies--kotlin--hard, q-cold-vs-hot-flows--kotlin--medium]
+related:
+- c-kotlin
+- q-channel-buffering-strategies--kotlin--hard
+- q-cold-vs-hot-flows--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [control-flow, difficulty/easy, kotlin, switch, syntax, when]
+tags:
+- control-flow
+- difficulty/easy
+- kotlin
+- switch
+- syntax
+- when
+anki_cards:
+- slug: kotlin-186-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - control-flow
+  - syntax
+- slug: kotlin-186-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - control-flow
+  - syntax
 ---
 # Вопрос (RU)
 > Какой оператор используется вместо switch в Kotlin?

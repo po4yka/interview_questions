@@ -1,19 +1,53 @@
 ---
 id: kotlin-195
-title: "Equals Hashcode Purpose / Назначение equals и hashCode"
-aliases: [Equals, Hashcode, Object Comparison]
+title: Equals Hashcode Purpose / Назначение equals и hashCode
+aliases:
+- Equals
+- Hashcode
+- Object Comparison
 topic: kotlin
-subtopics: [collections, equality, object-comparison]
+subtopics:
+- collections
+- equality
+- object-comparison
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-map-flatmap--kotlin--medium]
+related:
+- c-kotlin
+- q-kotlin-map-flatmap--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, equality, hashmap, kotlin, object-comparison]
+tags:
+- difficulty/medium
+- equality
+- hashmap
+- kotlin
+- object-comparison
+anki_cards:
+- slug: kotlin-195-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - equality
+  - object-comparison
+- slug: kotlin-195-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - equality
+  - object-comparison
 ---
 # Вопрос (RU)
 > Зачем нужны методы equals() и hashCode() в Kotlin/Java?

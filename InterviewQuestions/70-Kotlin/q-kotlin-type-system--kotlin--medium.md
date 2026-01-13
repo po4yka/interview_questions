@@ -1,30 +1,48 @@
 ---
 id: kotlin-028
-title: "Kotlin Type System (Any, Nothing, Unit) / Система типов Kotlin (Any, Nothing, Unit)"
-aliases: ["Kotlin Type System (Any, Nothing, Unit)", "Система типов Kotlin (Any, Nothing, Unit)"]
-
-# Classification
+title: Kotlin Type System (Any, Nothing, Unit) / Система типов Kotlin (Any, Nothing,
+  Unit)
+aliases:
+- Kotlin Type System (Any, Nothing, Unit)
+- Система типов Kotlin (Any, Nothing, Unit)
 topic: kotlin
-subtopics: [type-system]
+subtopics:
+- type-system
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-data-class-detailed--kotlin--medium]
-
-# Timestamps
+related:
+- c-kotlin
+- q-data-class-detailed--kotlin--medium
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [difficulty/medium, kotlin, type-system, types]
+tags:
+- difficulty/medium
+- kotlin
+- type-system
+- types
+anki_cards:
+- slug: kotlin-028-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - type-system
+- slug: kotlin-028-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - type-system
 ---
 # Вопрос (RU)
 > Что вы знаете о типах Any, Nothing, Unit в Kotlin?

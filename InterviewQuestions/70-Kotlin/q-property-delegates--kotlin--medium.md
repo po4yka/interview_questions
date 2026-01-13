@@ -1,19 +1,48 @@
 ---
 id: kotlin-147
-title: "Property Delegates / Делегаты свойств"
-aliases: [Delegates, Property, Property Delegates, Делегаты свойств]
+title: Property Delegates / Делегаты свойств
+aliases:
+- Delegates
+- Property
+- Property Delegates
+- Делегаты свойств
 topic: kotlin
-subtopics: [delegates]
+subtopics:
+- delegates
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-memory-leak-detection--kotlin--hard, q-dispatchers-unconfined--kotlin--medium]
+related:
+- c-kotlin
+- q-coroutine-memory-leak-detection--kotlin--hard
+- q-dispatchers-unconfined--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [delegates, difficulty/medium, kotlin, properties]
+tags:
+- delegates
+- difficulty/medium
+- kotlin
+- properties
+anki_cards:
+- slug: kotlin-147-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - delegates
+- slug: kotlin-147-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - delegates
 ---
 # Вопрос (RU)
 

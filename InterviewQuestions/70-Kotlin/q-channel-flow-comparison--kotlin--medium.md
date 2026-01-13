@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-channel-flow-comparison--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-channel-flow-comparison--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-085
 title: "Channel vs Flow Comparison / Сравнение Channel и Flow"
 aliases: ["Channel vs Flow Comparison", "Сравнение Channel и Flow"]

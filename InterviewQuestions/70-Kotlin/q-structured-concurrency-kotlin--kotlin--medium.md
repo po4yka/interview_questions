@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-structured-concurrency-kotlin--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-structured-concurrency-kotlin--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-185
 title: "Structured Concurrency in Kotlin Coroutines / Структурированная параллельность"

@@ -1,19 +1,49 @@
 ---
 id: lang-005
-title: "Kotlin Delegation / Делегирование в Kotlin"
-aliases: ["Kotlin Delegation", "Делегирование в Kotlin"]
+title: Kotlin Delegation / Делегирование в Kotlin
+aliases:
+- Kotlin Delegation
+- Делегирование в Kotlin
 topic: kotlin
-subtopics: [c-kotlin, c-kotlin-coroutines-basics, c-kotlin-features]
+subtopics:
+- c-kotlin
+- c-kotlin-coroutines-basics
+- c-kotlin-features
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-kotlin-delegation-detailed--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- q-kotlin-delegation-detailed--kotlin--medium
 created: 2025-10-13
 updated: 2025-11-09
-tags: [difficulty/easy]
+tags:
+- difficulty/easy
+anki_cards:
+- slug: lang-005-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - c-kotlin
+  - c-kotlin-coroutines-basics
+  - c-kotlin-features
+- slug: lang-005-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - c-kotlin
+  - c-kotlin-coroutines-basics
+  - c-kotlin-features
 ---
 # Вопрос (RU)
 > Что известно о делегировании?

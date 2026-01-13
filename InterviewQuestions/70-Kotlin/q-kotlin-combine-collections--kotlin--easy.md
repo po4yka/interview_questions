@@ -1,19 +1,43 @@
 ---
 id: lang-007
-title: "Kotlin Combine Collections / Объединение коллекций Kotlin"
-aliases: ["Kotlin Combine Collections", "Объединение коллекций Kotlin"]
+title: Kotlin Combine Collections / Объединение коллекций Kotlin
+aliases:
+- Kotlin Combine Collections
+- Объединение коллекций Kotlin
 topic: kotlin
-subtopics: [collections]
+subtopics:
+- collections
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-channels-vs-flow--kotlin--medium]
+related:
+- c-collections
+- c-kotlin
+- q-channels-vs-flow--kotlin--medium
 created: 2025-10-13
 updated: 2025-11-09
-tags: [difficulty/easy]
+tags:
+- difficulty/easy
+anki_cards:
+- slug: lang-007-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+- slug: lang-007-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
 ---
 # Вопрос (RU)
 > Какая функция Kotlin используется для объединения двух коллекций?

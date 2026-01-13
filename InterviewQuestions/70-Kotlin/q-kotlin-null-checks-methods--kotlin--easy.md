@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-null-checks-methods--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-null-checks-methods--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-058
 title: "Kotlin Null Checks Methods / Методы проверки на null в Kotlin"

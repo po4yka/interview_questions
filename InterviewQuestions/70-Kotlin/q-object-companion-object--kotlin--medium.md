@@ -1,19 +1,54 @@
 ---
 id: kotlin-143
-title: "Object Companion Object / Object и Companion Object"
-aliases: [Companion, Companion Object, Object, Object Keyword, Singleton]
+title: Object Companion Object / Object и Companion Object
+aliases:
+- Companion
+- Companion Object
+- Object
+- Object Keyword
+- Singleton
 topic: kotlin
-subtopics: [classes, singleton]
+subtopics:
+- classes
+- singleton
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutinecontext-composition--kotlin--hard, q-flow-backpressure--kotlin--hard]
+related:
+- c-kotlin
+- q-coroutinecontext-composition--kotlin--hard
+- q-flow-backpressure--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-09
-tags: [classes, companion-object, difficulty/medium, kotlin, object-keyword, singleton]
+tags:
+- classes
+- companion-object
+- difficulty/medium
+- kotlin
+- object-keyword
+- singleton
+anki_cards:
+- slug: kotlin-143-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - singleton
+- slug: kotlin-143-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - singleton
 ---
 # Что Такое Object / Companion Object?
 

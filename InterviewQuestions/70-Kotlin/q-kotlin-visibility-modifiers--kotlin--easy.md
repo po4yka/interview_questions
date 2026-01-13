@@ -1,30 +1,56 @@
 ---
 id: kotlin-023
-title: "Kotlin Visibility Modifiers / Модификаторы видимости в Kotlin"
-aliases: ["Kotlin Visibility Modifiers", "Модификаторы видимости в Kotlin"]
-
-# Classification
+title: Kotlin Visibility Modifiers / Модификаторы видимости в Kotlin
+aliases:
+- Kotlin Visibility Modifiers
+- Модификаторы видимости в Kotlin
 topic: kotlin
-subtopics: [access-control, encapsulation, modifiers]
+subtopics:
+- access-control
+- encapsulation
+- modifiers
 question_kind: theory
 difficulty: easy
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-array-vs-list-kotlin--kotlin--easy, q-coroutine-memory-leaks--kotlin--hard]
-
-# Timestamps
+related:
+- c-kotlin
+- q-array-vs-list-kotlin--kotlin--easy
+- q-coroutine-memory-leaks--kotlin--hard
 created: 2025-10-05
 updated: 2025-11-11
-
-tags: [access-control, difficulty/easy, encapsulation, kotlin, modifiers, visibility]
+tags:
+- access-control
+- difficulty/easy
+- encapsulation
+- kotlin
+- modifiers
+- visibility
+anki_cards:
+- slug: kotlin-023-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - access-control
+  - encapsulation
+  - modifiers
+- slug: kotlin-023-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - access-control
+  - encapsulation
+  - modifiers
 ---
 # Вопрос (RU)
 > Что такое модификаторы видимости в Kotlin?

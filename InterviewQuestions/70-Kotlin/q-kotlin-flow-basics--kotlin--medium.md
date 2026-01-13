@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-flow-basics--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-flow-basics--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-035
 title: "Kotlin Flow Basics / Основы Flow в Kotlin"

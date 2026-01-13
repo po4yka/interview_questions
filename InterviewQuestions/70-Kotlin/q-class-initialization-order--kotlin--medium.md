@@ -1,20 +1,54 @@
 ---
 id: kotlin-230
-title: "Class Initialization Order in Kotlin / Порядок инициализации класса в Kotlin"
-aliases: ["Class Initialization Order", "Порядок инициализации класса"]
+title: Class Initialization Order in Kotlin / Порядок инициализации класса в Kotlin
+aliases:
+- Class Initialization Order
+- Порядок инициализации класса
 topic: kotlin
-subtopics: [classes, initialization, kotlin-features]
+subtopics:
+- classes
+- initialization
+- kotlin-features
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium]
-created: "2025-10-12"
-updated: "2025-11-11"
-tags: [classes, difficulty/medium, initialization, kotlin, kotlin-features]
-sources: ["https://kotlinlang.org/docs/inheritance.html"]
+related:
+- c-kotlin
+- q-abstract-class-vs-interface--kotlin--medium
+created: '2025-10-12'
+updated: '2025-11-11'
+tags:
+- classes
+- difficulty/medium
+- initialization
+- kotlin
+- kotlin-features
+sources:
+- https://kotlinlang.org/docs/inheritance.html
+anki_cards:
+- slug: kotlin-230-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - initialization
+  - kotlin-features
+- slug: kotlin-230-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - initialization
+  - kotlin-features
 ---
 # Вопрос (RU)
 > В каком порядке происходит инициализация класса в Kotlin?

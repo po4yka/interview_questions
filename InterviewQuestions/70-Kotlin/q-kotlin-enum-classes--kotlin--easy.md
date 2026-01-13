@@ -1,30 +1,52 @@
 ---
 id: kotlin-010
-title: "Kotlin Enum Classes / Перечисления (Enum) в Kotlin"
-aliases: ["Kotlin Enum Classes", "Перечисления (Enum) в Kotlin"]
-
-# Classification
+title: Kotlin Enum Classes / Перечисления (Enum) в Kotlin
+aliases:
+- Kotlin Enum Classes
+- Перечисления (Enum) в Kotlin
 topic: kotlin
-subtopics: [enums, types]
+subtopics:
+- enums
+- types
 question_kind: theory
 difficulty: easy
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-kotlin-lateinit--kotlin--medium]
-
-# Timestamps
+related:
+- c-kotlin
+- c-kotlin-features
+- q-kotlin-lateinit--kotlin--medium
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [classes, difficulty/easy, enums, kotlin, types]
+tags:
+- classes
+- difficulty/easy
+- enums
+- kotlin
+- types
+anki_cards:
+- slug: kotlin-010-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - enums
+  - types
+- slug: kotlin-010-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - enums
+  - types
 ---
 # Вопрос (RU)
 > Что такое Enum в Kotlin?

@@ -1,30 +1,53 @@
 ---
 id: kotlin-029
-title: "Kotlin Generics / Обобщения (Generics) в Kotlin"
-aliases: ["Kotlin Generics", "Обобщения (Generics) в Kotlin"]
-
-# Classification
+title: Kotlin Generics / Обобщения (Generics) в Kotlin
+aliases:
+- Kotlin Generics
+- Обобщения (Generics) в Kotlin
 topic: kotlin
-subtopics: [generics, types]
+subtopics:
+- generics
+- types
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-hot-cold-flows--kotlin--medium, q-kotlin-native--kotlin--hard]
-
-# Timestamps
+related:
+- c-kotlin
+- q-hot-cold-flows--kotlin--medium
+- q-kotlin-native--kotlin--hard
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [difficulty/hard, generics, kotlin, type-erasure, types, variance]
+tags:
+- difficulty/hard
+- generics
+- kotlin
+- type-erasure
+- types
+- variance
+anki_cards:
+- slug: kotlin-029-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - types
+- slug: kotlin-029-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - types
 ---
 # Вопрос (RU)
 > Что вы знаете об обобщениях (Generics) в Kotlin?

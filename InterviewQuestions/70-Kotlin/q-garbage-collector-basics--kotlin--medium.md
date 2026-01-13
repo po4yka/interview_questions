@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-garbage-collector-basics--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-garbage-collector-basics--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-015
 title: "Garbage Collector Basics / Основы сборки мусора"
 aliases: [Garbage Collector Basics, Основы сборки мусора]

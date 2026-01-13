@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-when-coroutine-cannot-be-cancelled--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-when-coroutine-cannot-be-cancelled--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-084
 title: "When Coroutine Cannot Be Cancelled / Когда корутина не может быть отменена"
 aliases: [When Coroutine Cannot Be Cancelled, Когда корутина не может быть отменена]

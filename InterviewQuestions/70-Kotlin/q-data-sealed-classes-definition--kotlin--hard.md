@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-data-sealed-classes-definition--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-data-sealed-classes-definition--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-212
 title: "Data Sealed Classes Definition / Data и Sealed классы определение"
 aliases: [Data Sealed Classes, Data и Sealed классы]

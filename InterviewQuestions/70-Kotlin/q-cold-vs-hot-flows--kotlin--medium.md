@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-cold-vs-hot-flows--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-cold-vs-hot-flows--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-059
 title: "Cold vs Hot Flows / Холодные и горячие потоки"
 aliases: ["Cold vs Hot Flows", "Холодные и горячие потоки"]

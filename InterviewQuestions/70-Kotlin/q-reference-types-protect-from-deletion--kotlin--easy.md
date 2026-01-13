@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-reference-types-protect-from-deletion--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-reference-types-protect-from-deletion--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-052
 title: "Reference Types Protect From Deletion / Типы ссылок защищают от удаления"
 aliases: [Reference Types Protect From Deletion, Типы ссылок защищают от удаления]

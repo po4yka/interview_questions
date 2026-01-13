@@ -1,20 +1,46 @@
 ---
 id: kotlin-225
-title: "Kotlin Advantages For Android / Преимущества Kotlin для Android"
-aliases: [Advantages of Kotlin for Android, Kotlin advantages for Android]
+title: Kotlin Advantages For Android / Преимущества Kotlin для Android
+aliases:
+- Advantages of Kotlin for Android
+- Kotlin advantages for Android
 topic: kotlin
-subtopics: [extensions, null-safety]
+subtopics:
+- extensions
+- null-safety
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-delegates-compilation--kotlin--hard, q-kotlin-inline-functions--kotlin--medium]
+related:
+- c-kotlin
+- q-delegates-compilation--kotlin--hard
+- q-kotlin-inline-functions--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [difficulty/easy]
-
+tags:
+- difficulty/easy
+anki_cards:
+- slug: kotlin-225-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - extensions
+  - null-safety
+- slug: kotlin-225-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - extensions
+  - null-safety
 ---
 # Вопрос (RU)
 > В чём преимущества Kotlin для разработки под Android?

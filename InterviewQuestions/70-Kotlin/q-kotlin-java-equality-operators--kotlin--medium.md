@@ -1,19 +1,50 @@
 ---
 id: lang-085
-title: "Kotlin Java Equality Operators / Операторы равенства Kotlin и Java"
-aliases: [Kotlin Java Equality Operators, Операторы равенства Kotlin и Java]
+title: Kotlin Java Equality Operators / Операторы равенства Kotlin и Java
+aliases:
+- Kotlin Java Equality Operators
+- Операторы равенства Kotlin и Java
 topic: kotlin
-subtopics: [operators, type-system]
+subtopics:
+- operators
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-equality, c-kotlin]
+related:
+- c-equality
+- c-kotlin
 created: 2025-10-15
 updated: 2025-11-10
-tags: [comparison, difficulty/medium, equality, java, kotlin, operators]
+tags:
+- comparison
+- difficulty/medium
+- equality
+- java
+- kotlin
+- operators
+anki_cards:
+- slug: lang-085-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - operators
+  - type-system
+- slug: lang-085-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - operators
+  - type-system
 ---
 # Вопрос (RU)
 > Чем отличаются двойное равно в Java и Kotlin?

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-object-singleton-companion--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-object-singleton-companion--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-234
 title: "Object, Companion Object, and Singleton Pattern / object, companion object и паттерн Singleton"

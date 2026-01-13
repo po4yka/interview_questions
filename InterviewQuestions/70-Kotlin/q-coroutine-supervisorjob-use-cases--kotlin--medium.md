@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-supervisorjob-use-cases--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-supervisorjob-use-cases--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-243
 title: "SupervisorJob: when and why to use it? / SupervisorJob и его применение"
 aliases: [SupervisorJob Use Cases, SupervisorJob применение]

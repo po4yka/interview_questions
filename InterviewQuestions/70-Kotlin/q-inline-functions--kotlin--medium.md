@@ -1,19 +1,47 @@
 ---
 id: kotlin-207
-title: "Inline функции / Inline functions"
-aliases: [Inline functions, Inline функции]
+title: Inline функции / Inline functions
+aliases:
+- Inline functions
+- Inline функции
 topic: kotlin
-subtopics: [coroutines, inline-functions]
+subtopics:
+- coroutines
+- inline-functions
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-channels-basics-types--kotlin--medium, q-coroutine-timeout-withtimeout--kotlin--medium, q-kotlin-sealed-when-exhaustive--kotlin--medium]
+related:
+- c-kotlin
+- q-channels-basics-types--kotlin--medium
+- q-coroutine-timeout-withtimeout--kotlin--medium
+- q-kotlin-sealed-when-exhaustive--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/medium]
+tags:
+- difficulty/medium
+anki_cards:
+- slug: kotlin-207-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - inline-functions
+- slug: kotlin-207-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - inline-functions
 ---
 # Вопрос (RU)
 > Что такое inline функции в Kotlin и зачем они нужны?

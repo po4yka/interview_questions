@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-select-expression-channels--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-select-expression-channels--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-071
 title: "select Expression with Channels / Выражение select с каналами"
 aliases: ["select Expression with Channels", "Выражение select с каналами"]

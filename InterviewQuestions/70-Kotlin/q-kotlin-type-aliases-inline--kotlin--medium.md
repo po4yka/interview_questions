@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-type-aliases-inline--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-type-aliases-inline--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-164
 title: "Kotlin Type Aliases Inline / Type aliases и inline в Kotlin"
 aliases: [Inline Classes, Inline Functions, Type Aliases, Type Aliases и inline]

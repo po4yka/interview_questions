@@ -1,19 +1,56 @@
 ---
 id: kotlin-171
-title: "Kotlin Vs Java Class Creation / Создание классов Kotlin vs Java"
-aliases: [Class Creation, Data Classes, Kotlin Classes, Создание классов]
+title: Kotlin Vs Java Class Creation / Создание классов Kotlin vs Java
+aliases:
+- Class Creation
+- Data Classes
+- Kotlin Classes
+- Создание классов
 topic: kotlin
-subtopics: [classes, data-classes, syntax]
+subtopics:
+- classes
+- data-classes
+- syntax
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-inline-function-limitations--kotlin--medium, q-kotlin-lambda-expressions--kotlin--medium]
+related:
+- c-kotlin
+- q-inline-function-limitations--kotlin--medium
+- q-kotlin-lambda-expressions--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [classes, data-classes, difficulty/medium, java, kotlin, syntax]
+tags:
+- classes
+- data-classes
+- difficulty/medium
+- java
+- kotlin
+- syntax
+anki_cards:
+- slug: kotlin-171-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - data-classes
+  - syntax
+- slug: kotlin-171-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - data-classes
+  - syntax
 ---
 # Вопрос (RU)
 > Что при создании классов в Kotlin изменилось по сравнению с Java?

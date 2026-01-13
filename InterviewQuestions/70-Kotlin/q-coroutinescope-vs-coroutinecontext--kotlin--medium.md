@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutinescope-vs-coroutinecontext--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutinescope-vs-coroutinecontext--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-030
 title: "CoroutineScope vs CoroutineContext / CoroutineScope против CoroutineContext"

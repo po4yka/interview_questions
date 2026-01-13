@@ -1,19 +1,52 @@
 ---
 id: kotlin-179
-title: "Sam Conversions / SAM конверсии"
-aliases: [Functional Interfaces, SAM Conversion, Single Abstract Method]
+title: Sam Conversions / SAM конверсии
+aliases:
+- Functional Interfaces
+- SAM Conversion
+- Single Abstract Method
 topic: kotlin
-subtopics: [java-interop, lambdas]
+subtopics:
+- java-interop
+- lambdas
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-flow-exception-handling--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
+related:
+- c-kotlin
+- q-flow-exception-handling--kotlin--medium
+- q-kotlin-inline-functions--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, functional-interface, java-interop, kotlin, lambda, sam]
+tags:
+- difficulty/medium
+- functional-interface
+- java-interop
+- kotlin
+- lambda
+- sam
+anki_cards:
+- slug: kotlin-179-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - java-interop
+  - lambdas
+- slug: kotlin-179-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - java-interop
+  - lambdas
 ---
 # Вопрос (RU)
 

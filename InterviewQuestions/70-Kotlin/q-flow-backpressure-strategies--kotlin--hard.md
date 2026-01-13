@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-flow-backpressure-strategies--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-backpressure-strategies--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-055
 title: "Flow Backpressure Strategies / Стратегии противодавления Flow"
 aliases: ["Flow Backpressure Strategies", "Стратегии противодавления Flow"]

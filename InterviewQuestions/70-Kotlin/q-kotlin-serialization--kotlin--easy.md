@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-serialization--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-serialization--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-042
 title: "Kotlin Serialization / Сериализация в Kotlin"
 aliases: [Kotlin Serialization, Сериализация в Kotlin]

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-find-object-without-references--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-find-object-without-references--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-071
 title: "Find Object Without References / Поиск объектов без ссылок"

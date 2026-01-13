@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-sequences-vs-collections-performance--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-sequences-vs-collections-performance--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-176
 title: "Sequences Vs Collections Performance / Sequences vs Collections Performance"
 aliases: [Collections Performance, Lazy Evaluation, Performance Comparison, Sequences]

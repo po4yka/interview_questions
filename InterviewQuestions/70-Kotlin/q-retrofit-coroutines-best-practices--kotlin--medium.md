@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-retrofit-coroutines-best-practices--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-retrofit-coroutines-best-practices--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-184
 title: "Retrofit with coroutines: best practices / Retrofit с корутинами: лучшие практики"

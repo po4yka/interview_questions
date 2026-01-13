@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-inline-classes-value-classes--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-inline-classes-value-classes--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-018
 title: "Inline Classes (Value Classes) / Встроенные классы (Value классы)"
 aliases: ["Inline Classes (Value Classes)", "Встроенные классы (Value классы)"]

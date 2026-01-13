@@ -1,19 +1,54 @@
 ---
 id: kotlin-139
-title: "Lambdas Java Kotlin Syntax / Синтаксис лямбд Java и Kotlin"
-aliases: [Functional Programming, Lambda Syntax, Lambdas]
+title: Lambdas Java Kotlin Syntax / Синтаксис лямбд Java и Kotlin
+aliases:
+- Functional Programming
+- Lambda Syntax
+- Lambdas
 topic: kotlin
-subtopics: [functions, lambdas, syntax]
+subtopics:
+- functions
+- lambdas
+- syntax
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
+related:
+- c-kotlin
+- q-advanced-coroutine-patterns--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, functional-programming, java, kotlin, lambdas, syntax]
+tags:
+- difficulty/medium
+- functional-programming
+- java
+- kotlin
+- lambdas
+- syntax
+anki_cards:
+- slug: kotlin-139-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - lambdas
+  - syntax
+- slug: kotlin-139-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - lambdas
+  - syntax
 ---
 # Вопрос (RU)
 > Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?

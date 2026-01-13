@@ -1,22 +1,56 @@
 ---
 id: kotlin-027
-title: "Star Projection (*) vs Any in Generics / Звездная проекция vs Any в обобщениях"
-aliases: ["Star Projection (*) vs Any in Generics", "Звездная проекция vs Any в обобщениях"]
+title: Star Projection (*) vs Any in Generics / Звездная проекция vs Any в обобщениях
+aliases:
+- Star Projection (*) vs Any in Generics
+- Звездная проекция vs Any в обобщениях
 topic: kotlin
-subtopics: [generics, star-projection, type-safety]
+subtopics:
+- generics
+- star-projection
+- type-safety
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-generics--kotlin--hard, q-kotlin-type-system--kotlin--medium]
+related:
+- c-kotlin
+- q-kotlin-generics--kotlin--hard
+- q-kotlin-type-system--kotlin--medium
 created: 2025-10-05
 updated: 2025-11-09
-tags: [difficulty/hard, generics, kotlin, star-projection, type-safety, variance]
-
+tags:
+- difficulty/hard
+- generics
+- kotlin
+- star-projection
+- type-safety
+- variance
+anki_cards:
+- slug: kotlin-027-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - star-projection
+  - type-safety
+- slug: kotlin-027-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - star-projection
+  - type-safety
 ---
 # Вопрос (RU)
 > В чем разница между `*` (звездная проекция) и `Any` в обобщениях Kotlin?

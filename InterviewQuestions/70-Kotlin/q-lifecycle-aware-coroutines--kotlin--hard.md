@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-lifecycle-aware-coroutines--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-lifecycle-aware-coroutines--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-130
 title: "Lifecycle-Aware Coroutines / Корутины с учетом жизненного цикла"

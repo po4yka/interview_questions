@@ -1,20 +1,50 @@
 ---
 id: kotlin-208
-title: "Partition Function / Функция partition"
-aliases: [Collection Partition, Filtering, Partition, Partition Function]
+title: Partition Function / Функция partition
+aliases:
+- Collection Partition
+- Filtering
+- Partition
+- Partition Function
 topic: kotlin
-subtopics: [collections]
+subtopics:
+- collections
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-job-lifecycle--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium]
+related:
+- c-kotlin
+- q-coroutine-job-lifecycle--kotlin--medium
+- q-testing-viewmodel-coroutines--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, difficulty/easy, filtering, kotlin, pair, partition]
-
+tags:
+- collections
+- difficulty/easy
+- filtering
+- kotlin
+- pair
+- partition
+anki_cards:
+- slug: kotlin-208-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+- slug: kotlin-208-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
 ---
 # Вопрос (RU)
 

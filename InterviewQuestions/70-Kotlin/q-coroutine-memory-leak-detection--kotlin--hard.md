@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-memory-leak-detection--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-memory-leak-detection--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---topic: kotlin
 id: kotlin-131
 title: "Detecting and preventing coroutine memory leaks / Обнаружение и предотвращение утечек памяти"

@@ -1,30 +1,52 @@
 ---
 id: kotlin-003
-title: "Kotlin fold and reduce / fold и reduce в Kotlin"
-aliases: ["fold и reduce в Kotlin", "Kotlin fold and reduce"]
-
-# Classification
+title: Kotlin fold and reduce / fold и reduce в Kotlin
+aliases:
+- fold и reduce в Kotlin
+- Kotlin fold and reduce
 topic: kotlin
-subtopics: [collections, fold]
+subtopics:
+- collections
+- fold
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin]
-
-# Timestamps
+related:
+- c-collections
+- c-kotlin
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [collections, difficulty/medium, fold, functional-programming, kotlin, reduce]
+tags:
+- collections
+- difficulty/medium
+- fold
+- functional-programming
+- kotlin
+- reduce
+anki_cards:
+- slug: kotlin-003-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - fold
+- slug: kotlin-003-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - fold
 ---
 # Вопрос (RU)
 > Какая разница между fold и reduce в Kotlin?

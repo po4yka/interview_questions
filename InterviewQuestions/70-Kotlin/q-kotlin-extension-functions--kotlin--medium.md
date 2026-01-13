@@ -1,30 +1,51 @@
 ---
 id: kotlin-033
-title: "Kotlin Extension Functions / Функции-расширения в Kotlin"
-aliases: ["Kotlin Extension Functions", "Функции-расширения в Kotlin"]
-
-# Classification
+title: Kotlin Extension Functions / Функции-расширения в Kotlin
+aliases:
+- Kotlin Extension Functions
+- Функции-расширения в Kotlin
 topic: kotlin
-subtopics: [functions, language-features]
+subtopics:
+- functions
+- language-features
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-extension-functions-advanced--kotlin--hard]
-
-# Timestamps
+related:
+- c-kotlin
+- q-kotlin-extension-functions-advanced--kotlin--hard
 created: 2025-10-05
 updated: 2025-11-10
-
-tags: [difficulty/medium, extensions, functions, kotlin, language-features]
+tags:
+- difficulty/medium
+- extensions
+- functions
+- kotlin
+- language-features
+anki_cards:
+- slug: kotlin-033-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - language-features
+- slug: kotlin-033-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - functions
+  - language-features
 ---
 # Вопрос (RU)
 > Что вы знаете о расширениях в Kotlin?

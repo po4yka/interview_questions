@@ -1,19 +1,56 @@
 ---
 id: kotlin-201
-title: "Variance Type Projections / Вариантность и проекции типов"
-aliases: [Contravariance, Covariance, Type Projections, Variance, Variance типов]
+title: Variance Type Projections / Вариантность и проекции типов
+aliases:
+- Contravariance
+- Covariance
+- Type Projections
+- Variance
+- Variance типов
 topic: kotlin
-subtopics: [generics, type-system]
+subtopics:
+- generics
+- type-system
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-equals-hashcode-purpose--kotlin--medium, q-launch-vs-async--kotlin--easy]
+related:
+- c-kotlin
+- q-equals-hashcode-purpose--kotlin--medium
+- q-launch-vs-async--kotlin--easy
 created: 2025-10-15
 updated: 2025-11-09
-tags: [contravariance, covariance, difficulty/hard, generics, kotlin, projections, type-system, variance]
+tags:
+- contravariance
+- covariance
+- difficulty/hard
+- generics
+- kotlin
+- projections
+- type-system
+- variance
+anki_cards:
+- slug: kotlin-201-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - type-system
+- slug: kotlin-201-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - type-system
 ---
 # Вопрос (RU)
 > Объясните variance на месте объявления против на месте использования в Kotlin. В чем разница между in, out и star проекциями?

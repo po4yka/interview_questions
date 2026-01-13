@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-any-inheritance--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-any-inheritance--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-214
 title: "Kotlin Any Inheritance / Наследование от Any в Kotlin"
 aliases: []

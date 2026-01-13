@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-any-class-methods--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-any-class-methods--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-216
 title: "Kotlin Any Class Methods / Методы класса Any в Kotlin"
 aliases: ["Kotlin Any methods", "Методы Any в Kotlin"]

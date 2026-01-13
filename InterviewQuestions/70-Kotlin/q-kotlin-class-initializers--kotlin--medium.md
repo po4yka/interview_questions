@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-class-initializers--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-class-initializers--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-202
 title: "Kotlin Class Initializers / Инициализаторы классов Kotlin"
 aliases: ["Kotlin Class Initializers", "Инициализаторы классов Kotlin"]

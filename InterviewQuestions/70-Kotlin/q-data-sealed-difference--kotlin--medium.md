@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-data-sealed-difference--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-data-sealed-difference--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-204
 title: "Data Sealed Difference / Разница data и sealed"
 aliases: [Data vs Sealed Classes, Разница data и sealed]

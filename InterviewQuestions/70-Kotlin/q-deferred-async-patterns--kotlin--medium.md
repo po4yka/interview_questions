@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-deferred-async-patterns--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-deferred-async-patterns--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---topic: kotlin
 id: kotlin-063
 title: "Deferred and async patterns deep dive / Deferred и async паттерны подробно"

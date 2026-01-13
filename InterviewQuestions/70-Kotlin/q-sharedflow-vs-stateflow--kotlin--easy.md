@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-sharedflow-vs-stateflow--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-sharedflow-vs-stateflow--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-019
 title: "SharedFlow Vs StateFlow / SharedFlow против StateFlow"
 aliases: [SharedFlow Vs StateFlow, SharedFlow против StateFlow]

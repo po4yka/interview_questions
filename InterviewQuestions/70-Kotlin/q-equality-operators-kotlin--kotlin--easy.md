@@ -1,30 +1,51 @@
 ---
 id: kotlin-002
-title: "Equality Operators == vs === / Операторы равенства == vs ==="
-aliases: ["Equality Operators == vs ===", "Операторы равенства == vs ==="]
-
-# Classification
+title: Equality Operators == vs === / Операторы равенства == vs ===
+aliases:
+- Equality Operators == vs ===
+- Операторы равенства == vs ===
 topic: kotlin
-subtopics: [equality, operators]
+subtopics:
+- equality
+- operators
 question_kind: theory
 difficulty: easy
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-equality, c-kotlin]
-
-# Timestamps
+related:
+- c-equality
+- c-kotlin
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [comparison, difficulty/easy, equality, kotlin, operators]
+tags:
+- comparison
+- difficulty/easy
+- equality
+- kotlin
+- operators
+anki_cards:
+- slug: kotlin-002-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - equality
+  - operators
+- slug: kotlin-002-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - equality
+  - operators
 ---
 # Вопрос (RU)
 > В чем разница между == и === в Kotlin?

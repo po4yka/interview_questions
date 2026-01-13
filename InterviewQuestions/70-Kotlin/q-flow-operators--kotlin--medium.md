@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-flow-operators--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-operators--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-103
 title: "Flow Operators in Kotlin / Операторы Flow в Kotlin"

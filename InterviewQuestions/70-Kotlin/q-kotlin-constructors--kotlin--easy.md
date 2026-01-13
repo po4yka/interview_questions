@@ -1,22 +1,58 @@
 ---
 id: kotlin-088
-title: "Kotlin Constructors / Конструкторы в Kotlin"
-aliases: ["Kotlin Constructors", "Конструкторы в Kotlin"]
+title: Kotlin Constructors / Конструкторы в Kotlin
+aliases:
+- Kotlin Constructors
+- Конструкторы в Kotlin
 topic: kotlin
-subtopics: [constructors, init-block, initialization]
+subtopics:
+- constructors
+- init-block
+- initialization
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive guide on Kotlin constructors
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-init-block--kotlin--easy, q-kotlin-properties--kotlin--easy, q-kotlin-val-vs-var--kotlin--easy]
+related:
+- c-kotlin
+- q-kotlin-init-block--kotlin--easy
+- q-kotlin-properties--kotlin--easy
+- q-kotlin-val-vs-var--kotlin--easy
 created: 2025-10-12
 updated: 2025-11-09
-tags: [constructors, difficulty/easy, init, initialization, kotlin, primary-constructor, secondary-constructor]
-
+tags:
+- constructors
+- difficulty/easy
+- init
+- initialization
+- kotlin
+- primary-constructor
+- secondary-constructor
+anki_cards:
+- slug: kotlin-088-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - constructors
+  - init-block
+  - initialization
+- slug: kotlin-088-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - constructors
+  - init-block
+  - initialization
 ---
 # Вопрос (RU)
 > Что такое конструкторы в Kotlin? Объясните первичные конструкторы, вторичные конструкторы и блоки init.

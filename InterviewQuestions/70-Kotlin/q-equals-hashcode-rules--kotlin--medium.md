@@ -1,19 +1,52 @@
 ---
 id: lang-049
-title: "Equals Hashcode Rules / Правила equals и hashCode"
-aliases: [Equals Hashcode Rules, Правила equals и hashCode]
+title: Equals Hashcode Rules / Правила equals и hashCode
+aliases:
+- Equals Hashcode Rules
+- Правила equals и hashCode
 topic: kotlin
-subtopics: [collections, equality, object-methods]
+subtopics:
+- collections
+- equality
+- object-methods
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-equality]
+related:
+- c-equality
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, contracts, difficulty/medium, equality, kotlin, object-methods]
+tags:
+- collections
+- contracts
+- difficulty/medium
+- equality
+- kotlin
+- object-methods
+anki_cards:
+- slug: lang-049-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - equality
+  - object-methods
+- slug: lang-049-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - equality
+  - object-methods
 ---
 # Вопрос (RU)
 > Какие существуют правила для методов equals и hashcode?

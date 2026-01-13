@@ -1,19 +1,57 @@
 ---
 id: kotlin-113
-title: "Sealed classes vs sealed interfaces in Kotlin / Sealed классы vs интерфейсы"
-aliases: [Polymorphism, Sealed Classes, Sealed Interfaces, Sealed v Kotlin]
+title: Sealed classes vs sealed interfaces in Kotlin / Sealed классы vs интерфейсы
+aliases:
+- Polymorphism
+- Sealed Classes
+- Sealed Interfaces
+- Sealed v Kotlin
 topic: kotlin
-subtopics: [classes, polymorphism, sealed-classes]
+subtopics:
+- classes
+- polymorphism
+- sealed-classes
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-sealed-classes, q-kotlin-enum-classes--kotlin--easy]
+related:
+- c-kotlin
+- c-sealed-classes
+- q-kotlin-enum-classes--kotlin--easy
 created: 2025-10-12
 updated: 2025-11-11
-tags: [classes, difficulty/medium, kotlin, polymorphism, sealed-classes, sealed-interfaces, when-expression]
+tags:
+- classes
+- difficulty/medium
+- kotlin
+- polymorphism
+- sealed-classes
+- sealed-interfaces
+- when-expression
+anki_cards:
+- slug: kotlin-113-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - polymorphism
+  - sealed-classes
+- slug: kotlin-113-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - classes
+  - polymorphism
+  - sealed-classes
 ---
 # Вопрос (RU)
 

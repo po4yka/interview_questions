@@ -1,30 +1,55 @@
 ---
 id: kotlin-034
-title: "Destructuring Declarations / Деструктурирующие объявления"
-aliases: ["Destructuring Declarations", "Деструктурирующие объявления"]
-
-# Classification
+title: Destructuring Declarations / Деструктурирующие объявления
+aliases:
+- Destructuring Declarations
+- Деструктурирующие объявления
 topic: kotlin
-subtopics: [componentN, data-classes, destructuring]
+subtopics:
+- componentN
+- data-classes
+- destructuring
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-data-class-detailed--kotlin--medium, q-data-class-purpose--kotlin--easy]
-
-# Timestamps
+related:
+- c-kotlin
+- q-data-class-detailed--kotlin--medium
+- q-data-class-purpose--kotlin--easy
 created: 2025-10-05
 updated: 2025-11-10
-
-tags: [componentN, data-classes, destructuring, difficulty/medium, kotlin]
+tags:
+- componentN
+- data-classes
+- destructuring
+- difficulty/medium
+- kotlin
+anki_cards:
+- slug: kotlin-034-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - componentN
+  - data-classes
+  - destructuring
+- slug: kotlin-034-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - componentN
+  - data-classes
+  - destructuring
 ---
 # Вопрос (RU)
 > Что такое деструктурирующие объявления в Kotlin?

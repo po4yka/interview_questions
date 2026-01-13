@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-job-state-machine-transitions--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-job-state-machine-transitions--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-105
 title: "Job state machine and state transitions / Job машина состояний и переходы"

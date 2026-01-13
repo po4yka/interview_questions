@@ -1,30 +1,54 @@
 ---
 id: kotlin-004
-title: "Kotlin Operator Overloading / Перегрузка операторов в Kotlin"
-aliases: ["Kotlin Operator Overloading", "Перегрузка операторов в Kotlin"]
-
-# Classification
+title: Kotlin Operator Overloading / Перегрузка операторов в Kotlin
+aliases:
+- Kotlin Operator Overloading
+- Перегрузка операторов в Kotlin
 topic: kotlin
-subtopics: [conventions, language-features, operators]
+subtopics:
+- conventions
+- language-features
+- operators
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-custom-dispatchers-limited-parallelism--kotlin--hard]
-
-# Timestamps
+related:
+- c-kotlin
+- q-custom-dispatchers-limited-parallelism--kotlin--hard
 created: 2025-10-05
 updated: 2025-11-09
-
-tags: [conventions, difficulty/medium, kotlin, operators, overloading]
+tags:
+- conventions
+- difficulty/medium
+- kotlin
+- operators
+- overloading
+anki_cards:
+- slug: kotlin-004-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - conventions
+  - language-features
+  - operators
+- slug: kotlin-004-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - conventions
+  - language-features
+  - operators
 ---
 # Вопрос (RU)
 > Что вы знаете о перегрузке операторов в Kotlin?

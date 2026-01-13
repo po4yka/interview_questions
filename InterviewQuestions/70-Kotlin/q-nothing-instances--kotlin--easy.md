@@ -1,20 +1,48 @@
 ---
 id: kotlin-178
-title: "Nothing Instances / Экземпляры Nothing"
-aliases: [Bottom Type, Nothing, Nothing Type]
+title: Nothing Instances / Экземпляры Nothing
+aliases:
+- Bottom Type
+- Nothing
+- Nothing Type
 topic: kotlin
-subtopics: [type-system]
+subtopics:
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-circuit-breaker-coroutines--kotlin--hard, q-request-coalescing-deduplication--kotlin--hard]
+related:
+- c-kotlin
+- q-circuit-breaker-coroutines--kotlin--hard
+- q-request-coalescing-deduplication--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-09
-tags: [bottom-type, difficulty/easy, kotlin, nothing, type-system]
-
+tags:
+- bottom-type
+- difficulty/easy
+- kotlin
+- nothing
+- type-system
+anki_cards:
+- slug: kotlin-178-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - type-system
+- slug: kotlin-178-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - type-system
 ---
 # Вопрос (RU)
 > Сколько экземпляров имеет тип Nothing в Kotlin?

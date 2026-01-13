@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-coroutine-dispatchers--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-coroutine-dispatchers--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-096
 title: "Coroutine Dispatchers / Диспетчеры корутин"

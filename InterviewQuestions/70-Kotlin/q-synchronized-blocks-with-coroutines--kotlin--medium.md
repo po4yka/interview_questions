@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-synchronized-blocks-with-coroutines--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-synchronized-blocks-with-coroutines--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-037
 title: "Synchronized Blocks With Coroutines / Синхронизированные блоки с корутинами"

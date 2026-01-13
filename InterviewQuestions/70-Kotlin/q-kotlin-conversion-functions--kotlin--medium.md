@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-conversion-functions--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-conversion-functions--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-206
 title: "Kotlin Conversion Functions / Kotlin Conversion Функции"

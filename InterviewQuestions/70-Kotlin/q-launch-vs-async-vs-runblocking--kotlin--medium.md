@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-launch-vs-async-vs-runblocking--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-launch-vs-async-vs-runblocking--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-162
 title: "Launch Vs Async Vs Runblocking / Launch против Async против Runblocking"
 aliases: [Async, Coroutine Builders, Launch, RunBlocking]

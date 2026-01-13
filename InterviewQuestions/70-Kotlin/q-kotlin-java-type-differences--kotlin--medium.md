@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-java-type-differences--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-java-type-differences--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-051
 title: "Kotlin Java Type Differences / Различия типов Kotlin и Java"

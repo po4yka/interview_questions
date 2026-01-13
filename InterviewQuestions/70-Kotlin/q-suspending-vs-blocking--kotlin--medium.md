@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-suspending-vs-blocking--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-suspending-vs-blocking--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-015
 title: "Suspending vs Blocking / Приостанавливающие vs блокирующие функции"

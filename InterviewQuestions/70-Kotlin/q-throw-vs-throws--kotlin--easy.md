@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-throw-vs-throws--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-throw-vs-throws--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-035
 title: "Throw Vs Throws / Throw против Throws"
 aliases: [Throw Vs Throws, Throw против Throws]

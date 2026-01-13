@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-extensions-concept--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-extensions-concept--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: lang-068
 title: "Extensions Concept / Концепция расширений"

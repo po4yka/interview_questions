@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-noncancellable-context-cleanup--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-noncancellable-context-cleanup--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-119
 title: "NonCancellable context for critical cleanup operations / NonCancellable контекст для критических операций"

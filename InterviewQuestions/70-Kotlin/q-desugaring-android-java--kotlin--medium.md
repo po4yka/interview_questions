@@ -1,19 +1,47 @@
 ---
 id: kotlin-173
-title: "Desugaring Android Java / Desugaring в Android"
-aliases: [Desugaring Android, Desugaring Android Java]
+title: Desugaring Android Java / Desugaring в Android
+aliases:
+- Desugaring Android
+- Desugaring Android Java
 topic: kotlin
-subtopics: [compilation]
+subtopics:
+- compilation
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium]
+related:
+- c-kotlin
+- q-coroutine-cancellation-mechanisms--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [android, backward-compatibility, compilation, difficulty/medium, java, kotlin]
+tags:
+- android
+- backward-compatibility
+- compilation
+- difficulty/medium
+- java
+- kotlin
+anki_cards:
+- slug: kotlin-173-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - compilation
+- slug: kotlin-173-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - compilation
 ---
 # Вопрос (RU)
 > Что такое desugaring в Android и как он работает?

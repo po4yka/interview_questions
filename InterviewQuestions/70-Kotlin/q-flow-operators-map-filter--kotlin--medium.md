@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-flow-operators-map-filter--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-operators-map-filter--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-074
 title: "Операторы Flow: map, filter, transform / Flow Operators: map, filter, transform"
 aliases: []

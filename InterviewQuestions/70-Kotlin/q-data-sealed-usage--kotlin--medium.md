@@ -1,19 +1,47 @@
 ---
 id: kotlin-213
-title: "Data Sealed Usage / Data Sealed Использование"
-aliases: [Data Sealed Classes Usage, Data и Sealed использование]
+title: Data Sealed Usage / Data Sealed Использование
+aliases:
+- Data Sealed Classes Usage
+- Data и Sealed использование
 topic: kotlin
-subtopics: [data-classes, sealed-classes]
+subtopics:
+- data-classes
+- sealed-classes
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-sealed-classes]
+related:
+- c-kotlin
+- c-sealed-classes
 created: 2025-10-15
 updated: 2025-11-09
-tags: [data-classes, difficulty/medium, sealed-classes]
+tags:
+- data-classes
+- difficulty/medium
+- sealed-classes
+anki_cards:
+- slug: kotlin-213-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - data-classes
+  - sealed-classes
+- slug: kotlin-213-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - data-classes
+  - sealed-classes
 ---
 # Вопрос (RU)
 > Для чего используются `data` классы и `sealed` классы в Kotlin? Каковы их практические применения?

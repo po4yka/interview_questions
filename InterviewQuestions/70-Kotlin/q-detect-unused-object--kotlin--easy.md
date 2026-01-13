@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-detect-unused-object--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-detect-unused-object--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-020
 title: "Detect Unused Object / Обнаружение неиспользуемых объектов"
 aliases: [Detect Unused Object, Обнаружение неиспользуемых объектов]

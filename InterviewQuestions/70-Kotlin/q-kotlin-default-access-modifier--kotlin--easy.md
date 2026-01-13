@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-kotlin-default-access-modifier--kotlin--easy-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-kotlin-default-access-modifier--kotlin--easy-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: lang-201
 title: "Kotlin Default Access Modifier / Модификатор доступа по умолчанию в Kotlin"
 aliases: ["Kotlin Default Access Modifier", "Модификатор доступа по умолчанию в Kotlin"]

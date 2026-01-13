@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-actor-pattern--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-actor-pattern--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-066
 title: "Actor Pattern with Coroutines / Паттерн Actor с корутинами"

@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-inheritance-open-final--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-inheritance-open-final--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-232
 title: "Inheritance in Kotlin: open, final, abstract, override / Наследование в Kotlin: open, final, abstract, override"
 aliases: ["Inheritance in Kotlin", "Наследование в Kotlin"]

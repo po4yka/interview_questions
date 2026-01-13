@@ -1,19 +1,51 @@
 ---
 id: kotlin-227
-title: "Kotlin Contracts Smart Casts / Контракты и smart casts в Kotlin"
-aliases: [Casts, Contracts, Kotlin, Smart]
+title: Kotlin Contracts Smart Casts / Контракты и smart casts в Kotlin
+aliases:
+- Casts
+- Contracts
+- Kotlin
+- Smart
 topic: kotlin
-subtopics: [coroutines, flow, type-system]
+subtopics:
+- coroutines
+- flow
+- type-system
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-cancellation-cooperation--kotlin--medium, q-flow-operators-deep-dive--kotlin--hard]
+related:
+- c-kotlin
+- q-coroutine-cancellation-cooperation--kotlin--medium
+- q-flow-operators-deep-dive--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [difficulty/hard]
+tags:
+- difficulty/hard
+anki_cards:
+- slug: kotlin-227-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
+  - flow
+  - type-system
+- slug: kotlin-227-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - coroutines
+  - flow
+  - type-system
 ---
 # Вопрос (RU)
 > Что такое контракты Kotlin? Как они обеспечивают умные приведения типов (smart casts)? Реализуйте пользовательский контракт для функции валидации.

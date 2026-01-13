@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-flow-combining-zip-combine--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-combining-zip-combine--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-101
 title: "Flow Combining: zip, combine, merge / Комбинирование Flow: zip, combine, merge"
 aliases: []

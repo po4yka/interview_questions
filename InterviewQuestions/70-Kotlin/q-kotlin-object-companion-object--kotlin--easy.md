@@ -1,19 +1,50 @@
 ---
 id: lang-088
-title: "Kotlin Object Companion Object / Object и Companion Object в Kotlin"
-aliases: [Kotlin Object Companion Object, Object и Companion Object v Kotlin]
+title: Kotlin Object Companion Object / Object и Companion Object в Kotlin
+aliases:
+- Kotlin Object Companion Object
+- Object и Companion Object v Kotlin
 topic: kotlin
-subtopics: [c-kotlin, c-kotlin-features]
+subtopics:
+- c-kotlin
+- c-kotlin-features
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-data-class-detailed--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- q-data-class-detailed--kotlin--medium
+- q-kotlin-flow-basics--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [companion-object, difficulty/easy, object, singleton]
+tags:
+- companion-object
+- difficulty/easy
+- object
+- singleton
+anki_cards:
+- slug: lang-088-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - c-kotlin
+  - c-kotlin-features
+- slug: lang-088-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - c-kotlin
+  - c-kotlin-features
 ---
 # Вопрос (RU)
 > Что такое object / companion object?

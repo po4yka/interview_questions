@@ -1,19 +1,47 @@
 ---
 id: kotlin-197
-title: "Callsuper Annotation / Аннотация CallSuper"
-aliases: [CallSuper Annotation, Аннотация CallSuper]
+title: Callsuper Annotation / Аннотация CallSuper
+aliases:
+- CallSuper Annotation
+- Аннотация CallSuper
 topic: kotlin
-subtopics: [annotations]
+subtopics:
+- annotations
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features, q-annotation-processing--android--medium]
+related:
+- c-kotlin-features
+- q-annotation-processing--android--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [android, annotations, best-practices, difficulty/medium, kotlin, lifecycle]
+tags:
+- android
+- annotations
+- best-practices
+- difficulty/medium
+- kotlin
+- lifecycle
+anki_cards:
+- slug: kotlin-197-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - annotations
+- slug: kotlin-197-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - annotations
 ---
 # Вопрос (RU)
 > Что такое аннотация `@CallSuper` и когда её следует использовать?

@@ -1,19 +1,51 @@
 ---
 id: kotlin-154
-title: "Inline Function Limitations / Ограничения inline функций"
-aliases: [Inline function restrictions Kotlin, Kotlin inline function limitations, Ограничения inline функций Kotlin]
+title: Inline Function Limitations / Ограничения inline функций
+aliases:
+- Inline function restrictions Kotlin
+- Kotlin inline function limitations
+- Ограничения inline функций Kotlin
 topic: kotlin
-subtopics: [coroutines, delegation, flow]
+subtopics:
+- coroutines
+- delegation
+- flow
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-coroutine-context-elements--kotlin--hard, q-testing-stateflow-sharedflow--kotlin--medium]
+related:
+- c-kotlin
+- c-kotlin-features
+- q-coroutine-context-elements--kotlin--hard
+- q-testing-stateflow-sharedflow--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium]
+tags:
+- difficulty/medium
+anki_cards:
+- slug: kotlin-154-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - delegation
+  - flow
+- slug: kotlin-154-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - coroutines
+  - delegation
+  - flow
 ---
 # Вопрос (RU)
 > Когда нельзя или нежелательно использовать inline-функции в Kotlin, и какие ограничения при этом действуют?

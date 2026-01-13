@@ -1,19 +1,48 @@
 ---
 id: lang-096
-title: "Kotlin Immutable Collections / Неизменяемые коллекции Kotlin"
-aliases: [Kotlin Immutable Collections, Неизменяемые коллекции Kotlin]
+title: Kotlin Immutable Collections / Неизменяемые коллекции Kotlin
+aliases:
+- Kotlin Immutable Collections
+- Неизменяемые коллекции Kotlin
 topic: kotlin
-subtopics: [collections, type-system]
+subtopics:
+- collections
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-val-vs-var--kotlin--easy]
+related:
+- c-kotlin
+- q-kotlin-val-vs-var--kotlin--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [collections, difficulty/easy, immutability, kotlin]
+tags:
+- collections
+- difficulty/easy
+- immutability
+- kotlin
+anki_cards:
+- slug: lang-096-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - type-system
+- slug: lang-096-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - type-system
 ---
 # Вопрос (RU)
 > Какой механизм позволяет создавать неизменяемые (только для чтения) коллекции в Kotlin?

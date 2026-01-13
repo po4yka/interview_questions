@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-flow-time-operators--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-flow-time-operators--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-127
 title: "Flow Time Operators: debounce, sample, throttle / Временные операторы Flow"

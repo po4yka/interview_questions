@@ -1,19 +1,52 @@
 ---
 id: lang-095
-title: "Kotlin Override Keyword / Ключевое слово override в Kotlin"
-aliases: [Kotlin Override Keyword, Ключевое слово override в Kotlin]
+title: Kotlin Override Keyword / Ключевое слово override в Kotlin
+aliases:
+- Kotlin Override Keyword
+- Ключевое слово override в Kotlin
 topic: kotlin
-subtopics: [inheritance, type-system]
+subtopics:
+- inheritance
+- type-system
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-job-lifecycle--kotlin--medium]
+related:
+- c-kotlin
+- q-coroutine-job-lifecycle--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [abstract, difficulty/easy, inheritance, keywords, kotlin, open, override, polymorphism]
+tags:
+- abstract
+- difficulty/easy
+- inheritance
+- keywords
+- kotlin
+- open
+- override
+- polymorphism
+anki_cards:
+- slug: lang-095-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - inheritance
+  - type-system
+- slug: lang-095-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - inheritance
+  - type-system
 ---
 # Вопрос (RU)
 > Какое ключевое слово используется для определения метода, который должен быть переопределен в подклассе?

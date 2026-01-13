@@ -1,19 +1,48 @@
 ---
 id: lang-008
-title: "Kotlin Map Collection / Map коллекция в Kotlin"
-aliases: [Kotlin Map Collection, Map коллекция в Kotlin]
+title: Kotlin Map Collection / Map коллекция в Kotlin
+aliases:
+- Kotlin Map Collection
+- Map коллекция в Kotlin
 topic: kotlin
-subtopics: [collections, types]
+subtopics:
+- collections
+- types
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-09
-tags: [collections, difficulty/easy, kotlin, map]
+tags:
+- collections
+- difficulty/easy
+- kotlin
+- map
 moc: moc-kotlin
-related: [c-collections, c-kotlin]
+related:
+- c-collections
+- c-kotlin
+anki_cards:
+- slug: lang-008-0-en
+  language: en
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - types
+- slug: lang-008-0-ru
+  language: ru
+  difficulty: 0.3
+  tags:
+  - Kotlin
+  - difficulty::easy
+  - collections
+  - types
 ---
 # Вопрос (RU)
 > Расскажи про коллекцию `Map`

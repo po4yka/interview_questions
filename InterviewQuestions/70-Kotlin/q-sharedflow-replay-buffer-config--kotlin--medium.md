@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-sharedflow-replay-buffer-config--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-sharedflow-replay-buffer-config--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---id: kotlin-080
 title: "SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера"
 aliases: [Hot Flow, Replay Buffer, SharedFlow, SharedFlow Configuration]

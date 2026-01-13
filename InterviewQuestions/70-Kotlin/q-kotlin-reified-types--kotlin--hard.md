@@ -1,19 +1,50 @@
 ---
 id: kotlin-198
-title: "Kotlin Reified Types / Reified типы в Kotlin"
-aliases: [Kotlin Reified Types, Reified типы в Kotlin]
+title: Kotlin Reified Types / Reified типы в Kotlin
+aliases:
+- Kotlin Reified Types
+- Reified типы в Kotlin
 topic: kotlin
-subtopics: [generics, type-system]
+subtopics:
+- generics
+- type-system
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutinescope-vs-supervisorscope--kotlin--medium]
+related:
+- c-kotlin
+- q-coroutinescope-vs-supervisorscope--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/hard, generics, inline, kotlin, reified, type-parameters]
+tags:
+- difficulty/hard
+- generics
+- inline
+- kotlin
+- reified
+- type-parameters
+anki_cards:
+- slug: kotlin-198-0-en
+  language: en
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - type-system
+- slug: kotlin-198-0-ru
+  language: ru
+  difficulty: 0.7
+  tags:
+  - Kotlin
+  - difficulty::hard
+  - generics
+  - type-system
 ---
 # Вопрос (RU)
 

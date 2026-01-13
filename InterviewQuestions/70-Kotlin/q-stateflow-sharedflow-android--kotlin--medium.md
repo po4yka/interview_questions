@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-stateflow-sharedflow-android--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-stateflow-sharedflow-android--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-084
 title: "StateFlow and SharedFlow in Android / StateFlow и SharedFlow в Android"

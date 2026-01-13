@@ -1,19 +1,49 @@
 ---
 id: kotlin-149
-title: "Kotlin Sealed When Exhaustive / sealed и exhaustive when в Kotlin"
-aliases: [Kotlin Sealed When Exhaustive, sealed и exhaustive when в Kotlin]
+title: Kotlin Sealed When Exhaustive / sealed и exhaustive when в Kotlin
+aliases:
+- Kotlin Sealed When Exhaustive
+- sealed и exhaustive when в Kotlin
 topic: kotlin
-subtopics: [sealed-classes]
+subtopics:
+- sealed-classes
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-sealed-classes, q-flow-combining-zip-combine--kotlin--medium, q-sequences-detailed--kotlin--medium]
+related:
+- c-kotlin
+- c-sealed-classes
+- q-flow-combining-zip-combine--kotlin--medium
+- q-sequences-detailed--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, kotlin, result, sealed-classes, state-machine, when-expression]
+tags:
+- difficulty/medium
+- kotlin
+- result
+- sealed-classes
+- state-machine
+- when-expression
+anki_cards:
+- slug: kotlin-149-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - sealed-classes
+- slug: kotlin-149-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - sealed-classes
 ---
 # Вопрос (RU)
 

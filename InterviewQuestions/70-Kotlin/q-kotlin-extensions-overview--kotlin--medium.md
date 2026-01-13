@@ -1,19 +1,50 @@
 ---
 id: lang-029
-title: "Kotlin Extensions Overview / Обзор расширений Kotlin"
-aliases: [Kotlin Extensions Overview, Обзор расширений Kotlin]
+title: Kotlin Extensions Overview / Обзор расширений Kotlin
+aliases:
+- Kotlin Extensions Overview
+- Обзор расширений Kotlin
 topic: kotlin
-subtopics: [extensions, type-system]
+subtopics:
+- extensions
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-channel-pipelines--kotlin--hard, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
+related:
+- c-kotlin
+- q-channel-pipelines--kotlin--hard
+- q-supervisor-scope-vs-coroutine-scope--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, extension-functions, extension-properties, extensions, kotlin]
+tags:
+- difficulty/medium
+- extension-functions
+- extension-properties
+- extensions
+- kotlin
+anki_cards:
+- slug: lang-029-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - extensions
+  - type-system
+- slug: lang-029-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - extensions
+  - type-system
 ---
 # Вопрос (RU)
 > Что известно про extension?

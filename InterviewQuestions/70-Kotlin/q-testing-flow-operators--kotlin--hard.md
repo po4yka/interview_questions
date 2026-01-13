@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-testing-flow-operators--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-testing-flow-operators--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-082
 title: "Testing Flow Operators and Transformations / Тестирование операторов и трансформаций Flow"

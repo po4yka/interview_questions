@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-adaptive-layouts-compose--kotlin--hard-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-adaptive-layouts-compose--kotlin--hard-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-079
 title: "Adaptive Layouts in Compose / Адаптивные layouts в Compose"

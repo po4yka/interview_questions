@@ -1,19 +1,50 @@
 ---
 id: lang-067
-title: "Iterator Order Guarantee / Гарантия порядка Iterator"
-aliases: [Iterator Order Guarantee, Гарантия порядка Iterator]
+title: Iterator Order Guarantee / Гарантия порядка Iterator
+aliases:
+- Iterator Order Guarantee
+- Гарантия порядка Iterator
 topic: kotlin
-subtopics: [collections, iterators, ordering]
+subtopics:
+- collections
+- iterators
+- ordering
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections]
+related:
+- c-collections
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, difficulty/medium, iterators, kotlin]
+tags:
+- collections
+- difficulty/medium
+- iterators
+- kotlin
+anki_cards:
+- slug: lang-067-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - iterators
+  - ordering
+- slug: lang-067-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - iterators
+  - ordering
 ---
 # Вопрос (RU)
 > После перебирания данных итератором, гарантируется ли очередность получения этих данных?

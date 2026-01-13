@@ -1,3 +1,18 @@
+---
+anki_cards:
+- slug: q-rxjava-to-coroutines-migration--kotlin--medium-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+- slug: q-rxjava-to-coroutines-migration--kotlin--medium-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+---
 ---\
 id: kotlin-188
 title: "Migrating from RxJava to Kotlin Coroutines / Миграция сRxJava на Kotlin корутины"

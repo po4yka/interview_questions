@@ -1,19 +1,53 @@
 ---
 id: lang-044
-title: "Hashmap How It Works / Как работает HashMap"
-aliases: [Hashmap How It Works, Как работает HashMap]
+title: Hashmap How It Works / Как работает HashMap
+aliases:
+- Hashmap How It Works
+- Как работает HashMap
 topic: kotlin
-subtopics: [collections, data-structures, hash-tables]
+subtopics:
+- collections
+- data-structures
+- hash-tables
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-hash-map]
+related:
+- c-collections
+- c-hash-map
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, data-structures, difficulty/medium, hash-tables, hashmap, kotlin]
+tags:
+- collections
+- data-structures
+- difficulty/medium
+- hash-tables
+- hashmap
+- kotlin
+anki_cards:
+- slug: lang-044-0-en
+  language: en
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - data-structures
+  - hash-tables
+- slug: lang-044-0-ru
+  language: ru
+  difficulty: 0.5
+  tags:
+  - Kotlin
+  - difficulty::medium
+  - collections
+  - data-structures
+  - hash-tables
 ---
 # Вопрос (RU)
 > Как работает `HashMap`?
