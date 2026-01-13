@@ -1,7 +1,15 @@
+---
 id: kotlin-066
-title: "Actor Pattern with Coroutines / Паттерн Actor с корутинами"
-aliases: ["Actor Pattern with Coroutines", "Паттерн Actor с корутинами"]
-
+title: Actor Pattern with Coroutines / Паттерн Actor с корутинами
+anki_cards:
+- slug: q-actor-pattern-0-en
+  language: en
+- slug: q-actor-pattern-0-ru
+  language: ru
+aliases:
+- Actor Pattern with Coroutines
+- Паттерн Actor с корутинами
+---
 # Classification
 topic: kotlin
 subtopics: [channels, coroutines, state-management]

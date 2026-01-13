@@ -1,31 +1,49 @@
 ---
----
----id: kotlin-060
-title: "Channel Pipelines in Kotlin / Конвейеры каналов в Kotlin"
-aliases: ["Channel Pipelines in Kotlin", "Конвейеры каналов в Kotlin"]
-
-# Classification
+'---id': kotlin-060
+title: Channel Pipelines in Kotlin / Конвейеры каналов в Kotlin
+anki_cards:
+- slug: q-channel-pipelines-0-en
+  language: en
+- slug: q-channel-pipelines-0-ru
+  language: ru
+aliases:
+- Channel Pipelines in Kotlin
+- Конвейеры каналов в Kotlin
 topic: kotlin
-subtopics: [channels, coroutines, pipelines]
+subtopics:
+- channels
+- coroutines
+- pipelines
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Created for vault completeness
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-kotlin-coroutines-basics, c-stateflow, q-flow-backpressure-strategies--kotlin--hard, q-kotlin-channels--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium]
-
-# Timestamps
+related:
+- c-coroutines
+- c-kotlin
+- c-kotlin-coroutines-basics
+- c-stateflow
+- q-flow-backpressure-strategies--kotlin--hard
+- q-kotlin-channels--kotlin--medium
+- q-produce-actor-builders--kotlin--medium
+- q-structured-concurrency-kotlin--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09
-
-tags: [backpressure, channels, coroutines, difficulty/hard, fan-in, fan-out, kotlin, pipelines]
+tags:
+- backpressure
+- channels
+- coroutines
+- difficulty/hard
+- fan-in
+- fan-out
+- kotlin
+- pipelines
 ---
 # Вопрос (RU)
 > Объясните конвейеры каналов в корутинах Kotlin. Как реализовать паттерны производитель-потребитель, fan-out, fan-in и стратегии буферизации? Приведите примеры реальных архитектур конвейеров.

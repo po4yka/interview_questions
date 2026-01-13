@@ -1,23 +1,45 @@
 ---
----
----id: kotlin-038
-title: "Back Pressure в Kotlin Flow / Back Pressure in Kotlin Flow"
-aliases: ["Back Pressure in Kotlin Flow", "Back Pressure в Kotlin Flow"]
+'---id': kotlin-038
+title: Back Pressure в Kotlin Flow / Back Pressure in Kotlin Flow
+anki_cards:
+- slug: q-backpressure-in-kotlin-flow-0-en
+  language: en
+- slug: q-backpressure-in-kotlin-flow-0-ru
+  language: ru
+aliases:
+- Back Pressure in Kotlin Flow
+- Back Pressure в Kotlin Flow
 topic: kotlin
-subtopics: [backpressure, buffer, conflate]
+subtopics:
+- backpressure
+- buffer
+- conflate
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
+language_tags:
+- en
+- ru
+source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, c-stateflow, q-debounce-throttle-flow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
+related:
+- c-flow
+- c-kotlin
+- c-stateflow
+- q-debounce-throttle-flow--kotlin--medium
+- q-kotlin-flow-basics--kotlin--medium
 created: 2025-10-06
 updated: 2025-11-11
-tags: [backpressure, buffer, conflate, difficulty/medium, flow, kotlin, operators]
-
+tags:
+- backpressure
+- buffer
+- conflate
+- difficulty/medium
+- flow
+- kotlin
+- operators
 ---
 # Вопрос (RU)
 > Что такое Back Pressure в Kotlin `Flow`? Какие стратегии существуют для его обработки?

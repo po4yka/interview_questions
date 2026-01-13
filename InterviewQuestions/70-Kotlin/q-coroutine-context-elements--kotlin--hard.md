@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-239
+anki_cards:
+- slug: q-coroutine-context-elements-0-en
+  language: en
+- slug: q-coroutine-context-elements-0-ru
+  language: ru
 title: "What are CoroutineContext elements and how do they combine? / Элементы CoroutineContext и их комбинирование"
 aliases: [CoroutineContext Elements, Элементы CoroutineContext]
 topic: kotlin

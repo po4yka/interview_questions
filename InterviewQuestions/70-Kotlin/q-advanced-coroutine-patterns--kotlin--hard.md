@@ -1,7 +1,15 @@
+---
 id: kotlin-133
-title: "Advanced Coroutine Patterns / Продвинутые паттерны корутин"
-aliases: ["Advanced Coroutine Patterns", "Продвинутые паттерны корутин"]
-
+title: Advanced Coroutine Patterns / Продвинутые паттерны корутин
+anki_cards:
+- slug: q-advanced-coroutine-patterns-0-en
+  language: en
+- slug: q-advanced-coroutine-patterns-0-ru
+  language: ru
+aliases:
+- Advanced Coroutine Patterns
+- Продвинутые паттерны корутин
+---
 # Classification
 topic: kotlin
 subtopics: [coroutines, pipeline, producer-consumer]

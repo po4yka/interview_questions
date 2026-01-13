@@ -1,33 +1,44 @@
 ---
----
----\
 id: kotlin-114
-title: "Channel Buffering Strategies / Стратегии буферизации каналов"
-aliases: ["Channel Buffering Strategies", "Стратегии буферизации каналов"]
-
-# Classification
+title: Channel Buffering Strategies / Стратегии буферизации каналов
+anki_cards:
+- slug: q-channel-buffering-strategies-0-en
+  language: en
+- slug: q-channel-buffering-strategies-0-ru
+  language: ru
+aliases:
+- Channel Buffering Strategies
+- Стратегии буферизации каналов
 topic: kotlin
-subtopics: [coroutines]
+subtopics:
+- coroutines
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive guide on Channel buffering strategies
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-flow-backpressure--kotlin--hard]
-
-# Timestamps
+related:
+- c-coroutines
+- c-kotlin
+- q-flow-backpressure--kotlin--hard
 created: 2025-10-12
 updated: 2025-11-11
-
-tags: [buffering, channels, conflated, coroutines, difficulty/hard, kotlin, performance, rendezvous, unlimited]
----\
+tags:
+- buffering
+- channels
+- conflated
+- coroutines
+- difficulty/hard
+- kotlin
+- performance
+- rendezvous
+- unlimited
+---
 # Вопрос (RU)
 > Что такое стратегии буферизации каналов в Kotlin? Объясните каналы RENDEZVOUS, BUFFERED, UNLIMITED и CONFLATED и когда использовать каждый.
 

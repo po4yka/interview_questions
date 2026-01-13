@@ -1,5 +1,11 @@
+---
 id: kotlin-045
 title: Access Modifiers in Kotlin / Модификаторы доступа в Kotlin
+anki_cards:
+- slug: q-access-modifiers-0-en
+  language: en
+- slug: q-access-modifiers-0-ru
+  language: ru
 aliases:
 - Access Modifiers in Kotlin
 - Модификаторы доступа в Kotlin

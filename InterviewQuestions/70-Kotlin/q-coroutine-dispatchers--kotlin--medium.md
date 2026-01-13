@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-096
+anki_cards:
+- slug: q-coroutine-dispatchers-0-en
+  language: en
+- slug: q-coroutine-dispatchers-0-ru
+  language: ru
 title: "Coroutine Dispatchers / Диспетчеры корутин"
 aliases: ["Coroutine Dispatchers", "Диспетчеры корутин"]
 

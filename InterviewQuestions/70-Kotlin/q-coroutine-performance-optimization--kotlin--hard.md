@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-083
+anki_cards:
+- slug: q-coroutine-performance-optimization-0-en
+  language: en
+- slug: q-coroutine-performance-optimization-0-ru
+  language: ru
 title: "Coroutine Performance Optimization / Оптимизация производительности корутин"
 aliases: ["Coroutine Performance Optimization", "Оптимизация производительности корутин"]
 

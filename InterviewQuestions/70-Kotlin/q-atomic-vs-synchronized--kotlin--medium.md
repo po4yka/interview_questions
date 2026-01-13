@@ -1,5 +1,11 @@
+---
 id: kotlin-146
 title: Atomic vs Synchronized / Atomic против Synchronized
+anki_cards:
+- slug: q-atomic-vs-synchronized-0-en
+  language: en
+- slug: q-atomic-vs-synchronized-0-ru
+  language: ru
 aliases:
 - Atomic vs Synchronized
 - Atomic против Synchronized

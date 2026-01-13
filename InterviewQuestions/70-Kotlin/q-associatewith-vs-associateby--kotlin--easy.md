@@ -1,5 +1,11 @@
+---
 id: kotlin-140
 title: Associatewith Vs Associateby / associateWith против associateBy
+anki_cards:
+- slug: q-associatewith-vs-associateby-0-en
+  language: en
+- slug: q-associatewith-vs-associateby-0-ru
+  language: ru
 aliases:
 - associateWith vs associateBy
 - associateWith против associateBy

@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-205
+anki_cards:
+- slug: q-coroutine-cancellation-mechanisms-0-en
+  language: en
+- slug: q-coroutine-cancellation-mechanisms-0-ru
+  language: ru
 title: "Coroutine Cancellation Mechanisms / Механизмы Отмены Корутин"
 aliases: [Coroutine Cancellation, Механизмы отмены корутин]
 topic: kotlin

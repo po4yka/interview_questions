@@ -1,31 +1,39 @@
 ---
----
----id: kotlin-090
-title: "Coroutine Memory Leaks and Prevention / Утечки памяти в корутинах и их предотвращение"
-aliases: ["Coroutine Memory Leaks and Prevention", "Утечки памяти в корутинах и их предотвращение"]
-
-# Classification
+'---id': kotlin-090
+title: Coroutine Memory Leaks and Prevention / Утечки памяти в корутинах и их предотвращение
+anki_cards:
+- slug: q-coroutine-memory-leaks-0-en
+  language: en
+- slug: q-coroutine-memory-leaks-0-ru
+  language: ru
+aliases:
+- Coroutine Memory Leaks and Prevention
+- Утечки памяти в корутинах и их предотвращение
 topic: kotlin
-subtopics: [coroutines]
+subtopics:
+- coroutines
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140024
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-kotlin-sam-interfaces--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
-
-# Timestamps
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-kotlin-sam-interfaces--kotlin--medium
+- q-visibility-modifiers-kotlin--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09
-
-tags: [coroutines, difficulty/hard, kotlin]
+tags:
+- coroutines
+- difficulty/hard
+- kotlin
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140024

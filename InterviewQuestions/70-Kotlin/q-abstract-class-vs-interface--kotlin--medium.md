@@ -1,5 +1,11 @@
+---
 id: kotlin-012
 title: Abstract Class vs Interface / Абстрактный класс vs интерфейс
+anki_cards:
+- slug: q-abstract-class-vs-interface-0-en
+  language: en
+- slug: q-abstract-class-vs-interface-0-ru
+  language: ru
 aliases:
 - Abstract Class vs Interface
 - Абстрактный класс vs интерфейс

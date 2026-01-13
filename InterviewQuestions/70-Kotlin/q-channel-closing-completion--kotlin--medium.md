@@ -1,33 +1,45 @@
 ---
----
----\
 id: kotlin-078
-title: "Channel Closing and Completion / Закрытие и завершение каналов"
-aliases: ["Channel Closing and Completion", "Закрытие и завершение каналов"]
-
-# Classification
+title: Channel Closing and Completion / Закрытие и завершение каналов
+anki_cards:
+- slug: q-channel-closing-completion-0-en
+  language: en
+- slug: q-channel-closing-completion-0-ru
+  language: ru
+aliases:
+- Channel Closing and Completion
+- Закрытие и завершение каналов
 topic: kotlin
-subtopics: [channels, cleanup, coroutines]
+subtopics:
+- channels
+- cleanup
+- coroutines
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines Channel Lifecycle Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-channels-basics-types--kotlin--medium, q-produce-actor-builders--kotlin--medium]
-
-# Timestamps
+related:
+- c-coroutines
+- c-kotlin
+- q-channels-basics-types--kotlin--medium
+- q-produce-actor-builders--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09
-
-tags: [channels, cleanup, closing, completion, coroutines, difficulty/medium, kotlin]
----\
+tags:
+- channels
+- cleanup
+- closing
+- completion
+- coroutines
+- difficulty/medium
+- kotlin
+---
 # Вопрос (RU)
 > Как правильно закрывать и завершать каналы? Объясните close(), cancel(), разницу между ClosedSendChannelException и ClosedReceiveChannelException и лучшие практики очистки ресурсов.
 

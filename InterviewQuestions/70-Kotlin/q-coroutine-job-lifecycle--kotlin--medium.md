@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-241
+anki_cards:
+- slug: q-coroutine-job-lifecycle-0-en
+  language: en
+- slug: q-coroutine-job-lifecycle-0-ru
+  language: ru
 title: "What is a Job and its lifecycle in Kotlin coroutines? / Job и его жизненный цикл"
 aliases: [Job Lifecycle, Job и его жизненный цикл]
 topic: kotlin

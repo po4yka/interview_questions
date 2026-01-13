@@ -1,21 +1,46 @@
 ---
----
----id: kotlin-122
-title: "Continuation and CPS: how suspend functions work internally / Continuation и CPS: как работают suspend функции внутри"
+'---id': kotlin-122
+title: 'Continuation and CPS: how suspend functions work internally / Continuation
+  и CPS: как работают suspend функции внутри'
+anki_cards:
+- slug: q-continuation-cps-internals-0-en
+  language: en
+- slug: q-continuation-cps-internals-0-ru
+  language: ru
 topic: kotlin
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-12
 updated: 2025-11-11
-tags: [advanced, continuation, coroutines, cps, difficulty/hard, internals, kotlin, state-machine]
-aliases: ["Continuation and CPS internals in Kotlin", "Continuation и CPS: внутренняя работа suspend-функций"]
+tags:
+- advanced
+- continuation
+- coroutines
+- cps
+- difficulty/hard
+- internals
+- kotlin
+- state-machine
+aliases:
+- Continuation and CPS internals in Kotlin
+- 'Continuation и CPS: внутренняя работа suspend-функций'
 question_kind: theory
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
-subtopics: [continuation, coroutines, state-machine]
-
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-common-coroutine-mistakes--kotlin--medium
+- q-debugging-coroutines-techniques--kotlin--medium
+- q-suspend-cancellable-coroutine--kotlin--hard
+subtopics:
+- continuation
+- coroutines
+- state-machine
 ---
 # Вопрос (RU)
 > Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?

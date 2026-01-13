@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-091
+anki_cards:
+- slug: q-coroutine-exception-handler-0-en
+  language: en
+- slug: q-coroutine-exception-handler-0-ru
+  language: ru
 title: "CoroutineExceptionHandler: installation and usage / CoroutineExceptionHandler: установка и использование"
 topic: kotlin
 question_kind: coding

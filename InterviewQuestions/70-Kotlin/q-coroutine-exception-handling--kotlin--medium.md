@@ -1,23 +1,39 @@
 ---
----
----id: kotlin-042
-title: "Coroutine Exception Handling / Обработка исключений в корутинах"
-aliases: ["Coroutine Exception Handling", "Обработка исключений в корутинах"]
+'---id': kotlin-042
+title: Coroutine Exception Handling / Обработка исключений в корутинах
+anki_cards:
+- slug: q-coroutine-exception-handling-0-en
+  language: en
+- slug: q-coroutine-exception-handling-0-ru
+  language: ru
+aliases:
+- Coroutine Exception Handling
+- Обработка исключений в корутинах
 topic: kotlin
-subtopics: [coroutines, error-handling]
+subtopics:
+- coroutines
+- error-handling
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
+language_tags:
+- en
+- ru
+source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-stateflow, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
+related:
+- c-concurrency
+- c-stateflow
+- q-supervisor-scope-vs-coroutine-scope--kotlin--medium
 created: 2025-10-06
 updated: 2025-11-11
-tags: [coroutines, difficulty/medium, error-handling, kotlin]
-
+tags:
+- coroutines
+- difficulty/medium
+- error-handling
+- kotlin
 ---
 # Вопрос (RU)
 > Как работает обработка исключений в Kotlin корутинах? В чем разница между coroutineScope и supervisorScope?

@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-102
+anki_cards:
+- slug: q-coroutine-builders-basics-0-en
+  language: en
+- slug: q-coroutine-builders-basics-0-ru
+  language: ru
 title: "Coroutine Builders: launch, async, runBlocking / Билдеры корутин: launch, async, runBlocking"
 aliases: ["Coroutine Builders: launch, async, runBlocking", "Билдеры корутин: launch, async, runBlocking"]
 

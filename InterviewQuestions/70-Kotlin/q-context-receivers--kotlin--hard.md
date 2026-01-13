@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-142
+anki_cards:
+- slug: q-context-receivers-0-en
+  language: en
+- slug: q-context-receivers-0-ru
+  language: ru
 title: "Context Receivers / Context Receivers"
 aliases: ["Context Receivers in Kotlin", "Context Receivers", "Контекстные получатели в Kotlin", "Контекстные получатели"]
 topic: kotlin

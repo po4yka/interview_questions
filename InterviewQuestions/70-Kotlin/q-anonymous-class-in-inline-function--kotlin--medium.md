@@ -1,29 +1,47 @@
+---
 id: kotlin-047
 title: Anonymous Class in Inline Function / Анонимный класс в inline функции
-aliases: [Anonymous Class in Inline Function, Анонимный класс в inline функции]
-
-# Classification
+anki_cards:
+- slug: q-anonymous-class-in-inline-function-0-en
+  language: en
+- slug: q-anonymous-class-in-inline-function-0-ru
+  language: ru
+aliases:
+- Anonymous Class in Inline Function
+- Анонимный класс в inline функции
 topic: kotlin
-subtopics: [anonymous-classes, inline, lambdas]
+subtopics:
+- anonymous-classes
+- inline
+- lambdas
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source: ""
-source_note: ""
-
-# Workflow & relations
+language_tags:
+- en
+- ru
+source: ''
+source_note: ''
 status: draft
 moc: moc-kotlin
-related: [c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, q-coroutine-timeout-withtimeout--kotlin--medium, q-delegates-compilation--kotlin--hard, q-structured-concurrency-kotlin--kotlin--medium]
-
-# Timestamps
+related:
+- c-compose-recomposition
+- c-kotlin
+- c-perfetto
+- c-power-profiling
+- q-coroutine-timeout-withtimeout--kotlin--medium
+- q-delegates-compilation--kotlin--hard
+- q-structured-concurrency-kotlin--kotlin--medium
 created: 2025-10-06
 updated: 2025-11-10
-
-tags: [anonymous-classes, difficulty/medium, inline, kotlin, lambdas, object-expressions, performance]
+tags:
+- anonymous-classes
+- difficulty/medium
+- inline
+- kotlin
+- lambdas
+- object-expressions
+- performance
 ---
 # Вопрос (RU)
 > Можно ли создать анонимный класс внутри inline функции в Kotlin?

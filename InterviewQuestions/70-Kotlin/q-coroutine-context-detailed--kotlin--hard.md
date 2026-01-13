@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-048
+anki_cards:
+- slug: q-coroutine-context-detailed-0-en
+  language: en
+- slug: q-coroutine-context-detailed-0-ru
+  language: ru
 title: "CoroutineContext explained in detail / CoroutineContext детально"
 aliases: ["CoroutineContext explained in detail", "CoroutineContext детально"]
 

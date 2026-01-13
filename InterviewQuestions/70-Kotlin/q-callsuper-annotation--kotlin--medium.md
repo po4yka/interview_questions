@@ -1,6 +1,11 @@
 ---
 id: kotlin-197
 title: Callsuper Annotation / Аннотация CallSuper
+anki_cards:
+- slug: q-callsuper-annotation-0-en
+  language: en
+- slug: q-callsuper-annotation-0-ru
+  language: ru
 aliases:
 - CallSuper Annotation
 - Аннотация CallSuper

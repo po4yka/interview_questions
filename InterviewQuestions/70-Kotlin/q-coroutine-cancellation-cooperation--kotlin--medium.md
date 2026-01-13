@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-051
+anki_cards:
+- slug: q-coroutine-cancellation-cooperation-0-en
+  language: en
+- slug: q-coroutine-cancellation-cooperation-0-ru
+  language: ru
 title: "Coroutine Cancellation Cooperation / Кооперативная отмена корутин"
 aliases: ["Coroutine Cancellation Cooperation", "Кооперативная отмена корутин"]
 

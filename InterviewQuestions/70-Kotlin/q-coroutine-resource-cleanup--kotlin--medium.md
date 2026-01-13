@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-210
+anki_cards:
+- slug: q-coroutine-resource-cleanup-0-en
+  language: en
+- slug: q-coroutine-resource-cleanup-0-ru
+  language: ru
 title: "Resource Cleanup in Coroutines / Очистка Ресурсов в Корутинах"
 aliases: [Resource Cleanup Coroutines, Очистка ресурсов в корутинах]
 topic: kotlin

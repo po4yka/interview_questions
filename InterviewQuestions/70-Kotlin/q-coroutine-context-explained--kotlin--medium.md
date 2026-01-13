@@ -2,6 +2,11 @@
 ---
 ---\
 id: kotlin-039
+anki_cards:
+- slug: q-coroutine-context-explained-0-en
+  language: en
+- slug: q-coroutine-context-explained-0-ru
+  language: ru
 title: Coroutine Context Explained / CoroutineContext объяснение
 aliases: [Coroutine Context Explained, CoroutineContext объяснение]
 topic: kotlin

@@ -1,23 +1,45 @@
 ---
----
----id: kotlin-085
-title: "Channel vs Flow Comparison / Сравнение Channel и Flow"
-aliases: ["Channel vs Flow Comparison", "Сравнение Channel и Flow"]
+'---id': kotlin-085
+title: Channel vs Flow Comparison / Сравнение Channel и Flow
+anki_cards:
+- slug: q-channel-flow-comparison-0-en
+  language: en
+- slug: q-channel-flow-comparison-0-ru
+  language: ru
+aliases:
+- Channel vs Flow Comparison
+- Сравнение Channel и Flow
 topic: kotlin
-subtopics: [channels, coroutines]
+subtopics:
+- channels
+- coroutines
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines Channel vs Flow Guide
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-stateflow, q-channels-basics-types--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
+related:
+- c-concurrency
+- c-stateflow
+- q-channels-basics-types--kotlin--medium
+- q-kotlin-flow-basics--kotlin--medium
+- q-stateflow-sharedflow-differences--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [channels, cold-stream, concurrency, coroutines, difficulty/medium, flow, hot-stream, kotlin]
-
+tags:
+- channels
+- cold-stream
+- concurrency
+- coroutines
+- difficulty/medium
+- flow
+- hot-stream
+- kotlin
 ---
 # Вопрос (RU)
 > В чем разница между `Channel` и `Flow`? Объясните горячие и холодные потоки, обработку backpressure и когда выбирать каждый подход.

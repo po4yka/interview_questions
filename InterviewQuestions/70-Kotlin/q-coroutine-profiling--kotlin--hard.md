@@ -1,23 +1,39 @@
 ---
----
----id: kotlin-077
-title: "Coroutine Profiling and Debugging / Профилирование и отладка корутин"
-aliases: ["Coroutine Profiling and Debugging", "Профилирование и отладка корутин"]
+'---id': kotlin-077
+title: Coroutine Profiling and Debugging / Профилирование и отладка корутин
+anki_cards:
+- slug: q-coroutine-profiling-0-en
+  language: en
+- slug: q-coroutine-profiling-0-ru
+  language: ru
+aliases:
+- Coroutine Profiling and Debugging
+- Профилирование и отладка корутин
 topic: kotlin
-subtopics: [coroutines]
+subtopics:
+- coroutines
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140025
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-debugging, c-kotlin, c-stateflow, q-advanced-coroutine-patterns--kotlin--hard]
+related:
+- c-coroutines
+- c-debugging
+- c-kotlin
+- c-stateflow
+- q-advanced-coroutine-patterns--kotlin--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [coroutines, difficulty/hard, kotlin]
-
+tags:
+- coroutines
+- difficulty/hard
+- kotlin
 ---
 # Вопрос (RU)
 > Профилирование и отладка корутин в Kotlin: какие инструменты и подходы использовать для эффективной диагностики, поиска утечек и оптимизации производительности?

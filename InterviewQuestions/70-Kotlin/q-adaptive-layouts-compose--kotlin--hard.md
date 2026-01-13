@@ -1,19 +1,40 @@
+---
 id: kotlin-079
-title: "Adaptive Layouts in Compose / Адаптивные layouts в Compose"
-aliases: [Adaptive Layouts Compose, Адаптивные layouts Compose]
+title: Adaptive Layouts in Compose / Адаптивные layouts в Compose
+anki_cards:
+- slug: q-adaptive-layouts-compose-0-en
+  language: en
+- slug: q-adaptive-layouts-compose-0-ru
+  language: ru
+aliases:
+- Adaptive Layouts Compose
+- Адаптивные layouts Compose
 topic: kotlin
-subtopics: [jetpack-compose]
+subtopics:
+- jetpack-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-12
 updated: 2025-11-09
-tags: [adaptive-layouts, difficulty/hard, android/ui-compose, kotlin/adaptive-layouts, kotlin/jetpack-compose, responsive-design, window-size-classes]
+tags:
+- adaptive-layouts
+- difficulty/hard
+- android/ui-compose
+- kotlin/adaptive-layouts
+- kotlin/jetpack-compose
+- responsive-design
+- window-size-classes
 moc: moc-kotlin
-related: [c-jetpack-compose, c-window-size-class, q-android-jetpack-overview--android--easy]
----\
+related:
+- c-jetpack-compose
+- c-window-size-class
+- q-android-jetpack-overview--android--easy
+---
 # Вопрос (RU)
 > Как создавать адаптивные layouts в Compose? Что такое window size классы? Как обрабатывать телефоны, планшеты и складные устройства?
 

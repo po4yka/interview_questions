@@ -1,19 +1,37 @@
+---
 id: kotlin-160
-title: "ArrayList LinkedList Vector Difference / Разница ArrayList LinkedList и Vector"
-aliases: [ArrayList LinkedList Vector Difference, Разница ArrayList LinkedList Vector]
+title: ArrayList LinkedList Vector Difference / Разница ArrayList LinkedList и Vector
+anki_cards:
+- slug: q-arraylist-linkedlist-vector-difference-0-en
+  language: en
+- slug: q-arraylist-linkedlist-vector-difference-0-ru
+  language: ru
+aliases:
+- ArrayList LinkedList Vector Difference
+- Разница ArrayList LinkedList Vector
 topic: kotlin
-subtopics: [collections]
+subtopics:
+- collections
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-collections, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-enum-classes--kotlin--easy]
+related:
+- c-collections
+- q-coroutine-resource-cleanup--kotlin--medium
+- q-kotlin-enum-classes--kotlin--easy
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, data-structures, difficulty/medium, kotlin]
----\
+tags:
+- collections
+- data-structures
+- difficulty/medium
+- kotlin
+---
 # Вопрос (RU)
 > В чем разница между `ArrayList`, `LinkedList` и `Vector`?
 

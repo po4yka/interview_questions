@@ -1,21 +1,42 @@
 ---
----
 topic: kotlin
 id: kotlin-097
-title: "Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии буферизации каналов"
-aliases: [Channel Buffer Strategies, Стратегии буферизации каналов]
-subtopics: [channels, coroutines]
+title: 'Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии
+  буферизации каналов'
+anki_cards:
+- slug: q-channel-buffer-strategies-comparison-0-en
+  language: en
+- slug: q-channel-buffer-strategies-comparison-0-ru
+  language: ru
+aliases:
+- Channel Buffer Strategies
+- Стратегии буферизации каналов
+subtopics:
+- channels
+- coroutines
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 moc: moc-kotlin
-related: [q-statein-sharein-flow--kotlin--medium]
+related:
+- q-statein-sharein-flow--kotlin--medium
 status: draft
 created: 2025-10-12
 updated: 2025-10-31
-tags: [backpressure, buffer, capacity, channels, coroutines, difficulty/hard, kotlin, performance, producer-consumer]
----\
+tags:
+- backpressure
+- buffer
+- capacity
+- channels
+- coroutines
+- difficulty/hard
+- kotlin
+- performance
+- producer-consumer
+---
 # Вопрос (RU)
 
 Как работают различные стратегии буферизации каналов в Kotlin (RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED)? Объясните поведение send()/receive(), обработку противодавления, характеристики производительности, последствия для памяти и когда использовать каждую стратегию.

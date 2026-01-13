@@ -1,21 +1,42 @@
 ---
----
----id: kotlin-242
-title: "Parent-child relationships in structured concurrency / Отношения родитель-дитя"
-aliases: [Parent-Child Relationships, Отношения родитель-дитя]
+'---id': kotlin-242
+title: Parent-child relationships in structured concurrency / Отношения родитель-дитя
+anki_cards:
+- slug: q-coroutine-parent-child-relationship-0-en
+  language: en
+- slug: q-coroutine-parent-child-relationship-0-ru
+  language: ru
+aliases:
+- Parent-Child Relationships
+- Отношения родитель-дитя
 topic: kotlin
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 question_kind: theory
 status: draft
-created: "2025-10-12"
-updated: "2025-11-10"
-tags: ["coroutines", "difficulty/medium", "hierarchy", "job", "kotlin", "structured-concurrency"]
-description: "Note stub: to be expanded into a guide on parent-child relationships in structured concurrency in Kotlin coroutines"
+created: '2025-10-12'
+updated: '2025-11-10'
+tags:
+- coroutines
+- difficulty/medium
+- hierarchy
+- job
+- kotlin
+- structured-concurrency
+description: 'Note stub: to be expanded into a guide on parent-child relationships
+  in structured concurrency in Kotlin coroutines'
 moc: moc-kotlin
-related: [c-concurrency, c-coroutines, c-stateflow, q-coroutine-performance-optimization--kotlin--hard, q-retry-operators-flow--kotlin--medium]
-subtopics: [coroutines]
+related:
+- c-concurrency
+- c-coroutines
+- c-stateflow
+- q-coroutine-performance-optimization--kotlin--hard
+- q-retry-operators-flow--kotlin--medium
+subtopics:
+- coroutines
 ---
 # Вопрос (RU)
 

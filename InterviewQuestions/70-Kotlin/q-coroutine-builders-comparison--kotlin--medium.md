@@ -1,22 +1,43 @@
 ---
----
----id: kotlin-238
-title: "Comparison of all coroutine builders / Сравнение всех builders корутин"
-aliases: [Coroutine Builders Comparison, Сравнение coroutine builders]
+'---id': kotlin-238
+title: Comparison of all coroutine builders / Сравнение всех builders корутин
+anki_cards:
+- slug: q-coroutine-builders-comparison-0-en
+  language: en
+- slug: q-coroutine-builders-comparison-0-ru
+  language: ru
+aliases:
+- Coroutine Builders Comparison
+- Сравнение coroutine builders
 topic: kotlin
 difficulty: medium
 status: draft
-created: "2025-10-12"
-updated: "2025-11-09"
+created: '2025-10-12'
+updated: '2025-11-09'
 question_kind: theory
 original_language: en
-language_tags: [en, ru]
-subtopics: [builders, coroutines]
-tags: ["async", "builders", "coroutines", "difficulty/medium", "kotlin", "launch", "runblocking"]
-description: "Comprehensive comparison of Kotlin coroutine builders covering return types, blocking vs suspending behavior, use cases, and performance implications"
+language_tags:
+- en
+- ru
+subtopics:
+- builders
+- coroutines
+tags:
+- async
+- builders
+- coroutines
+- difficulty/medium
+- kotlin
+- launch
+- runblocking
+description: Comprehensive comparison of Kotlin coroutine builders covering return
+  types, blocking vs suspending behavior, use cases, and performance implications
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, c-stateflow, q-dispatcher-performance--kotlin--hard]
-
+related:
+- c-coroutines
+- c-kotlin
+- c-stateflow
+- q-dispatcher-performance--kotlin--hard
 ---
 # Вопрос (RU)
 

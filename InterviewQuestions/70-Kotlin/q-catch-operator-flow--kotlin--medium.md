@@ -1,24 +1,44 @@
 ---
----
----\
 id: kotlin-070
-title: "Catch Operator in Kotlin Flow / Оператор catch в Kotlin Flow"
-aliases: [Catch Operator in Kotlin Flow, Оператор catch в Kotlin Flow]
+title: Catch Operator in Kotlin Flow / Оператор catch в Kotlin Flow
+anki_cards:
+- slug: q-catch-operator-flow-0-en
+  language: en
+- slug: q-catch-operator-flow-0-ru
+  language: ru
+aliases:
+- Catch Operator in Kotlin Flow
+- Оператор catch в Kotlin Flow
 topic: kotlin
-subtopics: [coroutines, error-handling, flow]
+subtopics:
+- coroutines
+- error-handling
+- flow
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Deep dive into catch operator in Kotlin Flow
 status: draft
 moc: moc-kotlin
-related: [c-flow, q-flow-basics--kotlin--easy, q-flow-exception-handling--kotlin--medium, q-retry-operators-flow--kotlin--medium]
+related:
+- c-flow
+- q-flow-basics--kotlin--easy
+- q-flow-exception-handling--kotlin--medium
+- q-retry-operators-flow--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09
-tags: [coroutines, difficulty/medium, error-handling, flow, lang/kotlin, topic/kotlin]
----\
+tags:
+- coroutines
+- difficulty/medium
+- error-handling
+- flow
+- lang/kotlin
+- topic/kotlin
+---
 # Вопрос (RU)
 
 > Как работает оператор `catch` в Kotlin `Flow`? Что такое прозрачность исключений и где размещать `catch` в конвейере?
