@@ -1,4 +1,5 @@
----id: android-368
+---
+id: android-368
 title: "How Does Jetpack Compose Work / Как работает Jetpack Compose"
 aliases: [Compose UI, Declarative UI, Jetpack Compose, Декларативный UI]
 topic: android
@@ -14,6 +15,45 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium, recomposition]
+anki_cards:
+  - slug: android-368-0-en
+    front: "What are the core concepts of how Jetpack Compose works?"
+    back: |
+      **Declarative approach** - describe "what" UI should look like, not "how"
+
+      **Three rendering phases:**
+      1. **Composition** - builds UI tree from @Composable functions
+      2. **Layout** - measures and positions elements
+      3. **Drawing** - renders to Canvas
+
+      **Smart recomposition:**
+      - Tracks state dependencies via `mutableStateOf`
+      - Only recomposes affected parts of tree
+      - Skips stable, unchanged composables
+
+      **Side effects:** `LaunchedEffect`, `DisposableEffect` for async/cleanup
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-368-0-ru
+    front: "Каковы основные принципы работы Jetpack Compose?"
+    back: |
+      **Декларативный подход** - описывайте "что" должен показывать UI, а не "как"
+
+      **Три фазы рендеринга:**
+      1. **Composition** - строит дерево UI из @Composable функций
+      2. **Layout** - измеряет и позиционирует элементы
+      3. **Drawing** - рендерит на Canvas
+
+      **Умная рекомпозиция:**
+      - Отслеживает зависимости через `mutableStateOf`
+      - Рекомпозирует только затронутые части дерева
+      - Пропускает стабильные неизменившиеся composable
+
+      **Побочные эффекты:** `LaunchedEffect`, `DisposableEffect` для async/очистки
+    tags:
+      - android_compose
+      - difficulty::medium
 
 ---
 # Вопрос (RU)

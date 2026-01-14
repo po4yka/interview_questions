@@ -15,6 +15,49 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-state, difficulty/medium]
+anki_cards:
+  - slug: android-119-0-en
+    front: "What are the key principles of Jetpack Compose?"
+    back: |
+      **Declarative** - describe what UI should look like, not how to build it
+
+      **Reactive** - UI updates automatically when state changes
+
+      **Composition** - builds UI tree via @Composable functions using slot table
+
+      **Recomposition** - only invalidated parts re-execute:
+      1. State changes (`count++`)
+      2. Affected scopes marked invalid
+      3. Only those scopes recompose
+
+      **State hoisting** - lift state up for reusability:
+      ```kotlin
+      fun Counter(count: Int, onIncrement: () -> Unit)
+      ```
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-119-0-ru
+    front: "Каковы ключевые принципы Jetpack Compose?"
+    back: |
+      **Декларативный** - описывайте как UI должен выглядеть, а не как его строить
+
+      **Реактивный** - UI обновляется автоматически при изменении состояния
+
+      **Composition** - строит дерево UI через @Composable функции используя slot table
+
+      **Рекомпозиция** - перевыполняются только невалидные части:
+      1. Состояние меняется (`count++`)
+      2. Затронутые scope помечаются невалидными
+      3. Только эти scope рекомпозируются
+
+      **State hoisting** - поднимайте состояние для переиспользуемости:
+      ```kotlin
+      fun Counter(count: Int, onIncrement: () -> Unit)
+      ```
+    tags:
+      - android_compose
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

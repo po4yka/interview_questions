@@ -15,6 +15,43 @@ tags: [android/architecture-mvvm, android/ui-compose, android/ui-state, difficul
 moc: moc-android
 related: [c-compose-state, c-recomposition, q-recomposition-choreographer--android--hard]
 sources: []
+anki_cards:
+  - slug: android-108-0-en
+    front: "How does MutableState notify Compose about changes?"
+    back: |
+      Uses **Snapshot system** with read/write tracking (Observer pattern):
+
+      **1. Subscription (read phase):**
+      - Reading `MutableState` during composition registers dependency
+      - `Text("$count")` - this composable now depends on `count`
+
+      **2. Notification (write phase):**
+      - `count++` writes new value
+      - Snapshot system marks dependent scopes invalid
+      - Recomposition scheduled for those scopes only
+
+      **Benefits:** Isolation, thread-safe reads, granular recomposition
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-108-0-ru
+    front: "Как MutableState уведомляет Compose об изменениях?"
+    back: |
+      Использует **Snapshot system** с отслеживанием чтений/записей (Observer pattern):
+
+      **1. Подписка (фаза чтения):**
+      - Чтение `MutableState` во время композиции регистрирует зависимость
+      - `Text("$count")` - этот composable теперь зависит от `count`
+
+      **2. Уведомление (фаза записи):**
+      - `count++` записывает новое значение
+      - Snapshot system помечает зависимые scope невалидными
+      - Рекомпозиция планируется только для этих scope
+
+      **Преимущества:** Изоляция, потокобезопасное чтение, гранулярная рекомпозиция
+    tags:
+      - android_compose
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

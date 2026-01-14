@@ -15,6 +15,51 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/fragment, android/ui-navigation, difficulty/medium, fragments, navigation, navigation-component, ui]
+anki_cards:
+  - slug: android-421-0-en
+    front: "What are the main approaches to navigation in Android?"
+    back: |
+      **1. Navigation Component (recommended):**
+      - NavController + navigation graph (XML)
+      - Safe Args for type-safe arguments
+      - `findNavController().navigate(R.id.action_to_detail)`
+
+      **2. Bottom Navigation:**
+      - 3-5 main sections
+      - `setupWithNavController(navController)`
+
+      **3. Navigation Drawer:**
+      - Side menu for additional sections
+
+      **4. Manual Fragment transactions:**
+      - `replace()` + `addToBackStack()`
+
+      **Key concepts:** Back stack, Deep links, Safe Args
+    tags:
+      - android_navigation
+      - difficulty::medium
+  - slug: android-421-0-ru
+    front: "Какие основные подходы к навигации в Android?"
+    back: |
+      **1. Navigation Component (рекомендуется):**
+      - NavController + граф навигации (XML)
+      - Safe Args для типобезопасных аргументов
+      - `findNavController().navigate(R.id.action_to_detail)`
+
+      **2. Bottom Navigation:**
+      - 3-5 основных разделов
+      - `setupWithNavController(navController)`
+
+      **3. Navigation Drawer:**
+      - Боковое меню для дополнительных разделов
+
+      **4. Ручные Fragment-транзакции:**
+      - `replace()` + `addToBackStack()`
+
+      **Ключевые концепции:** Back stack, Deep links, Safe Args
+    tags:
+      - android_navigation
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

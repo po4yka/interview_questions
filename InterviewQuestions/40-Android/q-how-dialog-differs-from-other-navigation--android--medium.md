@@ -27,11 +27,11 @@ anki_cards:
 - slug: android-127-0-en
   language: en
   anki_id: 1768367857029
-  synced_at: '2026-01-14T09:17:53.020252'
+  synced_at: '2026-01-14T12:07:32.187411'
 - slug: android-127-0-ru
   language: ru
   anki_id: 1768367857054
-  synced_at: '2026-01-14T09:17:53.023297'
+  synced_at: '2026-01-14T12:07:32.192625'
 tags:
 - android
 - android/ui-compose

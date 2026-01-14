@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-474-0-en
   language: en
   anki_id: 1768367872383
-  synced_at: '2026-01-14T09:17:53.867695'
+  synced_at: '2026-01-14T12:07:32.253820'
 - slug: android-474-0-ru
   language: ru
   anki_id: 1768367872406
-  synced_at: '2026-01-14T09:17:53.870275'
+  synced_at: '2026-01-14T12:07:32.255319'
 created: 2025-10-20
 updated: 2025-11-03
 tags:

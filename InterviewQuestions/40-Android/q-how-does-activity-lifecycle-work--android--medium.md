@@ -15,6 +15,45 @@ tags: [android, android/activity, android/fragment, android/lifecycle, difficult
 moc: moc-android
 related: [c-activity, q-android-runtime-art--android--medium, q-fragment-vs-activity-lifecycle--android--medium, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-view-composition-strategy-compose--android--medium]
 sources: []
+anki_cards:
+  - slug: android-102-0-en
+    front: "How is Fragment lifecycle connected with Activity lifecycle?"
+    back: |
+      **Fragment lifecycle is tightly coupled with Activity:**
+
+      - Fragment cannot be in a state **higher** than its host Activity
+      - Has **additional callbacks**: `onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`
+      - Uses **viewLifecycleOwner** for UI observations (prevents leaks)
+      - On backstack: View destroyed but Fragment instance retained
+
+      ```text
+      Activity.onCreate -> Fragment.onAttach -> onCreate -> onCreateView
+      Activity.onStart  -> Fragment.onStart
+      Activity.onResume -> Fragment.onResume
+      ```
+    tags:
+      - android_lifecycle
+      - android_fragments
+      - difficulty::medium
+  - slug: android-102-0-ru
+    front: "Как жизненный цикл Fragment связан с жизненным циклом Activity?"
+    back: |
+      **Жизненный цикл Fragment тесно связан с Activity:**
+
+      - Fragment не может быть в состоянии **выше** хост-Activity
+      - Имеет **дополнительные колбэки**: `onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`
+      - Используйте **viewLifecycleOwner** для UI-наблюдений (предотвращает утечки)
+      - В backstack: View уничтожается, но экземпляр Fragment сохраняется
+
+      ```text
+      Activity.onCreate -> Fragment.onAttach -> onCreate -> onCreateView
+      Activity.onStart  -> Fragment.onStart
+      Activity.onResume -> Fragment.onResume
+      ```
+    tags:
+      - android_lifecycle
+      - android_fragments
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

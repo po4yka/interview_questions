@@ -14,6 +14,41 @@ related: [c-fragments, q-how-does-jetpackcompose-work--android--medium, q-how-to
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/fragment, difficulty/medium]
+anki_cards:
+  - slug: android-337-0-en
+    front: "What is the difference between commit() and commitNow() for Fragment transactions?"
+    back: |
+      **Asynchronous (default):**
+      - `commit()` - enqueues transaction, executes before next frame
+      - `commitAllowingStateLoss()` - same but allows after `onSaveInstanceState()`
+
+      **Synchronous (immediate):**
+      - `commitNow()` - executes immediately, blocks thread
+      - `commitNowAllowingStateLoss()` - same but allows state loss
+
+      **Key rules:**
+      - `commitNow*` cannot use `addToBackStack()`
+      - Regular `commit()` after `onSaveInstanceState()` throws `IllegalStateException`
+    tags:
+      - android_fragments
+      - difficulty::medium
+  - slug: android-337-0-ru
+    front: "В чём разница между commit() и commitNow() для Fragment-транзакций?"
+    back: |
+      **Асинхронный (по умолчанию):**
+      - `commit()` - ставит транзакцию в очередь, выполняет до следующего кадра
+      - `commitAllowingStateLoss()` - то же, но разрешает после `onSaveInstanceState()`
+
+      **Синхронный (немедленный):**
+      - `commitNow()` - выполняет немедленно, блокирует поток
+      - `commitNowAllowingStateLoss()` - то же, но разрешает потерю состояния
+
+      **Ключевые правила:**
+      - `commitNow*` нельзя использовать с `addToBackStack()`
+      - Обычный `commit()` после `onSaveInstanceState()` выбрасывает `IllegalStateException`
+    tags:
+      - android_fragments
+      - difficulty::medium
 
 ---
 # Вопрос (RU)

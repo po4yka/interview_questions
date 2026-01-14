@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-028-0-en
   language: en
   anki_id: 1768367868032
-  synced_at: '2026-01-14T09:17:53.618969'
+  synced_at: '2026-01-14T12:07:32.217579'
 - slug: android-028-0-ru
   language: ru
   anki_id: 1768367868054
-  synced_at: '2026-01-14T09:17:53.623056'
+  synced_at: '2026-01-14T12:07:32.219817'
 tags:
 - android/gradle
 - difficulty/medium

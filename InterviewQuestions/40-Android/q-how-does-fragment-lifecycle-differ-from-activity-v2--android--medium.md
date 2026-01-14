@@ -15,6 +15,49 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/activity, android/fragment, android/lifecycle, difficulty/medium]
+anki_cards:
+  - slug: android-339-0-en
+    front: "What are the key differences between Fragment and Activity lifecycles?"
+    back: |
+      **Fragment lifecycle is more complex:**
+
+      1. **Host dependency** - Fragment must be attached to FragmentManager
+      2. **Separate View lifecycle** - `onCreateView`/`onDestroyView` callbacks
+      3. **Attach/Detach** - `onAttach`/`onDetach` for host connection
+      4. **Back stack** - Instance survives while View is destroyed
+
+      **Extra callbacks:**
+      ```text
+      onAttach -> onCreate -> onCreateView -> onViewCreated
+      onDestroyView -> onDestroy -> onDetach
+      ```
+
+      **Key rule:** Clear binding in `onDestroyView()` to prevent leaks.
+    tags:
+      - android_lifecycle
+      - android_fragments
+      - difficulty::medium
+  - slug: android-339-0-ru
+    front: "Чем жизненный цикл Fragment отличается от жизненного цикла Activity?"
+    back: |
+      **Жизненный цикл Fragment сложнее:**
+
+      1. **Зависимость от хоста** - Fragment должен быть прикреплен к FragmentManager
+      2. **Отдельный жизненный цикл View** - колбэки `onCreateView`/`onDestroyView`
+      3. **Attach/Detach** - `onAttach`/`onDetach` для связи с хостом
+      4. **Back stack** - экземпляр сохраняется при уничтожении View
+
+      **Дополнительные колбэки:**
+      ```text
+      onAttach -> onCreate -> onCreateView -> onViewCreated
+      onDestroyView -> onDestroy -> onDetach
+      ```
+
+      **Ключевое правило:** Очищайте binding в `onDestroyView()` для предотвращения утечек.
+    tags:
+      - android_lifecycle
+      - android_fragments
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

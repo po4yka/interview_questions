@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-444-0-en
   language: en
   anki_id: 1768367860431
-  synced_at: '2026-01-14T09:17:53.196292'
+  synced_at: '2026-01-14T12:07:32.199268'
 - slug: android-444-0-ru
   language: ru
   anki_id: 1768367860456
-  synced_at: '2026-01-14T09:17:53.198903'
+  synced_at: '2026-01-14T12:07:32.201471'
 tags:
 - android/ui-compose
 - android/ui-state

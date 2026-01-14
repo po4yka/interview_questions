@@ -15,6 +15,41 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation, ui]
+anki_cards:
+  - slug: android-282-0-en
+    front: "What are the two levels of navigation in Android?"
+    back: |
+      **1. System navigation:**
+      - Gestures (Android 10+): swipe from bottom/edges
+      - Legacy: Back, Home, Recent buttons
+
+      **2. In-app navigation:**
+      - **Activity:** `startActivity(intent)`, task flags
+      - **Fragment:** `FragmentManager.beginTransaction()`
+      - **Navigation Component:** `NavController`, nav graph, Safe Args
+      - **Compose:** `NavHost`, `composable()` routes
+
+      **Best practice:** Use Navigation Component for consistent back stack handling
+    tags:
+      - android_navigation
+      - difficulty::medium
+  - slug: android-282-0-ru
+    front: "Какие два уровня навигации существуют в Android?"
+    back: |
+      **1. Системная навигация:**
+      - Жесты (Android 10+): свайп снизу/от краев
+      - Legacy: кнопки Назад, Домой, Недавние
+
+      **2. Навигация в приложении:**
+      - **Activity:** `startActivity(intent)`, флаги задач
+      - **Fragment:** `FragmentManager.beginTransaction()`
+      - **Navigation Component:** `NavController`, граф навигации, Safe Args
+      - **Compose:** `NavHost`, маршруты `composable()`
+
+      **Best practice:** Используйте Navigation Component для согласованного управления back stack
+    tags:
+      - android_navigation
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

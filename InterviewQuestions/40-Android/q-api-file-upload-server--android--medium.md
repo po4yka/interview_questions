@@ -39,11 +39,11 @@ anki_cards:
 - slug: android-161-0-en
   language: en
   anki_id: 1768364266423
-  synced_at: '2026-01-14T09:17:53.102973'
+  synced_at: '2026-01-14T12:07:32.195216'
 - slug: android-161-0-ru
   language: ru
   anki_id: 1768364266446
-  synced_at: '2026-01-14T09:17:53.106274'
+  synced_at: '2026-01-14T12:07:32.197687'
 ---
 # Вопрос (RU)
 

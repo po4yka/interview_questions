@@ -14,6 +14,59 @@ related: [c-android-components, q-custom-view-accessibility--android--medium, q-
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium]
+anki_cards:
+  - slug: android-347-0-en
+    front: "How to add custom attributes to a Custom View in Android?"
+    back: |
+      **4 steps:**
+
+      1. **Define in attrs.xml:**
+      ```xml
+      <declare-styleable name="MyView">
+          <attr name="progress" format="integer"/>
+          <attr name="color" format="color"/>
+      </declare-styleable>
+      ```
+
+      2. **Read in constructor:**
+      ```kotlin
+      val a = context.obtainStyledAttributes(attrs, R.styleable.MyView)
+      progress = a.getInt(R.styleable.MyView_progress, 0)
+      a.recycle() // Important!
+      ```
+
+      3. **Use in XML:** `app:progress="50"`
+
+      Formats: `integer`, `color`, `dimension`, `boolean`, `enum`, `reference`
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-347-0-ru
+    front: "Как добавить кастомные атрибуты к Custom View в Android?"
+    back: |
+      **4 шага:**
+
+      1. **Определить в attrs.xml:**
+      ```xml
+      <declare-styleable name="MyView">
+          <attr name="progress" format="integer"/>
+          <attr name="color" format="color"/>
+      </declare-styleable>
+      ```
+
+      2. **Прочитать в конструкторе:**
+      ```kotlin
+      val a = context.obtainStyledAttributes(attrs, R.styleable.MyView)
+      progress = a.getInt(R.styleable.MyView_progress, 0)
+      a.recycle() // Важно!
+      ```
+
+      3. **Использовать в XML:** `app:progress="50"`
+
+      Форматы: `integer`, `color`, `dimension`, `boolean`, `enum`, `reference`
+    tags:
+      - android_views
+      - difficulty::medium
 
 ---
 # Вопрос (RU)
