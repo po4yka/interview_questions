@@ -1,22 +1,51 @@
----\
+---
 id: android-462
 title: Dagger Scope Explained / Объяснение скоупов Dagger
-aliases: [Dagger Scope Explained, Объяснение скоупов Dagger]
+aliases:
+- Dagger Scope Explained
+- Объяснение скоупов Dagger
 topic: android
-subtopics: [di-hilt, lifecycle]
+subtopics:
+- di-hilt
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, q-dagger-custom-scopes--android--hard, q-dagger-framework-overview--android--hard, q-dagger-main-elements--android--medium, q-dagger-problems--android--medium, q-dagger-purpose--android--easy, q-singleton-scope-binding--android--medium]
+related:
+- c-dagger
+- q-dagger-custom-scopes--android--hard
+- q-dagger-framework-overview--android--hard
+- q-dagger-main-elements--android--medium
+- q-dagger-problems--android--medium
+- q-dagger-purpose--android--easy
+- q-singleton-scope-binding--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/di-hilt, android/lifecycle, dagger, difficulty/medium, hilt, lifecycle, scope]
+tags:
+- android/di-hilt
+- android/lifecycle
+- dagger
+- difficulty/medium
+- hilt
+- lifecycle
+- scope
+anki_cards:
+- slug: android-462-0-en
+  language: en
+  anki_id: 1768366755276
+  synced_at: '2026-01-14T09:17:53.606331'
+- slug: android-462-0-ru
+  language: ru
+  anki_id: 1768366755301
+  synced_at: '2026-01-14T09:17:53.609615'
 sources:
-  - "https://dagger.dev/api/latest/dagger/Scope.html"
----\
+- https://dagger.dev/api/latest/dagger/Scope.html
+---
 # Вопрос (RU)
 > Что такое scope в `Dagger` и как они работают?
 

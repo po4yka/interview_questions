@@ -1,22 +1,43 @@
----\
+---
 id: android-387
 title: Типы данных Bundle / Bundle Data Types
-aliases: [Bundle Data Types, Типы данных Bundle]
+aliases:
+- Bundle Data Types
+- Типы данных Bundle
 topic: android
-subtopics: [serialization]
+subtopics:
+- serialization
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, q-android-app-components--android--easy, q-data-sync-unstable-network--android--hard, q-foreground-service-types--android--medium, q-parcelable-implementation--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
+related:
+- c-activity
+- q-android-app-components--android--easy
+- q-data-sync-unstable-network--android--hard
+- q-foreground-service-types--android--medium
+- q-parcelable-implementation--android--medium
+- q-what-is-layout-types-and-when-to-use--android--easy
 created: 2024-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/serialization, difficulty/medium]
-
----\
+tags:
+- android/serialization
+- difficulty/medium
+anki_cards:
+- slug: android-387-0-en
+  language: en
+  anki_id: 1768364992400
+  synced_at: '2026-01-14T09:17:53.734090'
+- slug: android-387-0-ru
+  language: ru
+  anki_id: 1768364992423
+  synced_at: '2026-01-14T09:17:53.736036'
+---
 # Вопрос (RU)
 > Какие типы данных поддерживает `Bundle`?
 

@@ -1,21 +1,45 @@
----\
+---
 id: android-467
 title: CompositionLocal Advanced / CompositionLocal — продвинутый уровень
-aliases: [CompositionLocal — продвинутый уровень, CompositionLocal Advanced]
+aliases:
+- CompositionLocal — продвинутый уровень
+- CompositionLocal Advanced
 topic: android
-subtopics: [architecture-mvvm, ui-compose]
+subtopics:
+- architecture-mvvm
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compose-core-components--android--medium, q-compose-navigation-advanced--android--medium, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-semantics--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related:
+- q-compose-core-components--android--medium
+- q-compose-navigation-advanced--android--medium
+- q-compose-performance-optimization--android--hard
+- q-compose-remember-derived-state--android--medium
+- q-compose-semantics--android--medium
+- q-what-are-the-most-important-components-of-compose--android--medium
 sources: []
+anki_cards:
+- slug: android-467-0-en
+  language: en
+  anki_id: 1768366347179
+  synced_at: '2026-01-14T09:17:53.703026'
+- slug: android-467-0-ru
+  language: ru
+  anki_id: 1768366347198
+  synced_at: '2026-01-14T09:17:53.705947'
 created: 2025-10-20
 updated: 2025-10-30
-tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
----\
+tags:
+- android/architecture-mvvm
+- android/ui-compose
+- difficulty/medium
+---
 # Вопрос (RU)
 > Когда использовать `CompositionLocal`? Чем различаются `staticCompositionLocalOf` и `compositionLocalOf`?
 

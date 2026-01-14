@@ -1,22 +1,46 @@
----\
+---
 id: android-191
 title: Compose Multiplatform / Compose Multiplatform
-aliases: [Compose Multiplatform, KMP Compose]
+aliases:
+- Compose Multiplatform
+- KMP Compose
 topic: android
-subtopics: [compose-multiplatform, ui-compose]
+subtopics:
+- compose-multiplatform
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-compose-compiler-plugin--android--hard, q-compose-custom-layout--android--hard, q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-compose-stability-skippability--android--hard, q-kmm-architecture--android--hard]
+related:
+- c-jetpack-compose
+- q-compose-compiler-plugin--android--hard
+- q-compose-custom-layout--android--hard
+- q-compose-side-effects-launchedeffect-disposableeffect--android--hard
+- q-compose-stability-skippability--android--hard
+- q-kmm-architecture--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/compose-multiplatform, android/ui-compose, difficulty/hard, multiplatform]
-
----\
+tags:
+- android/compose-multiplatform
+- android/ui-compose
+- difficulty/hard
+- multiplatform
+anki_cards:
+- slug: android-191-0-en
+  language: en
+  anki_id: 1768366067526
+  synced_at: '2026-01-14T09:17:53.176210'
+- slug: android-191-0-ru
+  language: ru
+  anki_id: 1768366067549
+  synced_at: '2026-01-14T09:17:53.179437'
+---
 # Вопрос (RU)
 > Что такое Compose Multiplatform и как реализовать кроссплатформенную UI-архитектуру?
 

@@ -1,21 +1,48 @@
----\
+---
 id: android-269
 title: Android Modularization / Модуляризация Android
-aliases: [Android Modularization, Модуляризация Android]
+aliases:
+- Android Modularization
+- Модуляризация Android
 topic: android
-subtopics: [architecture-modularization, dependency-management, gradle]
+subtopics:
+- architecture-modularization
+- dependency-management
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-clean-architecture, c-dependency-injection, c-gradle, q-android-build-optimization--android--medium, q-annotation-processing-android--android--medium, q-gradle-build-system--android--medium, q-module-types-android--android--medium]
+related:
+- c-clean-architecture
+- c-dependency-injection
+- c-gradle
+- q-android-build-optimization--android--medium
+- q-annotation-processing-android--android--medium
+- q-gradle-build-system--android--medium
+- q-module-types-android--android--medium
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/architecture-modularization, android/dependency-management, android/gradle, difficulty/medium]
+tags:
+- android/architecture-modularization
+- android/dependency-management
+- android/gradle
+- difficulty/medium
 sources: []
----\
+anki_cards:
+- slug: android-269-0-en
+  language: en
+  anki_id: 1768363502246
+  synced_at: '2026-01-14T09:17:53.374119'
+- slug: android-269-0-ru
+  language: ru
+  anki_id: 1768363502272
+  synced_at: '2026-01-14T09:17:53.376457'
+---
 # Вопрос (RU)
 > Что такое модуляризация Android-приложений и какие основные преимущества она даёт?
 

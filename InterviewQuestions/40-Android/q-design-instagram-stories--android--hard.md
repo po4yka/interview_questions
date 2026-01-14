@@ -1,23 +1,53 @@
----\
+---
 id: android-441
 title: Design Instagram Stories / Проектирование Instagram Stories
-aliases: [Design Instagram Stories, Проектирование Instagram Stories]
+aliases:
+- Design Instagram Stories
+- Проектирование Instagram Stories
 topic: android
-subtopics: [architecture-clean, media, service]
+subtopics:
+- architecture-clean
+- media
+- service
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources:
-  - "https://developer.android.com/guide/topics/media"
+- https://developer.android.com/guide/topics/media
+anki_cards:
+- slug: android-441-0-en
+  language: en
+  anki_id: 1768366951130
+  synced_at: '2026-01-14T09:13:16.048894'
+- slug: android-441-0-ru
+  language: ru
+  anki_id: 1768366951155
+  synced_at: '2026-01-14T09:13:16.051166'
 status: draft
 moc: moc-android
-related: [c-android, q-data-sync-unstable-network--android--hard, q-database-optimization-android--android--medium, q-design-uber-app--android--hard, q-feature-flags-sdk--android--hard]
+related:
+- c-android
+- q-data-sync-unstable-network--android--hard
+- q-database-optimization-android--android--medium
+- q-design-uber-app--android--hard
+- q-feature-flags-sdk--android--hard
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/architecture-clean, android/media, android/service, architecture, difficulty/hard, exoplayer, mediacodec, performance, system-design, workmanager]
-
----\
+tags:
+- android/architecture-clean
+- android/media
+- android/service
+- architecture
+- difficulty/hard
+- exoplayer
+- mediacodec
+- performance
+- system-design
+- workmanager
+---
 # Вопрос (RU)
 
 > Как спроектировать Instagram Stories для Android?

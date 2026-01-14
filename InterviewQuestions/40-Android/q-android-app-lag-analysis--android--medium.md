@@ -1,21 +1,48 @@
 ---
 id: android-105
 title: Анализ тормозов приложения Android / Android App Lag Analysis
-aliases: [Android App Lag Analysis, Анализ тормозов приложения Android]
+aliases:
+- Android App Lag Analysis
+- Анализ тормозов приложения Android
 topic: android
-subtopics: [performance-memory, performance-rendering, profiling]
+subtopics:
+- performance-memory
+- performance-rendering
+- profiling
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-profiling, q-android-app-components--android--easy, q-android-performance-measurement-tools--android--medium, q-app-start-types-android--android--medium, q-reduce-app-size--android--medium]
+related:
+- c-android-profiling
+- q-android-app-components--android--easy
+- q-android-performance-measurement-tools--android--medium
+- q-app-start-types-android--android--medium
+- q-reduce-app-size--android--medium
 created: 2025-10-13
 updated: 2025-11-10
 sources: []
-tags: [android/performance-memory, android/performance-rendering, android/profiling, difficulty/medium, fps, lag, ui-thread]
-
+tags:
+- android/performance-memory
+- android/performance-rendering
+- android/profiling
+- difficulty/medium
+- fps
+- lag
+- ui-thread
+anki_cards:
+- slug: android-105-0-en
+  language: en
+  anki_id: 1768363328821
+  synced_at: '2026-01-14T09:17:53.792976'
+- slug: android-105-0-ru
+  language: ru
+  anki_id: 1768363328846
+  synced_at: '2026-01-14T09:17:53.795195'
 ---
 # Вопрос (RU)
 

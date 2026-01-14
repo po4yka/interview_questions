@@ -1,20 +1,51 @@
----id: android-033
+---
+id: android-033
 title: What is cleartext traffic in Android? / Что такое cleartext traffic в Android?
-aliases: [Cleartext traffic, Network Security Config, Незашифрованный трафик]
+aliases:
+- Cleartext traffic
+- Network Security Config
+- Незашифрованный трафик
 topic: android
-subtopics: [network-security-config, networking-http, permissions]
+subtopics:
+- network-security-config
+- networking-http
+- permissions
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-encryption, c-enterprise-mdm, c-play-integrity, c-scoped-storage-security, c-security-hardening, q-android-manifest-file--android--easy, q-android-security-best-practices--android--medium, q-android-security-practices-checklist--android--medium]
+related:
+- c-encryption
+- c-enterprise-mdm
+- c-play-integrity
+- c-scoped-storage-security
+- c-security-hardening
+- q-android-manifest-file--android--easy
+- q-android-security-best-practices--android--medium
+- q-android-security-practices-checklist--android--medium
 created: 2025-10-06
 updated: 2025-11-10
-tags: [android/network-security-config, android/networking-http, android/permissions, difficulty/easy, security]
+tags:
+- android/network-security-config
+- android/networking-http
+- android/permissions
+- difficulty/easy
+- security
 sources:
-  - "https://developer.android.com/training/articles/security-config"
+- https://developer.android.com/training/articles/security-config
+anki_cards:
+- slug: android-033-0-en
+  language: en
+  anki_id: 1768365662326
+  synced_at: '2026-01-14T09:17:53.833305'
+- slug: android-033-0-ru
+  language: ru
+  anki_id: 1768365662349
+  synced_at: '2026-01-14T09:17:53.836525'
 ---
 # Вопрос (RU)
 > Что такое cleartext traffic в Android и как его контролировать?

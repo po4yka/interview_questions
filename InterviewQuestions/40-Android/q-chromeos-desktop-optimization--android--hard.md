@@ -1,31 +1,52 @@
 ---
 id: android-633
-title: ChromeOS Desktop Optimization / Оптимизация Android-приложения под
-  ChromeOS
-aliases: [ChromeOS Desktop Optimization, Оптимизация Android-приложения под
-      ChromeOS]
+title: ChromeOS Desktop Optimization / Оптимизация Android-приложения под ChromeOS
+aliases:
+- ChromeOS Desktop Optimization
+- Оптимизация Android-приложения под ChromeOS
 topic: android
-subtopics: [foldables-chromeos, ui-state, ui-views]
+subtopics:
+- foldables-chromeos
+- ui-state
+- ui-views
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-chromeos-desktop, moc-android, q-optimize-memory-usage-android--android--medium, q-parsing-optimization-android--android--medium, q-performance-optimization-android--android--medium]
+related:
+- c-chromeos-desktop
+- moc-android
+- q-optimize-memory-usage-android--android--medium
+- q-parsing-optimization-android--android--medium
+- q-performance-optimization-android--android--medium
 created: 2024-11-02
 updated: 2025-11-10
-tags: [android/foldables-chromeos, android/ui-state, android/ui-views,
-      difficulty/hard]
+tags:
+- android/foldables-chromeos
+- android/ui-state
+- android/ui-views
+- difficulty/hard
 sources:
-  - "https://developer.android.com/games/playgamespc"
-  - "https://developer.android.com/large-screens/chromeos"
-
+- https://developer.android.com/games/playgamespc
+- https://developer.android.com/large-screens/chromeos
 anki_synced: true
 anki_slugs:
-  - 40-android-q-chromeos-desktop-optimization-android-hard-p01-en
-  - 40-android-q-chromeos-desktop-optimization-android-hard-p01-ru
+- 40-android-q-chromeos-desktop-optimization-android-hard-p01-en
+- 40-android-q-chromeos-desktop-optimization-android-hard-p01-ru
 anki_last_sync: '2025-11-27T09:56:33.839728'
+anki_cards:
+- slug: android-633-0-en
+  language: en
+  anki_id: 1768365309625
+  synced_at: '2026-01-14T09:17:53.577759'
+- slug: android-633-0-ru
+  language: ru
+  anki_id: 1768365309648
+  synced_at: '2026-01-14T09:17:53.580844'
 ---
 # Вопрос (RU)
 > Как адаптировать Android-приложение для ChromeOS/Desktop: поддержать resizeable окна, клавиатуру/мышь, drag-and-drop, файловые диалоги и Play Games on PC требования?

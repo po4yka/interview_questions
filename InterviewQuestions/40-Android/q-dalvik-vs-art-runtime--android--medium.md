@@ -1,21 +1,47 @@
 ---
 id: android-442
 title: Dalvik vs ART Runtime / Dalvik против ART Runtime
-aliases: [Dalvik vs ART Runtime, Dalvik против ART Runtime]
+aliases:
+- Dalvik vs ART Runtime
+- Dalvik против ART Runtime
 topic: android
-subtopics: [performance-memory]
+subtopics:
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-android-runtime-art--android--medium, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-runtime-permissions-best-practices--android--medium]
+related:
+- c-android-components
+- q-android-runtime-art--android--medium
+- q-how-to-create-dynamic-screens-at-runtime--android--hard
+- q-runtime-permissions-best-practices--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/performance-memory, aot, art, compilation, dalvik, difficulty/medium, jit, runtime]
+tags:
+- android/performance-memory
+- aot
+- art
+- compilation
+- dalvik
+- difficulty/medium
+- jit
+- runtime
+anki_cards:
+- slug: android-442-0-en
+  language: en
+  anki_id: 1768366747779
+  synced_at: '2026-01-14T09:17:53.050256'
+- slug: android-442-0-ru
+  language: ru
+  anki_id: 1768366747800
+  synced_at: '2026-01-14T09:17:53.052078'
 sources:
-  - "https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime"
+- https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
 ---
 # Вопрос (RU)
 > В чем различия между рантаймами Dalvik и ART в Android? Почему Android перешел с Dalvik на ART?

@@ -1,23 +1,48 @@
----\
+---
 id: android-306
 title: FragmentManager vs FragmentTransaction / FragmentManager против FragmentTransaction
-aliases: [FragmentManager vs FragmentTransaction, FragmentManager против FragmentTransaction]
+aliases:
+- FragmentManager vs FragmentTransaction
+- FragmentManager против FragmentTransaction
 topic: android
-subtopics: [fragment, lifecycle]
+subtopics:
+- fragment
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-android-lifecycle, q-activity-lifecycle-methods--android--medium, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium]
+related:
+- c-android
+- c-android-lifecycle
+- q-activity-lifecycle-methods--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/fragment, android/lifecycle, difficulty/medium, fragmentmanager, fragmenttransaction]
+tags:
+- android/fragment
+- android/lifecycle
+- difficulty/medium
+- fragmentmanager
+- fragmenttransaction
+anki_cards:
+- slug: android-306-0-en
+  language: en
+  anki_id: 1768367160054
+  synced_at: '2026-01-14T09:17:53.457528'
+- slug: android-306-0-ru
+  language: ru
+  anki_id: 1768367160080
+  synced_at: '2026-01-14T09:17:53.459529'
 sources:
-  - "https://developer.android.com/guide/fragments/fragmentmanager"
-
----\
+- https://developer.android.com/guide/fragments/fragmentmanager
+---
 # Вопрос (RU)
 > В чем разница между FragmentManager и FragmentTransaction?
 

@@ -1,21 +1,48 @@
----id: android-472
+---
+id: android-472
 title: Compose Testing / Тестирование Compose
-aliases: [Compose Testing, Тестирование Compose]
+aliases:
+- Compose Testing
+- Тестирование Compose
 topic: android
-subtopics: [testing-ui, ui-compose]
+subtopics:
+- testing-ui
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-testing, c-compose-recomposition, c-recomposition, q-accessibility-compose--android--medium, q-compose-performance-optimization--android--hard, q-compose-semantics--android--medium, q-compose-ui-testing-advanced--android--hard]
+related:
+- c-android-testing
+- c-compose-recomposition
+- c-recomposition
+- q-accessibility-compose--android--medium
+- q-compose-performance-optimization--android--hard
+- q-compose-semantics--android--medium
+- q-compose-ui-testing-advanced--android--hard
 created: 2024-10-20
 updated: 2025-11-10
-tags: [android/testing-ui, android/ui-compose, difficulty/medium, semantics, testing]
+anki_cards:
+- slug: android-472-0-en
+  language: en
+  anki_id: 1768367872029
+  synced_at: '2026-01-14T09:17:53.840172'
+- slug: android-472-0-ru
+  language: ru
+  anki_id: 1768367872055
+  synced_at: '2026-01-14T09:17:53.842872'
+tags:
+- android/testing-ui
+- android/ui-compose
+- difficulty/medium
+- semantics
+- testing
 sources:
-  - "https://developer.android.com/jetpack/compose/testing"
-
+- https://developer.android.com/jetpack/compose/testing
 ---
 # Вопрос (RU)
 > Как тестировать UI в Jetpack Compose? Какие основные инструменты и подходы используются?

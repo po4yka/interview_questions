@@ -1,26 +1,51 @@
----\
+---
 id: android-635
 title: Play Data Safety Workflow / Процесс Play Data Safety
-aliases: [Play Data Safety Workflow, Процесс Play Data Safety]
+aliases:
+- Play Data Safety Workflow
+- Процесс Play Data Safety
 topic: android
-subtopics: [permissions, play-console, privacy-sdks]
+subtopics:
+- permissions
+- play-console
+- privacy-sdks
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-keystore, q-android-release-pipeline-cicd--android--hard, q-data-sync-unstable-network--android--hard, q-play-billing-v6-architecture--android--hard, q-save-data-outside-fragment--android--medium]
+related:
+- c-android-keystore
+- q-android-release-pipeline-cicd--android--hard
+- q-data-sync-unstable-network--android--hard
+- q-play-billing-v6-architecture--android--hard
+- q-save-data-outside-fragment--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/permissions, android/play-console, android/privacy-sdks, difficulty/hard, play-data-safety]
+tags:
+- android/permissions
+- android/play-console
+- android/privacy-sdks
+- difficulty/hard
+- play-data-safety
+anki_cards:
+- slug: android-635-0-en
+  language: en
+  anki_id: 1768366757176
+  synced_at: '2026-01-14T09:17:53.743042'
+- slug: android-635-0-ru
+  language: ru
+  anki_id: 1768366757202
+  synced_at: '2026-01-14T09:17:53.745755'
 sources:
-  - url: "https://support.google.com/googleplay/android-developer/answer/10787469"
-    note: "Play Data Safety form policies"
-  - url: "https://support.google.com/googleplay/android-developer/answer/10787478"
-    note: "Data safety best practices guide"
-
----\
+- url: https://support.google.com/googleplay/android-developer/answer/10787469
+  note: Play Data Safety form policies
+- url: https://support.google.com/googleplay/android-developer/answer/10787478
+  note: Data safety best practices guide
+---
 # Вопрос (RU)
 > Как организовать процесс заполнения и поддержки Play Data Safety: инвентаризация данных, согласование с командами, автоматизация проверки и обновление формы при релизах?
 

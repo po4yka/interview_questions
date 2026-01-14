@@ -1,20 +1,52 @@
----id: android-098
-title: Android Performance Measurement Tools / Инструменты измерения производительности Android
-aliases: [Android Performance Measurement Tools, Инструменты измерения производительности Android]
+---
+id: android-098
+title: Android Performance Measurement Tools / Инструменты измерения производительности
+  Android
+aliases:
+- Android Performance Measurement Tools
+- Инструменты измерения производительности Android
 topic: android
-subtopics: [performance-memory, profiling, testing-benchmark]
+subtopics:
+- performance-memory
+- profiling
+- testing-benchmark
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-basics, c-compose-recomposition, c-perfetto, c-performance, c-power-profiling, q-android-app-lag-analysis--android--medium, q-multithreading-tools-android--android--medium, q-optimize-memory-usage-android--android--medium, q-performance-monitoring-jank-compose--android--medium]
+related:
+- c-android-basics
+- c-compose-recomposition
+- c-perfetto
+- c-performance
+- c-power-profiling
+- q-android-app-lag-analysis--android--medium
+- q-multithreading-tools-android--android--medium
+- q-optimize-memory-usage-android--android--medium
+- q-performance-monitoring-jank-compose--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/performance-memory, android/profiling, android/testing-benchmark, difficulty/medium, optimization, performance]
-
+tags:
+- android/performance-memory
+- android/profiling
+- android/testing-benchmark
+- difficulty/medium
+- optimization
+- performance
+anki_cards:
+- slug: android-098-0-en
+  language: en
+  anki_id: 1768363603072
+  synced_at: '2026-01-14T09:17:53.661129'
+- slug: android-098-0-ru
+  language: ru
+  anki_id: 1768363603098
+  synced_at: '2026-01-14T09:17:53.663557'
 ---
 # Вопрос (RU)
 > Какие инструменты используются для измерения производительности Android приложений и как их применять?

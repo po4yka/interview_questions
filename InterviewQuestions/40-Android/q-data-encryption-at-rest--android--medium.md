@@ -1,22 +1,46 @@
----\
+---
 id: android-466
 title: Data Encryption At Rest / Шифрование данных в покое
-aliases: [Data Encryption At Rest, Шифрование данных в покое]
+aliases:
+- Data Encryption At Rest
+- Шифрование данных в покое
 topic: android
-subtopics: [files-media, keystore-crypto]
+subtopics:
+- files-media
+- keystore-crypto
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-keystore, q-android-security-best-practices--android--medium, q-database-encryption-android--android--medium, q-save-data-outside-fragment--android--medium, q-workmanager-data-passing--android--medium]
+related:
+- c-android-keystore
+- q-android-security-best-practices--android--medium
+- q-database-encryption-android--android--medium
+- q-save-data-outside-fragment--android--medium
+- q-workmanager-data-passing--android--medium
 created: 2025-10-20
 updated: 2025-11-11
-tags: [android/files-media, android/keystore-crypto, difficulty/medium, encryption]
+tags:
+- android/files-media
+- android/keystore-crypto
+- difficulty/medium
+- encryption
+anki_cards:
+- slug: android-466-0-en
+  language: en
+  anki_id: 1768366756276
+  synced_at: '2026-01-14T09:17:53.693469'
+- slug: android-466-0-ru
+  language: ru
+  anki_id: 1768366756300
+  synced_at: '2026-01-14T09:17:53.695859'
 sources:
-  - "https://developer.android.com/guide/topics/security/encryption"
----\
+- https://developer.android.com/guide/topics/security/encryption
+---
 # Вопрос (RU)
 > Как реализовать шифрование данных в покое с помощью EncryptedSharedPreferences и SQLCipher для `Room`? Сравните подходы, влияние на производительность и стратегии управления ключами.
 

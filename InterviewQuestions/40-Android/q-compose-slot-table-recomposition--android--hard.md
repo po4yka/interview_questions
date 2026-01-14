@@ -1,20 +1,46 @@
----id: android-333
+---
+id: android-333
 title: Compose Slot Table & Recomposition / Slot Table и рекомпозиция Compose
-aliases: [Compose Slot Table and Recomposition, Slot Table и рекомпозиция]
+aliases:
+- Compose Slot Table and Recomposition
+- Slot Table и рекомпозиция
 topic: android
-subtopics: [performance-rendering, ui-compose]
+subtopics:
+- performance-rendering
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-recomposition, q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-choreographer--android--hard, q-recomposition-compose--android--medium, q-stable-classes-compose--android--hard]
+related:
+- c-compose-recomposition
+- c-recomposition
+- q-compose-compiler-plugin--android--hard
+- q-compose-performance-optimization--android--hard
+- q-compose-stability-skippability--android--hard
+- q-recomposition-choreographer--android--hard
+- q-recomposition-compose--android--medium
+- q-stable-classes-compose--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/performance-rendering, android/ui-compose, difficulty/hard]
+tags:
+- android/performance-rendering
+- android/ui-compose
+- difficulty/hard
 sources: []
-
+anki_cards:
+- slug: android-333-0-en
+  language: en
+  anki_id: 1768366070779
+  synced_at: '2026-01-14T09:17:53.529882'
+- slug: android-333-0-ru
+  language: ru
+  anki_id: 1768366070798
+  synced_at: '2026-01-14T09:17:53.533590'
 ---
 # Вопрос (RU)
 > Как работают Slot Table и рекомпозиция в Jetpack Compose? Объясните механизм внутреннего представления и оптимизации перерисовки.

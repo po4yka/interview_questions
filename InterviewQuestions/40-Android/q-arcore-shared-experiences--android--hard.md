@@ -1,24 +1,49 @@
----\
+---
 id: android-628
 title: ARCore Shared Experiences / Совместные ARCore-сцены
-aliases: [ARCore Shared Experiences, Совместные ARCore-сцены]
+aliases:
+- ARCore Shared Experiences
+- Совместные ARCore-сцены
 topic: android
-subtopics: [camera, networking-http, sensors]
+subtopics:
+- camera
+- networking-http
+- sensors
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-arcore, q-android-tv-compose-leanback--android--hard, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-shared-element-transitions--android--hard]
+related:
+- c-arcore
+- q-android-tv-compose-leanback--android--hard
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-shared-element-transitions--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/camera, android/networking-http, android/sensors, difficulty/hard]
+tags:
+- android/camera
+- android/networking-http
+- android/sensors
+- difficulty/hard
 sources:
-  - "https://developers.google.com/ar/develop/depth"
-  - "https://developers.google.com/ar/develop/java/cloud-anchors/overview"
-  - "https://developers.google.com/ar/reference/java"
----\
+- https://developers.google.com/ar/develop/depth
+- https://developers.google.com/ar/develop/java/cloud-anchors/overview
+- https://developers.google.com/ar/reference/java
+anki_cards:
+- slug: android-628-0-en
+  language: en
+  anki_id: 1768364694357
+  synced_at: '2026-01-14T09:17:53.067631'
+- slug: android-628-0-ru
+  language: ru
+  anki_id: 1768364694406
+  synced_at: '2026-01-14T09:17:53.070263'
+---
 # Вопрос (RU)
 > Как построить многопользовательский AR-опыт на ARCore: синхронизировать Cloud Anchors, использовать Depth API для окклюзии, совмещать Sceneform/Filament рендеринг и гарантировать стабильность трекинга?
 

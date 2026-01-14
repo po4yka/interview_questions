@@ -1,21 +1,51 @@
----id: android-050
+---
+id: android-050
 title: Доступность в Compose / Accessibility in Compose
-aliases: [Accessibility in Compose, Доступность в Compose]
+aliases:
+- Accessibility in Compose
+- Доступность в Compose
 topic: android
-subtopics: [ui-accessibility, ui-compose]
+subtopics:
+- ui-accessibility
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-accessibility, c-compose-recomposition, c-globalization, c-recomposition, q-accessibility-talkback--android--medium, q-accessibility-testing--android--medium, q-compose-semantics--android--medium, q-compose-testing--android--medium]
+related:
+- c-accessibility
+- c-compose-recomposition
+- c-globalization
+- c-recomposition
+- q-accessibility-talkback--android--medium
+- q-accessibility-testing--android--medium
+- q-compose-semantics--android--medium
+- q-compose-testing--android--medium
 created: 2025-10-11
 updated: 2025-11-10
 sources:
-  - "https://developer.android.com/guide/topics/ui/accessibility"
-  - "https://developer.android.com/jetpack/compose/accessibility"
-tags: [accessibility, android/ui-accessibility, android/ui-compose, difficulty/medium, semantics, talkback]
+- https://developer.android.com/guide/topics/ui/accessibility
+- https://developer.android.com/jetpack/compose/accessibility
+tags:
+- accessibility
+- android/ui-accessibility
+- android/ui-compose
+- difficulty/medium
+- semantics
+- talkback
+anki_cards:
+- slug: android-050-0-en
+  language: en
+  anki_id: 1768363603273
+  synced_at: '2026-01-14T09:17:53.708334'
+- slug: android-050-0-ru
+  language: ru
+  anki_id: 1768363603298
+  synced_at: '2026-01-14T09:17:53.710825'
 ---
 # Вопрос (RU)
 > Как обеспечить доступность в Jetpack Compose для людей с ограниченными возможностями?

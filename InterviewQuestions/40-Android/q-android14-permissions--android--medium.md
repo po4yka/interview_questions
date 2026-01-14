@@ -1,22 +1,44 @@
----\
+---
 id: android-293
 title: Android 14 Permissions / Разрешения Android 14
-aliases: [Android 14 Permissions, Разрешения Android 14]
+aliases:
+- Android 14 Permissions
+- Разрешения Android 14
 topic: android
-subtopics: [permissions, privacy-sdks]
+subtopics:
+- permissions
+- privacy-sdks
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-permissions, q-android-lint-tool--android--medium, q-android-manifest-file--android--easy, q-android-security-best-practices--android--medium, q-android-security-practices-checklist--android--medium]
+related:
+- c-permissions
+- q-android-lint-tool--android--medium
+- q-android-manifest-file--android--easy
+- q-android-security-best-practices--android--medium
+- q-android-security-practices-checklist--android--medium
 sources: []
 created: 2024-10-15
 updated: 2025-11-10
-tags: [android/permissions, android/privacy-sdks, difficulty/medium]
-
----\
+tags:
+- android/permissions
+- android/privacy-sdks
+- difficulty/medium
+anki_cards:
+- slug: android-293-0-en
+  language: en
+  anki_id: 1768364268073
+  synced_at: '2026-01-14T09:17:53.440889'
+- slug: android-293-0-ru
+  language: ru
+  anki_id: 1768364268099
+  synced_at: '2026-01-14T09:17:53.442851'
+---
 # Вопрос (RU)
 
 > Какие изменения в системе разрешений появились в Android 13-14, и как правильно их обрабатывать?

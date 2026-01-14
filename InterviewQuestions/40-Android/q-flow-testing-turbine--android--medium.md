@@ -1,23 +1,49 @@
----\
+---
 id: android-066
 title: Flow Testing with Turbine / Тестирование Flow с Turbine
-aliases: [Flow Testing with Turbine, Тестирование Flow с Turbine]
+aliases:
+- Flow Testing with Turbine
+- Тестирование Flow с Turbine
 topic: android
-subtopics: [coroutines, flow, testing-unit]
+subtopics:
+- coroutines
+- flow
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-flow, q-compose-testing--android--medium, q-testing-coroutines-flow--android--hard, q-testing-viewmodels-turbine--android--medium, q-unit-testing-coroutines-flow--android--medium]
+related:
+- c-flow
+- q-compose-testing--android--medium
+- q-testing-coroutines-flow--android--hard
+- q-testing-viewmodels-turbine--android--medium
+- q-unit-testing-coroutines-flow--android--medium
 created: 2025-10-12
 updated: 2025-11-10
-tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, turbine, testing-unit]
+tags:
+- android/coroutines
+- android/flow
+- android/testing-unit
+- difficulty/medium
+- turbine
+- testing-unit
+anki_cards:
+- slug: android-066-0-en
+  language: en
+  anki_id: 1768367161107
+  synced_at: '2026-01-14T09:17:53.521987'
+- slug: android-066-0-ru
+  language: ru
+  anki_id: 1768367161130
+  synced_at: '2026-01-14T09:17:53.525708'
 sources:
-  - "https://github.com/cashapp/turbine"
-
----\
+- https://github.com/cashapp/turbine
+---
 # Вопрос (RU)
 > Что такое Turbine? Как тестировать Flows с Turbine?
 

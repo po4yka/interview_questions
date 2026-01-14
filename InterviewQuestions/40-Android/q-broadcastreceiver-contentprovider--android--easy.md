@@ -1,24 +1,49 @@
----\
+---
 id: android-320
 title: BroadcastReceiver and ContentProvider / BroadcastReceiver и ContentProvider
-aliases: [BroadcastReceiver and ContentProvider, BroadcastReceiver и ContentProvider]
+aliases:
+- BroadcastReceiver and ContentProvider
+- BroadcastReceiver и ContentProvider
 topic: android
-subtopics: [broadcast-receiver, content-provider]
+subtopics:
+- broadcast-receiver
+- content-provider
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-broadcast-receiver, c-content-provider, q-android-app-components--android--easy, q-android-components-besides-activity--android--easy, q-android-manifest-file--android--easy, q-android-service-types--android--easy, q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]
+related:
+- c-broadcast-receiver
+- c-content-provider
+- q-android-app-components--android--easy
+- q-android-components-besides-activity--android--easy
+- q-android-manifest-file--android--easy
+- q-android-service-types--android--easy
+- q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium
+- q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
 sources:
-  - "https://developer.android.com/guide/components/broadcasts"
-  - "https://developer.android.com/guide/topics/providers/content-provider-basics"
+- https://developer.android.com/guide/components/broadcasts
+- https://developer.android.com/guide/topics/providers/content-provider-basics
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
-
----\
+tags:
+- android/broadcast-receiver
+- android/content-provider
+- difficulty/easy
+anki_cards:
+- slug: android-320-0-en
+  language: en
+  anki_id: 1768364991251
+  synced_at: '2026-01-14T09:17:53.505214'
+- slug: android-320-0-ru
+  language: ru
+  anki_id: 1768364991273
+  synced_at: '2026-01-14T09:17:53.507850'
+---
 # Вопрос (RU)
 > Что такое `BroadcastReceiver` и `ContentProvider` в Android?
 

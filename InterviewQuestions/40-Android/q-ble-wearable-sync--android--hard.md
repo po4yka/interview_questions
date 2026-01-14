@@ -1,21 +1,46 @@
----\
+---
 id: android-489
 title: Design BLE Wearable Sync / Проектирование синхронизации BLE носимых устройств
-aliases: [Design BLE Wearable Sync, Проектирование синхронизации BLE носимых устройств]
+aliases:
+- Design BLE Wearable Sync
+- Проектирование синхронизации BLE носимых устройств
 topic: android
-subtopics: [background-execution, bluetooth, service]
+subtopics:
+- background-execution
+- bluetooth
+- service
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-permissions, c-service, c-workmanager]
+related:
+- c-lifecycle
+- c-permissions
+- c-service
+- c-workmanager
 sources: []
 created: 2025-10-29
 updated: 2025-10-30
-tags: [android/background-execution, android/bluetooth, android/service, difficulty/hard, topic/android]
----\
+tags:
+- android/background-execution
+- android/bluetooth
+- android/service
+- difficulty/hard
+- topic/android
+anki_cards:
+- slug: android-489-0-en
+  language: en
+  anki_id: 1768364991649
+  synced_at: '2026-01-14T09:17:53.656377'
+- slug: android-489-0-ru
+  language: ru
+  anki_id: 1768364991673
+  synced_at: '2026-01-14T09:17:53.658519'
+---
 # Вопрос (RU)
 
 > Спроектируйте Android-компаньон для BLE носимого трекера здоровья. Требования: pairing & bonding, фоновая синхронизация каждые 10 мин, backfill пропущенных данных за 24ч, бюджет батареи <1%/ч во время активной синхронизации, защита приватности. Включите GATT profile, логику переподключения, модель данных, flow разрешений, наблюдаемость.

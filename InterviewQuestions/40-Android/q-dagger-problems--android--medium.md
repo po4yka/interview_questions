@@ -1,22 +1,50 @@
----\
+---
 id: android-453
 title: Dagger Problems / Проблемы Dagger
-aliases: [Dagger Problems, Проблемы Dagger]
+aliases:
+- Dagger Problems
+- Проблемы Dagger
 topic: android
-subtopics: [di-hilt, gradle, testing-unit]
+subtopics:
+- di-hilt
+- gradle
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-dagger-build-time-optimization--android--medium, q-dagger-field-injection--android--medium, q-dagger-framework-overview--android--hard, q-dagger-purpose--android--easy, q-dagger-scope-explained--android--medium]
+related:
+- c-dependency-injection
+- q-dagger-build-time-optimization--android--medium
+- q-dagger-field-injection--android--medium
+- q-dagger-framework-overview--android--hard
+- q-dagger-purpose--android--easy
+- q-dagger-scope-explained--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/di-hilt, android/gradle, android/testing-unit, challenges, dagger, difficulty/medium, hilt]
+tags:
+- android/di-hilt
+- android/gradle
+- android/testing-unit
+- challenges
+- dagger
+- difficulty/medium
+- hilt
+anki_cards:
+- slug: android-453-0-en
+  language: en
+  anki_id: 1768366558274
+  synced_at: '2026-01-14T09:17:53.394703'
+- slug: android-453-0-ru
+  language: ru
+  anki_id: 1768366558299
+  synced_at: '2026-01-14T09:17:53.397299'
 sources: []
-
----\
+---
 # Вопрос (RU)
 > Какие проблемы есть у `Dagger`?
 

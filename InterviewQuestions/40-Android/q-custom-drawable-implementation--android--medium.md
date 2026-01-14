@@ -1,22 +1,45 @@
----\
+---
 id: android-478
 title: Custom Drawable Implementation / Реализация Custom Drawable
-aliases: [Custom Drawable Implementation, Реализация Custom Drawable]
+aliases:
+- Custom Drawable Implementation
+- Реализация Custom Drawable
 topic: android
-subtopics: [ui-graphics, ui-views]
+subtopics:
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, q-canvas-drawing-optimization--android--hard, q-custom-view-accessibility--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium, q-custom-viewgroup-layout--android--hard]
+related:
+- c-custom-views
+- q-canvas-drawing-optimization--android--hard
+- q-custom-view-accessibility--android--medium
+- q-custom-view-attributes--android--medium
+- q-custom-view-lifecycle--android--medium
+- q-custom-viewgroup-layout--android--hard
 created: 2025-10-21
 updated: 2025-11-10
-tags: [android/ui-graphics, android/ui-views, difficulty/medium]
+tags:
+- android/ui-graphics
+- android/ui-views
+- difficulty/medium
 sources: []
-
----\
+anki_cards:
+- slug: android-478-0-en
+  language: en
+  anki_id: 1768366342725
+  synced_at: '2026-01-14T09:17:53.256143'
+- slug: android-478-0-ru
+  language: ru
+  anki_id: 1768366342750
+  synced_at: '2026-01-14T09:17:53.258165'
+---
 # Вопрос (RU)
 > Как реализовать Custom `Drawable` в Android?
 

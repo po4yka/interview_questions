@@ -1,22 +1,47 @@
----\
+---
 id: android-054
 title: Compose Custom Layout / Кастомный layout в Compose
-aliases: [Compose Custom Layout, Custom Layout Jetpack Compose, Кастомная разметка Compose, Кастомный layout в Compose]
+aliases:
+- Compose Custom Layout
+- Custom Layout Jetpack Compose
+- Кастомная разметка Compose
+- Кастомный layout в Compose
 topic: android
-subtopics: [ui-compose, ui-graphics]
+subtopics:
+- ui-compose
+- ui-graphics
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, q-compose-canvas-graphics--android--hard, q-compose-compiler-plugin--android--hard, q-compose-custom-animations--android--medium, q-compose-lazy-layout-optimization--android--hard, q-custom-viewgroup-layout--android--hard]
+related:
+- c-compose-state
+- q-compose-canvas-graphics--android--hard
+- q-compose-compiler-plugin--android--hard
+- q-compose-custom-animations--android--medium
+- q-compose-lazy-layout-optimization--android--hard
+- q-custom-viewgroup-layout--android--hard
 sources: []
 created: 2023-10-11
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
-
----\
+tags:
+- android/ui-compose
+- android/ui-graphics
+- difficulty/hard
+anki_cards:
+- slug: android-054-0-en
+  language: en
+  anki_id: 1768365662475
+  synced_at: '2026-01-14T09:17:53.862368'
+- slug: android-054-0-ru
+  language: ru
+  anki_id: 1768365662501
+  synced_at: '2026-01-14T09:17:53.865094'
+---
 # Вопрос (RU)
 > Как создать кастомный layout в Compose? Объясните механизм measurement и placement.
 

@@ -1,22 +1,46 @@
----\
+---
 id: android-454
 title: Custom ViewGroup Layout / Layout кастомных ViewGroup
-aliases: [Custom ViewGroup Layout, Layout кастомных ViewGroup]
+aliases:
+- Custom ViewGroup Layout
+- Layout кастомных ViewGroup
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, q-compose-custom-animations--android--medium, q-compose-custom-layout--android--hard, q-custom-drawable-implementation--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium, q-mlkit-custom-models--android--hard]
+related:
+- c-custom-views
+- q-compose-custom-animations--android--medium
+- q-compose-custom-layout--android--hard
+- q-custom-drawable-implementation--android--medium
+- q-custom-view-attributes--android--medium
+- q-custom-view-lifecycle--android--medium
+- q-mlkit-custom-models--android--hard
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/ui-views, custom-views, difficulty/hard, layout]
+tags:
+- android/ui-views
+- custom-views
+- difficulty/hard
+- layout
 sources: []
-
----\
+anki_cards:
+- slug: android-454-0-en
+  language: en
+  anki_id: 1768366344675
+  synced_at: '2026-01-14T09:17:53.427273'
+- slug: android-454-0-ru
+  language: ru
+  anki_id: 1768366344700
+  synced_at: '2026-01-14T09:17:53.430118'
+---
 # Вопрос (RU)
 
 > Как создать кастомный `ViewGroup`? Объясните процесс измерения и компоновки. Реализуйте FlowLayout, который располагает дочерние элементы в ряды с переносом.

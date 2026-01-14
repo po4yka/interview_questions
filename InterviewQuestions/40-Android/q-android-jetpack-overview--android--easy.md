@@ -1,22 +1,48 @@
----\
+---
 id: android-103
 title: Android Jetpack Overview / Обзор Android Jetpack
-aliases: [Android Jetpack Overview, Обзор Android Jetpack]
+aliases:
+- Android Jetpack Overview
+- Обзор Android Jetpack
 topic: android
-subtopics: [architecture-mvvm, lifecycle, ui-compose]
+subtopics:
+- architecture-mvvm
+- lifecycle
+- ui-compose
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-architecture-components-libraries--android--easy, q-how-jetpack-compose-works--android--medium, q-room-library-definition--android--easy, q-viewmodel-pattern--android--easy, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]
+related:
+- c-android
+- q-architecture-components-libraries--android--easy
+- q-how-jetpack-compose-works--android--medium
+- q-room-library-definition--android--easy
+- q-viewmodel-pattern--android--easy
+- q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
 sources: []
 created: 2025-10-13
 updated: 2025-11-11
-tags: [android/architecture-mvvm, android/lifecycle, android/ui-compose, difficulty/easy, jetpack]
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- android/ui-compose
+- difficulty/easy
+- jetpack
 question_kind: android
-
----\
+anki_cards:
+- slug: android-103-0-en
+  language: en
+  anki_id: 1768363502647
+  synced_at: '2026-01-14T09:17:53.759105'
+- slug: android-103-0-ru
+  language: ru
+  anki_id: 1768363502671
+  synced_at: '2026-01-14T09:17:53.761898'
+---
 # Вопрос (RU)
 > Что такое Android Jetpack и какие его основные компоненты?
 

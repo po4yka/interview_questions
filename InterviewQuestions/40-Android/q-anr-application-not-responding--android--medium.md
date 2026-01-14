@@ -1,22 +1,48 @@
----\
+---
 id: android-003
 title: ANR (Application Not Responding) / ANR (Приложение не отвечает)
-aliases: [ANR (Application Not Responding), ANR (Приложение не отвечает)]
+aliases:
+- ANR (Application Not Responding)
+- ANR (Приложение не отвечает)
 topic: android
-subtopics: [performance-rendering, profiling, strictmode-anr]
+subtopics:
+- performance-rendering
+- profiling
+- strictmode-anr
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, q-android-app-lag-analysis--android--medium, q-optimize-memory-usage-android--android--medium, q-performance-monitoring-jank-compose--android--medium, q-recomposition-compose--android--medium]
+related:
+- c-lifecycle
+- q-android-app-lag-analysis--android--medium
+- q-optimize-memory-usage-android--android--medium
+- q-performance-monitoring-jank-compose--android--medium
+- q-recomposition-compose--android--medium
 created: 2025-10-05
 updated: 2025-11-10
 sources: []
-tags: [android/performance-rendering, android/profiling, android/strictmode-anr, debugging, difficulty/medium, performance]
-
----\
+tags:
+- android/performance-rendering
+- android/profiling
+- android/strictmode-anr
+- debugging
+- difficulty/medium
+- performance
+anki_cards:
+- slug: android-003-0-en
+  language: en
+  anki_id: 1768364267073
+  synced_at: '2026-01-14T09:17:53.217684'
+- slug: android-003-0-ru
+  language: ru
+  anki_id: 1768364267096
+  synced_at: '2026-01-14T09:17:53.221474'
+---
 # Вопрос (RU)
 > Что такое ANR (`Application` Not Responding) и как его предотвратить?
 

@@ -1,20 +1,46 @@
 ---
 id: android-179
-title: "Gradle Version Catalog / Каталог версий Gradle"
-aliases: [Gradle Version Catalog, libs.versions.toml, Version Catalog, Каталог версий Gradle]
+title: Gradle Version Catalog / Каталог версий Gradle
+aliases:
+- Gradle Version Catalog
+- libs.versions.toml
+- Version Catalog
+- Каталог версий Gradle
 topic: android
-subtopics: [gradle]
+subtopics:
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-gradle, q-gradle-build-system--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium, q-kapt-ksp-migration--android--medium]
+related:
+- c-gradle
+- q-gradle-build-system--android--medium
+- q-gradle-kotlin-dsl-vs-groovy--android--medium
+- q-kapt-ksp-migration--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/gradle, difficulty/medium, gradle, toml]
-sources: ["https://developer.android.com/build/migrate-to-catalogs", "https://docs.gradle.org/current/userguide/platforms.html"]
+tags:
+- android/gradle
+- difficulty/medium
+- gradle
+- toml
+anki_cards:
+- slug: android-179-0-en
+  language: en
+  anki_id: 1768367361232
+  synced_at: '2026-01-14T09:17:53.141265'
+- slug: android-179-0-ru
+  language: ru
+  anki_id: 1768367361257
+  synced_at: '2026-01-14T09:17:53.143449'
+sources:
+- https://developer.android.com/build/migrate-to-catalogs
+- https://docs.gradle.org/current/userguide/platforms.html
 ---
 # Вопрос (RU)
 

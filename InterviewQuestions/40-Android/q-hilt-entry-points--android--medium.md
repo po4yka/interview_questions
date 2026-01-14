@@ -1,22 +1,44 @@
----\
+---
 id: android-035
-title: "Hilt Entry Points / Точки входа Hilt"
-aliases: ["Hilt Entry Points", "Точки входа Hilt"]
+title: Hilt Entry Points / Точки входа Hilt
+aliases:
+- Hilt Entry Points
+- Точки входа Hilt
 topic: android
-subtopics: [di-hilt, lifecycle]
+subtopics:
+- di-hilt
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, c-hilt]
+related:
+- c-dependency-injection
+- c-hilt
 created: 2025-10-11
 updated: 2025-11-11
-tags: [android/di-hilt, android/lifecycle, dependency-injection, difficulty/medium, hilt]
-sources: ["https://dagger.dev/hilt/entry-points.html"]
-
----\
+tags:
+- android/di-hilt
+- android/lifecycle
+- dependency-injection
+- difficulty/medium
+- hilt
+anki_cards:
+- slug: android-035-0-en
+  language: en
+  anki_id: 1768367580655
+  synced_at: '2026-01-14T09:13:16.043995'
+- slug: android-035-0-ru
+  language: ru
+  anki_id: 1768367580680
+  synced_at: '2026-01-14T09:13:16.046588'
+sources:
+- https://dagger.dev/hilt/entry-points.html
+---
 # Вопрос (RU)
 > Что такое `Hilt` Entry Points и когда их использовать?
 

@@ -1,20 +1,43 @@
----id: android-142
+---
+id: android-142
 title: Compose Stability Skippability / Стабильность и пропускаемость Compose
-aliases: [Compose Stability Skippability, Стабильность и пропускаемость Compose]
+aliases:
+- Compose Stability Skippability
+- Стабильность и пропускаемость Compose
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-recomposition, q-compose-compiler-plugin--android--hard, q-compose-lazy-layout-optimization--android--hard, q-compose-performance-optimization--android--hard]
+related:
+- c-compose-recomposition
+- c-recomposition
+- q-compose-compiler-plugin--android--hard
+- q-compose-lazy-layout-optimization--android--hard
+- q-compose-performance-optimization--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/performance-memory, android/ui-compose, difficulty/hard]
+tags:
+- android/performance-memory
+- android/ui-compose
+- difficulty/hard
 sources: []
-
+anki_cards:
+- slug: android-142-0-en
+  language: en
+  anki_id: 1768366065529
+  synced_at: '2026-01-14T09:17:53.031337'
+- slug: android-142-0-ru
+  language: ru
+  anki_id: 1768366065552
+  synced_at: '2026-01-14T09:17:53.033878'
 ---
 # Вопрос (RU)
 > Как стабильность типов влияет на пропускаемость перекомпозиции в Jetpack Compose?

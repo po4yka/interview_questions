@@ -1,21 +1,43 @@
----\
+---
 id: android-198
 title: Handler Looper Comprehensive / Handler и Looper подробно
-aliases: [Handler Looper Comprehensive, Handler и Looper подробно]
+aliases:
+- Handler Looper Comprehensive
+- Handler и Looper подробно
 topic: android
-subtopics: [threads-sync]
+subtopics:
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, q-glide-image-loading-internals--android--medium, q-handler-looper-main-thread--android--medium, q-looper-empty-queue-behavior--android--medium, q-looper-thread-connection--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
+related:
+- c-coroutines
+- q-glide-image-loading-internals--android--medium
+- q-handler-looper-main-thread--android--medium
+- q-looper-empty-queue-behavior--android--medium
+- q-looper-thread-connection--android--medium
+- q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/threads-sync, concurrency, difficulty/medium]
-
----\
+tags:
+- android/threads-sync
+- concurrency
+- difficulty/medium
+anki_cards:
+- slug: android-198-0-en
+  language: en
+  anki_id: 1768367584206
+  synced_at: '2026-01-14T09:17:53.205964'
+- slug: android-198-0-ru
+  language: ru
+  anki_id: 1768367584230
+  synced_at: '2026-01-14T09:17:53.208692'
+---
 # Вопрос (RU)
 > `Handler` и `Looper` подробно
 

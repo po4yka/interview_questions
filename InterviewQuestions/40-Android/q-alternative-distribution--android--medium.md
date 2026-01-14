@@ -1,21 +1,46 @@
 ---
 id: android-406
 title: Alternative Distribution / Альтернативное распространение
-aliases: [Alternative Distribution, Альтернативное распространение]
+aliases:
+- Alternative Distribution
+- Альтернативное распространение
 topic: android
-subtopics: [app-bundle, billing, play-console]
+subtopics:
+- app-bundle
+- billing
+- play-console
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-app-bundle, q-android-app-bundles--android--easy, q-app-store-optimization--android--medium, q-internal-app-distribution--android--medium, q-play-app-signing--android--medium, q-play-store-publishing--android--medium]
+related:
+- c-app-bundle
+- q-android-app-bundles--android--easy
+- q-app-store-optimization--android--medium
+- q-internal-app-distribution--android--medium
+- q-play-app-signing--android--medium
+- q-play-store-publishing--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/app-bundle, android/billing, android/play-console, difficulty/medium]
-
+tags:
+- android/app-bundle
+- android/billing
+- android/play-console
+- difficulty/medium
+anki_cards:
+- slug: android-406-0-en
+  language: en
+  anki_id: 1768363328871
+  synced_at: '2026-01-14T09:17:53.806739'
+- slug: android-406-0-ru
+  language: ru
+  anki_id: 1768363328895
+  synced_at: '2026-01-14T09:17:53.808963'
 ---
 # Вопрос (RU)
 > Что такое альтернативное распространение Android-приложений и какие платформы существуют помимо Google Play?

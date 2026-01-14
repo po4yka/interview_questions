@@ -1,22 +1,49 @@
----\
+---
 id: android-469
 title: Dagger Field Injection / Инъекция полей Dagger
-aliases: [Dagger Field Injection, Инъекция полей Dagger]
+aliases:
+- Dagger Field Injection
+- Инъекция полей Dagger
 topic: android
-subtopics: [architecture-mvvm, di-hilt]
+subtopics:
+- architecture-mvvm
+- di-hilt
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-dagger-framework-overview--android--hard, q-dagger-main-elements--android--medium, q-dagger-purpose--android--easy, q-hilt-components-scope--android--medium]
+related:
+- c-dagger
+- c-dependency-injection
+- c-hilt
+- q-dagger-build-time-optimization--android--medium
+- q-dagger-framework-overview--android--hard
+- q-dagger-main-elements--android--medium
+- q-dagger-purpose--android--easy
+- q-hilt-components-scope--android--medium
 sources: []
+anki_cards:
+- slug: android-469-0-en
+  language: en
+  anki_id: 1768366562829
+  synced_at: '2026-01-14T09:17:53.783669'
+- slug: android-469-0-ru
+  language: ru
+  anki_id: 1768366562851
+  synced_at: '2026-01-14T09:17:53.785661'
 created: 2025-10-20
 updated: 2025-10-30
-tags: [android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/medium]
-
----\
+tags:
+- android/architecture-mvvm
+- android/di-hilt
+- dagger
+- dependency-injection
+- difficulty/medium
+---
 # Вопрос (RU)
 > Какие особенности инъекции в поле при помощи `Dagger`?
 

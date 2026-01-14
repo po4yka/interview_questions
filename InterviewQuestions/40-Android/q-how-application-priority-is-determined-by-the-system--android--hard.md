@@ -1,22 +1,52 @@
----\
+---
 id: android-124
-title: How Application Priority Is Determined By The System / Как система определяет приоритет приложения
-aliases: [How Application Priority Is Determined, Как система определяет приоритет приложения]
+title: How Application Priority Is Determined By The System / Как система определяет
+  приоритет приложения
+aliases:
+- How Application Priority Is Determined
+- Как система определяет приоритет приложения
 topic: android
-subtopics: [lifecycle, performance-memory, processes]
+subtopics:
+- lifecycle
+- performance-memory
+- processes
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-memory-management, q-anr-application-not-responding--android--medium, q-raise-process-priority--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- c-lifecycle
+- c-memory-management
+- q-anr-application-not-responding--android--medium
+- q-raise-process-priority--android--medium
+- q-what-unites-the-main-components-of-an-android-application--android--medium
+- q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/lifecycle, android/performance-memory, android/processes, difficulty/hard, lifecycle, performance-memory, processes]
-
----\
+anki_cards:
+- slug: android-124-0-en
+  language: en
+  anki_id: 1768367580805
+  synced_at: '2026-01-14T09:17:53.015254'
+- slug: android-124-0-ru
+  language: ru
+  anki_id: 1768367580830
+  synced_at: '2026-01-14T09:17:53.017826'
+tags:
+- android
+- android/lifecycle
+- android/performance-memory
+- android/processes
+- difficulty/hard
+- lifecycle
+- performance-memory
+- processes
+---
 # Вопрос (RU)
 
 > Как система определяет приоритет приложения?

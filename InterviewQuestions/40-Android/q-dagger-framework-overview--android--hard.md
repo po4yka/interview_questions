@@ -1,23 +1,52 @@
----\
+---
 id: android-456
 title: Dagger Framework Overview / Обзор фреймворка Dagger
-aliases: [Dagger Framework Overview, Обзор фреймворка Dagger]
+aliases:
+- Dagger Framework Overview
+- Обзор фреймворка Dagger
 topic: android
-subtopics: [architecture-clean, architecture-mvvm, di-hilt]
+subtopics:
+- architecture-clean
+- architecture-mvvm
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-dagger-custom-scopes--android--hard, q-dagger-multibinding--android--hard, q-dagger-purpose--android--easy]
+related:
+- c-dagger
+- c-dependency-injection
+- c-hilt
+- q-dagger-build-time-optimization--android--medium
+- q-dagger-custom-scopes--android--hard
+- q-dagger-multibinding--android--hard
+- q-dagger-purpose--android--easy
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
+tags:
+- android/architecture-clean
+- android/architecture-mvvm
+- android/di-hilt
+- dagger
+- dependency-injection
+- difficulty/hard
+- hilt
+anki_cards:
+- slug: android-456-0-en
+  language: en
+  anki_id: 1768366559427
+  synced_at: '2026-01-14T09:17:53.466596'
+- slug: android-456-0-ru
+  language: ru
+  anki_id: 1768366559450
+  synced_at: '2026-01-14T09:17:53.468820'
 sources:
-  - "https://dagger.dev/"
-
----\
+- https://dagger.dev/
+---
 # Вопрос (RU)
 > Что известно про фреймворк `Dagger`?
 

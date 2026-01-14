@@ -1,22 +1,49 @@
----\
+---
 id: android-041
 title: Compose Compiler Plugin / Плагин компилятора Compose
-aliases: [Compose Compiler, Compose Compiler Plugin, Компилятор Compose, Плагин компилятора Compose]
+aliases:
+- Compose Compiler
+- Compose Compiler Plugin
+- Компилятор Compose
+- Плагин компилятора Compose
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, q-android-performance-measurement-tools--android--medium, q-compose-multiplatform--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
+related:
+- c-compose-recomposition
+- c-compose-state
+- q-android-performance-measurement-tools--android--medium
+- q-compose-multiplatform--android--hard
+- q-compose-performance-optimization--android--hard
+- q-compose-stability-skippability--android--hard
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
-tags: [android/performance-memory, android/ui-compose, compiler, difficulty/hard, performance]
-
----\
+tags:
+- android/performance-memory
+- android/ui-compose
+- compiler
+- difficulty/hard
+- performance
+anki_cards:
+- slug: android-041-0-en
+  language: en
+  anki_id: 1768365656574
+  synced_at: '2026-01-14T09:17:53.152174'
+- slug: android-041-0-ru
+  language: ru
+  anki_id: 1768365656598
+  synced_at: '2026-01-14T09:17:53.155286'
+---
 # Вопрос (RU)
 > Как работает плагин компилятора Compose и как он оптимизирует перекомпозицию?
 

@@ -1,21 +1,46 @@
----\
+---
 id: android-459
 title: Dagger Multibinding / Multibinding в Dagger
-aliases: [Dagger Multibinding, Multibinding в Dagger]
+aliases:
+- Dagger Multibinding
+- Multibinding в Dagger
 topic: android
-subtopics: [architecture-modularization, di-hilt]
+subtopics:
+- architecture-modularization
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-dagger-component-dependencies--android--hard, q-dagger-custom-scopes--android--hard, q-dagger-framework-overview--android--hard, q-dagger-purpose--android--easy]
+related:
+- q-dagger-component-dependencies--android--hard
+- q-dagger-custom-scopes--android--hard
+- q-dagger-framework-overview--android--hard
+- q-dagger-purpose--android--easy
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/architecture-modularization, android/di-hilt, dagger, dependency-injection, difficulty/hard, multibinding]
+tags:
+- android/architecture-modularization
+- android/di-hilt
+- dagger
+- dependency-injection
+- difficulty/hard
+- multibinding
+anki_cards:
+- slug: android-459-0-en
+  language: en
+  anki_id: 1768366560278
+  synced_at: '2026-01-14T09:17:53.547575'
+- slug: android-459-0-ru
+  language: ru
+  anki_id: 1768366560300
+  synced_at: '2026-01-14T09:17:53.550044'
 sources: []
----\
+---
 # Вопрос (RU)
 > Объясните Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). Как бы вы использовали это для реализации плагинной архитектуры или системы feature-модулей?
 

@@ -1,22 +1,46 @@
----\
+---
 id: android-154
 title: Android Architectural Patterns / Архитектурные паттерны Android
-aliases: [Android Architectural Patterns, Архитектурные паттерны Android]
+aliases:
+- Android Architectural Patterns
+- Архитектурные паттерны Android
 topic: android
-subtopics: [architecture-clean, architecture-mvi, architecture-mvvm]
+subtopics:
+- architecture-clean
+- architecture-mvi
+- architecture-mvvm
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-clean-architecture, c-mvvm, q-android-lint-tool--android--medium, q-factory-pattern-android--android--medium, q-modularization-patterns--android--hard]
+related:
+- c-clean-architecture
+- c-mvvm
+- q-android-lint-tool--android--medium
+- q-factory-pattern-android--android--medium
+- q-modularization-patterns--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-clean, android/architecture-mvi, android/architecture-mvvm, difficulty/medium]
+tags:
+- android/architecture-clean
+- android/architecture-mvi
+- android/architecture-mvvm
+- difficulty/medium
+anki_cards:
+- slug: android-154-0-en
+  language: en
+  anki_id: 1768363501862
+  synced_at: '2026-01-14T09:17:53.086235'
+- slug: android-154-0-ru
+  language: ru
+  anki_id: 1768363501873
+  synced_at: '2026-01-14T09:17:53.088760'
 sources: []
-
----\
+---
 # Вопрос (RU)
 > Какие архитектурные паттерны используются в Android разработке, и чем они отличаются друг от друга?
 

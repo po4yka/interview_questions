@@ -1,23 +1,48 @@
----\
+---
 id: android-477
 title: Custom View Accessibility / Доступность Custom View
-aliases: [Custom View Accessibility, Доступность Custom View]
+aliases:
+- Custom View Accessibility
+- Доступность Custom View
 topic: android
-subtopics: [ui-accessibility, ui-views]
+subtopics:
+- ui-accessibility
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-accessibility, c-custom-views, q-accessibility-compose--android--medium, q-accessibility-talkback--android--medium, q-compose-semantics--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium, q-custom-view-state-saving--android--medium]
+related:
+- c-accessibility
+- c-custom-views
+- q-accessibility-compose--android--medium
+- q-accessibility-talkback--android--medium
+- q-compose-semantics--android--medium
+- q-custom-view-attributes--android--medium
+- q-custom-view-lifecycle--android--medium
+- q-custom-view-state-saving--android--medium
 sources:
-  - "https://developer.android.com/guide/topics/ui/accessibility"
+- https://developer.android.com/guide/topics/ui/accessibility
+anki_cards:
+- slug: android-477-0-en
+  language: en
+  anki_id: 1768366342576
+  synced_at: '2026-01-14T09:17:53.247283'
+- slug: android-477-0-ru
+  language: ru
+  anki_id: 1768366342600
+  synced_at: '2026-01-14T09:17:53.249475'
 created: 2025-10-21
 updated: 2025-11-10
-tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
-
----\
+tags:
+- android/ui-accessibility
+- android/ui-views
+- difficulty/medium
+---
 # Вопрос (RU)
 > Как правильно реализовать доступность для custom view в Android?
 

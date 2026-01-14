@@ -1,21 +1,49 @@
----\
+---
 id: android-404
 title: Fragments Vs Activity / Fragments против Activity
-aliases: [Fragments Vs Activity, Fragments против Activity]
+aliases:
+- Fragments Vs Activity
+- Fragments против Activity
 topic: android
-subtopics: [fragment, lifecycle, ui-navigation]
+subtopics:
+- fragment
+- lifecycle
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-navigation, c-fragments, c-lifecycle, q-fragment-vs-activity-lifecycle--android--medium, q-fragments-and-activity-relationship--android--hard, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
+related:
+- c-compose-navigation
+- c-fragments
+- c-lifecycle
+- q-fragment-vs-activity-lifecycle--android--medium
+- q-fragments-and-activity-relationship--android--hard
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-what-are-fragments-for-if-there-is-activity--android--medium
+- q-why-are-fragments-needed-if-there-is-activity--android--hard
 sources: []
+anki_cards:
+- slug: android-404-0-en
+  language: en
+  anki_id: 1768367372082
+  synced_at: '2026-01-14T09:17:53.802198'
+- slug: android-404-0-ru
+  language: ru
+  anki_id: 1768367372108
+  synced_at: '2026-01-14T09:17:53.804224'
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/fragment, android/lifecycle, android/ui-navigation, difficulty/medium]
----\
+tags:
+- android/fragment
+- android/lifecycle
+- android/ui-navigation
+- difficulty/medium
+---
 # Вопрос (RU)
 
 > Для чего нужны фрагменты, если есть `Activity`?

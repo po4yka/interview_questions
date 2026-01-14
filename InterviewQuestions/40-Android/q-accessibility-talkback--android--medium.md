@@ -1,21 +1,48 @@
----id: android-055
+---
+id: android-055
 title: Accessibility TalkBack / Доступность и TalkBack
-aliases: [TalkBack Accessibility, Доступность TalkBack]
+aliases:
+- TalkBack Accessibility
+- Доступность TalkBack
 topic: android
-subtopics: [ui-accessibility, ui-navigation]
+subtopics:
+- ui-accessibility
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-accessibility, c-globalization, q-accessibility-color-contrast--android--medium, q-accessibility-compose--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
+related:
+- c-accessibility
+- c-globalization
+- q-accessibility-color-contrast--android--medium
+- q-accessibility-compose--android--medium
+- q-accessibility-testing--android--medium
+- q-custom-view-accessibility--android--medium
 created: 2025-10-11
 updated: 2025-11-10
-tags: [accessibility, android/ui-accessibility, android/ui-navigation, difficulty/medium, talkback]
+tags:
+- accessibility
+- android/ui-accessibility
+- android/ui-navigation
+- difficulty/medium
+- talkback
+anki_cards:
+- slug: android-055-0-en
+  language: en
+  anki_id: 1768363604322
+  synced_at: '2026-01-14T09:17:53.894601'
+- slug: android-055-0-ru
+  language: ru
+  anki_id: 1768363604346
+  synced_at: '2026-01-14T09:17:53.897229'
 sources:
-  - "https://developer.android.com/guide/topics/ui/accessibility"
-  - "https://developer.android.com/jetpack/compose/accessibility"
+- https://developer.android.com/guide/topics/ui/accessibility
+- https://developer.android.com/jetpack/compose/accessibility
 ---
 # Вопрос (RU)
 > Как реализовать поддержку TalkBack в Android-приложениях?

@@ -1,22 +1,52 @@
----\
+---
 id: android-446
-title: FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами
-aliases: [FileProvider, FileProvider for Secure File Sharing, FileProvider для безопасного обмена файлами, Безопасный обмен файлами]
+title: FileProvider for Secure File Sharing / FileProvider для безопасного обмена
+  файлами
+aliases:
+- FileProvider
+- FileProvider for Secure File Sharing
+- FileProvider для безопасного обмена файлами
+- Безопасный обмен файлами
 topic: android
-subtopics: [files-media, permissions]
+subtopics:
+- files-media
+- permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources:
-  - https://developer.android.com/reference/androidx/core/content/FileProvider
+- https://developer.android.com/reference/androidx/core/content/FileProvider
+anki_cards:
+- slug: android-446-0-en
+  language: en
+  anki_id: 1768367156506
+  synced_at: '2026-01-14T09:17:53.264046'
+- slug: android-446-0-ru
+  language: ru
+  anki_id: 1768367156530
+  synced_at: '2026-01-14T09:17:53.265907'
 status: draft
 moc: moc-android
-related: [c-content-provider, q-android-security-practices-checklist--android--medium, q-android-storage-types--android--medium, q-api-file-upload-server--android--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium, q-runtime-permissions-best-practices--android--medium]
+related:
+- c-content-provider
+- q-android-security-practices-checklist--android--medium
+- q-android-storage-types--android--medium
+- q-api-file-upload-server--android--medium
+- q-how-to-display-svg-string-as-a-vector-file--android--medium
+- q-runtime-permissions-best-practices--android--medium
 created: 2025-10-20
 updated: 2025-10-28
-tags: [android/files-media, android/permissions, content-provider, difficulty/medium, file-sharing, security]
----\
+tags:
+- android/files-media
+- android/permissions
+- content-provider
+- difficulty/medium
+- file-sharing
+- security
+---
 # Вопрос (RU)
 > Что вы знаете о FileProvider?
 

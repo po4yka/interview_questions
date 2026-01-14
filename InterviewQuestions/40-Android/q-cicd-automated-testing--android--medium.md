@@ -1,20 +1,47 @@
 ---
 id: android-237
 title: CI/CD Automated Testing / Автоматизированное тестирование в CI/CD
-aliases: [CI/CD Automated Testing, Автоматизированное тестирование в CI/CD]
+aliases:
+- CI/CD Automated Testing
+- Автоматизированное тестирование в CI/CD
 topic: android
-subtopics: [ci-cd, testing-instrumented, testing-unit]
+subtopics:
+- ci-cd
+- testing-instrumented
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-gradle, q-accessibility-testing--android--medium, q-android-release-pipeline-cicd--android--hard, q-android-testing-strategies--android--medium, q-integration-testing-strategies--android--medium]
+related:
+- c-gradle
+- q-accessibility-testing--android--medium
+- q-android-release-pipeline-cicd--android--hard
+- q-android-testing-strategies--android--medium
+- q-integration-testing-strategies--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/ci-cd, android/testing-instrumented, android/testing-unit, ci-cd, difficulty/medium, testing]
+tags:
+- android/ci-cd
+- android/testing-instrumented
+- android/testing-unit
+- ci-cd
+- difficulty/medium
+- testing
+anki_cards:
+- slug: android-237-0-en
+  language: en
+  anki_id: 1768365307675
+  synced_at: '2026-01-14T09:17:53.299588'
+- slug: android-237-0-ru
+  language: ru
+  anki_id: 1768365307700
+  synced_at: '2026-01-14T09:17:53.302200'
 ---
 # Вопрос (RU)
 > Как организовать автоматизированное тестирование Android-приложения в CI/CD пайплайне?

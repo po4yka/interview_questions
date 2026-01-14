@@ -1,23 +1,48 @@
----\
+---
 id: android-049
 title: Hilt Assisted Injection / Hilt Ассистированный инжект
-aliases: [Hilt Assisted Injection, Hilt Ассистированный инжект]
+aliases:
+- Hilt Assisted Injection
+- Hilt Ассистированный инжект
 topic: android
-subtopics: [architecture-mvvm, di-hilt]
+subtopics:
+- architecture-mvvm
+- di-hilt
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, q-hilt-entry-points--android--medium, q-koin-vs-dagger-philosophy--android--hard, q-test-doubles-dependency-injection--android--medium]
+related:
+- c-dagger
+- q-hilt-entry-points--android--medium
+- q-koin-vs-dagger-philosophy--android--hard
+- q-test-doubles-dependency-injection--android--medium
 created: 2025-10-11
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/di-hilt, assisted-inject, dagger, dependency-injection, difficulty/medium, hilt]
+tags:
+- android/architecture-mvvm
+- android/di-hilt
+- assisted-inject
+- dagger
+- dependency-injection
+- difficulty/medium
+- hilt
+anki_cards:
+- slug: android-049-0-en
+  language: en
+  anki_id: 1768367590110
+  synced_at: '2026-01-14T09:17:53.536738'
+- slug: android-049-0-ru
+  language: ru
+  anki_id: 1768367590131
+  synced_at: '2026-01-14T09:17:53.539758'
 sources:
-  - "https://dagger.dev/hilt/assisted-injection.html"
-
----\
+- https://dagger.dev/hilt/assisted-injection.html
+---
 # Вопрос (RU)
 > Что такое Assisted Injection в Hilt/Dagger? Когда использовать `@AssistedInject` и `@AssistedFactory`?
 

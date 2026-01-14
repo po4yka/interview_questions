@@ -1,20 +1,43 @@
----id: android-336
+---
+id: android-336
 title: Типы запуска приложения в Android / App Start Types Android
-aliases: ["App Start Types Android", "Типы запуска приложения в Android"]
+aliases:
+- App Start Types Android
+- Типы запуска приложения в Android
 topic: android
-subtopics: [performance-startup]
+subtopics:
+- performance-startup
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-app-startup, c-compose-recomposition, c-perfetto, c-power-profiling, q-android-performance-measurement-tools--android--medium]
+related:
+- c-app-startup
+- c-compose-recomposition
+- c-perfetto
+- c-power-profiling
+- q-android-performance-measurement-tools--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/performance-startup, difficulty/medium, performance, startup]
-
+tags:
+- android/performance-startup
+- difficulty/medium
+- performance
+- startup
+anki_cards:
+- slug: android-336-0-en
+  language: en
+  anki_id: 1768364697098
+  synced_at: '2026-01-14T09:17:53.542282'
+- slug: android-336-0-ru
+  language: ru
+  anki_id: 1768364697123
+  synced_at: '2026-01-14T09:17:53.544710'
 ---
 # Вопрос (RU)
 > Какие существуют типы запуска Android-приложения (cold/warm/hot), и как оптимизировать каждый из них?

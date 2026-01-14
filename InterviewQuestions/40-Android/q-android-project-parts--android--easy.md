@@ -1,21 +1,46 @@
----\
+---
 id: android-216
 title: Android Project Parts / Части Android проекта
-aliases: [Android Project Parts, Части Android проекта]
+aliases:
+- Android Project Parts
+- Части Android проекта
 topic: android
-subtopics: [build-variants, gradle]
+subtopics:
+- build-variants
+- gradle
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-gradle, q-android-lint-tool--android--medium, q-android-manifest-file--android--easy, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]
+related:
+- c-gradle
+- q-android-lint-tool--android--medium
+- q-android-manifest-file--android--easy
+- q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy
+- q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/build-variants, android/gradle, build-system, difficulty/easy, project-structure]
+tags:
+- android/build-variants
+- android/gradle
+- build-system
+- difficulty/easy
+- project-structure
 sources: []
----\
+anki_cards:
+- slug: android-216-0-en
+  language: en
+  anki_id: 1768363501996
+  synced_at: '2026-01-14T09:17:53.259903'
+- slug: android-216-0-ru
+  language: ru
+  anki_id: 1768363502021
+  synced_at: '2026-01-14T09:17:53.261860'
+---
 # Вопрос (RU)
 > Из каких основных частей состоит Android проект?
 

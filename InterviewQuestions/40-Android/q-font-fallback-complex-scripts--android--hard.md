@@ -1,24 +1,47 @@
----\
+---
 id: android-643
 title: Font Fallback for Complex Scripts / Резерв шрифтов для сложных скриптов
-aliases: [Font Fallback for Complex Scripts, Резерв шрифтов для сложных скриптов]
+aliases:
+- Font Fallback for Complex Scripts
+- Резерв шрифтов для сложных скриптов
 topic: android
-subtopics: [i18n-l10n, ui-theming]
+subtopics:
+- i18n-l10n
+- ui-theming
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-android-components, q-compose-core-components--android--medium, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard]
+related:
+- c-android
+- c-android-components
+- q-compose-core-components--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/i18n-l10n, android/ui-theming, difficulty/hard]
+tags:
+- android/i18n-l10n
+- android/ui-theming
+- difficulty/hard
+anki_cards:
+- slug: android-643-0-en
+  language: en
+  anki_id: 1768367153855
+  synced_at: '2026-01-14T09:17:53.072686'
+- slug: android-643-0-ru
+  language: ru
+  anki_id: 1768367153880
+  synced_at: '2026-01-14T09:17:53.075065'
 sources:
-  - "https://developer.android.com/guide/topics/resources/font-resource"
-  - "https://developer.android.com/guide/topics/text/downloadable-fonts"
-  - "https://material.io/design/typography/international-typography.html"
----\
+- https://developer.android.com/guide/topics/resources/font-resource
+- https://developer.android.com/guide/topics/text/downloadable-fonts
+- https://material.io/design/typography/international-typography.html
+---
 # Вопрос (RU)
 
 > Как обеспечить корректное отображение сложных скриптов (CJK, арабский, индийские письменности) в Android: настройте font fallback цепочки с Noto шрифтами, используйте downloadable fonts для динамической загрузки, корректно учитывайте ligatures и complex shaping. Тестируйте на реальных устройствах с accessibility scaling.

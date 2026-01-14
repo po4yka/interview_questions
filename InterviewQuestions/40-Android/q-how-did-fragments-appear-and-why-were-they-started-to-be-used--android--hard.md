@@ -1,22 +1,42 @@
----\
+---
 id: android-397
-title: "How Did Fragments Appear And Why Were They Started To Be Used / Как Появились Фрагменты И Для Чего Их Начали Использовать"
-aliases: [Fragment Origins, Fragments History, История фрагментов, Происхождение фрагментов]
+title: How Did Fragments Appear And Why Were They Started To Be Used / Как Появились
+  Фрагменты И Для Чего Их Начали Использовать
+aliases:
+- Fragment Origins
+- Fragments History
+- История фрагментов
+- Происхождение фрагментов
 topic: android
-subtopics: [fragment]
+subtopics:
+- fragment
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-what-are-fragments-for-if-there-is-activity--android--medium]
+related:
+- c-android-components
+- q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/fragment, difficulty/hard]
-
----\
+anki_cards:
+- slug: android-397-0-en
+  language: en
+  anki_id: 1768367870729
+  synced_at: '2026-01-14T09:17:53.769155'
+- slug: android-397-0-ru
+  language: ru
+  anki_id: 1768367870755
+  synced_at: '2026-01-14T09:17:53.771919'
+tags:
+- android/fragment
+- difficulty/hard
+---
 # Вопрос (RU)
 
 > Как появились фрагменты и для чего их начали использовать?

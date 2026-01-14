@@ -1,25 +1,49 @@
----\
+---
 id: android-645
 title: CallStyle & Foreground Service Compliance / CallStyle и требования foreground-сервисов
-aliases: [CallStyle & Foreground Service Compliance, CallStyle и требования foreground-сервисов]
+aliases:
+- CallStyle & Foreground Service Compliance
+- CallStyle и требования foreground-сервисов
 topic: android
-subtopics: [background-execution, notifications, service]
+subtopics:
+- background-execution
+- notifications
+- service
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-communication-surfaces, q-android-service-types--android--easy, q-background-vs-foreground-service--android--medium, q-foreground-service-types--android--medium, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- c-communication-surfaces
+- q-android-service-types--android--easy
+- q-background-vs-foreground-service--android--medium
+- q-foreground-service-types--android--medium
+- q-when-can-the-system-restart-a-service--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/background-execution, android/notifications, android/service, difficulty/hard]
+tags:
+- android/background-execution
+- android/notifications
+- android/service
+- difficulty/hard
 sources:
-  - "https://developer.android.com/about/versions/13/behavior-changes-13#post-notification-runtime-permission"
-  - "https://developer.android.com/about/versions/14/behavior-changes-14#foreground-services"
-  - "https://developer.android.com/develop/ui/views/notifications/callstyle"
-
----\
+- https://developer.android.com/about/versions/13/behavior-changes-13#post-notification-runtime-permission
+- https://developer.android.com/about/versions/14/behavior-changes-14#foreground-services
+- https://developer.android.com/develop/ui/views/notifications/callstyle
+anki_cards:
+- slug: android-645-0-en
+  language: en
+  anki_id: 1768364991798
+  synced_at: '2026-01-14T09:17:53.666191'
+- slug: android-645-0-ru
+  language: ru
+  anki_id: 1768364991823
+  synced_at: '2026-01-14T09:17:53.668511'
+---
 # Вопрос (RU)
 > Как реализовать звонковые уведомления с использованием CallStyle и соблюсти требования foreground-сервисов: категории FGS, индикаторы приватности (микрофон/камера), разрешения и тестирование?
 

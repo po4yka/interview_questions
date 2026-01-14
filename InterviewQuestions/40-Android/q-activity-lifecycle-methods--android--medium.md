@@ -1,22 +1,45 @@
----\
+---
 id: android-181
 title: Activity Lifecycle Methods / Методы жизненного цикла Activity
-aliases: [Activity Lifecycle Methods, Методы жизненного цикла Activity]
+aliases:
+- Activity Lifecycle Methods
+- Методы жизненного цикла Activity
 topic: android
-subtopics: [activity, lifecycle]
+subtopics:
+- activity
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, q-android-app-components--android--easy, q-how-to-save-activity-state--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]
+related:
+- c-lifecycle
+- q-android-app-components--android--easy
+- q-how-to-save-activity-state--android--medium
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/lifecycle, difficulty/medium, jetpack]
+tags:
+- android/activity
+- android/lifecycle
+- difficulty/medium
+- jetpack
+anki_cards:
+- slug: android-181-0-en
+  language: en
+  anki_id: 1768363501947
+  synced_at: '2026-01-14T09:17:53.158079'
+- slug: android-181-0-ru
+  language: ru
+  anki_id: 1768363501972
+  synced_at: '2026-01-14T09:17:53.160902'
 sources: []
-
----\
+---
 # Вопрос (RU)
 > Объясните методы жизненного цикла `Activity` и правила управления ресурсами в них.
 

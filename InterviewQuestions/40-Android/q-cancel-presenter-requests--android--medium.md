@@ -1,22 +1,49 @@
----\
+---
 id: android-273
 title: Cancel Presenter Requests / Отмена запросов презентера
-aliases: [Cancel Presenter Requests, Отмена запросов презентера]
+aliases:
+- Cancel Presenter Requests
+- Отмена запросов презентера
 topic: android
-subtopics: [architecture-clean, coroutines, lifecycle]
+subtopics:
+- architecture-clean
+- coroutines
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-coroutines, q-activity-lifecycle-methods--android--medium, q-inject-router-to-presenter--android--medium, q-mvvm-pattern--android--medium, q-presenter-notify-view--android--medium]
+related:
+- c-android
+- c-coroutines
+- q-activity-lifecycle-methods--android--medium
+- q-inject-router-to-presenter--android--medium
+- q-mvvm-pattern--android--medium
+- q-presenter-notify-view--android--medium
 sources: []
 created: 2023-10-15
 updated: 2025-11-10
-tags: [android/architecture-clean, android/coroutines, android/lifecycle, difficulty/medium, mvp, presenter-pattern]
-
----\
+tags:
+- android/architecture-clean
+- android/coroutines
+- android/lifecycle
+- difficulty/medium
+- mvp
+- presenter-pattern
+anki_cards:
+- slug: android-273-0-en
+  language: en
+  anki_id: 1768365308475
+  synced_at: '2026-01-14T09:17:53.399377'
+- slug: android-273-0-ru
+  language: ru
+  anki_id: 1768365308497
+  synced_at: '2026-01-14T09:17:53.401251'
+---
 # Вопрос (RU)
 > Как корректно отменять асинхронные запросы в Presenter при изменении состояния жизненного цикла `View`?
 

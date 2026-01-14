@@ -1,23 +1,52 @@
----\
+---
 id: android-452
 title: Database Optimization Android / Оптимизация базы данных Android
-aliases: [Database Optimization Android, Оптимизация базы данных Android]
+aliases:
+- Database Optimization Android
+- Оптимизация базы данных Android
 topic: android
-subtopics: [performance-memory, room]
+subtopics:
+- performance-memory
+- room
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-database-design, c-room-database, q-optimize-memory-usage-android--android--medium, q-parsing-optimization-android--android--medium, q-performance-optimization-android--android--medium, q-room-library-definition--android--easy, q-room-vs-sqlite--android--medium]
+related:
+- c-database-design
+- c-room-database
+- q-optimize-memory-usage-android--android--medium
+- q-parsing-optimization-android--android--medium
+- q-performance-optimization-android--android--medium
+- q-room-library-definition--android--easy
+- q-room-vs-sqlite--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/performance-memory, android/room, database, difficulty/medium, indexing, optimization, performance, sql]
+tags:
+- android/performance-memory
+- android/room
+- database
+- difficulty/medium
+- indexing
+- optimization
+- performance
+- sql
+anki_cards:
+- slug: android-452-0-en
+  language: en
+  anki_id: 1768366752177
+  synced_at: '2026-01-14T09:17:53.366326'
+- slug: android-452-0-ru
+  language: ru
+  anki_id: 1768366752200
+  synced_at: '2026-01-14T09:17:53.368872'
 sources:
-  - "https://developer.android.com/training/data-storage/room"
-
----\
+- https://developer.android.com/training/data-storage/room
+---
 # Вопрос (RU)
 > Какие лучшие практики и техники для оптимизации базы данных в Android приложениях?
 

@@ -1,20 +1,43 @@
 ---
 id: android-044
 title: Accessibility Text Scaling / Масштабирование текста для доступности
-aliases: [Text Scaling Accessibility, Масштабирование текста]
+aliases:
+- Text Scaling Accessibility
+- Масштабирование текста
 topic: android
-subtopics: [ui-accessibility, ui-theming]
+subtopics:
+- ui-accessibility
+- ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-accessibility, q-accessibility-color-contrast--android--medium, q-accessibility-testing--android--medium, q-accessibility-text-scaling--android--medium, q-how-to-break-text-by-screen-width--android--easy]
+related:
+- c-accessibility
+- q-accessibility-color-contrast--android--medium
+- q-accessibility-testing--android--medium
+- q-accessibility-text-scaling--android--medium
+- q-how-to-break-text-by-screen-width--android--easy
 created: 2025-10-11
 updated: 2025-11-10
 sources: []
-tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
+tags:
+- android/ui-accessibility
+- android/ui-theming
+- difficulty/medium
+anki_cards:
+- slug: android-044-0-en
+  language: en
+  anki_id: 1768363328571
+  synced_at: '2026-01-14T09:17:53.289372'
+- slug: android-044-0-ru
+  language: ru
+  anki_id: 1768363328596
+  synced_at: '2026-01-14T09:17:53.291493'
 ---
 # Вопрос (RU)
 > Как обрабатывать масштабирование текста для доступности в Android?

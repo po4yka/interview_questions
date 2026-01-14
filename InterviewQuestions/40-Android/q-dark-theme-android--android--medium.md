@@ -1,22 +1,45 @@
 ---
 id: android-461
 title: Dark Theme Android / Темная тема Android
-aliases: [Dark Theme Android, Темная тема Android]
+aliases:
+- Dark Theme Android
+- Темная тема Android
 topic: android
-subtopics: [ui-theming]
+subtopics:
+- ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-android-lint-tool--android--medium, q-main-thread-android--android--medium, q-parsing-optimization-android--android--medium]
+related:
+- c-android-components
+- q-android-lint-tool--android--medium
+- q-main-thread-android--android--medium
+- q-parsing-optimization-android--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/ui-theming, dark-theme, daynight, difficulty/medium, material-design, theming]
+tags:
+- android/ui-theming
+- dark-theme
+- daynight
+- difficulty/medium
+- material-design
+- theming
+anki_cards:
+- slug: android-461-0-en
+  language: en
+  anki_id: 1768366754879
+  synced_at: '2026-01-14T09:17:53.571132'
+- slug: android-461-0-ru
+  language: ru
+  anki_id: 1768366754899
+  synced_at: '2026-01-14T09:17:53.574476'
 sources:
-  - "https://developer.android.com/guide/topics/ui/look-and-feel/darktheme"
-
+- https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
 ---
 # Вопрос (RU)
 > Как реализовать темную тему в Android? Объясните ключевые подходы и преимущества.

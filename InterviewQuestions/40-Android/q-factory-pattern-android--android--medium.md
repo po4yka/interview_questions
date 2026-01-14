@@ -1,23 +1,50 @@
----\
+---
 id: android-460
 title: Factory Pattern Android / Паттерн Factory в Android
-aliases: [Abstract Factory Pattern, Factory Method Pattern, Factory Pattern Android, Паттерн Factory в Android]
+aliases:
+- Abstract Factory Pattern
+- Factory Method Pattern
+- Factory Pattern Android
+- Паттерн Factory в Android
 topic: android
-subtopics: [architecture-clean, ui-views]
+subtopics:
+- architecture-clean
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources:
-  - "https://developer.android.com/guide/topics/ui/declaring-layout"
+- https://developer.android.com/guide/topics/ui/declaring-layout
+anki_cards:
+- slug: android-460-0-en
+  language: en
+  anki_id: 1768366958930
+  synced_at: '2026-01-14T09:17:53.552285'
+- slug: android-460-0-ru
+  language: ru
+  anki_id: 1768366958956
+  synced_at: '2026-01-14T09:17:53.555420'
 status: draft
 moc: moc-android
-related: [c-design-patterns, q-android-architectural-patterns--android--medium, q-splash-screen-api-android12--android--medium, q-usecase-pattern-android--android--medium, q-what-is-known-about-view-lifecycles--android--medium]
+related:
+- c-design-patterns
+- q-android-architectural-patterns--android--medium
+- q-splash-screen-api-android12--android--medium
+- q-usecase-pattern-android--android--medium
+- q-what-is-known-about-view-lifecycles--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty/medium, factory-pattern, layout-inflater]
-
----\
+tags:
+- android/architecture-clean
+- android/ui-views
+- design-patterns
+- difficulty/medium
+- factory-pattern
+- layout-inflater
+---
 # Вопрос (RU)
 > Можешь привести пример когда Android фреймворк использует паттерн Factory?
 

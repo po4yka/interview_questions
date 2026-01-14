@@ -1,22 +1,58 @@
----id: android-474
+---
+id: android-474
 title: Fast Chat Rendering / Быстрый рендеринг чата
-aliases: [Fast Chat Rendering, Быстрый рендеринг чата]
+aliases:
+- Fast Chat Rendering
+- Быстрый рендеринг чата
 topic: android
-subtopics: [performance-memory, ui-compose, ui-views]
+subtopics:
+- performance-memory
+- ui-compose
+- ui-views
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-perfetto, c-performance-optimization, c-power-profiling, c-recomposition, c-recyclerview, q-compose-compiler-plugin--android--hard, q-diffutil-background-calculation-issues--android--medium, q-list-elements-problems--android--medium, q-why-diffutil-needed--android--medium]
+related:
+- c-compose-recomposition
+- c-perfetto
+- c-performance-optimization
+- c-power-profiling
+- c-recomposition
+- c-recyclerview
+- q-compose-compiler-plugin--android--hard
+- q-diffutil-background-calculation-issues--android--medium
+- q-list-elements-problems--android--medium
+- q-why-diffutil-needed--android--medium
 sources:
-  - https://developer.android.com/jetpack/compose/performance
-  - https://developer.android.com/topic/libraries/architecture/paging/v3-overview
-  - https://developer.android.com/topic/performance/rendering
+- https://developer.android.com/jetpack/compose/performance
+- https://developer.android.com/topic/libraries/architecture/paging/v3-overview
+- https://developer.android.com/topic/performance/rendering
+anki_cards:
+- slug: android-474-0-en
+  language: en
+  anki_id: 1768367872383
+  synced_at: '2026-01-14T09:17:53.867695'
+- slug: android-474-0-ru
+  language: ru
+  anki_id: 1768367872406
+  synced_at: '2026-01-14T09:17:53.870275'
 created: 2025-10-20
 updated: 2025-11-03
-tags: [android/performance-memory, android/ui-compose, android/ui-views, chat, difficulty/hard, diffutil, paging, performance, recyclerview]
+tags:
+- android/performance-memory
+- android/ui-compose
+- android/ui-views
+- chat
+- difficulty/hard
+- diffutil
+- paging
+- performance
+- recyclerview
 ---
 # Вопрос (RU)
 > Как оптимизировать рендеринг чатов для высокой производительности?

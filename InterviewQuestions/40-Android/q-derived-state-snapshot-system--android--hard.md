@@ -1,20 +1,58 @@
----id: android-464
+---
+id: android-464
 title: Derived State Snapshot System / Derived State и система Snapshot
-aliases: [Derived State Snapshot System, Derived State и система Snapshot]
+aliases:
+- Derived State Snapshot System
+- Derived State и система Snapshot
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-jetpack-compose, c-memory-management, c-perfetto, c-power-profiling, c-recomposition, c-snapshot-system, q-compose-performance-optimization--android--hard, q-compose-slot-table-recomposition--android--hard, q-compose-stability-skippability--android--hard, q-how-application-priority-is-determined-by-the-system--android--hard, q-sealed-classes-state-management--android--medium, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- c-compose-recomposition
+- c-compose-state
+- c-jetpack-compose
+- c-memory-management
+- c-perfetto
+- c-power-profiling
+- c-recomposition
+- c-snapshot-system
+- q-compose-performance-optimization--android--hard
+- q-compose-slot-table-recomposition--android--hard
+- q-compose-stability-skippability--android--hard
+- q-how-application-priority-is-determined-by-the-system--android--hard
+- q-sealed-classes-state-management--android--medium
+- q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/performance-memory, android/ui-compose, derived-state, difficulty/hard, optimization, performance, snapshot, state]
+anki_cards:
+- slug: android-464-0-en
+  language: en
+  anki_id: 1768367868383
+  synced_at: '2026-01-14T09:17:53.645359'
+- slug: android-464-0-ru
+  language: ru
+  anki_id: 1768367868406
+  synced_at: '2026-01-14T09:17:53.648991'
+tags:
+- android/performance-memory
+- android/ui-compose
+- derived-state
+- difficulty/hard
+- optimization
+- performance
+- snapshot
+- state
 sources:
-  - https://developer.android.com/jetpack/compose/state
+- https://developer.android.com/jetpack/compose/state
 ---
 # Вопрос (RU)
 > Объясните систему снимков (snapshot system) Compose. Как derivedStateOf оптимизирует перекомпозиции?

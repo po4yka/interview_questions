@@ -1,24 +1,51 @@
----\
+---
 id: android-244
 title: Чем Жизненный Цикл Fragment Отличается От Activity / Fragment vs Activity Lifecycle
-aliases: [Fragment vs Activity Lifecycle, Чем отличается жизненный цикл Fragment от Activity]
+aliases:
+- Fragment vs Activity Lifecycle
+- Чем отличается жизненный цикл Fragment от Activity
 topic: android
-subtopics: [activity, fragment, lifecycle]
+subtopics:
+- activity
+- fragment
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, q-activity-lifecycle-methods--android--medium, q-how-does-activity-lifecycle-work--android--medium, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium]
+related:
+- c-activity
+- q-activity-lifecycle-methods--android--medium
+- q-how-does-activity-lifecycle-work--android--medium
+- q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources:
-  - "https://developer.android.com/guide/fragments/lifecycle"
-  - "https://developer.android.com/topic/libraries/architecture/lifecycle"
-tags: [android/activity, android/fragment, android/lifecycle, difficulty/medium, fragments, lifecycle]
-
----\
+- https://developer.android.com/guide/fragments/lifecycle
+- https://developer.android.com/topic/libraries/architecture/lifecycle
+anki_cards:
+- slug: android-244-0-en
+  language: en
+  anki_id: 1768367157507
+  synced_at: '2026-01-14T09:17:53.318703'
+- slug: android-244-0-ru
+  language: ru
+  anki_id: 1768367157529
+  synced_at: '2026-01-14T09:17:53.322221'
+tags:
+- android/activity
+- android/fragment
+- android/lifecycle
+- difficulty/medium
+- fragments
+- lifecycle
+---
 # Вопрос (RU)
 > Чем жизненный цикл `Fragment` отличается от жизненного цикла `Activity`?
 

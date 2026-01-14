@@ -1,20 +1,44 @@
----\
+---
 id: android-193
 title: Home Screen Widgets / Виджеты домашнего экрана
-aliases: [Home Screen Widgets, Виджеты домашнего экрана]
+aliases:
+- Home Screen Widgets
+- Виджеты домашнего экрана
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-how-compose-draws-on-screen--android--hard, q-how-to-break-text-by-screen-width--android--easy, q-recyclerview-viewtypes-delegation--android--medium, q-what-is-broadcastreceiver--android--easy, q-what-is-known-about-recyclerview--android--easy, q-which-event-is-called-when-user-touches-screen--android--medium]
+related:
+- c-android-components
+- q-how-compose-draws-on-screen--android--hard
+- q-how-to-break-text-by-screen-width--android--easy
+- q-recyclerview-viewtypes-delegation--android--medium
+- q-what-is-broadcastreceiver--android--easy
+- q-what-is-known-about-recyclerview--android--easy
+- q-which-event-is-called-when-user-touches-screen--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/medium, widgets]
----\
+tags:
+- android/ui-views
+- difficulty/medium
+- widgets
+anki_cards:
+- slug: android-193-0-en
+  language: en
+  anki_id: 1768367584058
+  synced_at: '2026-01-14T09:17:53.189905'
+- slug: android-193-0-ru
+  language: ru
+  anki_id: 1768367584080
+  synced_at: '2026-01-14T09:17:53.193538'
+---
 # Вопрос (RU)
 > Виджеты домашнего экрана
 

@@ -1,23 +1,45 @@
----\
+---
 id: android-481
 title: Custom View Animation / Анимация Custom View
-aliases: [Custom View Animation, Анимация Custom View]
+aliases:
+- Custom View Animation
+- Анимация Custom View
 topic: android
-subtopics: [ui-animation, ui-views]
+subtopics:
+- ui-animation
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-surfaces, q-canvas-drawing-optimization--android--hard, q-custom-view-accessibility--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium]
+related:
+- c-android-surfaces
+- q-canvas-drawing-optimization--android--hard
+- q-custom-view-accessibility--android--medium
+- q-custom-view-attributes--android--medium
+- q-custom-view-lifecycle--android--medium
 sources:
-  - "https://developer.android.com/guide/topics/graphics/prop-animation"
+- https://developer.android.com/guide/topics/graphics/prop-animation
+anki_cards:
+- slug: android-481-0-en
+  language: en
+  anki_id: 1768366346327
+  synced_at: '2026-01-14T09:17:53.594079'
+- slug: android-481-0-ru
+  language: ru
+  anki_id: 1768366346351
+  synced_at: '2026-01-14T09:17:53.596914'
 created: 2025-10-21
 updated: 2025-11-10
-tags: [android/ui-animation, android/ui-views, difficulty/medium]
-
----\
+tags:
+- android/ui-animation
+- android/ui-views
+- difficulty/medium
+---
 # Вопрос (RU)
 > Как реализовать анимацию в Custom `View`?
 

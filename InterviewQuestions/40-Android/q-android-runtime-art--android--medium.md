@@ -1,20 +1,47 @@
 ---
 id: android-297
 title: Android Runtime (ART) / Android Runtime
-aliases: [Android Runtime, Android Runtime (ART)]
+aliases:
+- Android Runtime
+- Android Runtime (ART)
 topic: android
-subtopics: [performance-memory, processes]
+subtopics:
+- performance-memory
+- processes
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-basics, q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium, q-android-runtime-internals--android--hard, q-dalvik-vs-art-runtime--android--medium, q-optimize-memory-usage-android--android--medium]
+related:
+- c-android-basics
+- q-android-app-lag-analysis--android--medium
+- q-android-performance-measurement-tools--android--medium
+- q-android-runtime-internals--android--hard
+- q-dalvik-vs-art-runtime--android--medium
+- q-optimize-memory-usage-android--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/performance-memory, android/processes, compilation, difficulty/medium, gc, runtime]
+tags:
+- android/performance-memory
+- android/processes
+- compilation
+- difficulty/medium
+- gc
+- runtime
 sources: []
+anki_cards:
+- slug: android-297-0-en
+  language: en
+  anki_id: 1768363328671
+  synced_at: '2026-01-14T09:17:53.444602'
+- slug: android-297-0-ru
+  language: ru
+  anki_id: 1768363328695
+  synced_at: '2026-01-14T09:17:53.447021'
 ---
 # Вопрос (RU)
 > Что такое Android Runtime (ART) и чем он отличается от Dalvik?

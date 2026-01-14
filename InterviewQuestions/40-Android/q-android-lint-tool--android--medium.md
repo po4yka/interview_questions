@@ -1,21 +1,48 @@
 ---
 id: android-121
 title: Android Lint Tool / Инструмент Android Lint
-aliases: [Android Lint Tool, Инструмент Android Lint]
+aliases:
+- Android Lint Tool
+- Инструмент Android Lint
 topic: android
-subtopics: [build-variants, static-analysis]
+subtopics:
+- build-variants
+- static-analysis
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-android-build-optimization--android--medium, q-android-testing-strategies--android--medium, q-annotation-processing--android--medium, q-annotation-processing-android--android--medium, q-gradle-build-system--android--medium, q-proguard-r8--android--medium]
+related:
+- c-android-components
+- q-android-build-optimization--android--medium
+- q-android-testing-strategies--android--medium
+- q-annotation-processing--android--medium
+- q-annotation-processing-android--android--medium
+- q-gradle-build-system--android--medium
+- q-proguard-r8--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/build-variants, android/static-analysis, code-quality, difficulty/medium, static-analysis]
+tags:
+- android/build-variants
+- android/static-analysis
+- code-quality
+- difficulty/medium
+- static-analysis
 sources:
-  - "https://developer.android.com/studio/write/lint"
+- https://developer.android.com/studio/write/lint
+anki_cards:
+- slug: android-121-0-en
+  language: en
+  anki_id: 1768363328405
+  synced_at: '2026-01-14T09:09:33.482105'
+- slug: android-121-0-ru
+  language: ru
+  anki_id: 1768363328458
+  synced_at: '2026-01-14T09:09:33.485995'
 ---
 # Вопрос (RU)
 > Что такое Android Lint, его основные возможности и методы настройки для проекта?

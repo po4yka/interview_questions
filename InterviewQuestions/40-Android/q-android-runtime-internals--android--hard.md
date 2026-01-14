@@ -1,21 +1,45 @@
----\
+---
 id: android-107
 title: Android Runtime Internals / Внутреннее устройство Android Runtime
-aliases: [Android Runtime Internals, Внутреннее устройство Android Runtime]
+aliases:
+- Android Runtime Internals
+- Внутреннее устройство Android Runtime
 topic: android
-subtopics: [performance-memory, processes, profiling]
+subtopics:
+- performance-memory
+- processes
+- profiling
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium, q-android-runtime-art--android--medium, q-optimize-memory-usage-android--android--medium]
+related:
+- q-android-app-lag-analysis--android--medium
+- q-android-performance-measurement-tools--android--medium
+- q-android-runtime-art--android--medium
+- q-optimize-memory-usage-android--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/performance-memory, android/processes, android/profiling, difficulty/hard]
+tags:
+- android/performance-memory
+- android/processes
+- android/profiling
+- difficulty/hard
 sources: []
----\
+anki_cards:
+- slug: android-107-0-en
+  language: en
+  anki_id: 1768363503096
+  synced_at: '2026-01-14T09:17:53.821229'
+- slug: android-107-0-ru
+  language: ru
+  anki_id: 1768363503122
+  synced_at: '2026-01-14T09:17:53.823919'
+---
 # Вопрос (RU)
 > Как устроено внутреннее функционирование Android Runtime (ART)?
 

@@ -1,22 +1,50 @@
----\
+---
 id: android-011
 title: Gradle Build System / Система сборки Gradle
-aliases: [Gradle Build System, Система сборки Gradle]
+aliases:
+- Gradle Build System
+- Система сборки Gradle
 topic: android
 status: draft
 created: 2025-10-05
 updated: 2025-11-11
 difficulty: medium
-subtopics: [build-variants, dependency-management, gradle]
+subtopics:
+- build-variants
+- dependency-management
+- gradle
 question_kind: theory
 original_language: en
-language_tags: [en, ru]
-tags: [android/build-variants, android/dependency-management, android/gradle, build-system, dependency-management, difficulty/medium]
+language_tags:
+- en
+- ru
+tags:
+- android/build-variants
+- android/dependency-management
+- android/gradle
+- build-system
+- dependency-management
+- difficulty/medium
+anki_cards:
+- slug: android-011-0-en
+  language: en
+  anki_id: 1768367369883
+  synced_at: '2026-01-14T09:17:53.676083'
+- slug: android-011-0-ru
+  language: ru
+  anki_id: 1768367369907
+  synced_at: '2026-01-14T09:17:53.678231'
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Gradle.md
-related: [c-gradle, q-build-optimization-gradle--android--medium, q-cache-implementation-strategies--android--medium, q-dagger-build-time-optimization--android--medium, q-how-application-priority-is-determined-by-the-system--android--hard, q-kapt-vs-ksp--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
+related:
+- c-gradle
+- q-build-optimization-gradle--android--medium
+- q-cache-implementation-strategies--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-how-application-priority-is-determined-by-the-system--android--hard
+- q-kapt-vs-ksp--android--medium
+- q-what-unites-the-main-components-of-an-android-application--android--medium
 moc: moc-android
-
----\
+---
 # Вопрос (RU)
 > Что такое система сборки Gradle в Android и какие ключевые понятия (типы сборки, product flavors, build variants, настройки манифеста, зависимости, подпись, shrink, multiple APK, конфигурационные файлы) нужно знать для собеседования?
 

@@ -1,22 +1,47 @@
----id: android-443
+---
+id: android-443
 title: Compose Performance Optimization / Оптимизация производительности Compose
-aliases: [Compose Performance Optimization, Оптимизация производительности Compose]
+aliases:
+- Compose Performance Optimization
+- Оптимизация производительности Compose
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-recomposition, q-android-performance-measurement-tools--android--medium, q-compose-compiler-plugin--android--hard, q-compose-lazy-layout-optimization--android--hard, q-compose-modifier-order-performance--android--medium, q-compose-stability-skippability--android--hard]
+related:
+- c-compose-recomposition
+- c-recomposition
+- q-android-performance-measurement-tools--android--medium
+- q-compose-compiler-plugin--android--hard
+- q-compose-lazy-layout-optimization--android--hard
+- q-compose-modifier-order-performance--android--medium
+- q-compose-stability-skippability--android--hard
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/performance-memory, android/ui-compose, difficulty/hard]
+tags:
+- android/performance-memory
+- android/ui-compose
+- difficulty/hard
 sources:
-  - "https://developer.android.com/jetpack/compose/mental-model"
-  - "https://developer.android.com/jetpack/compose/performance"
-
+- https://developer.android.com/jetpack/compose/mental-model
+- https://developer.android.com/jetpack/compose/performance
+anki_cards:
+- slug: android-443-0-en
+  language: en
+  anki_id: 1768366066674
+  synced_at: '2026-01-14T09:17:53.113282'
+- slug: android-443-0-ru
+  language: ru
+  anki_id: 1768366066699
+  synced_at: '2026-01-14T09:17:53.116018'
 ---
 # Вопрос (RU)
 

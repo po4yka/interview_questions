@@ -1,22 +1,48 @@
----id: android-624
+---
+id: android-624
 title: Android Enterprise MDM Architecture / Архитектура Android Enterprise MDM
-aliases: [Android Enterprise MDM Architecture, Архитектура Android Enterprise MDM]
+aliases:
+- Android Enterprise MDM Architecture
+- Архитектура Android Enterprise MDM
 topic: android
-subtopics: [keystore-crypto, permissions, processes]
+subtopics:
+- keystore-crypto
+- permissions
+- processes
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-enterprise-mdm, q-android-lint-tool--android--medium, q-android-security-best-practices--android--medium, q-clean-architecture-android--android--hard, q-quick-settings-tiles-architecture--android--medium]
+related:
+- c-android
+- c-enterprise-mdm
+- q-android-lint-tool--android--medium
+- q-android-security-best-practices--android--medium
+- q-clean-architecture-android--android--hard
+- q-quick-settings-tiles-architecture--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/keystore-crypto, android/permissions, android/processes, difficulty/hard]
+tags:
+- android/keystore-crypto
+- android/permissions
+- android/processes
+- difficulty/hard
+anki_cards:
+- slug: android-624-0-en
+  language: en
+  anki_id: 1768363603323
+  synced_at: '2026-01-14T09:17:53.753400'
+- slug: android-624-0-ru
+  language: ru
+  anki_id: 1768363603347
+  synced_at: '2026-01-14T09:17:53.756238'
 sources:
-  - "https://developer.android.com/work/managed-configurations"
-  - "https://developer.android.com/work/overview"
-
+- https://developer.android.com/work/managed-configurations
+- https://developer.android.com/work/overview
 ---
 # Вопрос (RU)
 > Как спроектировать MDM-решение на Android Enterprise: DPC-приложение, режимы управления (Work Profile, Fully Managed, COPE), политики безопасности и интеграция с Play EMM API?

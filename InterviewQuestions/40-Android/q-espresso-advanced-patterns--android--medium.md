@@ -1,23 +1,51 @@
----\
+---
 id: android-448
 title: Espresso Advanced Patterns / Продвинутые паттерны Espresso
-aliases: [Custom Matchers, Custom ViewActions, Espresso Advanced Patterns, IdlingResource, Продвинутые паттерны Espresso]
+aliases:
+- Custom Matchers
+- Custom ViewActions
+- Espresso Advanced Patterns
+- IdlingResource
+- Продвинутые паттерны Espresso
 topic: android
-subtopics: [testing-instrumented, testing-ui]
+subtopics:
+- testing-instrumented
+- testing-ui
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-testing, q-android-architectural-patterns--android--medium, q-android-testing-strategies--android--medium, q-camerax-advanced-pipeline--android--hard, q-wear-compose-ux-patterns--android--hard]
+related:
+- c-android-testing
+- q-android-architectural-patterns--android--medium
+- q-android-testing-strategies--android--medium
+- q-camerax-advanced-pipeline--android--hard
+- q-wear-compose-ux-patterns--android--hard
 sources:
-  - "https://developer.android.com/training/testing/espresso"
+- https://developer.android.com/training/testing/espresso
+anki_cards:
+- slug: android-448-0-en
+  language: en
+  anki_id: 1768366954833
+  synced_at: '2026-01-14T09:17:53.276270'
+- slug: android-448-0-ru
+  language: ru
+  anki_id: 1768366954855
+  synced_at: '2026-01-14T09:17:53.278202'
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espresso, idling-resource, ui-testing]
-
----\
+tags:
+- android/testing-instrumented
+- android/testing-ui
+- difficulty/medium
+- espresso
+- idling-resource
+- ui-testing
+---
 # Вопрос (RU)
 > Как реализовать продвинутые паттерны Espresso с `IdlingResource`, custom matchers и `ViewAction`s?
 

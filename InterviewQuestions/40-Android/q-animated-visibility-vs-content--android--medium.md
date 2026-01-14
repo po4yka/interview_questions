@@ -1,19 +1,47 @@
----id: android-076
-title: AnimatedVisibility vs AnimatedContent vs Crossfade / AnimatedVisibility против AnimatedContent против Crossfade
-aliases: [AnimatedVisibility vs AnimatedContent vs Crossfade, AnimatedVisibility против AnimatedContent против Crossfade]
+---
+id: android-076
+title: AnimatedVisibility vs AnimatedContent vs Crossfade / AnimatedVisibility против
+  AnimatedContent против Crossfade
+aliases:
+- AnimatedVisibility vs AnimatedContent vs Crossfade
+- AnimatedVisibility против AnimatedContent против Crossfade
 topic: android
-subtopics: [ui-animation, ui-compose]
+subtopics:
+- ui-animation
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-jetpack-compose, c-recomposition, q-android-jetpack-overview--android--easy, q-compose-custom-animations--android--medium, q-compose-gesture-detection--android--medium, q-compose-semantics--android--medium]
+related:
+- c-compose-recomposition
+- c-jetpack-compose
+- c-recomposition
+- q-android-jetpack-overview--android--easy
+- q-compose-custom-animations--android--medium
+- q-compose-gesture-detection--android--medium
+- q-compose-semantics--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/ui-animation, android/ui-compose, animation, difficulty/medium]
+tags:
+- android/ui-animation
+- android/ui-compose
+- animation
+- difficulty/medium
 sources: []
+anki_cards:
+- slug: android-076-0-en
+  language: en
+  anki_id: 1768364266231
+  synced_at: '2026-01-14T09:17:53.095346'
+- slug: android-076-0-ru
+  language: ru
+  anki_id: 1768364266295
+  synced_at: '2026-01-14T09:17:53.097237'
 ---
 # Вопрос (RU)
 > В чем разница между AnimatedVisibility, AnimatedContent и Crossfade в Jetpack Compose?

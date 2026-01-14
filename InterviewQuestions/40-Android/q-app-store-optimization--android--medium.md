@@ -1,21 +1,47 @@
 ---
 id: android-399
 title: App Store Optimization / Оптимизация App Store
-aliases: [App Store Optimization, ASO, Оптимизация App Store]
+aliases:
+- App Store Optimization
+- ASO
+- Оптимизация App Store
 topic: android
-subtopics: [ab-testing, analytics, play-console]
+subtopics:
+- ab-testing
+- analytics
+- play-console
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-performance, c-performance-optimization, q-android-app-bundles--android--easy, q-app-size-optimization--android--medium, q-app-startup-optimization--android--medium, q-dagger-build-time-optimization--android--medium]
+related:
+- c-performance
+- c-performance-optimization
+- q-android-app-bundles--android--easy
+- q-app-size-optimization--android--medium
+- q-app-startup-optimization--android--medium
+- q-dagger-build-time-optimization--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/ab-testing, android/analytics, android/play-console, difficulty/medium]
-
+tags:
+- android/ab-testing
+- android/analytics
+- android/play-console
+- difficulty/medium
+anki_cards:
+- slug: android-399-0-en
+  language: en
+  anki_id: 1768364698252
+  synced_at: '2026-01-14T09:17:53.779005'
+- slug: android-399-0-ru
+  language: ru
+  anki_id: 1768364698273
+  synced_at: '2026-01-14T09:17:53.781474'
 ---
 # Вопрос (RU)
 > Что такое оптимизация App Store и как её реализовать?

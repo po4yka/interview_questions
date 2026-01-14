@@ -1,22 +1,48 @@
----\
+---
 id: android-447
 title: Dagger Purpose / Назначение Dagger
-aliases: [Dagger Purpose, Назначение Dagger]
+aliases:
+- Dagger Purpose
+- Назначение Dagger
 topic: android
-subtopics: [di-hilt]
+subtopics:
+- di-hilt
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, c-dependency-injection, q-dagger-custom-scopes--android--hard, q-dagger-framework-overview--android--hard, q-dagger-inject-annotation--android--easy, q-dagger-main-elements--android--medium]
+related:
+- c-dagger
+- c-dependency-injection
+- q-dagger-custom-scopes--android--hard
+- q-dagger-framework-overview--android--hard
+- q-dagger-inject-annotation--android--easy
+- q-dagger-main-elements--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
+tags:
+- android/di-hilt
+- dagger
+- dependency-injection
+- di-framework
+- difficulty/easy
+- hilt
+anki_cards:
+- slug: android-447-0-en
+  language: en
+  anki_id: 1768366556728
+  synced_at: '2026-01-14T09:17:53.267912'
+- slug: android-447-0-ru
+  language: ru
+  anki_id: 1768366556750
+  synced_at: '2026-01-14T09:17:53.269900'
 sources:
-  - "https://dagger.dev/"
----\
+- https://dagger.dev/
+---
 # Вопрос (RU)
 > Для чего нужен `Dagger`?
 

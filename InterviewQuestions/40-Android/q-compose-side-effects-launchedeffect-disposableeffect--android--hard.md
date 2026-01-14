@@ -1,22 +1,50 @@
----id: android-111
-title: "Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты Compose: LaunchedEffect vs DisposableEffect"
-aliases: [Compose LaunchedEffect vs DisposableEffect, Compose Side Effects, DisposableEffect, LaunchedEffect, Побочные эффекты Compose]
+---
+id: android-111
+title: 'Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты
+  Compose: LaunchedEffect vs DisposableEffect'
+aliases:
+- Compose LaunchedEffect vs DisposableEffect
+- Compose Side Effects
+- DisposableEffect
+- LaunchedEffect
+- Побочные эффекты Compose
 topic: android
-subtopics: [ui-compose]
+subtopics:
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-recomposition, q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-side-effects-advanced--android--hard, q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]
+related:
+- c-compose-recomposition
+- c-recomposition
+- q-compose-compiler-plugin--android--hard
+- q-compose-performance-optimization--android--hard
+- q-compose-remember-derived-state--android--medium
+- q-compose-side-effects-advanced--android--hard
+- q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/ui-compose, difficulty/hard, side-effects]
+tags:
+- android/ui-compose
+- difficulty/hard
+- side-effects
 sources:
-  - "https://developer.android.com/jetpack/compose/lifecycle"
-  - "https://developer.android.com/jetpack/compose/side-effects"
-
+- https://developer.android.com/jetpack/compose/lifecycle
+- https://developer.android.com/jetpack/compose/side-effects
+anki_cards:
+- slug: android-111-0-en
+  language: en
+  anki_id: 1768366073777
+  synced_at: '2026-01-14T09:17:53.876942'
+- slug: android-111-0-ru
+  language: ru
+  anki_id: 1768366073800
+  synced_at: '2026-01-14T09:17:53.879125'
 ---
 # Вопрос (RU)
 > В чем разница между побочными эффектами Compose: LaunchedEffect vs DisposableEffect?

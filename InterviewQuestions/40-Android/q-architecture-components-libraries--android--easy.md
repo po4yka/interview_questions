@@ -1,22 +1,48 @@
----\
+---
 id: android-208
 title: Architecture Components Libraries / Библиотеки Architecture Components
-aliases: [Architecture Components Libraries, Библиотеки Architecture Components]
+aliases:
+- Architecture Components Libraries
+- Библиотеки Architecture Components
 topic: android
-subtopics: [architecture-mvvm, lifecycle, room]
+subtopics:
+- architecture-mvvm
+- lifecycle
+- room
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, c-lifecycle, c-room, q-android-jetpack-overview--android--easy, q-compose-core-components--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related:
+- c-android-components
+- c-lifecycle
+- c-room
+- q-android-jetpack-overview--android--easy
+- q-compose-core-components--android--medium
+- q-what-are-the-most-important-components-of-compose--android--medium
 sources: []
 created: 2024-10-15
 updated: 2025-11-11
-tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/easy, jetpack]
-
----\
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- android/room
+- difficulty/easy
+- jetpack
+anki_cards:
+- slug: android-208-0-en
+  language: en
+  anki_id: 1768364695698
+  synced_at: '2026-01-14T09:17:53.235474'
+- slug: android-208-0-ru
+  language: ru
+  anki_id: 1768364695722
+  synced_at: '2026-01-14T09:17:53.238111'
+---
 # Вопрос (RU)
 > Что такое Android Architecture Components и зачем они нужны?
 

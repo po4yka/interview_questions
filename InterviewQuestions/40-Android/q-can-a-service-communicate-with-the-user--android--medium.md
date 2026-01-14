@@ -1,21 +1,41 @@
 ---
 id: android-330
 title: Can a Service Communicate With the User / Может ли сервис общаться с пользователем
-aliases: [Can a Service Communicate With the User, Может ли сервис общаться с пользователем]
+aliases:
+- Can a Service Communicate With the User
+- Может ли сервис общаться с пользователем
 topic: android
-subtopics: [service]
+subtopics:
+- service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-service-types--android--easy, q-background-vs-foreground-service--android--medium, q-foreground-service-types--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- q-android-service-types--android--easy
+- q-background-vs-foreground-service--android--medium
+- q-foreground-service-types--android--medium
+- q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+- q-when-can-the-system-restart-a-service--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/service, difficulty/medium]
-
+tags:
+- android/service
+- difficulty/medium
+anki_cards:
+- slug: android-330-0-en
+  language: en
+  anki_id: 1768364991298
+  synced_at: '2026-01-14T09:17:53.515799'
+- slug: android-330-0-ru
+  language: ru
+  anki_id: 1768364991323
+  synced_at: '2026-01-14T09:17:53.518558'
 ---
 # Вопрос (RU)
 > Может ли сервис общаться с пользователем?

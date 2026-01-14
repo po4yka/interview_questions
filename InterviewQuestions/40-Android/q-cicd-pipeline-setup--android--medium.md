@@ -1,19 +1,43 @@
----id: android-046
+---
+id: android-046
 title: CI/CD Pipeline Setup for Android / Настройка CI/CD пайплайна для Android
-aliases: [CI/CD Pipeline Setup for Android, Настройка CI/CD пайплайна для Android]
+aliases:
+- CI/CD Pipeline Setup for Android
+- Настройка CI/CD пайплайна для Android
 topic: android
-subtopics: [ci-cd, testing-unit]
+subtopics:
+- ci-cd
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-ci-cd, c-gradle, q-android-build-optimization--android--medium]
+related:
+- c-ci-cd
+- c-gradle
+- q-android-build-optimization--android--medium
 sources: []
 created: 2025-10-11
 updated: 2025-11-11
-tags: [android/ci-cd, android/testing-unit, automation, devops-ci-cd, difficulty/medium]
+tags:
+- android/ci-cd
+- android/testing-unit
+- automation
+- devops-ci-cd
+- difficulty/medium
+anki_cards:
+- slug: android-046-0-en
+  language: en
+  anki_id: 1768365308023
+  synced_at: '2026-01-14T09:17:53.347149'
+- slug: android-046-0-ru
+  language: ru
+  anki_id: 1768365308048
+  synced_at: '2026-01-14T09:17:53.349739'
 ---
 # Вопрос (RU)
 > Как настроить CI/CD пайплайн для Android-приложения?

@@ -1,7 +1,9 @@
----\
+---
 id: android-009
 title: Fragment Basics / Основы Fragment
-aliases: [Fragment Basics, Основы Fragment]
+aliases:
+- Fragment Basics
+- Основы Fragment
 topic: android
 status: draft
 created: 2025-10-05
@@ -9,15 +11,38 @@ updated: 2025-11-10
 difficulty: easy
 question_kind: android
 original_language: en
-language_tags: [en, ru]
-subtopics: [fragment, ui-navigation]
+language_tags:
+- en
+- ru
+subtopics:
+- fragment
+- ui-navigation
 sources:
-  - "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Fragment.md"
-tags: [android/fragment, android/ui-navigation, difficulty/easy, ui-component]
+- https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Fragment.md
+anki_cards:
+- slug: android-009-0-en
+  language: en
+  anki_id: 1768367160654
+  synced_at: '2026-01-14T09:17:53.494286'
+- slug: android-009-0-ru
+  language: ru
+  anki_id: 1768367160681
+  synced_at: '2026-01-14T09:17:53.497542'
+tags:
+- android/fragment
+- android/ui-navigation
+- difficulty/easy
+- ui-component
 moc: moc-android
-related: [c-compose-navigation, c-fragments, q-android-build-optimization--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-save-data-outside-fragment--android--medium, q-what-each-android-component-represents--android--easy]
-
----\
+related:
+- c-compose-navigation
+- c-fragments
+- q-android-build-optimization--android--medium
+- q-how-to-choose-layout-for-fragment--android--easy
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-save-data-outside-fragment--android--medium
+- q-what-each-android-component-represents--android--easy
+---
 # Вопрос (RU)
 > Что такое `Fragment` в Android и для чего он используется?
 

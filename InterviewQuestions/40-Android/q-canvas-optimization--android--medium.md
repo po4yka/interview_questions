@@ -1,22 +1,50 @@
----\
+---
 id: android-088
 title: Canvas Optimization / Оптимизация Canvas
-aliases: [Canvas Optimization, Оптимизация Canvas]
+aliases:
+- Canvas Optimization
+- Оптимизация Canvas
 topic: android
-subtopics: [performance-rendering, ui-graphics, ui-views]
+subtopics:
+- performance-rendering
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, q-android-app-lag-analysis--android--medium, q-android-build-optimization--android--medium, q-android-performance-measurement-tools--android--medium, q-canvas-drawing-optimization--android--hard, q-custom-view-lifecycle--android--medium, q-optimize-memory-usage-android--android--medium]
+related:
+- c-custom-views
+- q-android-app-lag-analysis--android--medium
+- q-android-build-optimization--android--medium
+- q-android-performance-measurement-tools--android--medium
+- q-canvas-drawing-optimization--android--hard
+- q-custom-view-lifecycle--android--medium
+- q-optimize-memory-usage-android--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/performance-rendering, android/ui-graphics, android/ui-views, custom-views, difficulty/medium, performance]
-
----\
+tags:
+- android/performance-rendering
+- android/ui-graphics
+- android/ui-views
+- custom-views
+- difficulty/medium
+- performance
+anki_cards:
+- slug: android-088-0-en
+  language: en
+  anki_id: 1768365308727
+  synced_at: '2026-01-14T09:17:53.432244'
+- slug: android-088-0-ru
+  language: ru
+  anki_id: 1768365308748
+  synced_at: '2026-01-14T09:17:53.434201'
+---
 # Вопрос (RU)
 > Как оптимизировать отрисовку `Canvas` для достижения 60 FPS?
 

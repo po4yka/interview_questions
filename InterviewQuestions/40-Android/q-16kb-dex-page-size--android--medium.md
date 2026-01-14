@@ -1,20 +1,46 @@
 ---
 id: android-483
 title: 16kb Dex Page Size / Размер страницы DEX 16KB
-aliases: [16 КБ страница DEX, 16KB DEX Page Size]
+aliases:
+- 16 КБ страница DEX
+- 16KB DEX Page Size
 topic: android
-subtopics: [gradle, performance-memory]
+subtopics:
+- gradle
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-app-bundle, c-gradle, q-android-app-bundles--android--easy, q-app-size-optimization--android--medium, q-build-optimization-gradle--android--medium, q-dagger-build-time-optimization--android--medium, q-proguard-r8--android--medium, q-reduce-apk-size-techniques--android--medium]
+related:
+- c-app-bundle
+- c-gradle
+- q-android-app-bundles--android--easy
+- q-app-size-optimization--android--medium
+- q-build-optimization-gradle--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-proguard-r8--android--medium
+- q-reduce-apk-size-techniques--android--medium
 created: 2025-10-25
 updated: 2025-10-29
 sources: []
-tags: [android/gradle, android/performance-memory, difficulty/medium]
+tags:
+- android/gradle
+- android/performance-memory
+- difficulty/medium
+anki_cards:
+- slug: android-483-0-en
+  language: en
+  anki_id: 1768363328621
+  synced_at: '2026-01-14T09:17:53.378757'
+- slug: android-483-0-ru
+  language: ru
+  anki_id: 1768363328646
+  synced_at: '2026-01-14T09:17:53.381460'
 ---
 # Вопрос (RU)
 > Что такое проблема размера страницы DEX 16KB в Android?

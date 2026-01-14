@@ -1,21 +1,50 @@
----\
+---
 id: android-052
 title: CI/CD for Multi‑Module Android / CI/CD для мультимодульных Android‑проектов
-aliases: [CI/CD for Multi-Module Android, CI/CD для мультимодульных Android‑проектов]
+aliases:
+- CI/CD for Multi-Module Android
+- CI/CD для мультимодульных Android‑проектов
 topic: android
-subtopics: [architecture-modularization, ci-cd, gradle]
+subtopics:
+- architecture-modularization
+- ci-cd
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-gradle, c-modularization, c-release-engineering, q-android-lint-tool--android--medium, q-android-modularization--android--medium, q-build-optimization-gradle--android--medium, q-cicd-automated-testing--android--medium, q-module-types-android--android--medium, q-multi-module-best-practices--android--hard]
+related:
+- c-gradle
+- c-modularization
+- c-release-engineering
+- q-android-lint-tool--android--medium
+- q-android-modularization--android--medium
+- q-build-optimization-gradle--android--medium
+- q-cicd-automated-testing--android--medium
+- q-module-types-android--android--medium
+- q-multi-module-best-practices--android--hard
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
-tags: [android/architecture-modularization, android/ci-cd, android/gradle, difficulty/medium]
----\
+tags:
+- android/architecture-modularization
+- android/ci-cd
+- android/gradle
+- difficulty/medium
+anki_cards:
+- slug: android-052-0-en
+  language: en
+  anki_id: 1768365310828
+  synced_at: '2026-01-14T09:17:53.738431'
+- slug: android-052-0-ru
+  language: ru
+  anki_id: 1768365310848
+  synced_at: '2026-01-14T09:17:53.740732'
+---
 # Вопрос (RU)
 > Как организовать CI/CD для мультимодульного Android-проекта с учётом оптимизации времени сборки и детерминированности?
 

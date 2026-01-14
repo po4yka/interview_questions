@@ -1,27 +1,47 @@
----\
+---
 id: android-067
 title: Annotation Processing in Android / Обработка аннотаций в Android
-aliases: [Annotation Processing in Android, Обработка аннотаций в Android]
+aliases:
+- Annotation Processing in Android
+- Обработка аннотаций в Android
 topic: android
-subtopics: [build-variants]
+subtopics:
+- build-variants
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-hilt, c-room, q-android-build-optimization--android--medium, q-annotation-processing-android--android--medium, q-module-types-android--android--medium]
+related:
+- c-hilt
+- c-room
+- q-android-build-optimization--android--medium
+- q-annotation-processing-android--android--medium
+- q-module-types-android--android--medium
 sources: []
 created: 2025-10-12
 updated: 2025-10-30
-tags: [android/build-variants, android/gradle, annotation-processing,
-      code-generation, difficulty/medium, kapt, ksp]
-anki_synced: true
-anki_slugs:
-  - 40-android-q-annotation-processing-android-medium-p01-en
-  - 40-android-q-annotation-processing-android-medium-p01-ru
-anki_last_sync: '2025-11-27T09:56:33.839728'
----\
+tags:
+- android/build-variants
+- android/gradle
+- annotation-processing
+- code-generation
+- difficulty/medium
+- kapt
+- ksp
+anki_cards:
+- slug: android-067-0-en
+  language: en
+  anki_id: 1768364268474
+  synced_at: '2026-01-14T09:17:53.671110'
+- slug: android-067-0-ru
+  language: ru
+  anki_id: 1768364268497
+  synced_at: '2026-01-14T09:17:53.673593'
+---
 # Вопрос (RU)
 > Что такое обработка аннотаций в Android и чем отличаются kapt и KSP?
 

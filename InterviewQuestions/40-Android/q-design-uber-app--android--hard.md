@@ -1,21 +1,53 @@
----\
+---
 id: android-445
 title: Design Uber App / Проектирование приложения Uber
-aliases: [Design Uber App, Проектирование приложения Uber]
+aliases:
+- Design Uber App
+- Проектирование приложения Uber
 topic: android
-subtopics: [location, networking-http, service]
+subtopics:
+- location
+- networking-http
+- service
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-data-sync-unstable-network--android--hard, q-design-instagram-stories--android--hard, q-feature-flags-sdk--android--hard, q-large-file-upload-app--android--hard]
+related:
+- c-android-components
+- q-data-sync-unstable-network--android--hard
+- q-design-instagram-stories--android--hard
+- q-feature-flags-sdk--android--hard
+- q-large-file-upload-app--android--hard
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/location, android/networking-http, android/service, architecture, difficulty/hard, location, maps, networking, performance, realtime, system-design, websocket]
-
----\
+tags:
+- android/location
+- android/networking-http
+- android/service
+- architecture
+- difficulty/hard
+- location
+- maps
+- networking
+- performance
+- realtime
+- system-design
+- websocket
+anki_cards:
+- slug: android-445-0-en
+  language: en
+  anki_id: 1768366954080
+  synced_at: '2026-01-14T09:17:53.224542'
+- slug: android-445-0-ru
+  language: ru
+  anki_id: 1768366954106
+  synced_at: '2026-01-14T09:17:53.227373'
+---
 # Вопрос (RU)
 
 > Как спроектировать приложение Uber для Android?

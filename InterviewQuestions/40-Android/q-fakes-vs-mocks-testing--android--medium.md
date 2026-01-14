@@ -1,21 +1,48 @@
 ---
 id: android-457
 title: Fakes Vs Mocks Testing / Fakes против Mocks Тестирование
-aliases: [Fakes Vs Mocks Testing, Fakes против Mocks Тестирование, Test Doubles, Тестовые дублёры]
+aliases:
+- Fakes Vs Mocks Testing
+- Fakes против Mocks Тестирование
+- Test Doubles
+- Тестовые дублёры
 topic: android
-subtopics: [testing-instrumented, testing-unit]
+subtopics:
+- testing-instrumented
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-accessibility-testing--android--medium, q-kmm-testing--android--medium, q-unit-testing-coroutines-flow--android--medium]
+related:
+- c-dependency-injection
+- q-accessibility-testing--android--medium
+- q-kmm-testing--android--medium
+- q-unit-testing-coroutines-flow--android--medium
 sources:
-  - https://developer.android.com/training/testing/unit-testing/local-unit-tests
+- https://developer.android.com/training/testing/unit-testing/local-unit-tests
+anki_cards:
+- slug: android-457-0-en
+  language: en
+  anki_id: 1768366958231
+  synced_at: '2026-01-14T09:17:53.487803'
+- slug: android-457-0-ru
+  language: ru
+  anki_id: 1768366958256
+  synced_at: '2026-01-14T09:17:53.490919'
 created: 2025-10-20
 updated: 2025-11-03
-tags: [android/testing-instrumented, android/testing-unit, difficulty/medium, fakes, mocks, test-doubles]
+tags:
+- android/testing-instrumented
+- android/testing-unit
+- difficulty/medium
+- fakes
+- mocks
+- test-doubles
 ---
 # Вопрос (RU)
 > Объясните разницу между fakes, mocks и stubs. Когда следует использовать каждый?

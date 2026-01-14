@@ -1,22 +1,45 @@
----\
+---
 id: android-272
 title: Android Components Besides Activity / Компоненты Android кроме Activity
-aliases: [Android Components Besides Activity, Компоненты Android кроме Activity]
+aliases:
+- Android Components Besides Activity
+- Компоненты Android кроме Activity
 topic: android
-subtopics: [broadcast-receiver, content-provider, service]
+subtopics:
+- broadcast-receiver
+- content-provider
+- service
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-android-app-components--android--easy, q-what-unifies-android-components--android--easy, q-what-unites-the-main-components-of-an-android-application--android--medium]
+related:
+- c-android-components
+- q-android-app-components--android--easy
+- q-what-unifies-android-components--android--easy
+- q-what-unites-the-main-components-of-an-android-application--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/broadcast-receiver, android/content-provider, android/service, difficulty/easy]
+tags:
+- android/broadcast-receiver
+- android/content-provider
+- android/service
+- difficulty/easy
+anki_cards:
+- slug: android-272-0-en
+  language: en
+  anki_id: 1768363502397
+  synced_at: '2026-01-14T09:17:53.388010'
+- slug: android-272-0-ru
+  language: ru
+  anki_id: 1768363502421
+  synced_at: '2026-01-14T09:17:53.392462'
 sources: []
-
----\
+---
 # Вопрос (RU)
 
 > Какие компоненты Android существуют помимо `Activity`?

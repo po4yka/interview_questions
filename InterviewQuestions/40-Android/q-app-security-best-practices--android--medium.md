@@ -1,22 +1,47 @@
----\
+---
 id: android-277
-title: App Security Best Practices / 1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f
-aliases: [1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f, App Security Best Practices]
+title: App Security Best Practices / 1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238
+  3f40383b3e36353d384f
+aliases:
+- 1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f
+- App Security Best Practices
 topic: android
-subtopics: [keystore-crypto, network-security-config, permissions]
+subtopics:
+- keystore-crypto
+- network-security-config
+- permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-keystore, c-encryption, q-android-security-best-practices--android--medium]
+related:
+- c-android-keystore
+- c-encryption
+- q-android-security-best-practices--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, owasp, security]
-
----\
+tags:
+- android/keystore-crypto
+- android/network-security-config
+- android/permissions
+- difficulty/medium
+- owasp
+- security
+anki_cards:
+- slug: android-277-0-en
+  language: en
+  anki_id: 1768364267823
+  synced_at: '2026-01-14T09:17:53.403238'
+- slug: android-277-0-ru
+  language: ru
+  anki_id: 1768364267846
+  synced_at: '2026-01-14T09:17:53.405571'
+---
 # Вопрос (RU)
 
 > Какие основные практики безопасности следует применять в Android-приложении?

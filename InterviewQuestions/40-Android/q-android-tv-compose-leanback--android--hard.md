@@ -1,22 +1,47 @@
----id: android-623
+---
+id: android-623
 title: Android TV Compose & Leanback / Android TV на Compose и Leanback
-aliases: [Android TV Compose & Leanback, Android TV на Compose и Leanback]
+aliases:
+- Android TV Compose & Leanback
+- Android TV на Compose и Leanback
 topic: android
-subtopics: [tv, ui-compose]
+subtopics:
+- tv
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-tv, c-compose-recomposition, c-recomposition, q-android-auto-guidelines--android--hard, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-how-does-jetpackcompose-work--android--medium]
+related:
+- c-android-tv
+- c-compose-recomposition
+- c-recomposition
+- q-android-auto-guidelines--android--hard
+- q-compose-core-components--android--medium
+- q-compose-custom-animations--android--medium
+- q-how-does-jetpackcompose-work--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/tv, android/ui-compose, difficulty/hard]
+tags:
+- android/tv
+- android/ui-compose
+- difficulty/hard
 sources:
-  - "https://developer.android.com/jetpack/compose/tv"
-  - "https://developer.android.com/training/tv/start"
-
+- https://developer.android.com/jetpack/compose/tv
+- https://developer.android.com/training/tv/start
+anki_cards:
+- slug: android-623-0-en
+  language: en
+  anki_id: 1768364268221
+  synced_at: '2026-01-14T09:17:53.558438'
+- slug: android-623-0-ru
+  language: ru
+  anki_id: 1768364268248
+  synced_at: '2026-01-14T09:17:53.561024'
 ---
 # Вопрос (RU)
 > Как построить интерфейс Android TV, совмещая Legacy Leanback и Compose for TV, обеспечивая навигацию фокусом, рекомендации и сертификацию Google TV?

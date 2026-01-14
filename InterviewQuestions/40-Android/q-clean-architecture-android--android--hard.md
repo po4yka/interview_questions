@@ -1,22 +1,46 @@
----\
+---
 id: android-047
 title: Clean Architecture on Android / Clean Architecture в Android
-aliases: [Clean Architecture on Android, Clean Architecture в Android]
+aliases:
+- Clean Architecture on Android
+- Clean Architecture в Android
 topic: android
-subtopics: [architecture-clean, architecture-modularization, di-hilt]
+subtopics:
+- architecture-clean
+- architecture-modularization
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-clean-architecture, c-dependency-injection, q-android-enterprise-mdm-architecture--android--hard, q-kmm-architecture--android--hard, q-multi-module-best-practices--android--hard]
+related:
+- c-clean-architecture
+- c-dependency-injection
+- q-android-enterprise-mdm-architecture--android--hard
+- q-kmm-architecture--android--hard
+- q-multi-module-best-practices--android--hard
 sources: []
 created: 2025-10-11
 updated: 2025-11-11
-tags: [android/architecture-clean, android/architecture-modularization, android/di-hilt, difficulty/hard]
-
----\
+tags:
+- android/architecture-clean
+- android/architecture-modularization
+- android/di-hilt
+- difficulty/hard
+anki_cards:
+- slug: android-047-0-en
+  language: en
+  anki_id: 1768365658775
+  synced_at: '2026-01-14T09:17:53.411164'
+- slug: android-047-0-ru
+  language: ru
+  anki_id: 1768365658800
+  synced_at: '2026-01-14T09:17:53.413293'
+---
 # Вопрос (RU)
 > Как реализовать Clean Architecture в Android?
 

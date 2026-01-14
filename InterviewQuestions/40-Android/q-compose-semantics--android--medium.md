@@ -1,21 +1,53 @@
----id: android-026
+---
+id: android-026
 title: Semantics in Jetpack Compose / Семантика в Jetpack Compose
-aliases: [Semantics in Jetpack Compose, Семантика в Jetpack Compose]
+aliases:
+- Semantics in Jetpack Compose
+- Семантика в Jetpack Compose
 topic: android
-subtopics: [testing-ui, ui-accessibility, ui-compose]
+subtopics:
+- testing-ui
+- ui-accessibility
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-accessibility, c-compose-recomposition, c-globalization, c-jetpack-compose, c-recomposition, q-accessibility-compose--android--medium, q-compose-modifier-system--android--medium, q-compose-testing--android--medium, q-how-does-jetpack-compose-work--android--medium]
+related:
+- c-accessibility
+- c-compose-recomposition
+- c-globalization
+- c-jetpack-compose
+- c-recomposition
+- q-accessibility-compose--android--medium
+- q-compose-modifier-system--android--medium
+- q-compose-testing--android--medium
+- q-how-does-jetpack-compose-work--android--medium
 created: 2025-10-06
 updated: 2025-10-30
-tags: [accessibility, android/testing-ui, android/ui-accessibility, android/ui-compose, difficulty/medium, testing]
+tags:
+- accessibility
+- android/testing-ui
+- android/ui-accessibility
+- android/ui-compose
+- difficulty/medium
+- testing
 sources:
-  - https://developer.android.com/guide/topics/ui/accessibility
-  - https://developer.android.com/jetpack/compose/semantics
+- https://developer.android.com/guide/topics/ui/accessibility
+- https://developer.android.com/jetpack/compose/semantics
+anki_cards:
+- slug: android-026-0-en
+  language: en
+  anki_id: 1768366070176
+  synced_at: '2026-01-14T09:17:53.448858'
+- slug: android-026-0-ru
+  language: ru
+  anki_id: 1768366070198
+  synced_at: '2026-01-14T09:17:53.450875'
 ---
 # Вопрос (RU)
 > Что такое семантика в Jetpack Compose и зачем она нужна?

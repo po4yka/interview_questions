@@ -1,22 +1,48 @@
----\
+---
 id: android-450
 title: Deep Link Vs App Link / Deep Link против App Link
-aliases: [Deep Link Vs App Link, Deep Link против App Link]
+aliases:
+- Deep Link Vs App Link
+- Deep Link против App Link
 topic: android
-subtopics: [intents-deeplinks, ui-navigation]
+subtopics:
+- intents-deeplinks
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-navigation, c-fragments, c-intent, q-app-startup-optimization--android--medium, q-design-uber-app--android--hard, q-macrobenchmark-startup--android--medium]
+related:
+- c-compose-navigation
+- c-fragments
+- c-intent
+- q-app-startup-optimization--android--medium
+- q-design-uber-app--android--hard
+- q-macrobenchmark-startup--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/intents-deeplinks, android/ui-navigation, app-links, deep-linking, difficulty/medium]
+tags:
+- android/intents-deeplinks
+- android/ui-navigation
+- app-links
+- deep-linking
+- difficulty/medium
+anki_cards:
+- slug: android-450-0-en
+  language: en
+  anki_id: 1768366955681
+  synced_at: '2026-01-14T09:17:53.336193'
+- slug: android-450-0-ru
+  language: ru
+  anki_id: 1768366955706
+  synced_at: '2026-01-14T09:17:53.339020'
 sources:
-  - https://developer.android.com/training/app-links
----\
+- https://developer.android.com/training/app-links
+---
 # Вопрос (RU)
 > Какие основные отличия между Deep Link и App Link в Android?
 

@@ -1,22 +1,45 @@
----\
+---
 id: android-192
 title: App Startup Optimization / Оптимизация запуска приложения
-aliases: [App Startup Optimization, Оптимизация запуска приложения]
+aliases:
+- App Startup Optimization
+- Оптимизация запуска приложения
 topic: android
-subtopics: [app-startup, performance-memory, performance-startup]
+subtopics:
+- app-startup
+- performance-memory
+- performance-startup
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-content-provider, q-app-size-optimization--android--medium, q-app-startup-library--android--medium, q-optimize-memory-usage-android--android--medium]
+related:
+- c-content-provider
+- q-app-size-optimization--android--medium
+- q-app-startup-library--android--medium
+- q-optimize-memory-usage-android--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/app-startup, android/performance-memory, android/performance-startup, difficulty/medium]
-
----\
+tags:
+- android/app-startup
+- android/performance-memory
+- android/performance-startup
+- difficulty/medium
+anki_cards:
+- slug: android-192-0-en
+  language: en
+  anki_id: 1768364695498
+  synced_at: '2026-01-14T09:17:53.182842'
+- slug: android-192-0-ru
+  language: ru
+  anki_id: 1768364695523
+  synced_at: '2026-01-14T09:17:53.186679'
+---
 # Вопрос (RU)
 > Как оптимизировать время запуска Android-приложения?
 

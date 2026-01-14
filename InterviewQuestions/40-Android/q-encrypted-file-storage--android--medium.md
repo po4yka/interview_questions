@@ -1,22 +1,51 @@
----\
+---
 id: android-458
 title: Encrypted File Storage / Зашифрованное хранение файлов
-aliases: [Encrypted File Storage, Зашифрованное хранение файлов]
+aliases:
+- Encrypted File Storage
+- Зашифрованное хранение файлов
 topic: android
-subtopics: [files-media, permissions]
+subtopics:
+- files-media
+- permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-permissions, c-scoped-storage-security, q-api-file-upload-server--android--medium, q-data-encryption-at-rest--android--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium, q-large-file-upload--android--medium]
+related:
+- c-permissions
+- c-scoped-storage-security
+- q-api-file-upload-server--android--medium
+- q-data-encryption-at-rest--android--medium
+- q-how-to-display-svg-string-as-a-vector-file--android--medium
+- q-large-file-upload--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/files-media, android/permissions, android/security, difficulty/medium, encryption, file-storage, keystore, security]
+tags:
+- android/files-media
+- android/permissions
+- android/security
+- difficulty/medium
+- encryption
+- file-storage
+- keystore
+- security
+anki_cards:
+- slug: android-458-0-en
+  language: en
+  anki_id: 1768366958480
+  synced_at: '2026-01-14T09:17:53.510268'
+- slug: android-458-0-ru
+  language: ru
+  anki_id: 1768366958506
+  synced_at: '2026-01-14T09:17:53.512727'
 sources:
-  - "https://developer.android.com/topic/security/data"
----\
+- https://developer.android.com/topic/security/data
+---
 # Вопрос (RU)
 > Как реализовать зашифрованное хранение файлов с использованием EncryptedFile API?
 

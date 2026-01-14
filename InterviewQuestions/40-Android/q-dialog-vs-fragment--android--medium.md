@@ -1,24 +1,49 @@
----\
+---
 id: android-357
 title: Dialog vs Fragment / Диалог против Фрагмента
-aliases: [Dialog vs Fragment, Диалог против Фрагмента]
+aliases:
+- Dialog vs Fragment
+- Диалог против Фрагмента
 topic: android
-subtopics: [fragment, ui-views]
+subtopics:
+- fragment
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-activity-lifecycle-methods--android--medium, q-how-dialog-differs-from-other-navigation--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-save-data-outside-fragment--android--medium]
+related:
+- c-android-components
+- q-activity-lifecycle-methods--android--medium
+- q-how-dialog-differs-from-other-navigation--android--medium
+- q-how-to-choose-layout-for-fragment--android--easy
+- q-save-data-outside-fragment--android--medium
 created: 2025-01-10
 updated: 2025-02-10
-tags: [android/fragment, android/ui-views, dialog, difficulty/medium, fragment, ui]
+tags:
+- android/fragment
+- android/ui-views
+- dialog
+- difficulty/medium
+- fragment
+- ui
+anki_cards:
+- slug: android-357-0-en
+  language: en
+  anki_id: 1768366959485
+  synced_at: '2026-01-14T09:17:53.600074'
+- slug: android-357-0-ru
+  language: ru
+  anki_id: 1768366959505
+  synced_at: '2026-01-14T09:17:53.603175'
 sources:
-  - "https://developer.android.com/develop/ui/views/components/dialogs"
-  - "https://developer.android.com/guide/fragments"
-
----\
+- https://developer.android.com/develop/ui/views/components/dialogs
+- https://developer.android.com/guide/fragments
+---
 # Вопрос (RU)
 > Какая разница между диалогом и фрагментом?
 

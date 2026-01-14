@@ -1,25 +1,49 @@
----\
+---
 id: android-386
 title: Fragments And Activity Relationship / Взаимосвязь Фрагментов И Activity
-aliases: [Fragment Lifecycle Dependency, Fragments And Activity Relationship, Взаимосвязь Фрагментов И Activity, Зависимость жизненного цикла фрагмента]
+aliases:
+- Fragment Lifecycle Dependency
+- Fragments And Activity Relationship
+- Взаимосвязь Фрагментов И Activity
+- Зависимость жизненного цикла фрагмента
 topic: android
-subtopics: [fragment, lifecycle]
+subtopics:
+- fragment
+- lifecycle
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-why-use-fragments-when-we-have-activities--android--medium]
+related:
+- c-android-components
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-what-are-fragments-for-if-there-is-activity--android--medium
+- q-why-are-fragments-needed-if-there-is-activity--android--hard
+- q-why-use-fragments-when-we-have-activities--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources:
-  - "https://developer.android.com/guide/fragments"
-  - "https://developer.android.com/guide/fragments/fragmentmanager"
-  - "https://developer.android.com/guide/fragments/lifecycle"
-tags: [android/fragment, android/lifecycle, difficulty/hard]
-
----\
+- https://developer.android.com/guide/fragments
+- https://developer.android.com/guide/fragments/fragmentmanager
+- https://developer.android.com/guide/fragments/lifecycle
+anki_cards:
+- slug: android-386-0-en
+  language: en
+  anki_id: 1768367370835
+  synced_at: '2026-01-14T09:17:53.729050'
+- slug: android-386-0-ru
+  language: ru
+  anki_id: 1768367370857
+  synced_at: '2026-01-14T09:17:53.731930'
+tags:
+- android/fragment
+- android/lifecycle
+- difficulty/hard
+---
 # Вопрос (RU)
 > Как существуют и к чему привязаны фрагменты в `Activity`?
 

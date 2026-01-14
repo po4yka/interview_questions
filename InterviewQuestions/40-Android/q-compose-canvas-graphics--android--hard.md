@@ -1,21 +1,45 @@
----\
+---
 id: android-042
 title: Compose Canvas & Graphics / Canvas и графика в Compose
-aliases: [Canvas и графика в Compose, Compose Canvas & Graphics]
+aliases:
+- Canvas и графика в Compose
+- Compose Canvas & Graphics
 topic: android
-subtopics: [ui-compose, ui-graphics]
+subtopics:
+- ui-compose
+- ui-graphics
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-graphics, c-compose-ui, q-android-performance-measurement-tools--android--medium, q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
+related:
+- c-android-graphics
+- c-compose-ui
+- q-android-performance-measurement-tools--android--medium
+- q-compose-compiler-plugin--android--hard
+- q-compose-performance-optimization--android--hard
+- q-compose-stability-skippability--android--hard
 created: 2025-10-11
 updated: 2025-11-11
 sources: []
-tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
----\
+tags:
+- android/ui-compose
+- android/ui-graphics
+- difficulty/hard
+anki_cards:
+- slug: android-042-0-en
+  language: en
+  anki_id: 1768365657324
+  synced_at: '2026-01-14T09:17:53.251665'
+- slug: android-042-0-ru
+  language: ru
+  anki_id: 1768365657349
+  synced_at: '2026-01-14T09:17:53.253726'
+---
 # Вопрос (RU)
 > Как эффективно работать с `Canvas` и графикой в Jetpack Compose?
 

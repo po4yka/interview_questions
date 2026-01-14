@@ -1,21 +1,46 @@
----\
+---
 id: android-449
 title: Dagger Main Elements / Основные элементы Dagger
-aliases: [Dagger Main Elements, Основные элементы Dagger]
+aliases:
+- Dagger Main Elements
+- Основные элементы Dagger
 topic: android
-subtopics: [di-hilt]
+subtopics:
+- di-hilt
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, c-dependency-injection, q-dagger-custom-scopes--android--hard, q-dagger-field-injection--android--medium, q-dagger-framework-overview--android--hard, q-dagger-inject-annotation--android--easy, q-dagger-purpose--android--easy]
+related:
+- c-dagger
+- c-dependency-injection
+- q-dagger-custom-scopes--android--hard
+- q-dagger-field-injection--android--medium
+- q-dagger-framework-overview--android--hard
+- q-dagger-inject-annotation--android--easy
+- q-dagger-purpose--android--easy
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium]
+tags:
+- android/di-hilt
+- dagger
+- dependency-injection
+- difficulty/medium
+anki_cards:
+- slug: android-449-0-en
+  language: en
+  anki_id: 1768366556876
+  synced_at: '2026-01-14T09:17:53.280975'
+- slug: android-449-0-ru
+  language: ru
+  anki_id: 1768366556899
+  synced_at: '2026-01-14T09:17:53.282874'
 sources: []
----\
+---
 # Вопрос (RU)
 > Из каких основных элементов состоит `Dagger`?
 

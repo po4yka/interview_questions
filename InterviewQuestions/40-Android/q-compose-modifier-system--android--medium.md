@@ -1,20 +1,47 @@
----id: android-021
+---
+id: android-021
 title: Modifier System in Compose / Система модификаторов в Compose
-aliases: [Modifier System in Compose]
+aliases:
+- Modifier System in Compose
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-recomposition, q-android-performance-measurement-tools--android--medium, q-animated-visibility-vs-content--android--medium, q-compose-compiler-plugin--android--hard, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-compose-gesture-detection--android--medium, q-compose-modifier-order-performance--android--medium]
+related:
+- c-compose-recomposition
+- c-recomposition
+- q-android-performance-measurement-tools--android--medium
+- q-animated-visibility-vs-content--android--medium
+- q-compose-compiler-plugin--android--hard
+- q-compose-core-components--android--medium
+- q-compose-custom-animations--android--medium
+- q-compose-gesture-detection--android--medium
+- q-compose-modifier-order-performance--android--medium
 created: 2025-10-06
 updated: 2025-10-30
-tags: [android/performance-memory, android/ui-compose, difficulty/medium]
+tags:
+- android/performance-memory
+- android/ui-compose
+- difficulty/medium
 sources:
-  - https://developer.android.com/jetpack/compose/modifiers
+- https://developer.android.com/jetpack/compose/modifiers
+anki_cards:
+- slug: android-021-0-en
+  language: en
+  anki_id: 1768366068275
+  synced_at: '2026-01-14T09:17:53.284710'
+- slug: android-021-0-ru
+  language: ru
+  anki_id: 1768366068299
+  synced_at: '2026-01-14T09:17:53.286940'
 ---
 # Вопрос (RU)
 

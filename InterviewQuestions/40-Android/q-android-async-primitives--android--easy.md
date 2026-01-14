@@ -1,22 +1,45 @@
----\
+---
 id: android-143
 title: Android Async Primitives / Примитивы асинхронности Android
-aliases: [Android Async Primitives, Примитивы асинхронности Android]
+aliases:
+- Android Async Primitives
+- Примитивы асинхронности Android
 topic: android
-subtopics: [coroutines, threads-sync]
+subtopics:
+- coroutines
+- threads-sync
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, q-async-operations-android--android--medium, q-coroutine-builders-basics--kotlin--easy, q-how-to-start-drawing-ui-in-android--android--easy, q-viewmodel-pattern--android--easy, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]
+related:
+- c-coroutines
+- q-async-operations-android--android--medium
+- q-coroutine-builders-basics--kotlin--easy
+- q-how-to-start-drawing-ui-in-android--android--easy
+- q-viewmodel-pattern--android--easy
+- q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/coroutines, android/threads-sync, difficulty/easy]
-
----\
+tags:
+- android/coroutines
+- android/threads-sync
+- difficulty/easy
+anki_cards:
+- slug: android-143-0-en
+  language: en
+  anki_id: 1768363501798
+  synced_at: '2026-01-14T09:17:53.053778'
+- slug: android-143-0-ru
+  language: ru
+  anki_id: 1768363501839
+  synced_at: '2026-01-14T09:17:53.055641'
+---
 # Вопрос (RU)
 > Какие примитивы асинхронности предоставляет Android?
 

@@ -1,22 +1,45 @@
----\
+---
 id: android-385
 title: API Rate Limiting and Throttling / Ограничение скорости API и троттлинг
-aliases: [API Rate Limiting and Throttling, Ограничение скорости API и троттлинг]
+aliases:
+- API Rate Limiting and Throttling
+- Ограничение скорости API и троттлинг
 topic: android
-subtopics: [networking-http, performance-startup]
+subtopics:
+- networking-http
+- performance-startup
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-basics, q-android-testing-strategies--android--medium]
+related:
+- c-android-basics
+- q-android-testing-strategies--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/networking-http, android/performance-startup, difficulty/medium, networking, okhttp, performance, retrofit]
-
----\
+tags:
+- android/networking-http
+- android/performance-startup
+- difficulty/medium
+- networking
+- okhttp
+- performance
+- retrofit
+anki_cards:
+- slug: android-385-0-en
+  language: en
+  anki_id: 1768364268773
+  synced_at: '2026-01-14T09:17:53.724130'
+- slug: android-385-0-ru
+  language: ru
+  anki_id: 1768364268796
+  synced_at: '2026-01-14T09:17:53.726554'
+---
 # Вопрос (RU)
 > Как реализовать rate limiting и throttling для API запросов в Android?
 

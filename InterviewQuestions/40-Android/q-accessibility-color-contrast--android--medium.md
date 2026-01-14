@@ -1,21 +1,43 @@
----\
+---
 id: android-039
 title: Accessibility Color Contrast / Контрастность цветов для доступности
-aliases: [Accessibility Color Contrast, Контрастность цветов для доступности]
+aliases:
+- Accessibility Color Contrast
+- Контрастность цветов для доступности
 topic: android
-subtopics: [ui-accessibility, ui-theming]
+subtopics:
+- ui-accessibility
+- ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-accessibility, q-accessibility-compose--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
+related:
+- c-accessibility
+- q-accessibility-compose--android--medium
+- q-accessibility-testing--android--medium
+- q-custom-view-accessibility--android--medium
 created: 2025-10-11
 updated: 2025-10-29
-tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
+tags:
+- android/ui-accessibility
+- android/ui-theming
+- difficulty/medium
+anki_cards:
+- slug: android-039-0-en
+  language: en
+  anki_id: 1768363501896
+  synced_at: '2026-01-14T09:17:53.118497'
+- slug: android-039-0-ru
+  language: ru
+  anki_id: 1768363501921
+  synced_at: '2026-01-14T09:17:53.121005'
 sources: []
----\
+---
 # Вопрос (RU)
 > Как обеспечить доступную контрастность цветов в Android-приложении согласно WCAG?
 

@@ -1,21 +1,47 @@
----\
+---
 id: android-094
-title: "Frame Time 120ms Meaning / Значение времени кадра 120мс"
-aliases: ["Frame Time 120ms Meaning", "Значение времени кадра 120мс"]
+title: Frame Time 120ms Meaning / Значение времени кадра 120мс
+aliases:
+- Frame Time 120ms Meaning
+- Значение времени кадра 120мс
 topic: android
-subtopics: [performance-rendering, profiling]
+subtopics:
+- performance-rendering
+- profiling
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/performance-rendering, android/profiling, difficulty/easy, fps, frame-rate, performance, rendering, ui-performance]
+tags:
+- android/performance-rendering
+- android/profiling
+- difficulty/easy
+- fps
+- frame-rate
+- performance
+- rendering
+- ui-performance
+anki_cards:
+- slug: android-094-0-en
+  language: en
+  anki_id: 1768367368384
+  synced_at: '2026-01-14T09:17:53.564937'
+- slug: android-094-0-ru
+  language: ru
+  anki_id: 1768367368406
+  synced_at: '2026-01-14T09:17:53.567883'
 moc: moc-android
-related: [c-android-basics, c-android-profiling, q-android-performance-measurement-tools--android--medium]
+related:
+- c-android-basics
+- c-android-profiling
+- q-android-performance-measurement-tools--android--medium
 sources: []
----\
+---
 # Вопрос (RU)
 
 > Если профайлер показывает что какой-нибудь фрейм занял 120 миллисекунд, что это значит?

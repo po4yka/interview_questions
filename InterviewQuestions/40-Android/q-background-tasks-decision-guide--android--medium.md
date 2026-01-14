@@ -1,21 +1,48 @@
----\
+---
 id: android-006
 title: Background Tasks Decision Guide / Руководство по фоновым задачам
-aliases: [Background Tasks Decision Guide, Руководство по фоновым задачам]
+aliases:
+- Background Tasks Decision Guide
+- Руководство по фоновым задачам
 topic: android
-subtopics: [background-execution, coroutines, service]
+subtopics:
+- background-execution
+- coroutines
+- service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, c-service, q-async-operations-android--android--medium, q-background-vs-foreground-service--android--medium, q-foreground-service-types--android--medium, q-what-is-workmanager--android--medium, q-workmanager-decision-guide--android--medium]
+related:
+- c-coroutines
+- c-service
+- q-async-operations-android--android--medium
+- q-background-vs-foreground-service--android--medium
+- q-foreground-service-types--android--medium
+- q-what-is-workmanager--android--medium
+- q-workmanager-decision-guide--android--medium
 sources: []
 created: 2025-10-05
 updated: 2025-10-30
-tags: [android/background-execution, android/coroutines, android/service, difficulty/medium]
----\
+tags:
+- android/background-execution
+- android/coroutines
+- android/service
+- difficulty/medium
+anki_cards:
+- slug: android-006-0-en
+  language: en
+  anki_id: 1768364696152
+  synced_at: '2026-01-14T09:17:53.330496'
+- slug: android-006-0-ru
+  language: ru
+  anki_id: 1768364696173
+  synced_at: '2026-01-14T09:17:53.333368'
+---
 # Вопрос (RU)
 > Как выбрать правильный способ выполнения фоновых задач в Android?
 

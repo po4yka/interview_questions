@@ -1,20 +1,48 @@
----\
+---
 id: android-074
 title: Cache Implementation Strategies / Стратегии реализации кэша
-aliases: [Cache Implementation Strategies, Стратегии реализации кэша]
+aliases:
+- Cache Implementation Strategies
+- Стратегии реализации кэша
 topic: android
-subtopics: [cache-offline, networking-http, room]
+subtopics:
+- cache-offline
+- networking-http
+- room
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-performance, c-room, q-android-performance-measurement-tools--android--medium, q-android-storage-types--android--medium, q-android-testing-strategies--android--medium, q-database-optimization-android--android--medium, q-integration-testing-strategies--android--medium, q-tflite-acceleration-strategies--android--hard]
+related:
+- c-performance
+- c-room
+- q-android-performance-measurement-tools--android--medium
+- q-android-storage-types--android--medium
+- q-android-testing-strategies--android--medium
+- q-database-optimization-android--android--medium
+- q-integration-testing-strategies--android--medium
+- q-tflite-acceleration-strategies--android--hard
 created: 2024-10-13
 updated: 2025-11-10
-tags: [android/cache-offline, android/networking-http, android/room, difficulty/medium]
----\
+tags:
+- android/cache-offline
+- android/networking-http
+- android/room
+- difficulty/medium
+anki_cards:
+- slug: android-074-0-en
+  language: en
+  anki_id: 1768364987310
+  synced_at: '2026-01-14T09:13:16.058491'
+- slug: android-074-0-ru
+  language: ru
+  anki_id: 1768364987362
+  synced_at: '2026-01-14T09:13:16.060564'
+---
 # Вопрос (RU)
 > Какие существуют стратегии реализации кэша в Android?
 

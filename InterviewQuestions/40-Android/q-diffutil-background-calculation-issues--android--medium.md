@@ -1,22 +1,50 @@
----\
+---
 id: android-473
 title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
-aliases: [DiffUtil Background Calculation Issues, DiffUtil background issues, Проблемы DiffUtil в фоне, Проблемы фонового вычисления DiffUtil]
+aliases:
+- DiffUtil Background Calculation Issues
+- DiffUtil background issues
+- Проблемы DiffUtil в фоне
+- Проблемы фонового вычисления DiffUtil
 topic: android
-subtopics: [performance-memory, ui-views]
+subtopics:
+- performance-memory
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-memory-management, q-background-vs-foreground-service--android--medium, q-keep-service-running-background--android--medium, q-main-causes-ui-lag--android--medium, q-what-is-diffutil-for--android--medium]
+related:
+- c-memory-management
+- q-background-vs-foreground-service--android--medium
+- q-keep-service-running-background--android--medium
+- q-main-causes-ui-lag--android--medium
+- q-what-is-diffutil-for--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/performance-memory, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
+tags:
+- android/performance-memory
+- android/ui-views
+- difficulty/medium
+- diffutil
+- performance
+- recyclerview
+anki_cards:
+- slug: android-473-0-en
+  language: en
+  anki_id: 1768366962980
+  synced_at: '2026-01-14T09:17:53.856971'
+- slug: android-473-0-ru
+  language: ru
+  anki_id: 1768366963005
+  synced_at: '2026-01-14T09:17:53.859701'
 sources:
-  - https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
----\
+- https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
+---
 # Вопрос (RU)
 > Когда фоновое вычисление `DiffUtil` работает плохо?
 

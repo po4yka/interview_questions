@@ -1,23 +1,53 @@
----\
+---
 id: android-468
 title: Design WhatsApp App / Проектирование приложения WhatsApp
-aliases: [Design WhatsApp App, Проектирование приложения WhatsApp]
+aliases:
+- Design WhatsApp App
+- Проектирование приложения WhatsApp
 topic: android
-subtopics: [media, networking-http, service]
+subtopics:
+- media
+- networking-http
+- service
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-service, q-data-sync-unstable-network--android--hard, q-database-encryption-android--android--medium, q-design-instagram-stories--android--hard, q-design-uber-app--android--hard, q-macrobenchmark-startup--android--medium]
+related:
+- c-service
+- q-data-sync-unstable-network--android--hard
+- q-database-encryption-android--android--medium
+- q-design-instagram-stories--android--hard
+- q-design-uber-app--android--hard
+- q-macrobenchmark-startup--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/media, android/networking-http, android/service, difficulty/hard, messaging, networking, performance, realtime, system-design]
+tags:
+- android/media
+- android/networking-http
+- android/service
+- difficulty/hard
+- messaging
+- networking
+- performance
+- realtime
+- system-design
+anki_cards:
+- slug: android-468-0-en
+  language: en
+  anki_id: 1768366961531
+  synced_at: '2026-01-14T09:17:53.748530'
+- slug: android-468-0-ru
+  language: ru
+  anki_id: 1768366961556
+  synced_at: '2026-01-14T09:17:53.750881'
 sources:
-  - "https://signal.org/docs/specifications/doubleratchet/"
-
----\
+- https://signal.org/docs/specifications/doubleratchet/
+---
 # Вопрос (RU)
 
 > Как спроектировать мессенджер WhatsApp для Android?

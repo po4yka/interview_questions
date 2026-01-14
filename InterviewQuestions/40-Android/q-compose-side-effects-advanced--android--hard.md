@@ -1,23 +1,47 @@
----\
+---
 id: android-254
 title: Compose Side Effects (Advanced) / Побочные эффекты Compose (продвинуто)
-aliases: [Compose Side Effects Advanced, Побочные эффекты Compose]
+aliases:
+- Compose Side Effects Advanced
+- Побочные эффекты Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-compose-ui-testing-advanced--android--hard, q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]
+related:
+- c-jetpack-compose
+- q-compose-compiler-plugin--android--hard
+- q-compose-performance-optimization--android--hard
+- q-compose-remember-derived-state--android--medium
+- q-compose-side-effects-launchedeffect-disposableeffect--android--hard
+- q-compose-ui-testing-advanced--android--hard
+- q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-state, difficulty/hard]
+tags:
+- android/ui-compose
+- android/ui-state
+- difficulty/hard
 sources:
-  - "https://developer.android.com/jetpack/compose/side-effects"
-
----\
+- https://developer.android.com/jetpack/compose/side-effects
+anki_cards:
+- slug: android-254-0-en
+  language: en
+  anki_id: 1768366069025
+  synced_at: '2026-01-14T09:17:53.361865'
+- slug: android-254-0-ru
+  language: ru
+  anki_id: 1768366069050
+  synced_at: '2026-01-14T09:17:53.364208'
+---
 # Вопрос (RU)
 > Как выбирать и правильно использовать API побочных эффектов Compose (LaunchedEffect, DisposableEffect, SideEffect, produceState)?
 

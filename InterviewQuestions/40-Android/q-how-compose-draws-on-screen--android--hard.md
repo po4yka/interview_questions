@@ -1,21 +1,50 @@
----\
+---
 id: android-152
 title: How Compose Draws On Screen / Как Compose рисует на экране
-aliases: [How Compose Draws On Screen, Как Compose рисует на экране]
+aliases:
+- How Compose Draws On Screen
+- Как Compose рисует на экране
 topic: android
-subtopics: [performance-rendering, ui-compose]
+subtopics:
+- performance-rendering
+- ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, c-performance, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-how-does-jetpackcompose-work--android--medium, q-recomposition-compose--android--medium]
+related:
+- c-compose-state
+- c-jetpack-compose
+- c-performance
+- q-compose-core-components--android--medium
+- q-compose-custom-animations--android--medium
+- q-compose-performance-optimization--android--hard
+- q-compose-stability-skippability--android--hard
+- q-how-does-jetpackcompose-work--android--medium
+- q-recomposition-compose--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/performance-rendering, android/ui-compose, difficulty/medium, rendering]
+tags:
+- android
+- android/performance-rendering
+- android/ui-compose
+- difficulty/medium
+- rendering
+anki_cards:
+- slug: android-152-0-en
+  language: en
+  anki_id: 1768367581959
+  synced_at: '2026-01-14T09:17:53.081832'
+- slug: android-152-0-ru
+  language: ru
+  anki_id: 1768367581981
+  synced_at: '2026-01-14T09:17:53.084044'
 sources: []
----\
+---
 # Вопрос (RU)
 
 > Как Jetpack Compose отрисовывает UI на экране? Опишите трёхфазный процесс рендеринга.

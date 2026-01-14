@@ -1,22 +1,47 @@
----\
+---
 id: android-051
 title: App Size Optimization / Оптимизация размера приложения
-aliases: [App Size Optimization, Оптимизация размера приложения]
+aliases:
+- App Size Optimization
+- Оптимизация размера приложения
 topic: android
-subtopics: [app-bundle, obfuscation, performance-memory]
+subtopics:
+- app-bundle
+- obfuscation
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-app-bundle, q-android-app-bundles--android--easy, q-android-build-optimization--android--medium, q-app-startup-optimization--android--medium, q-optimize-memory-usage-android--android--medium, q-reduce-apk-size-techniques--android--medium]
+related:
+- c-app-bundle
+- q-android-app-bundles--android--easy
+- q-android-build-optimization--android--medium
+- q-app-startup-optimization--android--medium
+- q-optimize-memory-usage-android--android--medium
+- q-reduce-apk-size-techniques--android--medium
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
-tags: [android/app-bundle, android/obfuscation, android/performance-memory, difficulty/medium]
-
----\
+tags:
+- android/app-bundle
+- android/obfuscation
+- android/performance-memory
+- difficulty/medium
+anki_cards:
+- slug: android-051-0-en
+  language: en
+  anki_id: 1768364268727
+  synced_at: '2026-01-14T09:17:53.718362'
+- slug: android-051-0-ru
+  language: ru
+  anki_id: 1768364268749
+  synced_at: '2026-01-14T09:17:53.721327'
+---
 # Вопрос (RU)
 > Какие техники используются для уменьшения размера Android-приложения?
 

@@ -1,20 +1,49 @@
----id: android-381
+---
+id: android-381
 title: Compose Lazy Layout Optimization / Оптимизация Lazy‑layout в Compose
-aliases: [Compose Lazy Layout Optimization, LazyColumn optimization, LazyRow optimization, Оптимизация Lazy‑layout в Compose, Оптимизация LazyColumn]
+aliases:
+- Compose Lazy Layout Optimization
+- LazyColumn optimization
+- LazyRow optimization
+- Оптимизация Lazy‑layout в Compose
+- Оптимизация LazyColumn
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-compose-recomposition, c-recomposition, q-android-performance-measurement-tools--android--medium, q-compose-compiler-plugin--android--hard, q-compose-custom-layout--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
+related:
+- c-android
+- c-compose-recomposition
+- c-recomposition
+- q-android-performance-measurement-tools--android--medium
+- q-compose-compiler-plugin--android--hard
+- q-compose-custom-layout--android--hard
+- q-compose-performance-optimization--android--hard
+- q-compose-stability-skippability--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/performance-memory, android/ui-compose, difficulty/hard]
-
+tags:
+- android/performance-memory
+- android/ui-compose
+- difficulty/hard
+anki_cards:
+- slug: android-381-0-en
+  language: en
+  anki_id: 1768365660875
+  synced_at: '2026-01-14T09:17:53.697702'
+- slug: android-381-0-ru
+  language: ru
+  anki_id: 1768365660900
+  synced_at: '2026-01-14T09:17:53.700384'
 ---
 # Вопрос (RU)
 > Как оптимизировать производительность Lazy-layout (LazyColumn, LazyRow) в Jetpack Compose?

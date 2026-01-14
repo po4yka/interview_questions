@@ -1,22 +1,49 @@
----\
+---
 id: android-183
 title: Android Storage Types / Типы хранилища Android
-aliases: [Android Storage Types, Типы хранилища Android]
+aliases:
+- Android Storage Types
+- Типы хранилища Android
 topic: android
-subtopics: [datastore, files-media, room]
+subtopics:
+- datastore
+- files-media
+- room
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-storage-options, q-android-manifest-file--android--easy, q-android-security-best-practices--android--medium, q-android-service-types--android--easy, q-app-start-types-android--android--medium, q-module-types-android--android--medium]
+related:
+- c-android-storage-options
+- q-android-manifest-file--android--easy
+- q-android-security-best-practices--android--medium
+- q-android-service-types--android--easy
+- q-app-start-types-android--android--medium
+- q-module-types-android--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/datastore, android/files-media, android/room, difficulty/medium, persistence, storage]
-
----\
+tags:
+- android/datastore
+- android/files-media
+- android/room
+- difficulty/medium
+- persistence
+- storage
+anki_cards:
+- slug: android-183-0-en
+  language: en
+  anki_id: 1768363949922
+  synced_at: '2026-01-14T09:17:53.163976'
+- slug: android-183-0-ru
+  language: ru
+  anki_id: 1768363949948
+  synced_at: '2026-01-14T09:17:53.166480'
+---
 # Вопрос (RU)
 > Какие существуют типы хранилищ данных в Android и когда их использовать?
 

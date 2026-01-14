@@ -1,21 +1,49 @@
----\
+---
 id: android-024
 title: Annotation Processing in Android / Обработка аннотаций в Android
-aliases: [Annotation Processing in Android, Обработка аннотаций в Android]
+aliases:
+- Annotation Processing in Android
+- Обработка аннотаций в Android
 topic: android
-subtopics: [build-variants, dependency-management, gradle]
+subtopics:
+- build-variants
+- dependency-management
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, c-gradle, c-room, q-android-build-optimization--android--medium, q-android-modularization--android--medium, q-annotation-processing--android--medium, q-build-optimization-gradle--android--medium, q-gradle-build-system--android--medium]
+related:
+- c-dagger
+- c-gradle
+- c-room
+- q-android-build-optimization--android--medium
+- q-android-modularization--android--medium
+- q-annotation-processing--android--medium
+- q-build-optimization-gradle--android--medium
+- q-gradle-build-system--android--medium
 sources: []
 created: 2025-10-06
 updated: 2025-11-10
-tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium]
----\
+tags:
+- android/build-variants
+- android/dependency-management
+- android/gradle
+- difficulty/medium
+anki_cards:
+- slug: android-024-0-en
+  language: en
+  anki_id: 1768364268023
+  synced_at: '2026-01-14T09:17:53.436260'
+- slug: android-024-0-ru
+  language: ru
+  anki_id: 1768364268048
+  synced_at: '2026-01-14T09:17:53.438813'
+---
 # Вопрос (RU)
 > Что такое обработка аннотаций в Android и зачем она нужна?
 

@@ -1,22 +1,49 @@
----\
+---
 id: android-451
 title: Dagger Custom Scopes / Кастомные скоупы Dagger
-aliases: [Dagger Custom Scopes, Кастомные скоупы Dagger]
+aliases:
+- Dagger Custom Scopes
+- Кастомные скоупы Dagger
 topic: android
-subtopics: [di-hilt]
+subtopics:
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, c-dependency-injection, q-dagger-build-time-optimization--android--medium, q-dagger-component-dependencies--android--hard, q-dagger-framework-overview--android--hard, q-dagger-multibinding--android--hard, q-dagger-purpose--android--easy, q-hilt-components-scope--android--medium]
+related:
+- c-dagger
+- c-dependency-injection
+- q-dagger-build-time-optimization--android--medium
+- q-dagger-component-dependencies--android--hard
+- q-dagger-framework-overview--android--hard
+- q-dagger-multibinding--android--hard
+- q-dagger-purpose--android--easy
+- q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
+tags:
+- android/di-hilt
+- dagger
+- dependency-injection
+- difficulty/hard
+- hilt
+anki_cards:
+- slug: android-451-0-en
+  language: en
+  anki_id: 1768366557626
+  synced_at: '2026-01-14T09:17:53.341772'
+- slug: android-451-0-ru
+  language: ru
+  anki_id: 1768366557651
+  synced_at: '2026-01-14T09:17:53.344240'
 sources:
-  - "https://dagger.dev/hilt/components.html"
----\
+- https://dagger.dev/hilt/components.html
+---
 # Вопрос (RU)
 > Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между `@Singleton`, пользовательскими (custom) скоупами и unscoped-зависимостями. Когда и зачем стоит создавать кастомный скоуп?
 

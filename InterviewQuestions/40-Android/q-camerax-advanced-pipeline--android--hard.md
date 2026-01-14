@@ -1,25 +1,46 @@
 ---
 id: android-614
 title: CameraX Advanced Pipeline / Продвинутый pipeline CameraX
-aliases: [CameraX Advanced Pipeline, Продвинутый pipeline CameraX]
+aliases:
+- CameraX Advanced Pipeline
+- Продвинутый pipeline CameraX
 topic: android
-subtopics: [camera]
+subtopics:
+- camera
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-camerax, q-advanced-share-sheet-shortcuts--android--hard, q-android-release-pipeline-cicd--android--hard, q-recyclerview-itemdecoration-advanced--android--medium, q-room-type-converters-advanced--android--medium]
+related:
+- c-camerax
+- q-advanced-share-sheet-shortcuts--android--hard
+- q-android-release-pipeline-cicd--android--hard
+- q-recyclerview-itemdecoration-advanced--android--medium
+- q-room-type-converters-advanced--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/camera, android/camerax, difficulty/hard]
+tags:
+- android/camera
+- android/camerax
+- difficulty/hard
 sources:
-  - url: "https://developer.android.com/training/camerax"
-    note: "Official CameraX guide"
-  - url: "https://medium.com/androiddevelopers/camerax-advanced-usage-article"
-    note: "Advanced CameraX best practices"
-
+- url: https://developer.android.com/training/camerax
+  note: Official CameraX guide
+- url: https://medium.com/androiddevelopers/camerax-advanced-usage-article
+  note: Advanced CameraX best practices
+anki_cards:
+- slug: android-614-0-en
+  language: en
+  anki_id: 1768364987899
+  synced_at: '2026-01-14T09:17:53.077336'
+- slug: android-614-0-ru
+  language: ru
+  anki_id: 1768364987922
+  synced_at: '2026-01-14T09:17:53.079647'
 ---
 # Вопрос (RU)
 > Как построить продвинутый pipeline с CameraX: объединить Preview, ImageAnalysis и VideoCapture, вручную контролировать экспозицию/фокус и интегрировать ML-обработку кадров без лагов?

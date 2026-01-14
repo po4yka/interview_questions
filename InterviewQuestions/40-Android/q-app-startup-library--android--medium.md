@@ -1,21 +1,42 @@
 ---
 id: android-251
 title: App Startup Library / Библиотека App Startup
-aliases: [App Startup Library, Библиотека App Startup]
+aliases:
+- App Startup Library
+- Библиотека App Startup
 topic: android
-subtopics: [app-startup, performance-startup]
+subtopics:
+- app-startup
+- performance-startup
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy, c-application-class, c-performance-optimization]
+related:
+- q-android-app-components--android--easy
+- c-application-class
+- c-performance-optimization
 created: 2024-10-15
 updated: 2024-11-10
 sources: []
-tags: [android/app-startup, android/performance-startup, difficulty/medium, jetpack]
-
+tags:
+- android/app-startup
+- android/performance-startup
+- difficulty/medium
+- jetpack
+anki_cards:
+- slug: android-251-0-en
+  language: en
+  anki_id: 1768364696197
+  synced_at: '2026-01-14T09:17:53.352019'
+- slug: android-251-0-ru
+  language: ru
+  anki_id: 1768364696222
+  synced_at: '2026-01-14T09:17:53.354630'
 ---
 # Вопрос (RU)
 > Зачем нужна библиотека App Startup?

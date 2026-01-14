@@ -1,21 +1,44 @@
----id: android-641
+---
+id: android-641
 title: Global Localization Strategy / Стратегия глобальной локализации
-aliases: [Global Localization Strategy, Стратегия глобальной локализации]
+aliases:
+- Global Localization Strategy
+- Стратегия глобальной локализации
 topic: android
-subtopics: [i18n-l10n]
+subtopics:
+- i18n-l10n
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-globalization, q-android-architectural-patterns--android--medium, q-media3-migration-strategy--android--hard, q-play-asset-delivery-strategy--android--hard, q-scoped-storage-migration-strategy--android--hard]
+related:
+- c-android
+- c-globalization
+- q-android-architectural-patterns--android--medium
+- q-media3-migration-strategy--android--hard
+- q-play-asset-delivery-strategy--android--hard
+- q-scoped-storage-migration-strategy--android--hard
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/i18n-l10n, difficulty/hard]
+anki_cards:
+- slug: android-641-0-en
+  language: en
+  anki_id: 1768367861083
+  synced_at: '2026-01-14T09:17:53.240782'
+- slug: android-641-0-ru
+  language: ru
+  anki_id: 1768367861103
+  synced_at: '2026-01-14T09:17:53.244200'
+tags:
+- android/i18n-l10n
+- difficulty/hard
 sources:
-  - "https://developer.android.com/guide/topics/resources/localization"
-  - "https://developer.android.com/guide/topics/resources/pseudolocales"
+- https://developer.android.com/guide/topics/resources/localization
+- https://developer.android.com/guide/topics/resources/pseudolocales
 ---
 # Вопрос (RU)
 > Как построить стратегию глобальной локализации Android-приложения: управление ресурсами, процесс перевода, псевдолокализация, тестирование и автоматизация в CI/CD?

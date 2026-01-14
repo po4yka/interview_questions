@@ -1,20 +1,47 @@
----id: android-307
+---
+id: android-307
 title: CompositionLocal in Compose / CompositionLocal в Compose
-aliases: [CompositionLocal in Compose, CompositionLocal в Compose]
+aliases:
+- CompositionLocal in Compose
+- CompositionLocal в Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-recomposition, q-compose-gesture-detection--android--medium, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-side-effects-advanced--android--hard, q-compose-stability-skippability--android--hard, q-compositionlocal-advanced--android--medium]
+related:
+- c-compose-recomposition
+- c-recomposition
+- q-compose-gesture-detection--android--medium
+- q-compose-performance-optimization--android--hard
+- q-compose-remember-derived-state--android--medium
+- q-compose-side-effects-advanced--android--hard
+- q-compose-stability-skippability--android--hard
+- q-compositionlocal-advanced--android--medium
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ui-compose, android/ui-state, difficulty/hard]
+anki_cards:
+- slug: android-307-0-en
+  language: en
+  anki_id: 1768367865432
+  synced_at: '2026-01-14T09:17:53.461678'
+- slug: android-307-0-ru
+  language: ru
+  anki_id: 1768367865454
+  synced_at: '2026-01-14T09:17:53.464459'
+tags:
+- android/ui-compose
+- android/ui-state
+- difficulty/hard
 sources:
-  - https://developer.android.com/jetpack/compose/compositionlocal
+- https://developer.android.com/jetpack/compose/compositionlocal
 ---
 # Вопрос (RU)
 > Что такое CompositionLocal в Jetpack Compose и когда его использовать?

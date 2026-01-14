@@ -1,21 +1,43 @@
----\
+---
 id: android-403
 title: Hilt Components Scope / Компоненты и скоупы Hilt
-aliases: [Hilt Components Scope, Компоненты и скоупы Hilt]
+aliases:
+- Hilt Components Scope
+- Компоненты и скоупы Hilt
 topic: android
-subtopics: [di-hilt]
+subtopics:
+- di-hilt
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-hilt, q-android-security-best-practices--android--medium, q-compose-core-components--android--medium, q-hilt-entry-points--android--medium, q-room-library-definition--android--easy, q-what-are-the-most-important-components-of-compose--android--medium]
+related:
+- c-hilt
+- q-android-security-best-practices--android--medium
+- q-compose-core-components--android--medium
+- q-hilt-entry-points--android--medium
+- q-room-library-definition--android--easy
+- q-what-are-the-most-important-components-of-compose--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/di-hilt, dependency-injection, difficulty/medium]
-
----\
+tags:
+- android/di-hilt
+- dependency-injection
+- difficulty/medium
+anki_cards:
+- slug: android-403-0-en
+  language: en
+  anki_id: 1768367594459
+  synced_at: '2026-01-14T09:17:53.797980'
+- slug: android-403-0-ru
+  language: ru
+  anki_id: 1768367594481
+  synced_at: '2026-01-14T09:17:53.800154'
+---
 # Вопрос (RU)
 > Компоненты и скоупы `Hilt`
 

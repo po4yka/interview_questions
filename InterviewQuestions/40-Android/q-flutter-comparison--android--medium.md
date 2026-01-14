@@ -1,24 +1,50 @@
----\
+---
 id: android-252
 title: KMM vs Flutter Comparison / Сравнение KMM и Flutter
-aliases: [KMM vs Flutter, Kotlin Multiplatform Mobile vs Flutter, Сравнение KMM и Flutter]
+aliases:
+- KMM vs Flutter
+- Kotlin Multiplatform Mobile vs Flutter
+- Сравнение KMM и Flutter
 topic: android
-subtopics: [architecture-clean, kmp]
+subtopics:
+- architecture-clean
+- kmp
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-android-architectural-patterns--android--medium, q-kmm-architecture--android--hard, q-kmm-testing--android--medium, q-react-native-vs-flutter--android--medium]
+related:
+- c-android
+- q-android-architectural-patterns--android--medium
+- q-kmm-architecture--android--hard
+- q-kmm-testing--android--medium
+- q-react-native-vs-flutter--android--medium
 sources:
-  - "https://docs.flutter.dev"
-  - "https://kotlinlang.org/docs/multiplatform.html"
+- https://docs.flutter.dev
+- https://kotlinlang.org/docs/multiplatform.html
+anki_cards:
+- slug: android-252-0-en
+  language: en
+  anki_id: 1768367158156
+  synced_at: '2026-01-14T09:17:53.357259'
+- slug: android-252-0-ru
+  language: ru
+  anki_id: 1768367158180
+  synced_at: '2026-01-14T09:17:53.359498'
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/medium, flutter, multiplatform]
-
----\
+tags:
+- android/architecture-clean
+- android/kmp
+- cross-platform
+- difficulty/medium
+- flutter
+- multiplatform
+---
 # Вопрос (RU)
 
 > Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки.

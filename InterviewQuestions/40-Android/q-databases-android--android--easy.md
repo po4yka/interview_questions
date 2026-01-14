@@ -1,23 +1,46 @@
----\
+---
 id: android-475
 title: Databases Android / Базы данных в Android
-aliases: [Databases Android, Базы данных в Android]
+aliases:
+- Databases Android
+- Базы данных в Android
 topic: android
-subtopics: [datastore, room]
+subtopics:
+- datastore
+- room
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-database-design, q-android-storage-types--android--medium, q-database-encryption-android--android--medium, q-database-optimization-android--android--medium, q-how-to-start-drawing-ui-in-android--android--easy]
+related:
+- c-database-design
+- q-android-storage-types--android--medium
+- q-database-encryption-android--android--medium
+- q-database-optimization-android--android--medium
+- q-how-to-start-drawing-ui-in-android--android--easy
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/datastore, android/room, database, difficulty/easy]
+tags:
+- android/datastore
+- android/room
+- database
+- difficulty/easy
+anki_cards:
+- slug: android-475-0-en
+  language: en
+  anki_id: 1768366758926
+  synced_at: '2026-01-14T09:17:53.881436'
+- slug: android-475-0-ru
+  language: ru
+  anki_id: 1768366758952
+  synced_at: '2026-01-14T09:17:53.883547'
 sources:
-  - "https://developer.android.com/training/data-storage"
-
----\
+- https://developer.android.com/training/data-storage
+---
 # Вопрос (RU)
 > Какие базы данных можно использовать в Android?
 

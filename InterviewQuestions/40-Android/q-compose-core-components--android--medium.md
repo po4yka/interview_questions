@@ -1,20 +1,51 @@
----id: android-072
+---
+id: android-072
 title: Compose Core Components / Основные компоненты Compose
-aliases: [Compose Components, Jetpack Compose Architecture, Архитектура Jetpack Compose, Основные компоненты Compose]
+aliases:
+- Compose Components
+- Jetpack Compose Architecture
+- Архитектура Jetpack Compose
+- Основные компоненты Compose
 topic: android
-subtopics: [architecture-mvvm, ui-compose]
+subtopics:
+- architecture-mvvm
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-mvvm-pattern, c-recomposition, q-compose-modifier-order-performance--android--medium, q-compose-stability-skippability--android--hard, q-how-jetpack-compose-works--android--medium, q-migration-to-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related:
+- c-compose-recomposition
+- c-compose-state
+- c-mvvm-pattern
+- c-recomposition
+- q-compose-modifier-order-performance--android--medium
+- q-compose-stability-skippability--android--hard
+- q-how-jetpack-compose-works--android--medium
+- q-migration-to-compose--android--medium
+- q-what-are-the-most-important-components-of-compose--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium]
+tags:
+- android/architecture-mvvm
+- android/ui-compose
+- declarative-ui
+- difficulty/medium
 sources:
-  - "https://developer.android.com/jetpack/compose/architecture"
+- https://developer.android.com/jetpack/compose/architecture
+anki_cards:
+- slug: android-072-0-en
+  language: en
+  anki_id: 1768365654608
+  synced_at: '2026-01-14T08:59:19.159506'
+- slug: android-072-0-ru
+  language: ru
+  anki_id: 1768365654655
+  synced_at: '2026-01-14T08:59:19.161650'
 ---
 # Вопрос (RU)
 > Из каких более важных компонентов состоит Compose?

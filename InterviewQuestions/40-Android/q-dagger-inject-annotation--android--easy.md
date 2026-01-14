@@ -1,22 +1,47 @@
----\
+---
 id: android-463
 title: Dagger Inject Annotation / Аннотация Inject Dagger
-aliases: [Dagger Inject Annotation, Аннотация Inject Dagger]
+aliases:
+- Dagger Inject Annotation
+- Аннотация Inject Dagger
 topic: android
-subtopics: [di-hilt]
+subtopics:
+- di-hilt
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, c-dependency-injection, q-dagger-custom-scopes--android--hard, q-dagger-field-injection--android--medium, q-dagger-framework-overview--android--hard, q-dagger-purpose--android--easy, q-hilt-components-scope--android--medium]
+related:
+- c-dagger
+- c-dependency-injection
+- q-dagger-custom-scopes--android--hard
+- q-dagger-field-injection--android--medium
+- q-dagger-framework-overview--android--hard
+- q-dagger-purpose--android--easy
+- q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-11-10
 sources: []
-tags: [android/di-hilt, dagger, dependency-injection, difficulty/easy, hilt]
-
----\
+anki_cards:
+- slug: android-463-0-en
+  language: en
+  anki_id: 1768366560928
+  synced_at: '2026-01-14T09:17:53.633864'
+- slug: android-463-0-ru
+  language: ru
+  anki_id: 1768366560950
+  synced_at: '2026-01-14T09:17:53.635936'
+tags:
+- android/di-hilt
+- dagger
+- dependency-injection
+- difficulty/easy
+- hilt
+---
 # Вопрос (RU)
 > Как указать `Dagger`, где выполнить инъекцию зависимостей?
 

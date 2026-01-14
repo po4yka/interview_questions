@@ -1,19 +1,50 @@
----id: android-158
+---
+id: android-158
 title: Android Build Optimization / Оптимизация сборки Android
-aliases: [Android Build Optimization, Оптимизация сборки Android]
+aliases:
+- Android Build Optimization
+- Оптимизация сборки Android
 topic: android
-subtopics: [build-variants, dependency-management, gradle]
+subtopics:
+- build-variants
+- dependency-management
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-gradle, c-modularization, c-perfetto, c-power-profiling, q-annotation-processing-android--android--medium, q-dagger-build-time-optimization--android--medium, q-optimize-memory-usage-android--android--medium]
+related:
+- c-compose-recomposition
+- c-gradle
+- c-modularization
+- c-perfetto
+- c-power-profiling
+- q-annotation-processing-android--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-optimize-memory-usage-android--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium, gradle, performance]
+tags:
+- android/build-variants
+- android/dependency-management
+- android/gradle
+- difficulty/medium
+- gradle
+- performance
+anki_cards:
+- slug: android-158-0-en
+  language: en
+  anki_id: 1768363601523
+  synced_at: '2026-01-14T09:17:53.098891'
+- slug: android-158-0-ru
+  language: ru
+  anki_id: 1768363601548
+  synced_at: '2026-01-14T09:17:53.100821'
 ---
 # Вопрос (RU)
 > Как оптимизировать время сборки Android-приложения?

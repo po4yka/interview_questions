@@ -1,28 +1,50 @@
----\
+---
 id: android-161
 title: API File Upload Server / Загрузка файлов на сервер через API
-aliases: [API File Upload Server, Загрузка файлов на сервер через API]
+aliases:
+- API File Upload Server
+- Загрузка файлов на сервер через API
 topic: android
-subtopics: [background-execution, files-media, networking-http]
+subtopics:
+- background-execution
+- files-media
+- networking-http
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-okhttp, c-workmanager, q-android-storage-types--android--medium, q-api-rate-limiting-throttling--android--medium, q-large-file-upload--android--medium, q-large-file-upload-app--android--hard]
+related:
+- c-okhttp
+- c-workmanager
+- q-android-storage-types--android--medium
+- q-api-rate-limiting-throttling--android--medium
+- q-large-file-upload--android--medium
+- q-large-file-upload-app--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/background-execution, android/files-media,
-      android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
-
-anki_synced: true
-anki_slugs:
-  - 40-android-q-api-file-upload-server-android-medium-p01-en
-  - 40-android-q-api-file-upload-server-android-medium-p01-ru
-anki_last_sync: '2025-11-27T09:56:33.839728'
----\
+tags:
+- android/background-execution
+- android/files-media
+- android/networking-http
+- difficulty/medium
+- okhttp
+- retrofit
+- workmanager
+anki_cards:
+- slug: android-161-0-en
+  language: en
+  anki_id: 1768364266423
+  synced_at: '2026-01-14T09:17:53.102973'
+- slug: android-161-0-ru
+  language: ru
+  anki_id: 1768364266446
+  synced_at: '2026-01-14T09:17:53.106274'
+---
 # Вопрос (RU)
 
 > Как реализовать загрузку файлов на сервер через API в Android?

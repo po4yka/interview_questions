@@ -1,21 +1,48 @@
 ---
 id: android-393
 title: Android App Components / Компоненты Android приложения
-aliases: [Android App Components, Компоненты Android приложения]
+aliases:
+- Android App Components
+- Компоненты Android приложения
 topic: android
-subtopics: [activity, broadcast-receiver, service]
+subtopics:
+- activity
+- broadcast-receiver
+- service
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-broadcast-receiver, c-content-provider, c-service, q-activity-lifecycle-methods--android--medium, q-android-app-bundles--android--easy, q-android-components-besides-activity--android--easy, q-how-to-start-drawing-ui-in-android--android--easy, q-service-types-android--android--easy]
+related:
+- c-broadcast-receiver
+- c-content-provider
+- c-service
+- q-activity-lifecycle-methods--android--medium
+- q-android-app-bundles--android--easy
+- q-android-components-besides-activity--android--easy
+- q-how-to-start-drawing-ui-in-android--android--easy
+- q-service-types-android--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/activity, android/broadcast-receiver, android/service, difficulty/easy]
-
+tags:
+- android/activity
+- android/broadcast-receiver
+- android/service
+- difficulty/easy
+anki_cards:
+- slug: android-393-0-en
+  language: en
+  anki_id: 1768363328721
+  synced_at: '2026-01-14T09:17:53.764841'
+- slug: android-393-0-ru
+  language: ru
+  anki_id: 1768363328745
+  synced_at: '2026-01-14T09:17:53.767049'
 ---
 # Вопрос (RU)
 > Назовите четыре основных компонента Android приложения и их назначение.

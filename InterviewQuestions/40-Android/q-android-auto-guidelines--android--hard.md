@@ -1,24 +1,44 @@
----\
+---
 id: android-622
 title: Android Auto Guidelines / Руководство Android Auto
-aliases: [Android Auto Guidelines, Руководство Android Auto]
+aliases:
+- Android Auto Guidelines
+- Руководство Android Auto
 topic: android
-subtopics: [auto]
+subtopics:
+- auto
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-auto, q-android-auto-guidelines--android--hard, q-android-lint-tool--android--medium, q-main-thread-android--android--medium, q-parsing-optimization-android--android--medium]
+related:
+- c-android-auto
+- q-android-auto-guidelines--android--hard
+- q-android-lint-tool--android--medium
+- q-main-thread-android--android--medium
+- q-parsing-optimization-android--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/auto, difficulty/hard]
+tags:
+- android/auto
+- difficulty/hard
+anki_cards:
+- slug: android-622-0-en
+  language: en
+  anki_id: 1768363502197
+  synced_at: '2026-01-14T09:17:53.325217'
+- slug: android-622-0-ru
+  language: ru
+  anki_id: 1768363502222
+  synced_at: '2026-01-14T09:17:53.327327'
 sources:
-  - "https://developer.android.com/training/cars/apps"
-  - "https://developer.android.com/training/cars/apps/media"
-
----\
+- https://developer.android.com/training/cars/apps
+- https://developer.android.com/training/cars/apps/media
+---
 # Вопрос (RU)
 > Как спроектировать и сертифицировать Android Auto / Automotive OS приложение: соблюсти ограничений по отвлечению, шаблонам, голосовому управлению и процессу ревью?
 

@@ -1,20 +1,46 @@
 ---
 id: android-236
 title: Gradle Basics / Gradle Основы
-aliases: [Gradle Basics, Gradle Основы]
+aliases:
+- Gradle Basics
+- Gradle Основы
 topic: android
-subtopics: [build-variants, gradle]
+subtopics:
+- build-variants
+- gradle
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-gradle, q-android-runtime-art--android--medium, q-build-optimization-gradle--android--medium, q-gradle-version-catalog--android--medium, q-jetpack-compose-basics--android--medium, q-large-file-upload--android--medium, q-room-transactions-dao--android--medium]
+related:
+- c-gradle
+- q-android-runtime-art--android--medium
+- q-build-optimization-gradle--android--medium
+- q-gradle-version-catalog--android--medium
+- q-jetpack-compose-basics--android--medium
+- q-large-file-upload--android--medium
+- q-room-transactions-dao--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/build-variants, android/gradle, build-system, dependencies, difficulty/easy]
-
+tags:
+- android/build-variants
+- android/gradle
+- build-system
+- dependencies
+- difficulty/easy
+anki_cards:
+- slug: android-236-0-en
+  language: en
+  anki_id: 1768367363481
+  synced_at: '2026-01-14T09:17:53.293583'
+- slug: android-236-0-ru
+  language: ru
+  anki_id: 1768367363504
+  synced_at: '2026-01-14T09:17:53.296861'
 ---
 # Вопрос (RU)
 > Gradle Основы

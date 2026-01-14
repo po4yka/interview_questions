@@ -1,24 +1,51 @@
----\
+---
 id: android-377
 title: Как работает навигация Activity / How Activity Navigation Works
-aliases: [Activity Back Stack, Activity Navigation, Навигация Activity, Стек активностей]
+aliases:
+- Activity Back Stack
+- Activity Navigation
+- Навигация Activity
+- Стек активностей
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, q-activity-lifecycle-methods--android--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-how-to-pass-data-from-one-activity-to-another--android--medium, q-single-activity-approach--android--medium, q-what-is-intent--android--easy]
+related:
+- c-activity-lifecycle
+- q-activity-lifecycle-methods--android--medium
+- q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
+- q-how-to-pass-data-from-one-activity-to-another--android--medium
+- q-single-activity-approach--android--medium
+- q-what-is-intent--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/ui-navigation, back-stack, difficulty/medium, intent]
+tags:
+- android/activity
+- android/ui-navigation
+- back-stack
+- difficulty/medium
+- intent
+anki_cards:
+- slug: android-377-0-en
+  language: en
+  anki_id: 1768363502598
+  synced_at: '2026-01-14T09:17:53.681313'
+- slug: android-377-0-ru
+  language: ru
+  anki_id: 1768363502622
+  synced_at: '2026-01-14T09:17:53.685828'
 sources:
-  - "https://developer.android.com/guide/components/activities/tasks-and-back-stack"
-  - "https://developer.android.com/guide/navigation"
-
----\
+- https://developer.android.com/guide/components/activities/tasks-and-back-stack
+- https://developer.android.com/guide/navigation
+---
 # Вопрос (RU)
 
 > Как работает навигация между `Activity` в Android?

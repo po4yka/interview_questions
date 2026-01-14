@@ -1,23 +1,49 @@
----\
+---
 id: android-621
 title: Glance Compose Widgets / Виджеты Glance на Compose
-aliases: [Glance Compose Widgets, Виджеты Glance на Compose]
+aliases:
+- Glance Compose Widgets
+- Виджеты Glance на Compose
 topic: android
-subtopics: [shortcuts-widgets, ui-compose, ui-widgets]
+subtopics:
+- shortcuts-widgets
+- ui-compose
+- ui-widgets
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-glance, c-jetpack-compose, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-how-does-jetpackcompose-work--android--medium]
+related:
+- c-glance
+- c-jetpack-compose
+- q-compose-core-components--android--medium
+- q-compose-custom-animations--android--medium
+- q-how-does-jetpackcompose-work--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/glance, android/shortcuts-widgets, android/ui-compose, android/ui-widgets, difficulty/medium]
+tags:
+- android/glance
+- android/shortcuts-widgets
+- android/ui-compose
+- android/ui-widgets
+- difficulty/medium
+anki_cards:
+- slug: android-621-0-en
+  language: en
+  anki_id: 1768367361280
+  synced_at: '2026-01-14T09:17:53.146242'
+- slug: android-621-0-ru
+  language: ru
+  anki_id: 1768367361306
+  synced_at: '2026-01-14T09:17:53.149858'
 sources:
-  - url: "https://developer.android.com/jetpack/compose/glance/appwidget"
-    note: Glance app widget guide
----\
+- url: https://developer.android.com/jetpack/compose/glance/appwidget
+  note: Glance app widget guide
+---
 # Вопрос (RU)
 > Как создать и поддерживать аппвиджет на Jetpack Glance: управлять состоянием, обновлениями, действиями и ограничениями RemoteViews?
 

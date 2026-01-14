@@ -1,23 +1,44 @@
----\
+---
 id: android-465
 title: Dagger Component Dependencies / Зависимости компонентов Dagger
-aliases: [Dagger Component Dependencies, Зависимости компонентов Dagger]
+aliases:
+- Dagger Component Dependencies
+- Зависимости компонентов Dagger
 topic: android
-subtopics: [di-hilt]
+subtopics:
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, q-dagger-build-time-optimization--android--medium, q-dagger-custom-scopes--android--hard, q-dagger-framework-overview--android--hard, q-dagger-multibinding--android--hard, q-hilt-components-scope--android--medium]
+related:
+- c-dagger
+- q-dagger-build-time-optimization--android--medium
+- q-dagger-custom-scopes--android--hard
+- q-dagger-framework-overview--android--hard
+- q-dagger-multibinding--android--hard
+- q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-11-11
-tags: [android/di-hilt, difficulty/hard]
+tags:
+- android/di-hilt
+- difficulty/hard
+anki_cards:
+- slug: android-465-0-en
+  language: en
+  anki_id: 1768366561476
+  synced_at: '2026-01-14T09:17:53.688819'
+- slug: android-465-0-ru
+  language: ru
+  anki_id: 1768366561501
+  synced_at: '2026-01-14T09:17:53.691148'
 sources:
-  - "https://dagger.dev/api/latest/dagger/Component.html"
-
----\
+- https://dagger.dev/api/latest/dagger/Component.html
+---
 # Вопрос (RU)
 > В чем разница между `Component` Dependencies и Subcomponents в `Dagger`? Когда использовать один подход вместо другого?
 

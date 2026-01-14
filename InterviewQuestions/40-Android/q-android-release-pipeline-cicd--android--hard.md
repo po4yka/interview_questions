@@ -1,24 +1,44 @@
 ---
 id: android-640
 title: Android Release Pipeline CI/CD / CI/CD пайплайн релизов Android
-aliases: [Android Release Pipeline CI/CD, CI/CD пайплайн релизов Android]
+aliases:
+- Android Release Pipeline CI/CD
+- CI/CD пайплайн релизов Android
 topic: android
-subtopics: [ci-cd]
+subtopics:
+- ci-cd
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-release-engineering, q-android-build-optimization--android--medium, q-android-lint-tool--android--medium, q-cicd-pipeline-android--android--medium, q-cicd-pipeline-setup--android--medium]
+related:
+- c-release-engineering
+- q-android-build-optimization--android--medium
+- q-android-lint-tool--android--medium
+- q-cicd-pipeline-android--android--medium
+- q-cicd-pipeline-setup--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/ci-cd, difficulty/hard]
+tags:
+- android/ci-cd
+- difficulty/hard
 sources:
-  - "https://developer.android.com/studio/build/build-variants"
-  - "https://docs.fastlane.tools/actions/supply/"
-  - "https://firebase.google.com/docs/app-distribution"
-
+- https://developer.android.com/studio/build/build-variants
+- https://docs.fastlane.tools/actions/supply/
+- https://firebase.google.com/docs/app-distribution
+anki_cards:
+- slug: android-640-0-en
+  language: en
+  anki_id: 1768363328521
+  synced_at: '2026-01-14T09:17:53.036614'
+- slug: android-640-0-ru
+  language: ru
+  anki_id: 1768363328546
+  synced_at: '2026-01-14T09:17:53.040527'
 ---
 # Вопрос (RU)
 > Как построить надёжный CI/CD пайплайн релизов Android: ветвление, подпись, автоматизированные проверки, каналы дистрибуции (internal, QA, production) и управление фич-флагами?

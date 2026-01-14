@@ -1,22 +1,47 @@
----\
+---
 id: android-311
 title: Compose remember/derivedStateOf / remember и derivedStateOf в Compose
-aliases: [Compose remember and derivedStateOf, remember и derivedStateOf]
+aliases:
+- Compose remember and derivedStateOf
+- remember и derivedStateOf
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, q-compose-compiler-plugin--android--hard, q-compose-gesture-detection--android--medium, q-compose-performance-optimization--android--hard, q-compose-slot-table-recomposition--android--hard, q-mutable-state-compose--android--medium, q-recomposition-compose--android--medium, q-remember-vs-remembersaveable-compose--android--medium]
+related:
+- c-compose-state
+- q-compose-compiler-plugin--android--hard
+- q-compose-gesture-detection--android--medium
+- q-compose-performance-optimization--android--hard
+- q-compose-slot-table-recomposition--android--hard
+- q-mutable-state-compose--android--medium
+- q-recomposition-compose--android--medium
+- q-remember-vs-remembersaveable-compose--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-state, difficulty/medium]
-
----\
+tags:
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
+anki_cards:
+- slug: android-311-0-en
+  language: en
+  anki_id: 1768366070426
+  synced_at: '2026-01-14T09:17:53.481995'
+- slug: android-311-0-ru
+  language: ru
+  anki_id: 1768366070450
+  synced_at: '2026-01-14T09:17:53.484813'
+---
 # Вопрос (RU)
 > Что такое remember и derivedStateOf в Jetpack Compose? Когда и как их использовать?
 

@@ -1,22 +1,46 @@
----\
+---
 id: android-127
-title: "How Dialog Differs From Other Navigation / Чем Dialog отличается от другой навигации"
-aliases: ["How Dialog Differs From Other Navigation", "Чем Dialog отличается от другой навигации"]
+title: How Dialog Differs From Other Navigation / Чем Dialog отличается от другой
+  навигации
+aliases:
+- How Dialog Differs From Other Navigation
+- Чем Dialog отличается от другой навигации
 topic: android
-subtopics: [ui-compose, ui-navigation]
+subtopics:
+- ui-compose
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-navigation, q-main-thread-android--android--medium, q-what-is-layout-performance-measured-in--android--medium]
+related:
+- c-compose-navigation
+- q-main-thread-android--android--medium
+- q-what-is-layout-performance-measured-in--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/ui-compose, android/ui-navigation, dialog, difficulty/medium, navigation]
+anki_cards:
+- slug: android-127-0-en
+  language: en
+  anki_id: 1768367857029
+  synced_at: '2026-01-14T09:17:53.020252'
+- slug: android-127-0-ru
+  language: ru
+  anki_id: 1768367857054
+  synced_at: '2026-01-14T09:17:53.023297'
+tags:
+- android
+- android/ui-compose
+- android/ui-navigation
+- dialog
+- difficulty/medium
+- navigation
 sources: []
-
----\
+---
 # Вопрос (RU)
 
 > Чем dialog отличается от остальной навигации?

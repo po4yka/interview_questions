@@ -1,21 +1,42 @@
 ---
 id: android-476
 title: Custom View Attributes / Атрибуты Custom View
-aliases: [Custom View Attributes, Атрибуты Custom View]
+aliases:
+- Custom View Attributes
+- Атрибуты Custom View
 topic: android
-subtopics: [ui-theming, ui-views]
+subtopics:
+- ui-theming
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, q-custom-view-accessibility--android--medium, q-custom-view-lifecycle--android--medium, q-custom-view-state-saving--android--medium]
+related:
+- c-custom-views
+- q-custom-view-accessibility--android--medium
+- q-custom-view-lifecycle--android--medium
+- q-custom-view-state-saving--android--medium
 created: 2025-10-21
 updated: 2025-11-10
-tags: [android/ui-theming, android/ui-views, difficulty/medium]
+tags:
+- android/ui-theming
+- android/ui-views
+- difficulty/medium
 sources: []
-
+anki_cards:
+- slug: android-476-0-en
+  language: en
+  anki_id: 1768366340306
+  synced_at: '2026-01-14T09:17:53.061275'
+- slug: android-476-0-ru
+  language: ru
+  anki_id: 1768366340344
+  synced_at: '2026-01-14T09:17:53.064695'
 ---
 # Вопрос (RU)
 > Как работают кастомные атрибуты в Custom `View` и как их правильно объявлять и считывать?

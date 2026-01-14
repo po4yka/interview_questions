@@ -1,23 +1,47 @@
----\
+---
 id: android-057
 title: Foreground Service Types / Foreground Service
-aliases: [Foreground Service, Foreground Service Types]
+aliases:
+- Foreground Service
+- Foreground Service Types
 topic: android
-subtopics: [background-execution, service]
+subtopics:
+- background-execution
+- service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-background-tasks, q-android-service-types--android--easy, q-background-vs-foreground-service--android--medium, q-service-types-android--android--easy, q-workmanager-vs-alternatives--android--medium]
+related:
+- c-background-tasks
+- q-android-service-types--android--easy
+- q-background-vs-foreground-service--android--medium
+- q-service-types-android--android--easy
+- q-workmanager-vs-alternatives--android--medium
 created: 2025-10-12
 updated: 2025-11-10
-tags: [android/background-execution, android/service, difficulty/medium, foreground-service, notifications]
+tags:
+- android/background-execution
+- android/service
+- difficulty/medium
+- foreground-service
+- notifications
+anki_cards:
+- slug: android-057-0-en
+  language: en
+  anki_id: 1768367152453
+  synced_at: '2026-01-14T09:09:33.468166'
+- slug: android-057-0-ru
+  language: ru
+  anki_id: 1768367152480
+  synced_at: '2026-01-14T09:09:33.470401'
 sources:
-  - "https://developer.android.com/guide/components/foreground-services"
-
----\
+- https://developer.android.com/guide/components/foreground-services
+---
 # Вопрос (RU)
 > Какие существуют типы Foreground `Service` в Android и как правильно реализовывать foreground-сервисы?
 

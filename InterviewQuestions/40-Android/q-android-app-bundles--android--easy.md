@@ -1,22 +1,47 @@
 ---
 id: android-015
 title: Android App Bundle (AAB) / Android App Bundle
-aliases: [4ndroid App Bundle, 608088847290 AAB, AAB, Android App Bundle, Android App Bundles]
+aliases:
+- 4ndroid App Bundle
+- 608088847290 AAB
+- AAB
+- Android App Bundle
+- Android App Bundles
 topic: android
-subtopics: [app-bundle]
+subtopics:
+- app-bundle
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-app-bundle, c-gradle, q-android-app-components--android--easy, q-app-start-types-android--android--medium, q-gradle-basics--android--easy, q-play-feature-delivery--android--medium, q-reduce-app-size--android--medium]
+related:
+- c-app-bundle
+- c-gradle
+- q-android-app-components--android--easy
+- q-app-start-types-android--android--medium
+- q-gradle-basics--android--easy
+- q-play-feature-delivery--android--medium
+- q-reduce-app-size--android--medium
 created: 2025-10-05
 updated: 2025-11-10
 sources:
-  - "https://developer.android.com/guide/app-bundle"
-tags: [android/app-bundle, difficulty/easy]
-
+- https://developer.android.com/guide/app-bundle
+tags:
+- android/app-bundle
+- difficulty/easy
+anki_cards:
+- slug: android-015-0-en
+  language: en
+  anki_id: 1768363328920
+  synced_at: '2026-01-14T09:17:53.890573'
+- slug: android-015-0-ru
+  language: ru
+  anki_id: 1768363328946
+  synced_at: '2026-01-14T09:17:53.892606'
 ---
 # Вопрос (RU)
 > Что такое Android App `Bundle` (AAB)?

@@ -1,18 +1,45 @@
----id: android-317
+---
+id: android-317
 title: Compose Modifier Order Performance / Порядок модификаторов и производительность
-aliases: [Compose Modifier Order Performance, Modifier Chain Optimization, Оптимизация цепочки модификаторов, Порядок модификаторов и производительность Compose]
+aliases:
+- Compose Modifier Order Performance
+- Modifier Chain Optimization
+- Оптимизация цепочки модификаторов
+- Порядок модификаторов и производительность Compose
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-recomposition, q-compose-modifier-system--android--medium, q-compose-performance-optimization--android--hard, q-performance-monitoring-jank-compose--android--medium]
+related:
+- c-compose-recomposition
+- c-recomposition
+- q-compose-modifier-system--android--medium
+- q-compose-performance-optimization--android--hard
+- q-performance-monitoring-jank-compose--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/performance-memory, android/ui-compose, difficulty/medium, optimization]
+tags:
+- android/performance-memory
+- android/ui-compose
+- difficulty/medium
+- optimization
+anki_cards:
+- slug: android-317-0-en
+  language: en
+  anki_id: 1768365659526
+  synced_at: '2026-01-14T09:17:53.500074'
+- slug: android-317-0-ru
+  language: ru
+  anki_id: 1768365659550
+  synced_at: '2026-01-14T09:17:53.502480'
 ---
 # Вопрос (RU)
 > Как порядок модификаторов влияет на производительность в Jetpack Compose?

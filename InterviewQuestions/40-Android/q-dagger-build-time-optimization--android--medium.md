@@ -1,22 +1,47 @@
----\
+---
 id: android-439
 title: Dagger Build Time Optimization / Оптимизация времени сборки Dagger
-aliases: [Dagger Build Time Optimization, Оптимизация времени сборки Dagger]
+aliases:
+- Dagger Build Time Optimization
+- Оптимизация времени сборки Dagger
 topic: android
-subtopics: [di-hilt, gradle]
+subtopics:
+- di-hilt
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, c-gradle, q-android-build-optimization--android--medium, q-build-optimization-gradle--android--medium, q-dagger-framework-overview--android--hard, q-dagger-problems--android--medium, q-kapt-ksp-migration--android--medium]
+related:
+- c-dependency-injection
+- c-gradle
+- q-android-build-optimization--android--medium
+- q-build-optimization-gradle--android--medium
+- q-dagger-framework-overview--android--hard
+- q-dagger-problems--android--medium
+- q-kapt-ksp-migration--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags: [android/di-hilt, android/gradle, difficulty/medium]
+tags:
+- android/di-hilt
+- android/gradle
+- difficulty/medium
+anki_cards:
+- slug: android-439-0-en
+  language: en
+  anki_id: 1768366552936
+  synced_at: '2026-01-14T08:56:04.055595'
+- slug: android-439-0-ru
+  language: ru
+  anki_id: 1768366552990
+  synced_at: '2026-01-14T08:56:04.059392'
 sources:
-  - "https://dagger.dev/hilt/"
----\
+- https://dagger.dev/hilt/
+---
 # Вопрос (RU)
 > Как минимизировать влияние `Dagger` на время сборки?
 

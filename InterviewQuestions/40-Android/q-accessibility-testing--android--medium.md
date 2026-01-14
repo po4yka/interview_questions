@@ -1,21 +1,46 @@
 ---
 id: android-036
 title: Accessibility Testing / Тестирование доступности
-aliases: [Accessibility Testing, Тестирование доступности]
+aliases:
+- Accessibility Testing
+- Тестирование доступности
 topic: android
-subtopics: [testing-ui, ui-accessibility]
+subtopics:
+- testing-ui
+- ui-accessibility
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-accessibility, q-accessibility-color-contrast--android--medium, q-accessibility-compose--android--medium, q-accessibility-talkback--android--medium, q-compose-testing--android--medium, q-custom-view-accessibility--android--medium]
+related:
+- c-accessibility
+- q-accessibility-color-contrast--android--medium
+- q-accessibility-compose--android--medium
+- q-accessibility-talkback--android--medium
+- q-compose-testing--android--medium
+- q-custom-view-accessibility--android--medium
 created: 2025-10-11
 updated: 2025-11-10
-tags: [a11y, android/testing-ui, android/ui-accessibility, difficulty/medium, testing]
+tags:
+- a11y
+- android/testing-ui
+- android/ui-accessibility
+- difficulty/medium
+- testing
+anki_cards:
+- slug: android-036-0-en
+  language: en
+  anki_id: 1768363328475
+  synced_at: '2026-01-14T09:17:53.025866'
+- slug: android-036-0-ru
+  language: ru
+  anki_id: 1768363328497
+  synced_at: '2026-01-14T09:17:53.028124'
 sources: []
-
 ---
 # Вопрос (RU)
 > Как тестировать доступность в Android-приложениях?
