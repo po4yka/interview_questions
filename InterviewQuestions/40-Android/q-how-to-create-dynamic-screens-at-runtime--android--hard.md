@@ -14,6 +14,54 @@ related: [c-android-components, q-dalvik-vs-art-runtime--android--medium, q-frag
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/hard]
+anki_cards:
+  - slug: android-184-0-en
+    front: "How to create dynamic screens at runtime in Android?"
+    back: |
+      **Server-Driven UI approach:**
+
+      1. **Load config from backend** (JSON/XML/Proto)
+      2. **Map to local model:**
+      ```kotlin
+      data class ScreenConfig(
+          val components: List<Component>
+      )
+      ```
+
+      3. **Use factory pattern** to build UI from description:
+      - Fragment factories
+      - Compose + `when` on component type
+      - RecyclerView with different ViewTypes
+
+      **Benefits:** Update UI without app release
+      **Considerations:** Validation, security, schema versioning
+    tags:
+      - android_architecture
+      - difficulty::hard
+  - slug: android-184-0-ru
+    front: "Как создавать динамические экраны во время выполнения в Android?"
+    back: |
+      **Подход Server-Driven UI:**
+
+      1. **Загрузить конфиг с бэкенда** (JSON/XML/Proto)
+      2. **Мапить в локальную модель:**
+      ```kotlin
+      data class ScreenConfig(
+          val components: List<Component>
+      )
+      ```
+
+      3. **Использовать паттерн фабрика** для построения UI:
+      - Fragment factories
+      - Compose + `when` по типу компонента
+      - RecyclerView с разными ViewTypes
+
+      **Преимущества:** Обновление UI без релиза приложения
+      **Важно:** Валидация, безопасность, версионирование схемы
+    tags:
+      - android_architecture
+      - difficulty::hard
+
 ---\
 # Вопрос (RU)
 

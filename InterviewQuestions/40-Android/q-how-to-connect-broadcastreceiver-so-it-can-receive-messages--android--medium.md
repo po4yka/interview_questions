@@ -14,6 +14,55 @@ related: [c-broadcast-receiver, q-how-to-register-broadcastreceiver-to-receive-m
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/broadcast-receiver, difficulty/medium]
+anki_cards:
+  - slug: android-280-0-en
+    front: "What are the two ways to register a BroadcastReceiver?"
+    back: |
+      **1. Static (Manifest):**
+      ```xml
+      <receiver android:name=".BootReceiver"
+                android:exported="true">
+          <intent-filter>
+              <action android:name="android.intent.action.BOOT_COMPLETED"/>
+          </intent-filter>
+      </receiver>
+      ```
+      - System can launch app to deliver broadcast
+      - Limited by Android 8+ restrictions
+
+      **2. Dynamic (Code):**
+      ```kotlin
+      registerReceiver(receiver, IntentFilter(action))
+      // Don't forget: unregisterReceiver() in onDestroy
+      ```
+      - Lives only while component is active
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-280-0-ru
+    front: "Какие два способа регистрации BroadcastReceiver?"
+    back: |
+      **1. Статический (Manifest):**
+      ```xml
+      <receiver android:name=".BootReceiver"
+                android:exported="true">
+          <intent-filter>
+              <action android:name="android.intent.action.BOOT_COMPLETED"/>
+          </intent-filter>
+      </receiver>
+      ```
+      - Система может запустить приложение для доставки broadcast
+      - Ограничен Android 8+ ограничениями
+
+      **2. Динамический (Код):**
+      ```kotlin
+      registerReceiver(receiver, IntentFilter(action))
+      // Не забудьте: unregisterReceiver() в onDestroy
+      ```
+      - Живет только пока компонент активен
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

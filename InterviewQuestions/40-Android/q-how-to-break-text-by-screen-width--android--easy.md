@@ -15,6 +15,47 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/ui-graphics, android/ui-views, difficulty/easy]
+anki_cards:
+  - slug: android-131-0-en
+    front: "How to break text by screen width in custom Canvas drawing?"
+    back: |
+      Use `Paint.breakText()` for low-level text measurement:
+
+      ```kotlin
+      val paint = Paint().apply { textSize = 48f }
+      val maxWidth = 500f
+
+      val charsFit = paint.breakText(text, true, maxWidth, null)
+      val fittingText = text.substring(0, charsFit)
+      ```
+
+      **Note:** This breaks by character count that fits width.
+      For word-aware breaking, additionally find last space.
+
+      **For regular UI:** Use TextView/Compose - they handle wrapping automatically.
+    tags:
+      - android_views
+      - difficulty::easy
+  - slug: android-131-0-ru
+    front: "Как разбить текст по ширине экрана при кастомном рисовании на Canvas?"
+    back: |
+      Используйте `Paint.breakText()` для низкоуровневого измерения текста:
+
+      ```kotlin
+      val paint = Paint().apply { textSize = 48f }
+      val maxWidth = 500f
+
+      val charsFit = paint.breakText(text, true, maxWidth, null)
+      val fittingText = text.substring(0, charsFit)
+      ```
+
+      **Примечание:** Разбивает по количеству символов, помещающихся в ширину.
+      Для переноса по словам дополнительно ищите последний пробел.
+
+      **Для обычного UI:** Используйте TextView/Compose - они сами обрабатывают перенос.
+    tags:
+      - android_views
+      - difficulty::easy
 
 ---
 # Вопрос (RU)

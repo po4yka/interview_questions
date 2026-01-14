@@ -15,6 +15,57 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/fragment, android/ui-views, difficulty/easy]
+anki_cards:
+  - slug: android-138-0-en
+    front: "How do you choose and set a layout for a Fragment?"
+    back: |
+      **In onCreateView() using LayoutInflater:**
+
+      ```kotlin
+      override fun onCreateView(
+          inflater: LayoutInflater,
+          container: ViewGroup?,
+          savedInstanceState: Bundle?
+      ): View {
+          return inflater.inflate(
+              R.layout.fragment_example,
+              container,
+              false  // attachToRoot = false!
+          )
+      }
+      ```
+
+      **Key:** `attachToRoot = false` - FragmentManager handles attachment.
+
+      **Alternative:** Pass layout to Fragment constructor: `Fragment(R.layout.my_fragment)`
+    tags:
+      - android_fragments
+      - difficulty::easy
+  - slug: android-138-0-ru
+    front: "Как выбрать и задать layout для Fragment?"
+    back: |
+      **В onCreateView() используя LayoutInflater:**
+
+      ```kotlin
+      override fun onCreateView(
+          inflater: LayoutInflater,
+          container: ViewGroup?,
+          savedInstanceState: Bundle?
+      ): View {
+          return inflater.inflate(
+              R.layout.fragment_example,
+              container,
+              false  // attachToRoot = false!
+          )
+      }
+      ```
+
+      **Ключевое:** `attachToRoot = false` - FragmentManager сам прикрепляет.
+
+      **Альтернатива:** Передать layout в конструктор: `Fragment(R.layout.my_fragment)`
+    tags:
+      - android_fragments
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

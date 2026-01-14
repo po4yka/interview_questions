@@ -14,6 +14,47 @@ related: [c-recyclerview, q-how-dialog-differs-from-other-navigation--android--m
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/hard, recyclerview]
+anki_cards:
+  - slug: android-219-0-en
+    front: "What are the key components for building a chat list UI in Android?"
+    back: |
+      **1. Data model:**
+      - `ChatRoom` - id, name, avatar, lastMessage, time, unreadCount, isPinned
+
+      **2. RecyclerView setup:**
+      - `ListAdapter` + `DiffUtil` for efficient updates
+      - Multiple ViewHolder types (sent/received messages)
+
+      **3. Layout elements:**
+      - Avatar (Coil/Glide), name, preview, timestamp
+      - Unread badge, online/typing indicators, pin icon
+
+      **4. Sorting:** Pinned first, then by lastMessageTime DESC
+
+      **5. Performance:** `DiffUtil`, pagination, image caching
+    tags:
+      - android_layouts
+      - difficulty::hard
+  - slug: android-219-0-ru
+    front: "Какие ключевые компоненты для построения UI списка чатов в Android?"
+    back: |
+      **1. Модель данных:**
+      - `ChatRoom` - id, name, avatar, lastMessage, time, unreadCount, isPinned
+
+      **2. Настройка RecyclerView:**
+      - `ListAdapter` + `DiffUtil` для эффективных обновлений
+      - Несколько типов ViewHolder (отправленные/полученные)
+
+      **3. Элементы layout:**
+      - Аватар (Coil/Glide), имя, превью, время
+      - Бейдж непрочитанных, индикаторы online/typing, пин
+
+      **4. Сортировка:** Закрепленные первыми, затем по lastMessageTime DESC
+
+      **5. Производительность:** `DiffUtil`, пагинация, кеширование изображений
+    tags:
+      - android_layouts
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

@@ -15,6 +15,45 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/ui-compose, difficulty/medium]
+anki_cards:
+  - slug: android-260-0-en
+    front: "What are the three rendering phases in Jetpack Compose?"
+    back: |
+      **1. Composition:**
+      - Builds UI tree from @Composable functions
+      - Creates slot table with nodes, states, keys
+
+      **2. Layout:**
+      - Measures and positions each element
+      - Single-pass algorithm (no multi-measure)
+
+      **3. Drawing:**
+      - Renders to Canvas
+      - Only draws visible parts
+
+      **Optimization:** Compose skips unchanged phases - if state doesn't affect layout, only Drawing runs.
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-260-0-ru
+    front: "Какие три фазы рендеринга в Jetpack Compose?"
+    back: |
+      **1. Composition:**
+      - Строит дерево UI из @Composable функций
+      - Создает slot table с узлами, состояниями, ключами
+
+      **2. Layout:**
+      - Измеряет и позиционирует каждый элемент
+      - Однопроходный алгоритм (без multi-measure)
+
+      **3. Drawing:**
+      - Рендерит на Canvas
+      - Рисует только видимые части
+
+      **Оптимизация:** Compose пропускает неизменившиеся фазы - если состояние не влияет на layout, выполняется только Drawing.
+    tags:
+      - android_compose
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

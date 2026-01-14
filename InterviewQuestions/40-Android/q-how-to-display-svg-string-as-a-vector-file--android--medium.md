@@ -15,6 +15,59 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, ui]
+anki_cards:
+  - slug: android-172-0-en
+    front: "How to display an SVG string as a vector image in Android?"
+    back: |
+      Android has **no native runtime SVG support**. Use third-party libraries:
+
+      **1. AndroidSVG** (simple cases):
+      ```kotlin
+      val svg = SVG.getFromString(svgString)
+      val drawable = PictureDrawable(svg.renderToPicture())
+      imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+      imageView.setImageDrawable(drawable)
+      ```
+
+      **2. Coil + SvgDecoder** (modern, with caching):
+      ```kotlin
+      ImageRequest.Builder(context)
+          .data(svgString.toByteArray())
+          .target(imageView)
+          .build()
+      ```
+
+      **Key points**: Always handle parse errors, cache parsed SVG objects, preserve aspect ratio.
+    tags:
+      - android_views
+      - android_compose
+      - difficulty::medium
+  - slug: android-172-0-ru
+    front: "Как отобразить SVG-строку как векторное изображение в Android?"
+    back: |
+      Android **не поддерживает SVG нативно** во время выполнения. Используйте сторонние библиотеки:
+
+      **1. AndroidSVG** (простые случаи):
+      ```kotlin
+      val svg = SVG.getFromString(svgString)
+      val drawable = PictureDrawable(svg.renderToPicture())
+      imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+      imageView.setImageDrawable(drawable)
+      ```
+
+      **2. Coil + SvgDecoder** (современный подход с кешированием):
+      ```kotlin
+      ImageRequest.Builder(context)
+          .data(svgString.toByteArray())
+          .target(imageView)
+          .build()
+      ```
+
+      **Ключевые моменты**: обрабатывайте ошибки парсинга, кешируйте SVG-объекты, сохраняйте пропорции.
+    tags:
+      - android_views
+      - android_compose
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

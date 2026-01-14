@@ -1,4 +1,5 @@
----id: android-245
+---
+id: android-245
 title: How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно
 aliases: [Display Two Identical Fragments, Multiple Fragment Instances, Два одинаковых фрагмента, Несколько экземпляров Fragment]
 topic: android
@@ -14,6 +15,53 @@ created: 2025-10-15
 updated: 2025-11-11
 sources: []
 tags: [android/fragment, android/ui-views, difficulty/easy, fragments, ui]
+anki_cards:
+  - slug: android-245-0-en
+    front: "How to display two identical fragments on the screen at the same time?"
+    back: |
+      Add **two separate instances** of the same Fragment class to different containers.
+
+      **Key steps**:
+      1. Create layout with two `FrameLayout` containers
+      2. Use `newInstance()` factory method for each fragment
+      3. Add with unique tags in `FragmentTransaction`
+
+      ```kotlin
+      if (savedInstanceState == null) {
+          supportFragmentManager.beginTransaction()
+              .add(R.id.container_1, MyFragment.newInstance("A"), "frag_1")
+              .add(R.id.container_2, MyFragment.newInstance("B"), "frag_2")
+              .commit()
+      }
+      ```
+
+      **Key rule**: One Fragment instance per container. Never reuse the same object.
+    tags:
+      - android_fragments
+      - difficulty::easy
+  - slug: android-245-0-ru
+    front: "Как отобразить два одинаковых Fragment на экране одновременно?"
+    back: |
+      Добавьте **два отдельных экземпляра** одного класса Fragment в разные контейнеры.
+
+      **Ключевые шаги**:
+      1. Создайте макет с двумя `FrameLayout` контейнерами
+      2. Используйте factory-метод `newInstance()` для каждого фрагмента
+      3. Добавляйте с уникальными тегами в `FragmentTransaction`
+
+      ```kotlin
+      if (savedInstanceState == null) {
+          supportFragmentManager.beginTransaction()
+              .add(R.id.container_1, MyFragment.newInstance("A"), "frag_1")
+              .add(R.id.container_2, MyFragment.newInstance("B"), "frag_2")
+              .commit()
+      }
+      ```
+
+      **Ключевое правило**: один экземпляр Fragment на контейнер. Никогда не переиспользуйте один объект.
+    tags:
+      - android_fragments
+      - difficulty::easy
 
 ---
 # Вопрос (RU)
