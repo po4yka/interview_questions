@@ -16,6 +16,49 @@ updated: 2025-11-10
 tags: [android/activity, android/ui-navigation, difficulty/medium, task-affinity, tasks]
 sources:
   - "https://developer.android.com/guide/components/activities/tasks-and-back-stack"
+anki_cards:
+  - slug: android-016-0-en
+    front: "What is taskAffinity in Android and when does it take effect?"
+    back: |
+      **taskAffinity** - defines which task an Activity prefers to belong to.
+
+      **Default**: all activities share app's package name as affinity.
+
+      **Takes effect when**:
+      1. **FLAG_ACTIVITY_NEW_TASK** - places Activity in task with matching affinity
+      2. **allowTaskReparenting=true** - Activity moves to its affinity task when it comes to foreground
+
+      ```xml
+      <activity
+          android:taskAffinity="com.example.weather"
+          android:allowTaskReparenting="true" />
+      ```
+
+      **Use cases**: separate workflows, notification handling, cross-app grouping.
+    tags:
+      - android_activities
+      - difficulty::medium
+  - slug: android-016-0-ru
+    front: "Что такое taskAffinity в Android и когда она применяется?"
+    back: |
+      **taskAffinity** - определяет какой задаче Activity предпочитает принадлежать.
+
+      **По умолчанию**: все Activity имеют affinity равный package name приложения.
+
+      **Вступает в силу когда**:
+      1. **FLAG_ACTIVITY_NEW_TASK** - размещает Activity в задаче с совпадающим affinity
+      2. **allowTaskReparenting=true** - Activity перемещается в свою affinity задачу при выходе на передний план
+
+      ```xml
+      <activity
+          android:taskAffinity="com.example.weather"
+          android:allowTaskReparenting="true" />
+      ```
+
+      **Применение**: разделение рабочих процессов, обработка уведомлений, группировка между приложениями.
+    tags:
+      - android_activities
+      - difficulty::medium
 
 ---
 # Вопрос (RU)

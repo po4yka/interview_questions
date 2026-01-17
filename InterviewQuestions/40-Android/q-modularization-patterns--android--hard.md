@@ -16,6 +16,40 @@ related: [c-clean-architecture, q-android-architectural-patterns--android--mediu
 created: 2025-10-05
 updated: 2025-11-11
 tags: [android/architecture-clean, android/architecture-modularization, difficulty/hard, en, ru]
+anki_cards:
+  - slug: android-005-0-en
+    front: "What are the key principles of Android modularization?"
+    back: |
+      **High cohesion, low coupling**:
+
+      - **Low coupling**: modules independent, changes don't affect others
+      - **High cohesion**: related code grouped together
+
+      **Key patterns**:
+      1. **Dependency inversion** - depend on abstractions, not implementations
+      2. **Mediator module** - app module coordinates feature modules
+      3. **Prefer Kotlin/Java modules** over Android modules when possible
+      4. **Expose minimum** - use `internal`, prefer `implementation` over `api`
+    tags:
+      - android_architecture
+      - difficulty::hard
+  - slug: android-005-0-ru
+    front: "Какие ключевые принципы модуляризации в Android?"
+    back: |
+      **Высокая связность, слабое зацепление**:
+
+      - **Слабое зацепление**: модули независимы, изменения не влияют на другие
+      - **Высокая связность**: связанный код сгруппирован вместе
+
+      **Ключевые паттерны**:
+      1. **Инверсия зависимостей** - зависеть от абстракций, не от реализаций
+      2. **Модуль-посредник** - app-модуль координирует feature-модули
+      3. **Предпочитать Kotlin/Java модули** вместо Android-модулей где возможно
+      4. **Раскрывать минимум** - использовать `internal`, предпочитать `implementation` вместо `api`
+    tags:
+      - android_architecture
+      - difficulty::hard
+
 ---
 # Вопрос (RU)
 > Какие паттерны модуляризации вы знаете?

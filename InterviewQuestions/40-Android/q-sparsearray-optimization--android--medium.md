@@ -15,6 +15,51 @@ created: 2025-10-05
 updated: 2025-11-11
 tags: [android/performance-memory, android/profiling, difficulty/medium, memory-optimization, sparsearray]
 sources: []
+anki_cards:
+  - slug: android-012-0-en
+    front: "What is SparseArray and when to use it instead of HashMap<Int, V>?"
+    back: |
+      **SparseArray** - optimized int-to-Object mapping.
+
+      **Advantages over HashMap<Integer, V>**:
+      - No Integer boxing (uses primitive int[] keys)
+      - Less memory overhead
+
+      **Trade-offs**:
+      - O(log n) lookup (binary search) vs HashMap's O(1)
+      - Best for small-medium collections (up to few thousand entries)
+
+      ```kotlin
+      val cache = SparseArray<View>(8)
+      cache.put(R.id.button, button)
+      ```
+
+      **Variants**: `SparseIntArray`, `SparseBooleanArray`, `LongSparseArray`
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-012-0-ru
+    front: "Что такое SparseArray и когда его использовать вместо HashMap<Int, V>?"
+    back: |
+      **SparseArray** - оптимизированное отображение int в Object.
+
+      **Преимущества над HashMap<Integer, V>**:
+      - Нет боксинга Integer (использует примитивный int[] для ключей)
+      - Меньше накладных расходов памяти
+
+      **Компромиссы**:
+      - O(log n) поиск (бинарный) против O(1) у HashMap
+      - Лучше для небольших коллекций (до нескольких тысяч элементов)
+
+      ```kotlin
+      val cache = SparseArray<View>(8)
+      cache.put(R.id.button, button)
+      ```
+
+      **Варианты**: `SparseIntArray`, `SparseBooleanArray`, `LongSparseArray`
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---
 # Вопрос (RU)

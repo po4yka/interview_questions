@@ -16,6 +16,43 @@ related: [c-background-tasks, c-lifecycle, c-service, q-android-service-types--a
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/background-execution, android/lifecycle, android/service, difficulty/medium, en, ru]
+anki_cards:
+  - slug: android-008-0-en
+    front: "What are the three types of Android Services?"
+    back: |
+      **Three types**:
+
+      1. **Foreground** - user-visible, must show notification (e.g., music player)
+      2. **Background** - not noticed by user, limited on modern Android
+      3. **Bound** - client-server interface via `bindService()`, destroyed when all unbind
+
+      **Key callbacks**:
+      - `onStartCommand()` - for started services
+      - `onBind()` - returns IBinder for bound services
+      - `onCreate()` / `onDestroy()` - lifecycle
+
+      Note: Use `WorkManager` for most background tasks on modern Android.
+    tags:
+      - android_services
+      - difficulty::medium
+  - slug: android-008-0-ru
+    front: "Какие три типа Service существуют в Android?"
+    back: |
+      **Три типа**:
+
+      1. **Foreground** - видимый пользователю, должен показывать уведомление (например, музыкальный плеер)
+      2. **Background** - незаметный для пользователя, ограничен на современном Android
+      3. **Bound** - клиент-серверный интерфейс через `bindService()`, уничтожается когда все отвяжутся
+
+      **Ключевые callbacks**:
+      - `onStartCommand()` - для started-сервисов
+      - `onBind()` - возвращает IBinder для bound-сервисов
+      - `onCreate()` / `onDestroy()` - жизненный цикл
+
+      Примечание: используйте `WorkManager` для большинства фоновых задач.
+    tags:
+      - android_services
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

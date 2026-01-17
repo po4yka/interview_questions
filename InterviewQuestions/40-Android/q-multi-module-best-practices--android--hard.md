@@ -15,6 +15,53 @@ related: [c-gradle, c-modularization, q-android-jetpack-overview--android--easy,
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-modularization, android/gradle, difficulty/hard]
+anki_cards:
+  - slug: android-018-0-en
+    front: "What are the key rules for multi-module architecture in Android?"
+    back: |
+      **Module types**: app, feature, core, data
+
+      **Critical rule**: Features do NOT depend on each other directly.
+
+      ```text
+      :feature:auth -> :core:ui, :data:user  (OK)
+      :feature:auth -> :feature:profile      (BAD)
+      ```
+
+      **Communication**: via dependency inversion (interfaces in core, implementations in app)
+
+      **Best practices**:
+      - Convention plugins for Gradle config
+      - Version catalogs for dependencies
+      - `implementation` over `api` to hide transitives
+
+      **When to use**: 5+ devs, 50K+ LOC, shared code, long builds
+    tags:
+      - android_architecture
+      - difficulty::hard
+  - slug: android-018-0-ru
+    front: "Какие ключевые правила мульти-модульной архитектуры в Android?"
+    back: |
+      **Типы модулей**: app, feature, core, data
+
+      **Критическое правило**: Features НЕ зависят друг от друга напрямую.
+
+      ```text
+      :feature:auth -> :core:ui, :data:user  (OK)
+      :feature:auth -> :feature:profile      (ПЛОХО)
+      ```
+
+      **Коммуникация**: через инверсию зависимостей (интерфейсы в core, реализации в app)
+
+      **Лучшие практики**:
+      - Convention plugins для конфигурации Gradle
+      - Version catalogs для зависимостей
+      - `implementation` вместо `api` для сокрытия транзитивных
+
+      **Когда использовать**: 5+ разработчиков, 50K+ строк, общий код, долгие сборки
+    tags:
+      - android_architecture
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)
