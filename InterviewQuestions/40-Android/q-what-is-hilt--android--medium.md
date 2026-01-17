@@ -14,6 +14,39 @@ related: [c-dependency-injection, c-hilt, q-hilt-assisted-injection--android--me
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/di-hilt, dependency-injection, di, difficulty/medium, hilt]
+anki_cards:
+  - slug: android-199-0-en
+    front: "What is Hilt in Android?"
+    back: |
+      **DI framework** built on Dagger, designed for Android.
+
+      **Key annotations:**
+      - `@HiltAndroidApp` - Application class
+      - `@AndroidEntryPoint` - Activity/Fragment/Service
+      - `@HiltViewModel` - ViewModel
+      - `@Module` + `@InstallIn` - provide dependencies
+      - `@Inject` - constructor/field injection
+
+      **Benefits:** Predefined Android scopes, compile-time safety, Jetpack integration, less boilerplate than Dagger
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-199-0-ru
+    front: "Что такое Hilt в Android?"
+    back: |
+      **DI фреймворк** построенный на Dagger, разработан для Android.
+
+      **Ключевые аннотации:**
+      - `@HiltAndroidApp` - класс Application
+      - `@AndroidEntryPoint` - Activity/Fragment/Service
+      - `@HiltViewModel` - ViewModel
+      - `@Module` + `@InstallIn` - предоставление зависимостей
+      - `@Inject` - инъекция в конструктор/поле
+
+      **Преимущества:** Предопределённые Android scopes, compile-time безопасность, интеграция с Jetpack, меньше boilerplate чем Dagger
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

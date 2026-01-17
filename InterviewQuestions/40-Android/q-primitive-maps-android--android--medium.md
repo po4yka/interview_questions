@@ -15,6 +15,49 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-memory, collections, difficulty/medium, memory-optimization, performance]
+anki_cards:
+  - slug: android-321-0-en
+    front: "What are SparseArray collections in Android and when to use them?"
+    back: |
+      **Types:**
+      - `SparseArray<E>` - Int -> Object
+      - `SparseIntArray` - Int -> Int
+      - `SparseBooleanArray` - Int -> Boolean
+      - `LongSparseArray<E>` - Long -> Object
+
+      **Advantages vs HashMap:**
+      - No boxing for int/long keys
+      - Lower memory overhead
+      - Reduced GC pressure
+
+      **Limitations:**
+      - O(log n) lookup (binary search)
+      - Better for small-medium collections (<1000)
+      - Not thread-safe
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-321-0-ru
+    front: "Что такое SparseArray коллекции в Android и когда их использовать?"
+    back: |
+      **Типы:**
+      - `SparseArray<E>` - Int -> Object
+      - `SparseIntArray` - Int -> Int
+      - `SparseBooleanArray` - Int -> Boolean
+      - `LongSparseArray<E>` - Long -> Object
+
+      **Преимущества перед HashMap:**
+      - Нет boxing для int/long ключей
+      - Меньше расход памяти
+      - Меньше нагрузка на GC
+
+      **Ограничения:**
+      - O(log n) поиск (бинарный)
+      - Лучше для небольших коллекций (<1000)
+      - Не потокобезопасны
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

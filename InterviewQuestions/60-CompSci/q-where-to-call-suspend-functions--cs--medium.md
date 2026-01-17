@@ -1,22 +1,41 @@
----\
+---
 id: cs-032
-title: "Where to Call Suspend Functions / Где можно вызывать suspend-функции"
-aliases: ["Suspend Functions Call Context", "Контекст вызова suspend-функций"]
+title: Where to Call Suspend Functions / Где можно вызывать suspend-функции
+aliases:
+- Suspend Functions Call Context
+- Контекст вызова suspend-функций
 topic: cs
-subtopics: [coroutines]
+subtopics:
+- coroutines
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-coroutines]
+related:
+- c-coroutines
 created: 2025-10-15
 updated: 2025-11-11
-tags: [coroutines, difficulty/medium, kotlin, suspend-functions]
-sources: ["https://kotlinlang.org/docs/composing-suspending-functions.html"]
-
----\
+tags:
+- coroutines
+- difficulty/medium
+- kotlin
+- suspend-functions
+sources:
+- https://kotlinlang.org/docs/composing-suspending-functions.html
+anki_cards:
+- slug: cs-suspend-0-en
+  language: en
+  anki_id: 1768455796694
+  synced_at: '2026-01-15T09:43:17.118861'
+- slug: cs-suspend-0-ru
+  language: ru
+  anki_id: 1768455796720
+  synced_at: '2026-01-15T09:43:17.121024'
+---
 # Вопрос (RU)
 > Где можно вызывать suspend-функции?
 

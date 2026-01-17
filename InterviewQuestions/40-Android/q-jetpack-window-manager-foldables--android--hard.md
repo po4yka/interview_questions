@@ -14,6 +14,49 @@ related: [c-android, q-adaptive-layouts-compose--kotlin--hard, q-how-does-jetpac
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/foldables-chromeos, android/ui-compose, android/ui-state, difficulty/hard]
+anki_cards:
+  - slug: android-616-0-en
+    front: "How do you adapt Android apps for foldables using Jetpack Window Manager?"
+    back: |
+      **Key APIs:**
+      - `WindowSizeClass` (compact/medium/expanded) from `calculateWindowSizeClass(activity)`
+      - `FoldingFeature` - posture (FLAT/HALF_OPENED), hinge bounds, isSeparating
+      - `WindowInfoTracker` for observing layout changes
+
+      **Adaptation:**
+      ```kotlin
+      when (windowSizeClass.widthSizeClass) {
+          Compact -> CompactLayout()
+          Medium -> ListDetailSplit()
+          Expanded -> ThreePaneLayout()
+      }
+      ```
+
+      Avoid placing UI under hinge. Use `NavigationSuiteScaffold` for adaptive navigation.
+    tags:
+      - android_compose
+      - difficulty::hard
+  - slug: android-616-0-ru
+    front: "Как адаптировать Android-приложение для складных устройств с Jetpack Window Manager?"
+    back: |
+      **Основные API:**
+      - `WindowSizeClass` (compact/medium/expanded) из `calculateWindowSizeClass(activity)`
+      - `FoldingFeature` - posture (FLAT/HALF_OPENED), bounds шарнира, isSeparating
+      - `WindowInfoTracker` для отслеживания изменений раскладки
+
+      **Адаптация:**
+      ```kotlin
+      when (windowSizeClass.widthSizeClass) {
+          Compact -> CompactLayout()
+          Medium -> ListDetailSplit()
+          Expanded -> ThreePaneLayout()
+      }
+      ```
+
+      Не размещать UI под шарниром. Использовать `NavigationSuiteScaffold` для адаптивной навигации.
+    tags:
+      - android_compose
+      - difficulty::hard
 sources:
   - url: "https://developer.android.com/jetpack/androidx/releases/window"
     note: "Jetpack Window Manager documentation"

@@ -1,4 +1,44 @@
 ---id: android-204
+id: android-710
+anki_cards:
+  - slug: android-204-0-en
+    front: "What is MutableState in Jetpack Compose and why use remember?"
+    back: |
+      **MutableState<T>** - wrapper that triggers recomposition on value change.
+
+      **With remember (correct):**
+      ```kotlin
+      var count by remember { mutableStateOf(0) }
+      ```
+
+      **Without remember (wrong):**
+      ```kotlin
+      var count by mutableStateOf(0) // Resets on recomposition!
+      ```
+
+      `remember` preserves state across recompositions.
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-204-0-ru
+    front: "Что такое MutableState в Jetpack Compose и зачем нужен remember?"
+    back: |
+      **MutableState<T>** - обертка, вызывающая рекомпозицию при изменении значения.
+
+      **С remember (правильно):**
+      ```kotlin
+      var count by remember { mutableStateOf(0) }
+      ```
+
+      **Без remember (неправильно):**
+      ```kotlin
+      var count by mutableStateOf(0) // Сбрасывается при рекомпозиции!
+      ```
+
+      `remember` сохраняет состояние между рекомпозициями.
+    tags:
+      - android_compose
+      - difficulty::medium
 title: "MutableState в Compose / MutableState in Compose"
 aliases: ["Compose State Management", "MutableState in Compose", "MutableState в Compose", "Изменяемое состояние Compose"]
 topic: android

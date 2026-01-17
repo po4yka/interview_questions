@@ -1,22 +1,44 @@
----\
+---
 id: cs-037
-title: "Design Patterns Fundamentals / Фундаментальные паттерны проектирования"
-aliases: ["Design Patterns Fundamentals", "Фундаментальные паттерны проектирования"]
+title: Design Patterns Fundamentals / Фундаментальные паттерны проектирования
+anki_cards:
+- slug: cs-037-0-en
+  language: en
+  anki_id: 1768454534514
+  synced_at: '2026-01-15T09:43:17.059410'
+- slug: cs-037-0-ru
+  language: ru
+  anki_id: 1768454534540
+  synced_at: '2026-01-15T09:43:17.061162'
+aliases:
+- Design Patterns Fundamentals
+- Фундаментальные паттерны проектирования
 topic: cs
-subtopics: [design-patterns, gof-patterns, programming-languages]
+subtopics:
+- design-patterns
+- gof-patterns
+- programming-languages
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-clean-architecture, c-computer-science]
-created: "2025-10-13"
-updated: "2025-11-11"
-tags: [design-patterns, difficulty/hard, gof]
-sources: ["https://refactoring.guru/design-patterns"]
-
----\
+related:
+- c-architecture-patterns
+- c-clean-architecture
+- c-computer-science
+created: '2025-10-13'
+updated: '2025-11-11'
+tags:
+- design-patterns
+- difficulty/hard
+- gof
+sources:
+- https://refactoring.guru/design-patterns
+---
 # Вопрос (RU)
 > Что такое паттерны проектирования? Какие основные категории паттернов существуют и когда их использовать?
 

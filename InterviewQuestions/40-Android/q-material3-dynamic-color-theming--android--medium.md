@@ -1,5 +1,56 @@
----\
+---
 id: android-157
+anki_cards:
+  - slug: android-157-0-en
+    front: "How does Material 3 dynamic color work in Compose?"
+    back: |
+      **System extracts colors from wallpaper (Android 12+):**
+
+      ```kotlin
+      val colorScheme = when {
+          dynamicColor && Build.VERSION.SDK_INT >= S -> {
+              if (darkTheme) dynamicDarkColorScheme(context)
+              else dynamicLightColorScheme(context)
+          }
+          darkTheme -> DarkColorScheme
+          else -> LightColorScheme
+      }
+      MaterialTheme(colorScheme = colorScheme)
+      ```
+
+      **Key points:**
+      - Always provide fallback for Android < 12
+      - Use semantic roles: `MaterialTheme.colorScheme.primary`
+      - Avoid hardcoded colors
+      - Tonal elevation: higher = more surface tint
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-157-0-ru
+    front: "Как работает динамический цвет Material 3 в Compose?"
+    back: |
+      **Система извлекает цвета из обоев (Android 12+):**
+
+      ```kotlin
+      val colorScheme = when {
+          dynamicColor && Build.VERSION.SDK_INT >= S -> {
+              if (darkTheme) dynamicDarkColorScheme(context)
+              else dynamicLightColorScheme(context)
+          }
+          darkTheme -> DarkColorScheme
+          else -> LightColorScheme
+      }
+      MaterialTheme(colorScheme = colorScheme)
+      ```
+
+      **Ключевые моменты:**
+      - Всегда предоставляйте fallback для Android < 12
+      - Используйте семантические роли: `MaterialTheme.colorScheme.primary`
+      - Избегайте хардкод цветов
+      - Тональная elevation: выше = больше surface tint
+    tags:
+      - android_compose
+      - difficulty::medium
 title: Material3 Dynamic Color Theming / Динамические цвета Material3
 aliases: [Material3 Dynamic Color Theming, Динамические цвета Material3]
 topic: android

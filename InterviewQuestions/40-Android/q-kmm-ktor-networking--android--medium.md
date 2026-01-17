@@ -15,6 +15,52 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/networking-http, difficulty/medium, kmm, ktor, multiplatform]
 sources: []
+anki_cards:
+  - slug: android-164-0-en
+    front: "How do you use Ktor for networking in KMM projects?"
+    back: |
+      **Ktor** - multiplatform HTTP client from JetBrains.
+
+      **Setup:** Platform engines (OkHttp for Android, Darwin for iOS).
+
+      **Key features:**
+      - Auth plugin with bearer token refresh
+      - HttpSend.intercept for retries with exponential backoff
+      - ContentNegotiation for JSON
+      - MockEngine for testing
+
+      ```kotlin
+      HttpClient {
+          install(ContentNegotiation) { json() }
+          install(HttpTimeout) { requestTimeoutMillis = 30_000 }
+      }
+      ```
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-164-0-ru
+    front: "Как использовать Ktor для сети в KMM проектах?"
+    back: |
+      **Ktor** - мультиплатформенный HTTP-клиент от JetBrains.
+
+      **Настройка:** Платформенные движки (OkHttp для Android, Darwin для iOS).
+
+      **Ключевые возможности:**
+      - Auth плагин с обновлением bearer токена
+      - HttpSend.intercept для ретраев с exponential backoff
+      - ContentNegotiation для JSON
+      - MockEngine для тестирования
+
+      ```kotlin
+      HttpClient {
+          install(ContentNegotiation) { json() }
+          install(HttpTimeout) { requestTimeoutMillis = 30_000 }
+      }
+      ```
+    tags:
+      - android_architecture
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

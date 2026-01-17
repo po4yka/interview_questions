@@ -15,6 +15,44 @@ updated: 2025-11-11
 tags: [composition, difficulty/medium, has-a, inheritance, is-a, oop, polymorphism]
 sources: ["https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)"]
 
+anki_cards:
+- slug: cs-inherit-0-en
+  front: |
+    When is inheritance useful and when should you prefer composition?
+  back: |
+    **Use inheritance when**:
+    - True IS-A relationship
+    - Need polymorphism
+    - Extending framework classes
+    
+    **Prefer composition when**:
+    - HAS-A relationship
+    - Need flexibility to change behavior
+    - Avoiding tight coupling
+    
+    **Rule**: Favor composition over inheritance.
+  language: en
+  difficulty: 0.5
+  tags: [cs_oop, difficulty::medium]
+- slug: cs-inherit-0-ru
+  front: |
+    Когда полезно наследование и когда лучше использовать композицию?
+  back: |
+    **Используйте наследование когда**:
+    - Истинное отношение IS-A
+    - Нужен полиморфизм
+    - Расширяете классы фреймворка
+    
+    **Предпочитайте композицию когда**:
+    - Отношение HAS-A
+    - Нужна гибкость смены поведения
+    - Избегаете тесной связанности
+    
+    **Правило**: Предпочитайте композицию наследованию.
+  language: ru
+  difficulty: 0.5
+  tags: [cs_oop, difficulty::medium]
+
 ---
 # Вопрос (RU)
 > Когда наследование полезно, а когда нет?

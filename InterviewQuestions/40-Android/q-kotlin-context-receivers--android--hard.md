@@ -15,6 +15,53 @@ created: 2025-10-12
 updated: 2025-11-10
 tags: [android/coroutines, android/di-hilt, api-design, context-receivers, difficulty/hard, dsl, experimental]
 sources: ["https://kotlinlang.org/docs/whatsnew15.html#context-receivers"]
+anki_cards:
+  - slug: android-063-0-en
+    front: "What are Kotlin context receivers and when to use them?"
+    back: |
+      **Context receivers** declare implicit receivers required to call a function.
+
+      **Syntax:**
+      ```kotlin
+      context(Context, CoroutineScope)
+      fun launchAndShowToast(message: String) {
+          launch { Toast.makeText(this@Context, message, ...).show() }
+      }
+      ```
+
+      **Key advantages:**
+      - Multiple contexts (vs single receiver in extensions)
+      - Dependencies explicit in type system
+      - Ideal for DSLs, cross-cutting concerns (logging, navigation)
+
+      **Status:** Stable in Kotlin 2.x (experimental in 1.6-1.8)
+    tags:
+      - kotlin_functions
+      - android_architecture
+      - difficulty::hard
+  - slug: android-063-0-ru
+    front: "Что такое context receivers в Kotlin и когда их использовать?"
+    back: |
+      **Context receivers** объявляют неявные ресиверы, требуемые для вызова функции.
+
+      **Синтаксис:**
+      ```kotlin
+      context(Context, CoroutineScope)
+      fun launchAndShowToast(message: String) {
+          launch { Toast.makeText(this@Context, message, ...).show() }
+      }
+      ```
+
+      **Ключевые преимущества:**
+      - Множественные контексты (vs один receiver в extension)
+      - Зависимости явны на уровне типов
+      - Идеальны для DSL, cross-cutting concerns (логирование, навигация)
+
+      **Статус:** Стабильны в Kotlin 2.x (экспериментальны в 1.6-1.8)
+    tags:
+      - kotlin_functions
+      - android_architecture
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

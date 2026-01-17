@@ -1,5 +1,52 @@
----\
+---
 id: android-166
+anki_cards:
+  - slug: android-166-0-en
+    front: "How to implement face detection with ML Kit on Android?"
+    back: |
+      **Two detector modes:**
+      - `PERFORMANCE_MODE_FAST` - real-time (10 FPS throttled)
+      - `PERFORMANCE_MODE_ACCURATE` - static photos
+
+      **Setup:**
+      ```kotlin
+      val detector = FaceDetection.getClient(
+          FaceDetectorOptions.Builder()
+              .setPerformanceMode(FAST)
+              .enableTracking()
+              .build()
+      )
+      ```
+
+      **Features:** landmarks, contours, expressions (smile/eye open probability), head pose (Euler angles).
+
+      **Key:** Throttle frames, lower resolution (480x640), run on background thread.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-166-0-ru
+    front: "Как реализовать детекцию лиц с ML Kit на Android?"
+    back: |
+      **Два режима детектора:**
+      - `PERFORMANCE_MODE_FAST` - реальное время (троттлинг ~10 FPS)
+      - `PERFORMANCE_MODE_ACCURATE` - статичные фото
+
+      **Настройка:**
+      ```kotlin
+      val detector = FaceDetection.getClient(
+          FaceDetectorOptions.Builder()
+              .setPerformanceMode(FAST)
+              .enableTracking()
+              .build()
+      )
+      ```
+
+      **Возможности:** landmarks, контуры, выражения (улыбка/открытость глаз), поза головы (углы Эйлера).
+
+      **Ключ:** Троттлинг кадров, низкое разрешение (480x640), фоновый поток.
+    tags:
+      - android_general
+      - difficulty::medium
 title: Mlkit Face Detection / Распознавание лиц ML Kit
 aliases: [ML Kit Face Detection, Распознавание лиц ML Kit]
 topic: android

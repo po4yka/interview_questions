@@ -1,21 +1,39 @@
----\
+---
 id: cs-003
-title: "Concurrency Fundamentals / Основы параллелизма"
-aliases: ["Concurrency Fundamentals", "Основы параллелизма"]
+title: Concurrency Fundamentals / Основы параллелизма
+aliases:
+- Concurrency Fundamentals
+- Основы параллелизма
 topic: cs
-subtopics: [concurrency]
+subtopics:
+- concurrency
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [q-abstract-class-purpose--cs--medium]
+related:
+- q-abstract-class-purpose--cs--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [concurrency, difficulty/hard]
-sources: ["https://en.wikipedia.org/wiki/Concurrency_(computer_science)"]
----\
+tags:
+- concurrency
+- difficulty/hard
+sources:
+- https://en.wikipedia.org/wiki/Concurrency_(computer_science)
+anki_cards:
+- slug: cs-003-0-en
+  language: en
+  anki_id: 1768454343139
+  synced_at: '2026-01-15T09:41:02.833879'
+- slug: cs-003-0-ru
+  language: ru
+  anki_id: 1768454343165
+  synced_at: '2026-01-15T09:41:02.836993'
+---
 # Вопрос (RU)
 > Что такое concurrency vs parallelism? Что такое race conditions и как их предотвратить? Что такое mutexes, semaphores и monitors? Как избежать deadlocks?
 

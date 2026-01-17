@@ -1,22 +1,47 @@
----\
+---
 id: cs-004
-title: "Operating System Fundamentals / Основы операционных систем"
-aliases: ["OS Fundamentals", "Основы ОС"]
+title: Operating System Fundamentals / Основы операционных систем
+aliases:
+- OS Fundamentals
+- Основы ОС
 topic: cs
-subtopics: [memory-management, operating-systems, processes]
+subtopics:
+- memory-management
+- operating-systems
+- processes
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-computer-science, q-abstract-class-purpose--cs--medium]
+related:
+- c-computer-science
+- q-abstract-class-purpose--cs--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [cpu-scheduling, difficulty/hard, memory, os, processes, threads, virtual-memory]
-sources: ["https://en.wikipedia.org/wiki/Operating_system"]
-
----\
+tags:
+- cpu-scheduling
+- difficulty/hard
+- memory
+- os
+- processes
+- threads
+- virtual-memory
+sources:
+- https://en.wikipedia.org/wiki/Operating_system
+anki_cards:
+- slug: cs-004-0-en
+  language: en
+  anki_id: 1768455794594
+  synced_at: '2026-01-15T09:43:17.048520'
+- slug: cs-004-0-ru
+  language: ru
+  anki_id: 1768455794619
+  synced_at: '2026-01-15T09:43:17.049990'
+---
 # Вопрос (RU)
 > Что такое основные концепции операционных систем? Как работают процессы и потоки, виртуальная память и планирование CPU?
 

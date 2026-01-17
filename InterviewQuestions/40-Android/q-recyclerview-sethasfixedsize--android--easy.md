@@ -16,6 +16,47 @@ updated: 2025-11-10
 sources:
   - "https://github.com/amitshekhariitbhu/android-interview-questions"
 tags: [android/performance-memory, android/ui-views, difficulty/easy]
+anki_cards:
+  - slug: android-027-0-en
+    front: "What does setHasFixedSize(true) do in RecyclerView?"
+    back: |
+      Optimization hint: tells RecyclerView its **container size won't change** when data changes.
+
+      **When to use**:
+      - `match_parent` or fixed dimensions
+      - Size controlled by parent, not content
+
+      **Avoid with**:
+      - `wrap_content` (size depends on items)
+
+      ```kotlin
+      recyclerView.setHasFixedSize(true) // Skip container remeasure
+      ```
+
+      **Key**: About container size stability, not item count.
+    tags:
+      - android_views
+      - difficulty::easy
+  - slug: android-027-0-ru
+    front: "Что делает setHasFixedSize(true) в RecyclerView?"
+    back: |
+      Подсказка для оптимизации: сообщает RecyclerView, что **размер контейнера не изменится** при изменении данных.
+
+      **Когда использовать**:
+      - `match_parent` или фиксированные размеры
+      - Размер контролируется родителем, не содержимым
+
+      **Избегать с**:
+      - `wrap_content` (размер зависит от элементов)
+
+      ```kotlin
+      recyclerView.setHasFixedSize(true) // Пропустить пересчёт контейнера
+      ```
+
+      **Ключевое**: о стабильности размера контейнера, не количества элементов.
+    tags:
+      - android_views
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

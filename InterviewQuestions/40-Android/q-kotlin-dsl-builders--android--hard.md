@@ -1,4 +1,48 @@
 ---id: android-061
+id: android-707
+anki_cards:
+  - slug: android-061-0-en
+    front: "What are DSL builders in Kotlin and how to create them?"
+    back: |
+      **DSL builders create type-safe, declarative APIs.**
+
+      **Key concepts:**
+      - **Lambda with receiver** `T.() -> Unit` - `this` is T inside block
+      - **@DslMarker** - prevents accessing wrong receiver
+      - **Extension functions** - add builder methods
+
+      ```kotlin
+      fun html(init: HTML.() -> Unit): HTML {
+          return HTML().apply(init)
+      }
+      ```
+
+      **Examples:** Gradle Kotlin DSL, Jetpack Compose
+    tags:
+      - android_compose
+      - kotlin_functions
+      - difficulty::hard
+  - slug: android-061-0-ru
+    front: "Что такое DSL строители в Kotlin и как их создавать?"
+    back: |
+      **DSL строители создают типобезопасные, декларативные API.**
+
+      **Ключевые концепции:**
+      - **Лямбда с получателем** `T.() -> Unit` - `this` равен T внутри блока
+      - **@DslMarker** - предотвращает доступ к неправильному получателю
+      - **Функции-расширения** - добавляют методы строителя
+
+      ```kotlin
+      fun html(init: HTML.() -> Unit): HTML {
+          return HTML().apply(init)
+      }
+      ```
+
+      **Примеры:** Gradle Kotlin DSL, Jetpack Compose
+    tags:
+      - android_compose
+      - kotlin_functions
+      - difficulty::hard
 title: Kotlin DSL Builders / Kotlin DSL строители
 aliases: [Kotlin DSL Builders, Kotlin DSL строители]
 topic: android

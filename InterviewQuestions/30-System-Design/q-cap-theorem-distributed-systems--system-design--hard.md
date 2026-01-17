@@ -1,22 +1,46 @@
----\
+---
 id: sysdes-004
-title: "CAP Theorem and Distributed Systems / CAP теорема и распределённые системы"
-aliases: ["CAP Theorem", "CAP теорема"]
+title: CAP Theorem and Distributed Systems / CAP теорема и распределённые системы
+aliases:
+- CAP Theorem
+- CAP теорема
 topic: system-design
-subtopics: [availability, consistency, distributed-systems]
+subtopics:
+- availability
+- consistency
+- distributed-systems
 question_kind: system-design
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [c-architecture-patterns, q-caching-strategies--system-design--medium, q-microservices-vs-monolith--system-design--hard]
+related:
+- c-architecture-patterns
+- q-caching-strategies--system-design--medium
+- q-microservices-vs-monolith--system-design--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [cap-theorem, consistency, difficulty/hard, distributed-systems, system-design]
-sources: ["https://en.wikipedia.org/wiki/CAP_theorem"]
-
----\
+tags:
+- cap-theorem
+- consistency
+- difficulty/hard
+- distributed-systems
+- system-design
+sources:
+- https://en.wikipedia.org/wiki/CAP_theorem
+anki_cards:
+- slug: sysdes-004-0-en
+  language: en
+  anki_id: 1768468551659
+  synced_at: '2026-01-15T13:15:52.007284'
+- slug: sysdes-004-0-ru
+  language: ru
+  anki_id: 1768468551684
+  synced_at: '2026-01-15T13:15:52.009881'
+---
 # Вопрос (RU)
 > Что такое CAP теорема? Какие компромиссы делают разные системы, и как выбрать между CP и AP системами?
 

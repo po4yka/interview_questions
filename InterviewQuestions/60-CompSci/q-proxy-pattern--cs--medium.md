@@ -1,20 +1,43 @@
----\
+---
 id: dp-007
-title: "Proxy Pattern / Proxy Паттерн"
-aliases: [Proxy Pattern, Proxy Паттерн]
+title: Proxy Pattern / Proxy Паттерн
+aliases:
+- Proxy Pattern
+- Proxy Паттерн
 topic: cs
-subtopics: [design-patterns]
+subtopics:
+- design-patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-adapter-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- q-adapter-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [cs, design-patterns, difficulty/medium, gof-patterns, proxy, structural-patterns, surrogate]
----\
+tags:
+- cs
+- design-patterns
+- difficulty/medium
+- gof-patterns
+- proxy
+- structural-patterns
+- surrogate
+anki_cards:
+- slug: dp-007-0-en
+  language: en
+  anki_id: 1768455794844
+  synced_at: '2026-01-15T09:43:17.055461'
+- slug: dp-007-0-ru
+  language: ru
+  anki_id: 1768455794869
+  synced_at: '2026-01-15T09:43:17.057581'
+---
 # Вопрос (RU)
 > Что такое паттерн Proxy? Когда и зачем его следует использовать?
 

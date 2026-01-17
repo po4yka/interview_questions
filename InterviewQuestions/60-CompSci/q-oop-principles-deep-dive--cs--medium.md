@@ -14,6 +14,38 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [abstraction, composition, difficulty/medium, encapsulation, inheritance, oop, polymorphism]
 sources: ["https://en.wikipedia.org/wiki/Object-oriented_programming"]
+anki_cards:
+- slug: cs-002-0-en
+  front: |
+    What are the four pillars of OOP?
+  back: |
+    **Four OOP pillars**:
+    
+    1. **Encapsulation**: Bundle data + methods, control access via modifiers
+    2. **Inheritance**: IS-A relationship, code reuse via class hierarchies
+    3. **Polymorphism**: Same interface, different implementations
+    4. **Abstraction**: Hide complexity, expose essential features
+    
+    **Key principle**: Prefer composition over inheritance.
+  language: en
+  difficulty: 0.5
+  tags: [cs_oop, difficulty::medium]
+- slug: cs-002-0-ru
+  front: |
+    Каковы четыре столпа ООП?
+  back: |
+    **Четыре столпа ООП**:
+    
+    1. **Инкапсуляция**: Объединение данных и методов, контроль доступа через модификаторы
+    2. **Наследование**: Отношение IS-A, переиспользование кода через иерархии
+    3. **Полиморфизм**: Один интерфейс, разные реализации
+    4. **Абстракция**: Скрытие сложности, выставление только важного
+    
+    **Ключевой принцип**: Предпочитайте композицию наследованию.
+  language: ru
+  difficulty: 0.5
+  tags: [cs_oop, difficulty::medium]
+
 ---
 # Вопрос (RU)
 > Каковы четыре столпа ООП? Как работают инкапсуляция, наследование, полиморфизм и абстракция?

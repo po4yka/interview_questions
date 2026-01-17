@@ -1,4 +1,42 @@
----\
+---
+id: android-724
+anki_cards:
+  - slug: android-287-0-en
+    front: "What is SharedPreferences and when should you use it?"
+    back: |
+      **SharedPreferences** stores small key-value pairs in XML format in app's private storage.
+
+      **Supported types**: Boolean, Int, Float, Long, String, StringSet
+
+      **apply() vs commit()**:
+      - `apply()`: Async, non-blocking (use on UI thread)
+      - `commit()`: Sync, returns success boolean
+
+      **When NOT to use**:
+      - Large data -> Room/SQLite
+      - Sensitive data -> EncryptedSharedPreferences
+      - Type-safe/reactive -> DataStore
+
+      Data is deleted when app is uninstalled.
+    tags: ["android_storage", "difficulty::easy"]
+  - slug: android-287-0-ru
+    front: "Что такое SharedPreferences и когда его использовать?"
+    back: |
+      **SharedPreferences** хранит небольшие пары ключ-значение в XML-формате в приватном хранилище.
+
+      **Поддерживаемые типы**: Boolean, Int, Float, Long, String, StringSet
+
+      **apply() vs commit()**:
+      - `apply()`: Асинхронно, не блокирует (для UI-потока)
+      - `commit()`: Синхронно, возвращает boolean успеха
+
+      **Когда НЕ использовать**:
+      - Большие данные -> Room/SQLite
+      - Чувствительные данные -> EncryptedSharedPreferences
+      - Типобезопасность/реактивность -> DataStore
+
+      Данные удаляются при удалении приложения.
+    tags: ["android_storage", "difficulty::easy"]
 id: android-287
 title: "SharedPreferences / Хранилище пар ключ-значение"
 aliases: ["Shared Preferences", "SharedPreferences", "Хранилище пар ключ-значение"]

@@ -15,6 +15,45 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/fragment, android/intents-deeplinks, android/ui-navigation, bundle, difficulty/medium, navigation-component, parcelable]
+anki_cards:
+  - slug: android-319-0-en
+    front: "How do you implement list-to-detail navigation in Android?"
+    back: |
+      **Approaches:**
+      1. `Intent` + `Bundle` (Activity -> Activity)
+      2. Navigation Component + Safe Args (Fragment)
+      3. Shared ViewModel (master-detail in one Activity)
+
+      **Best practice:** Pass ID, load data in detail screen:
+      ```kotlin
+      intent.putExtra("USER_ID", userId)
+      // Detail loads via ViewModel
+      viewModel.loadUser(userId)
+      ```
+
+      Avoid passing large Parcelables (Binder limit ~1MB).
+    tags:
+      - android_navigation
+      - difficulty::medium
+  - slug: android-319-0-ru
+    front: "Как реализовать навигацию от списка к деталям в Android?"
+    back: |
+      **Подходы:**
+      1. `Intent` + `Bundle` (Activity -> Activity)
+      2. Navigation Component + Safe Args (Fragment)
+      3. Shared ViewModel (master-detail в одной Activity)
+
+      **Best practice:** Передавать ID, загружать данные в экране деталей:
+      ```kotlin
+      intent.putExtra("USER_ID", userId)
+      // Detail загружает через ViewModel
+      viewModel.loadUser(userId)
+      ```
+
+      Избегать передачи больших Parcelable (лимит Binder ~1MB).
+    tags:
+      - android_navigation
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

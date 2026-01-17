@@ -15,6 +15,43 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android, android/permissions, android/privacy-sdks, difficulty/hard, security/privacy]
+anki_cards:
+  - slug: android-430-0-en
+    front: "What is SDK Runtime in Privacy Sandbox and how does it isolate SDKs?"
+    back: |
+      **SDK Runtime** - runs third-party SDKs in isolated sandbox process (Android 13+).
+
+      **Key features:**
+      - **Process Isolation** - separate sandbox process per app
+      - **Limited Access** - no SharedPrefs, internal storage, device IDs
+      - **Binder IPC** - all communication via `SdkSandboxManager`
+      - **Resource Quotas** - CPU, memory, network limits
+
+      **Migration challenges:**
+      - Convert to IPC contracts
+      - Handle storage/permission restrictions
+      - Support fallback for older devices
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-430-0-ru
+    front: "Что такое SDK Runtime в Privacy Sandbox и как он изолирует SDK?"
+    back: |
+      **SDK Runtime** - запускает сторонние SDK в изолированном sandbox-процессе (Android 13+).
+
+      **Ключевые особенности:**
+      - **Process Isolation** - отдельный sandbox-процесс на приложение
+      - **Limited Access** - нет SharedPrefs, internal storage, device IDs
+      - **Binder IPC** - коммуникация через `SdkSandboxManager`
+      - **Resource Quotas** - лимиты CPU, памяти, сети
+
+      **Сложности миграции:**
+      - Переход на IPC-контракты
+      - Учёт ограничений storage/permissions
+      - Fallback для старых устройств
+    tags:
+      - android_general
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

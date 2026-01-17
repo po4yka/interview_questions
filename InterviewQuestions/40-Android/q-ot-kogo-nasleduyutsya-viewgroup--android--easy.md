@@ -1,5 +1,38 @@
 ---
 id: android-278
+anki_cards:
+  - slug: android-278-0-en
+    front: "What class does ViewGroup inherit from in Android?"
+    back: |
+      **ViewGroup inherits from View.**
+
+      ```
+      Object -> View -> ViewGroup -> Layouts
+      ```
+
+      - **View:** Handles drawing, measurement, touch events
+      - **ViewGroup:** Adds child management, `onLayout()`, `onInterceptTouchEvent()`
+
+      This allows polymorphism - ViewGroup can be used anywhere View is expected.
+    tags:
+      - android_views
+      - difficulty::easy
+  - slug: android-278-0-ru
+    front: "От какого класса наследуется ViewGroup в Android?"
+    back: |
+      **ViewGroup наследуется от View.**
+
+      ```
+      Object -> View -> ViewGroup -> Layouts
+      ```
+
+      - **View:** Отрисовка, измерение, обработка касаний
+      - **ViewGroup:** Добавляет управление дочерними элементами, `onLayout()`, `onInterceptTouchEvent()`
+
+      Это позволяет полиморфизм - ViewGroup можно использовать везде, где ожидается View.
+    tags:
+      - android_views
+      - difficulty::easy
 title: Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup
 aliases: [View Hierarchy, ViewGroup Inheritance, Иерархия View, Наследование ViewGroup]
 topic: android

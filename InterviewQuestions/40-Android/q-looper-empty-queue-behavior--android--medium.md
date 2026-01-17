@@ -1,5 +1,48 @@
----\
+---
 id: android-106
+anki_cards:
+  - slug: android-106-0-en
+    front: "What happens when Looper.loop() processes an empty MessageQueue?"
+    back: |
+      **The thread blocks (does NOT terminate):**
+
+      1. Blocks inside `MessageQueue.next()`
+      2. Enters native wait via `nativePollOnce()` (epoll)
+      3. **No CPU consumption** - efficient idle
+      4. Wakes on `nativeWake()` when message posted
+
+      ```java
+      Message next() {
+          nativePollOnce(ptr, -1); // Blocks until wake
+          return mMessages;
+      }
+      ```
+
+      **Only `quit()`/`quitSafely()` exits the loop** - empty queue alone does NOT terminate thread.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-106-0-ru
+    front: "Что происходит когда Looper.loop() обрабатывает пустую MessageQueue?"
+    back: |
+      **Поток блокируется (НЕ завершается):**
+
+      1. Блокируется в `MessageQueue.next()`
+      2. Входит в native ожидание через `nativePollOnce()` (epoll)
+      3. **Не потребляет CPU** - эффективный idle
+      4. Пробуждается при `nativeWake()` когда сообщение добавлено
+
+      ```java
+      Message next() {
+          nativePollOnce(ptr, -1); // Блокируется до wake
+          return mMessages;
+      }
+      ```
+
+      **Только `quit()`/`quitSafely()` завершает цикл** - пустая очередь НЕ завершает поток.
+    tags:
+      - android_general
+      - difficulty::medium
 title: Looper Empty Queue Behavior / Поведение Looper при пустой очереди
 aliases: [Looper Blocking Behavior, Looper Empty Queue, Блокировка Looper, Поведение Looper при пустой очереди]
 topic: android

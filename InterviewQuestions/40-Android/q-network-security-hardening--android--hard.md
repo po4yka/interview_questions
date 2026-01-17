@@ -18,6 +18,57 @@ sources:
   - "https://cloud.google.com/security/en-transit/application-layer-transport-security"
   - "https://developer.android.com/training/articles/security-config"
   - "https://square.github.io/okhttp/https/#certificate-pinning"
+anki_cards:
+  - slug: android-636-0-en
+    front: "How do you harden Android app networking security?"
+    back: |
+      **1. Network Security Config:**
+      - `cleartextTrafficPermitted="false"`
+      - Explicit domain pinning with 2+ pins + expiration
+
+      **2. Certificate Pinning:**
+      - OkHttp `CertificatePinner`
+      - Telemetry on mismatch, CI/CD rotation
+
+      **3. mTLS:**
+      - Short-lived client certs
+      - Private keys in hardware-backed Keystore
+
+      **4. Key Attestation:**
+      - Keys only from `AndroidKeyStore`
+      - Server verifies attestation chain
+
+      **5. Monitoring:**
+      - Log pin mismatches, TLS failures
+      - Fail-close for critical endpoints
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-636-0-ru
+    front: "Как укрепить сетевую безопасность Android приложения?"
+    back: |
+      **1. Network Security Config:**
+      - `cleartextTrafficPermitted="false"`
+      - Явный pinning домена с 2+ пинами + expiration
+
+      **2. Certificate Pinning:**
+      - OkHttp `CertificatePinner`
+      - Телеметрия при несоответствии, ротация через CI/CD
+
+      **3. mTLS:**
+      - Краткоживущие клиентские сертификаты
+      - Приватные ключи в hardware-backed Keystore
+
+      **4. Key Attestation:**
+      - Ключи только из `AndroidKeyStore`
+      - Сервер проверяет цепочку аттестации
+
+      **5. Мониторинг:**
+      - Логирование pin mismatch, TLS ошибок
+      - Fail-close для критичных endpoint
+    tags:
+      - android_general
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

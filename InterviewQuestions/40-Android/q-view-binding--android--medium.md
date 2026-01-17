@@ -16,6 +16,41 @@ related: [c-gradle, q-reduce-apk-size-techniques--android--medium, q-what-is-a-v
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium, view-binding]
+anki_cards:
+  - slug: android-182-0-en
+    front: "What is View Binding in Android?"
+    back: |
+      **Generates type-safe binding classes** for XML layouts, replacing `findViewById`.
+
+      **Setup:** `buildFeatures { viewBinding = true }`
+
+      **Activity:** `binding = ActivityBinding.inflate(layoutInflater)`, then `setContentView(binding.root)`
+
+      **Fragment:** Use nullable `_binding`, set to null in `onDestroyView()` to prevent leaks.
+
+      **Benefits:** Null safety, type safety, no runtime errors from wrong IDs.
+
+      Class naming: `result_profile.xml` -> `ResultProfileBinding`
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-182-0-ru
+    front: "Что такое View Binding в Android?"
+    back: |
+      **Генерирует типобезопасные классы привязки** для XML layouts, заменяя `findViewById`.
+
+      **Настройка:** `buildFeatures { viewBinding = true }`
+
+      **Activity:** `binding = ActivityBinding.inflate(layoutInflater)`, затем `setContentView(binding.root)`
+
+      **Fragment:** Использовать nullable `_binding`, обнулять в `onDestroyView()` для предотвращения утечек.
+
+      **Преимущества:** Null safety, type safety, нет runtime ошибок от неправильных ID.
+
+      Именование классов: `result_profile.xml` -> `ResultProfileBinding`
+    tags:
+      - android_views
+      - difficulty::medium
 
 ---
 # Вопрос (RU)

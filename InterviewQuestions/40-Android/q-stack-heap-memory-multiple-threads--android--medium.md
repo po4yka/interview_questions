@@ -14,6 +14,50 @@ updated: 2025-11-10
 tags: [android/performance-memory, android/threads-sync, difficulty/medium]
 moc: moc-android
 related: [c-android, c-concurrency, q-optimize-memory-usage-android--android--medium, q-tasks-back-stack--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
+anki_cards:
+  - slug: android-080-0-en
+    front: "How do Stack and Heap memory work with multiple threads in Android?"
+    back: |
+      **Stack:**
+      - **Each thread has its own stack**
+      - Stores local variables, method frames, return addresses
+      - More threads = more total stack memory
+
+      **Heap:**
+      - **Single shared heap** for all threads in process
+      - Max size per process (not per thread)
+      - More threads = more allocations = more GC pressure
+
+      ```text
+      10 threads: 10 separate stacks + 1 shared heap
+      ```
+
+      **Key:** Many threads significantly increase memory due to stack overhead.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-080-0-ru
+    front: "Как работают Stack и Heap память с несколькими потоками в Android?"
+    back: |
+      **Stack:**
+      - **У каждого потока свой стек**
+      - Хранит локальные переменные, фреймы методов, адреса возврата
+      - Больше потоков = больше суммарной памяти под стеки
+
+      **Heap:**
+      - **Одна общая куча** для всех потоков процесса
+      - Максимальный размер на процесс (не на поток)
+      - Больше потоков = больше аллокаций = больше нагрузки на GC
+
+      ```text
+      10 потоков: 10 отдельных стеков + 1 общая куча
+      ```
+
+      **Важно:** Много потоков значительно увеличивают память из-за накладных расходов на стеки.
+    tags:
+      - android_general
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 > `Stack` и Heap память для нескольких потоков

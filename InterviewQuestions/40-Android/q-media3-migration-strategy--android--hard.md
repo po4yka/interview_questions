@@ -1,4 +1,40 @@
 ---id: android-615
+id: android-709
+anki_cards:
+  - slug: android-615-0-en
+    front: "What are key steps to migrate from ExoPlayer to Media3?"
+    back: |
+      **Migration steps:**
+
+      1. **Dependencies:** `exoplayer` -> `media3-exoplayer`
+      2. **Player:** `SimpleExoPlayer` removed, use `ExoPlayer.Builder`
+      3. **Session:** `MediaSessionService` + `MediaSession`
+      4. **UI:** `PlayerView` -> `StyledPlayerView`
+      5. **Listener:** Multiple interfaces -> unified `Player.Listener`
+
+      **Key changes:**
+      - Namespace: `com.google.android.exoplayer2.*` -> `androidx.media3.*`
+      - Use `MediaItem.Builder` for DRM config
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-615-0-ru
+    front: "Какие ключевые шаги миграции с ExoPlayer на Media3?"
+    back: |
+      **Шаги миграции:**
+
+      1. **Зависимости:** `exoplayer` -> `media3-exoplayer`
+      2. **Плеер:** `SimpleExoPlayer` удален, используйте `ExoPlayer.Builder`
+      3. **Сессия:** `MediaSessionService` + `MediaSession`
+      4. **UI:** `PlayerView` -> `StyledPlayerView`
+      5. **Listener:** Несколько интерфейсов -> единый `Player.Listener`
+
+      **Ключевые изменения:**
+      - Namespace: `com.google.android.exoplayer2.*` -> `androidx.media3.*`
+      - Используйте `MediaItem.Builder` для DRM конфигурации
+    tags:
+      - android_general
+      - difficulty::hard
 title: Media3 Migration Strategy / Стратегия миграции на Media3
 aliases: [Media3 Migration Strategy, Стратегия миграции на Media3]
 topic: android

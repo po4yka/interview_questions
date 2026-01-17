@@ -15,6 +15,57 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, callback, difficulty/medium, lifecycle, mvp, platform/android, presenter, view]
+anki_cards:
+  - slug: android-313-0-en
+    front: "How does a Presenter notify the View in MVP architecture?"
+    back: |
+      **Interface Contract (recommended):**
+      ```kotlin
+      interface UserContract {
+          interface View {
+              fun showUser(user: User)
+              fun showError(message: String)
+          }
+          interface Presenter {
+              fun attachView(view: View)
+              fun detachView()
+          }
+      }
+      ```
+
+      **Key points:**
+      - Use nullable `view?` for async callbacks
+      - Call `detachView()` in `onDestroy()`
+      - Ensure UI updates on main thread
+      - Never hold strong reference after detach
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-313-0-ru
+    front: "Как Presenter уведомляет View в архитектуре MVP?"
+    back: |
+      **Interface Contract (рекомендуется):**
+      ```kotlin
+      interface UserContract {
+          interface View {
+              fun showUser(user: User)
+              fun showError(message: String)
+          }
+          interface Presenter {
+              fun attachView(view: View)
+              fun detachView()
+          }
+      }
+      ```
+
+      **Ключевые моменты:**
+      - Использовать nullable `view?` для async callback
+      - Вызывать `detachView()` в `onDestroy()`
+      - Обновлять UI только на main thread
+      - Не держать strong reference после detach
+    tags:
+      - android_architecture
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

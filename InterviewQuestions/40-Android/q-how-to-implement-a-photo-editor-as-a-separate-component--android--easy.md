@@ -15,6 +15,51 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/fragment, android/ui-graphics, android/ui-views, bitmap, canvas, difficulty/easy, fragments, imageview, views]
+anki_cards:
+  - slug: android-247-0-en
+    front: "How to implement a photo editor as a separate component in Android?"
+    back: |
+      **Approach:** Create reusable `Fragment` with clear API
+
+      **Key components:**
+      - `ImageView` for display
+      - `Matrix` for transformations (rotate, scale)
+      - `ColorMatrix` for color effects (grayscale, brightness)
+      - `MediaStore` for saving results
+
+      **API pattern:**
+      ```kotlin
+      PhotoEditorFragment.newInstance(imageUri)
+      // Return via Fragment Result API
+      ```
+
+      **Memory:** Clear bitmap refs in `onDestroyView`, use proper decode scaling
+    tags:
+      - android_fragments
+      - android_views
+      - difficulty::easy
+  - slug: android-247-0-ru
+    front: "Как реализовать фоторедактор как отдельный компонент в Android?"
+    back: |
+      **Подход:** Создать переиспользуемый `Fragment` с четким API
+
+      **Ключевые компоненты:**
+      - `ImageView` для отображения
+      - `Matrix` для трансформаций (rotate, scale)
+      - `ColorMatrix` для цветовых эффектов (grayscale, яркость)
+      - `MediaStore` для сохранения результатов
+
+      **Паттерн API:**
+      ```kotlin
+      PhotoEditorFragment.newInstance(imageUri)
+      // Возврат через Fragment Result API
+      ```
+
+      **Память:** Очищайте ссылки на bitmap в `onDestroyView`, используйте масштабирование при декодировании
+    tags:
+      - android_fragments
+      - android_views
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

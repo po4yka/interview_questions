@@ -14,6 +14,47 @@ related: [c-dependency-injection, q-koin-fundamentals--android--medium, q-koin-s
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/architecture-clean, android/di-koin, dependency-injection, difficulty/hard, koin]
+anki_cards:
+  - slug: android-611-0-en
+    front: "How does Koin resolve dependencies internally?"
+    back: |
+      **Pipeline:** DSL -> BeanDefinition -> BeanRegistry -> InstanceFactory
+
+      **Key components:**
+      - `BeanDefinition` - type, qualifier, kind, definition lambda
+      - `DefinitionResolver` - finds definition by (KClass, Qualifier)
+      - `ScopeRegistry` - manages scope lifecycle
+      - `InstanceFactory` - creates/caches instances
+
+      **Caching:**
+      - Single: InstanceHolder with synchronized lazy
+      - Factory: no cache
+      - Scoped: Scope.instances map
+
+      Cycle detection via resolution chain tracking.
+    tags:
+      - android_architecture
+      - difficulty::hard
+  - slug: android-611-0-ru
+    front: "Как Koin разрешает зависимости внутри?"
+    back: |
+      **Pipeline:** DSL -> BeanDefinition -> BeanRegistry -> InstanceFactory
+
+      **Ключевые компоненты:**
+      - `BeanDefinition` - тип, qualifier, kind, лямбда создания
+      - `DefinitionResolver` - находит definition по (KClass, Qualifier)
+      - `ScopeRegistry` - управляет жизненным циклом scope
+      - `InstanceFactory` - создаёт/кэширует экземпляры
+
+      **Кэширование:**
+      - Single: InstanceHolder с synchronized lazy
+      - Factory: без кэша
+      - Scoped: Scope.instances map
+
+      Обнаружение циклов через отслеживание цепочки разрешения.
+    tags:
+      - android_architecture
+      - difficulty::hard
 sources:
   - url: "https://insert-koin.io/docs/reference/koin-core/architecture"
     note: "Официальный обзор архитектуры Koin"

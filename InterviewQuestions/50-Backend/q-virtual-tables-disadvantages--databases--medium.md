@@ -1,29 +1,45 @@
----id: db-001
+---
+id: db-001
 title: Virtual tables disadvantages / Недостатки виртуальных таблиц
 aliases: []
-
-# Classification
 topic: databases
-subtopics: [performance]
+subtopics:
+- performance
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
 status: draft
 moc: moc-backend
-related: [c-compose-recomposition, c-database-performance, c-perfetto, c-power-profiling, c-views]
-
-# Timestamps
+related:
+- c-compose-recomposition
+- c-database-performance
+- c-perfetto
+- c-power-profiling
+- c-views
 created: 2025-10-03
 updated: 2025-11-11
-
-# Tags
-tags: [database, virtual-tables, views, performance, difficulty/medium, kotlin, lang/ru, topic/databases]
+tags:
+- database
+- virtual-tables
+- views
+- performance
+- difficulty/medium
+- kotlin
+- lang/ru
+- topic/databases
+anki_cards:
+- slug: db-001-0-en
+  language: en
+  anki_id: 1768460896389
+  synced_at: '2026-01-15T11:08:17.065158'
+- slug: db-001-0-ru
+  language: ru
+  anki_id: 1768460896412
+  synced_at: '2026-01-15T11:08:17.069321'
 ---
 # Вопрос (RU)
 > Какой минус есть у виртуальных таблиц

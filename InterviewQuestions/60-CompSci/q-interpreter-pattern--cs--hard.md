@@ -1,19 +1,47 @@
----id: cs-031
-title: "Interpreter Pattern / Паттерн Интерпретатор"
-aliases: ["Interpreter Pattern", "Паттерн Интерпретатор"]
+---
+id: cs-031
+title: Interpreter Pattern / Паттерн Интерпретатор
+anki_cards:
+- slug: cs-031-0-en
+  language: en
+  anki_id: 1768454535363
+  synced_at: '2026-01-15T09:43:17.110334'
+- slug: cs-031-0-ru
+  language: ru
+  anki_id: 1768454535389
+  synced_at: '2026-01-15T09:43:17.112224'
+aliases:
+- Interpreter Pattern
+- Паттерн Интерпретатор
 topic: cs
-subtopics: [behavioral-patterns, design-patterns, language-processing]
+subtopics:
+- behavioral-patterns
+- design-patterns
+- language-processing
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-dao-pattern, c-software-design-patterns, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- c-dao-pattern
+- c-software-design-patterns
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral-patterns, design-patterns, difficulty/hard, expression-evaluation, interpreter, language-processing]
-sources: ["https://refactoring.guru/design-patterns/interpreter"]
+tags:
+- behavioral-patterns
+- design-patterns
+- difficulty/hard
+- expression-evaluation
+- interpreter
+- language-processing
+sources:
+- https://refactoring.guru/design-patterns/interpreter
 ---
 # Вопрос (RU)
 > Что такое паттерн Интерпретатор? Когда его использовать и как он работает?

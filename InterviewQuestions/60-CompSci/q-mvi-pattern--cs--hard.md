@@ -14,6 +14,36 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [architecture-patterns, difficulty/hard, mvi, mvp, mvvm, redux, state-management, unidirectional-data-flow]
 sources: ["https://proandroiddev.com/mvi-a-new-member-of-the-mv-band-6f7f0d23bc8a"]
+anki_cards:
+- slug: cs-014-0-en
+  front: |
+    What is MVI architecture and how does it differ from MVVM?
+  back: |
+    **MVI** (Model-View-Intent): Architecture with unidirectional data flow.
+    
+    **Flow**: View -> Intent -> Model/Reducer -> State -> View
+    
+    **vs MVVM**: MVI enforces immutable state and strict one-way flow. MVVM allows two-way binding and mutable state.
+    
+    **Use for**: Complex UIs needing predictable state management.
+  language: en
+  difficulty: 0.5
+  tags: [cs_architecture, difficulty::hard]
+- slug: cs-014-0-ru
+  front: |
+    Что такое архитектура MVI и чем она отличается от MVVM?
+  back: |
+    **MVI** (Model-View-Intent): Архитектура с однонаправленным потоком данных.
+    
+    **Поток**: View -> Intent -> Model/Reducer -> State -> View
+    
+    **vs MVVM**: MVI требует иммутабельное состояние и строгий однонаправленный поток. MVVM допускает двусторонний биндинг.
+    
+    **Применяйте для**: Сложных UI с предсказуемым управлением состоянием.
+  language: ru
+  difficulty: 0.5
+  tags: [cs_architecture, difficulty::hard]
+
 ---
 # Вопрос (RU)
 > Что такое паттерн MVI? Когда его использовать и как он работает?

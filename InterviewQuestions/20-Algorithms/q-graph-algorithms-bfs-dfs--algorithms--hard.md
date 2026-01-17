@@ -1,22 +1,65 @@
----\
+---
 id: algo-002
-title: "Graph Algorithms: BFS and DFS / Алгоритмы графов: BFS и DFS"
-aliases: ["BFS and DFS", "BFS и DFS", "Graph Algorithms", "Алгоритмы графов"]
+title: 'Graph Algorithms: BFS and DFS / Алгоритмы графов: BFS и DFS'
+aliases:
+- BFS and DFS
+- BFS и DFS
+- Graph Algorithms
+- Алгоритмы графов
 topic: algorithms
-subtopics: [bfs, dfs, graphs]
+subtopics:
+- bfs
+- dfs
+- graphs
 question_kind: coding
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, q-advanced-graph-algorithms--algorithms--hard]
+related:
+- c-algorithms
+- q-advanced-graph-algorithms--algorithms--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [algorithms, bfs, dfs, difficulty/hard, graphs, traversal]
-sources: ["https://en.wikipedia.org/wiki/Breadth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search"]
-
----\
+tags:
+- algorithms
+- bfs
+- dfs
+- difficulty/hard
+- graphs
+- traversal
+sources:
+- https://en.wikipedia.org/wiki/Breadth-first_search
+- https://en.wikipedia.org/wiki/Depth-first_search
+anki_cards:
+- slug: algo-002-0-en
+  language: en
+  anki_id: 1768457298229
+  synced_at: '2026-01-15T10:08:19.311068'
+- slug: algo-002-0-ru
+  language: ru
+  anki_id: 1768457298254
+  synced_at: '2026-01-15T10:08:19.316028'
+- slug: algo-002-1-en
+  language: en
+  anki_id: 1768457298279
+  synced_at: '2026-01-15T10:08:19.318547'
+- slug: algo-002-1-ru
+  language: ru
+  anki_id: 1768457298304
+  synced_at: '2026-01-15T10:08:19.321333'
+- slug: algo-002-2-en
+  language: en
+  anki_id: 1768457298327
+  synced_at: '2026-01-15T10:08:19.324062'
+- slug: algo-002-2-ru
+  language: ru
+  anki_id: 1768457298352
+  synced_at: '2026-01-15T10:08:19.326938'
+---
 # Вопрос (RU)
 > Как работают BFS и DFS? Когда следует использовать каждый? Каковы распространённые задачи и паттерны с графами?
 

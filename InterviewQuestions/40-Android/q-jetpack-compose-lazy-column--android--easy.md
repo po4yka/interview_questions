@@ -15,6 +15,49 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-widgets, difficulty/easy, lazy-list]
+anki_cards:
+  - slug: android-438-0-en
+    front: "How to create a RecyclerView-like list in Jetpack Compose?"
+    back: |
+      Use **LazyColumn** (vertical) or **LazyRow** (horizontal):
+
+      ```kotlin
+      LazyColumn {
+          items(contacts, key = { it.id }) { contact ->
+              ContactRow(contact)
+          }
+      }
+      ```
+
+      **Features:**
+      - Lazy: only renders visible items
+      - No Adapter/ViewHolder needed
+      - Use `key` for stable identity
+      - Use `contentType` for optimization
+    tags:
+      - android_compose
+      - difficulty::easy
+  - slug: android-438-0-ru
+    front: "Как создать список типа RecyclerView в Jetpack Compose?"
+    back: |
+      Использовать **LazyColumn** (вертикальный) или **LazyRow** (горизонтальный):
+
+      ```kotlin
+      LazyColumn {
+          items(contacts, key = { it.id }) { contact ->
+              ContactRow(contact)
+          }
+      }
+      ```
+
+      **Особенности:**
+      - Ленивый: рендерит только видимые элементы
+      - Не нужен Adapter/ViewHolder
+      - Использовать `key` для стабильной идентичности
+      - Использовать `contentType` для оптимизации
+    tags:
+      - android_compose
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

@@ -15,6 +15,43 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-modularization, android/gradle, codebase-analysis, difficulty/easy, project-metrics]
+anki_cards:
+  - slug: android-223-0-en
+    front: "How can you measure Android project size?"
+    back: |
+      **Key metrics:**
+      1. **LOC** - `find . -name "*.kt" | xargs wc -l`
+      2. **Modules** - `grep include settings.gradle.kts | wc -l`
+      3. **APK size** - APK Analyzer in Android Studio
+      4. **Methods** - dexcount plugin (65K limit per DEX)
+
+      **Size guidelines:**
+      - Small: <10K LOC
+      - Medium: 10-50K LOC
+      - Large: 50-200K LOC
+
+      Tools: APK Analyzer, SonarQube, Detekt, Dexcount.
+    tags:
+      - android_general
+      - difficulty::easy
+  - slug: android-223-0-ru
+    front: "Как измерить размер Android проекта?"
+    back: |
+      **Ключевые метрики:**
+      1. **LOC** - `find . -name "*.kt" | xargs wc -l`
+      2. **Модули** - `grep include settings.gradle.kts | wc -l`
+      3. **Размер APK** - APK Analyzer в Android Studio
+      4. **Методы** - dexcount плагин (лимит 65K на DEX)
+
+      **Ориентиры по размеру:**
+      - Маленький: <10K LOC
+      - Средний: 10-50K LOC
+      - Большой: 50-200K LOC
+
+      Инструменты: APK Analyzer, SonarQube, Detekt, Dexcount.
+    tags:
+      - android_general
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

@@ -1,21 +1,44 @@
 ---
 id: cs-017
-title: "Abstract Class Purpose / Назначение абстрактных классов"
-aliases: ["Abstract Class Purpose", "Назначение абстрактных классов"]
+title: Abstract Class Purpose / Назначение абстрактных классов
+aliases:
+- Abstract Class Purpose
+- Назначение абстрактных классов
 topic: cs
-subtopics: [abstraction, inheritance, oop]
+subtopics:
+- abstraction
+- inheritance
+- oop
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-inheritance]
+related:
+- c-computer-science
+- c-inheritance
 created: 2025-10-15
 updated: 2025-11-11
-tags: [abstract-classes, difficulty/medium, inheritance, oop, template-method]
-sources: ["https://en.wikipedia.org/wiki/Abstract_type"]
-
+tags:
+- abstract-classes
+- difficulty/medium
+- inheritance
+- oop
+- template-method
+sources:
+- https://en.wikipedia.org/wiki/Abstract_type
+anki_cards:
+- slug: cs-017-0-en
+  language: en
+  anki_id: 1768454033539
+  synced_at: '2026-01-15T09:41:02.828307'
+- slug: cs-017-0-ru
+  language: ru
+  anki_id: 1768454033565
+  synced_at: '2026-01-15T09:41:02.831115'
 ---
 # Вопрос (RU)
 > Что такое абстрактный класс и для чего он используется?

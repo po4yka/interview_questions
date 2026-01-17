@@ -15,6 +15,51 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/di-hilt, android/networking-http, authentication, difficulty/hard, interceptor, logging, okhttp]
 sources: ["https://square.github.io/okhttp/interceptors/"]
+anki_cards:
+  - slug: android-090-0-en
+    front: "How to modify all requests globally in Retrofit?"
+    back: |
+      Use **OkHttp Interceptors** on the OkHttpClient:
+
+      **Two types:**
+      - **Application** - before retries/redirects (auth, common params)
+      - **Network** - sees actual network requests
+
+      ```kotlin
+      class AuthInterceptor(val tokenManager: TokenManager) : Interceptor {
+          override fun intercept(chain: Chain): Response {
+              val request = chain.request().newBuilder()
+                  .header("Authorization", "Bearer ${tokenManager.getToken()}")
+                  .build()
+              return chain.proceed(request)
+          }
+      }
+      ```
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-090-0-ru
+    front: "Как глобально изменять все запросы в Retrofit?"
+    back: |
+      Используйте **OkHttp Interceptors** на OkHttpClient:
+
+      **Два типа:**
+      - **Application** - до повторов/редиректов (авторизация, общие параметры)
+      - **Network** - видит реальные сетевые запросы
+
+      ```kotlin
+      class AuthInterceptor(val tokenManager: TokenManager) : Interceptor {
+          override fun intercept(chain: Chain): Response {
+              val request = chain.request().newBuilder()
+                  .header("Authorization", "Bearer ${tokenManager.getToken()}")
+                  .build()
+              return chain.proceed(request)
+          }
+      }
+      ```
+    tags:
+      - android_general
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

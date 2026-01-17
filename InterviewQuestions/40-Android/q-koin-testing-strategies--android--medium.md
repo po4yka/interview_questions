@@ -14,6 +14,47 @@ related: [c-dependency-injection, q-android-testing-strategies--android--medium,
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/architecture-clean, android/di-koin, android/testing-unit, dependency-injection, difficulty/medium, koin]
+anki_cards:
+  - slug: android-610-0-en
+    front: "How do you test Koin modules?"
+    back: |
+      **Key approaches:**
+      1. `checkModules` - validates graph at test time
+      2. `KoinTestRule` - starts/stops Koin per test
+      3. `loadKoinModules` - override dependencies
+
+      ```kotlin
+      koinApplication {
+          modules(appModules)
+      }.checkModules {
+          withInstance<Context>(mockk())
+      }
+      ```
+
+      Use `module(override = true)` to replace production deps with fakes.
+    tags:
+      - android_testing
+      - difficulty::medium
+  - slug: android-610-0-ru
+    front: "Как тестировать модули Koin?"
+    back: |
+      **Ключевые подходы:**
+      1. `checkModules` - валидация графа в тестах
+      2. `KoinTestRule` - старт/стоп Koin для каждого теста
+      3. `loadKoinModules` - переопределение зависимостей
+
+      ```kotlin
+      koinApplication {
+          modules(appModules)
+      }.checkModules {
+          withInstance<Context>(mockk())
+      }
+      ```
+
+      Используйте `module(override = true)` для замены production-зависимостей фейками.
+    tags:
+      - android_testing
+      - difficulty::medium
 sources:
   - "https://insert-koin.io/docs/reference/koin-android/check-modules"
   - "https://insert-koin.io/docs/reference/koin-test/testing"

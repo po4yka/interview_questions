@@ -14,6 +14,33 @@ related: [c-performance, c-recyclerview, q-canvas-drawing-optimization--android-
 created: 2025-10-13
 updated: 2025-10-31
 tags: [android/performance-memory, android/performance-rendering, android/ui-views, difficulty/hard, optimization, performance, recyclerview]
+anki_cards:
+  - slug: android-091-0-en
+    front: "What are key techniques to optimize large lists in Android?"
+    back: |
+      1. **ViewHolder** - cache view refs, light binding
+      2. **DiffUtil/ListAdapter** - efficient updates
+      3. **Image loading** - Glide/Coil with caching
+      4. **Pagination** - Paging 3 library
+      5. **Light onBindViewHolder** - precompute data
+      6. **Flat layouts** - ConstraintLayout
+      7. **RecyclerView config** - setHasFixedSize, prefetch
+    tags:
+      - android_layouts
+      - difficulty::hard
+  - slug: android-091-0-ru
+    front: "Какие ключевые техники оптимизации больших списков в Android?"
+    back: |
+      1. **ViewHolder** - кешировать ссылки, легкий биндинг
+      2. **DiffUtil/ListAdapter** - эффективные обновления
+      3. **Загрузка изображений** - Glide/Coil с кешированием
+      4. **Пагинация** - Paging 3
+      5. **Легкий onBindViewHolder** - предрассчитывать данные
+      6. **Плоские layout** - ConstraintLayout
+      7. **Настройки RecyclerView** - setHasFixedSize, prefetch
+    tags:
+      - android_layouts
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

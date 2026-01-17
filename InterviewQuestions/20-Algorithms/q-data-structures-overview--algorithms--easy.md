@@ -1,19 +1,50 @@
 ---
 id: algo-001
-title: "Data Structures Overview / Обзор структур данных"
-aliases: ["Data Structures Overview", "Обзор структур данных"]
+title: Data Structures Overview / Обзор структур данных
+aliases:
+- Data Structures Overview
+- Обзор структур данных
 topic: algorithms
-subtopics: [data-structures, fundamentals]
+subtopics:
+- data-structures
+- fundamentals
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, c-data-structures, q-binary-search-variants--algorithms--medium]
+related:
+- c-algorithms
+- c-data-structures
+- q-binary-search-variants--algorithms--medium
 created: 2025-10-03
 updated: 2025-01-25
-tags: [algorithms, data-structures, difficulty/easy, fundamentals, overview]
+tags:
+- algorithms
+- data-structures
+- difficulty/easy
+- fundamentals
+- overview
+anki_cards:
+- slug: algo-001-0-en
+  language: en
+  anki_id: 1768457299227
+  synced_at: '2026-01-15T10:08:19.418394'
+- slug: algo-001-0-ru
+  language: ru
+  anki_id: 1768457299253
+  synced_at: '2026-01-15T10:08:19.420542'
+- slug: algo-001-1-en
+  language: en
+  anki_id: 1768457299277
+  synced_at: '2026-01-15T10:08:19.422964'
+- slug: algo-001-1-ru
+  language: ru
+  anki_id: 1768457299303
+  synced_at: '2026-01-15T10:08:19.425261'
 ---
 # Вопрос (RU)
 > Расскажи про какие структуры данных знаешь

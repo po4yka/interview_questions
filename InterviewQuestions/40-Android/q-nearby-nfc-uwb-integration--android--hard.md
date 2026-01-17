@@ -1,4 +1,34 @@
 ---id: android-620
+id: android-712
+anki_cards:
+  - slug: android-620-0-en
+    front: "How to design a hybrid proximity system using NFC, Nearby, and UWB?"
+    back: |
+      **3-layer approach:**
+
+      1. **NFC** - Bootstrap session (one tap, exchange keys/nonce)
+      2. **Nearby Connections** - Main encrypted data channel
+      3. **UWB** - Precise ranging when supported (fallback to BLE)
+
+      **Security:** Cryptographically bind all channels; mutual auth on Nearby.
+      **Compatibility:** Check FEATURE_NFC, FEATURE_UWB; graceful degradation.
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-620-0-ru
+    front: "Как спроектировать гибридную систему ближней связи с NFC, Nearby и UWB?"
+    back: |
+      **3-уровневый подход:**
+
+      1. **NFC** - Инициализация сессии (одно касание, обмен ключами/nonce)
+      2. **Nearby Connections** - Основной зашифрованный канал данных
+      3. **UWB** - Точное позиционирование при поддержке (fallback на BLE)
+
+      **Безопасность:** Криптографическая привязка всех каналов; взаимная аутентификация на Nearby.
+      **Совместимость:** Проверка FEATURE_NFC, FEATURE_UWB; graceful degradation.
+    tags:
+      - android_general
+      - difficulty::hard
 title: Nearby, NFC & UWB Integration / Интеграция Nearby, NFC и UWB
 aliases: [Nearby NFC UWB Integration, NFC и UWB, Интеграция Nearby]
 topic: android

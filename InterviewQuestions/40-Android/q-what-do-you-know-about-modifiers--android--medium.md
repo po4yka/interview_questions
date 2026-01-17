@@ -1,4 +1,5 @@
 ---id: android-202
+id: android-734
 title: "What Do You Know About Modifiers / Что вы знаете о модификаторах"
 aliases: ["Compose Modifiers", "Модификаторы Compose"]
 topic: android

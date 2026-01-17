@@ -1,22 +1,54 @@
----\
+---
 id: net-004
-title: "OkHttp Interceptors Advanced / Продвинутые перехватчики OkHttp"
-aliases: ["OkHttp Interceptors Advanced", "Продвинутые перехватчики OkHttp"]
+title: OkHttp Interceptors Advanced / Продвинутые перехватчики OkHttp
+aliases:
+- OkHttp Interceptors Advanced
+- Продвинутые перехватчики OkHttp
 topic: databases
-subtopics: [api-clients, authentication, caching, http-clients]
+subtopics:
+- api-clients
+- authentication
+- caching
+- http-clients
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-backend
-related: [c-coroutines]
+related:
+- c-coroutines
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [authentication, caching, difficulty/medium, interceptors, networking, okhttp, retry]
-
----\
+tags:
+- authentication
+- caching
+- difficulty/medium
+- interceptors
+- networking
+- okhttp
+- retry
+anki_cards:
+- slug: net-004-0-en
+  language: en
+  anki_id: 1768460896737
+  synced_at: '2026-01-15T11:08:17.101815'
+- slug: net-004-0-ru
+  language: ru
+  anki_id: 1768460896761
+  synced_at: '2026-01-15T11:08:17.104350'
+- slug: net-004-1-en
+  language: en
+  anki_id: 1768460896786
+  synced_at: '2026-01-15T11:08:17.106859'
+- slug: net-004-1-ru
+  language: ru
+  anki_id: 1768460896812
+  synced_at: '2026-01-15T11:08:17.109068'
+---
 # Вопрос (RU)
 
 > Реализовать пользовательские интерцепторы `OkHttp` для обновления аутентификации, повторных попыток запросов и кеширования ответов. Объяснить порядок цепочки `application` vs `network` интерцепторов.

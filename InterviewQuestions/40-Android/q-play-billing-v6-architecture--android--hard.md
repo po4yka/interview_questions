@@ -1,5 +1,52 @@
 ---
 id: android-618
+anki_cards:
+  - slug: android-618-0-en
+    front: "What are the key components of Play Billing v6 architecture?"
+    back: |
+      **Client-side:**
+      - `BillingClient` v6 with `enablePendingPurchases()`
+      - `ProductDetails` with base plans and subscription offers
+      - `BillingFlowParams` with `offerToken` for purchase initiation
+
+      **Server-side:**
+      - Play Developer API: `purchases.subscriptionsv2.get`
+      - RTDN (Pub/Sub) for lifecycle events (renewal, expiration, revoke)
+      - Store `purchaseToken` + user mapping
+
+      **Purchase flow:**
+      1. Query `ProductDetails` -> cache
+      2. Launch billing flow with `offerToken`
+      3. Handle `PurchaseState.PURCHASED` / `PENDING`
+      4. Server validates -> `acknowledgePurchase`
+
+      **Critical:** Always acknowledge purchases or auto-refund occurs.
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-618-0-ru
+    front: "Какие ключевые компоненты архитектуры Play Billing v6?"
+    back: |
+      **Клиентская часть:**
+      - `BillingClient` v6 с `enablePendingPurchases()`
+      - `ProductDetails` с base plans и subscription offers
+      - `BillingFlowParams` с `offerToken` для запуска покупки
+
+      **Серверная часть:**
+      - Play Developer API: `purchases.subscriptionsv2.get`
+      - RTDN (Pub/Sub) для событий жизненного цикла (renewal, expiration, revoke)
+      - Хранение `purchaseToken` + привязка к пользователю
+
+      **Процесс покупки:**
+      1. Запрос `ProductDetails` -> кэширование
+      2. Запуск billing flow с `offerToken`
+      3. Обработка `PurchaseState.PURCHASED` / `PENDING`
+      4. Сервер валидирует -> `acknowledgePurchase`
+
+      **Критично:** Всегда подтверждать покупки иначе автовозврат.
+    tags:
+      - android_general
+      - difficulty::hard
 title: Play Billing v6 Architecture / Архитектура Play Billing v6
 aliases: [Play Billing v6 Architecture, Архитектура Play Billing v6]
 topic: android

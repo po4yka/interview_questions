@@ -16,6 +16,58 @@ updated: 2025-11-10
 tags: [android/ui-graphics, android/ui-views, custom-drawing, difficulty/medium, itemdecoration, ui]
 sources:
   - "https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration"
+anki_cards:
+  - slug: android-081-0-en
+    front: "How to create custom ItemDecorations for RecyclerView?"
+    back: |
+      **ItemDecoration** adds custom drawing/offsets without modifying items.
+
+      **Three methods:**
+      - `onDraw()` - draw UNDER items (before)
+      - `onDrawOver()` - draw OVER items (after, for sticky headers)
+      - `getItemOffsets()` - add spacing (no drawing)
+
+      ```kotlin
+      class DividerDecoration : ItemDecoration() {
+          override fun getItemOffsets(outRect: Rect, ...) {
+              outRect.bottom = dividerHeight
+          }
+          override fun onDraw(canvas: Canvas, parent: RecyclerView, ...) {
+              // Draw divider lines
+          }
+      }
+      ```
+
+      Use `recyclerView.addItemDecoration(...)` to apply.
+    tags:
+      - android_layouts
+      - difficulty::medium
+  - slug: android-081-0-ru
+    front: "Как создать пользовательские ItemDecorations для RecyclerView?"
+    back: |
+      **ItemDecoration** добавляет кастомную отрисовку/отступы без изменения элементов.
+
+      **Три метода:**
+      - `onDraw()` - рисовать ПОД элементами (до)
+      - `onDrawOver()` - рисовать НАД элементами (после, для sticky headers)
+      - `getItemOffsets()` - добавить отступы (без отрисовки)
+
+      ```kotlin
+      class DividerDecoration : ItemDecoration() {
+          override fun getItemOffsets(outRect: Rect, ...) {
+              outRect.bottom = dividerHeight
+          }
+          override fun onDraw(canvas: Canvas, parent: RecyclerView, ...) {
+              // Рисуем разделители
+          }
+      }
+      ```
+
+      Применять через `recyclerView.addItemDecoration(...)`.
+    tags:
+      - android_layouts
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 > Как создать пользовательские ItemDecorations для `RecyclerView`?

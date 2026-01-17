@@ -1,4 +1,30 @@
----\
+---
+id: android-717
+anki_cards:
+  - slug: android-318-0-en
+    front: "What is screenshot testing and how does it differ from snapshot testing in Android?"
+    back: |
+      **Screenshot testing** captures full-screen images and compares them pixel-by-pixel.
+      **Snapshot testing** captures component-level images for isolated comparison.
+
+      Key tools:
+      - **Paparazzi**: JVM-based, no emulator needed, generates HTML reports
+      - **Shot**: Emulator-based, Espresso-compatible, better for real device rendering
+
+      Both detect visual regressions by comparing against golden images stored in version control.
+    tags: ["android_testing", "difficulty::medium"]
+  - slug: android-318-0-ru
+    front: "Что такое скриншот-тестирование и чем оно отличается от снапшот-тестирования в Android?"
+    back: |
+      **Скриншот-тестирование** захватывает изображения всего экрана и сравнивает их попиксельно.
+      **Снапшот-тестирование** захватывает изображения отдельных компонентов для изолированного сравнения.
+
+      Основные инструменты:
+      - **Paparazzi**: на базе JVM, без эмулятора, генерирует HTML-отчёты
+      - **Shot**: на базе эмулятора, совместим с Espresso, лучше для рендеринга на реальных устройствах
+
+      Оба обнаруживают визуальные регрессии путём сравнения с эталонными изображениями в системе контроля версий.
+    tags: ["android_testing", "difficulty::medium"]
 id: android-318
 title: Screenshot and Snapshot Testing / Screenshot и Snapshot тестирование
 aliases: [Screenshot and Snapshot Testing, Screenshot и Snapshot тестирование]

@@ -1,4 +1,34 @@
 ---id: android-013
+id: android-713
+anki_cards:
+  - slug: android-013-0-en
+    front: "What are notification channels in Android and why are they required?"
+    back: |
+      **Notification channels** (API 26+) group notifications by type, giving users control over sound/vibration/importance.
+
+      **Required:** Every notification must specify a channel ID on Android 8.0+.
+
+      **Key points:**
+      - App cannot change importance after channel creation
+      - User preferences cannot be overridden
+      - IMPORTANCE_HIGH = heads-up display
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-013-0-ru
+    front: "Что такое каналы уведомлений в Android и почему они обязательны?"
+    back: |
+      **Каналы уведомлений** (API 26+) группируют уведомления по типам, давая пользователям контроль над звуком/вибрацией/важностью.
+
+      **Обязательно:** Каждое уведомление должно указывать ID канала на Android 8.0+.
+
+      **Ключевые моменты:**
+      - Приложение не может изменить важность после создания канала
+      - Настройки пользователя нельзя переопределить
+      - IMPORTANCE_HIGH = heads-up отображение
+    tags:
+      - android_general
+      - difficulty::medium
 title: Notification Channels / Каналы уведомлений
 aliases: [Notification Channels, Каналы уведомлений]
 topic: android

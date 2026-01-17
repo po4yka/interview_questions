@@ -15,6 +15,36 @@ sources: []
 tags: [android/ui-views, android/ui-widgets, difficulty/medium, spannable, text-styling]
 moc: moc-android
 related: [c-android-components, q-accessibility-text-scaling--android--medium, q-custom-view-attributes--android--medium, q-how-to-break-text-by-screen-width--android--easy, q-how-to-organize-work-with-text-and-images-in-a-delegate--android--easy]
+anki_cards:
+  - slug: android-109-0-en
+    front: "What is Spannable and what are the main classes for text styling?"
+    back: |
+      **Spannable** - interface to attach markup objects (spans) to text at runtime.
+
+      **Classes:**
+      - `SpannedString` - immutable text + immutable markup
+      - `SpannableString` - immutable text + mutable markup
+      - `SpannableStringBuilder` - mutable text + mutable markup
+
+      **Key spans:** ForegroundColorSpan, StyleSpan, ClickableSpan
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-109-0-ru
+    front: "Что такое Spannable и какие основные классы для стилизации текста?"
+    back: |
+      **Spannable** - интерфейс для прикрепления объектов разметки (spans) к тексту во время выполнения.
+
+      **Классы:**
+      - `SpannedString` - неизменяемый текст + неизменяемая разметка
+      - `SpannableString` - неизменяемый текст + изменяемая разметка
+      - `SpannableStringBuilder` - изменяемый текст + изменяемая разметка
+
+      **Ключевые spans:** ForegroundColorSpan, StyleSpan, ClickableSpan
+    tags:
+      - android_views
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

@@ -1,5 +1,46 @@
 ---\
 id: android-348
+anki_cards:
+  - slug: android-348-0-en
+    front: "What are the key components for building an RSS aggregator app?"
+    back: |
+      **Architecture:**
+      - **Network layer:** XML parser (Jsoup/dedicated RSS lib)
+      - **Database:** Room with Feed/Item entities (foreign keys)
+      - **Sync:** WorkManager for periodic background refresh
+      - **UI:** ViewModel + Flow + LazyColumn/RecyclerView
+
+      **Key features:**
+      - PagingSource from Room for feed items
+      - RemoteMediator for offline-first
+      - Mark as read, favorites, swipe-to-refresh
+      - Cleanup old items (e.g., 30+ days)
+      - Notifications for new content
+    tags:
+      - android_architecture
+      - android_room
+      - android_workmanager
+      - difficulty::medium
+  - slug: android-348-0-ru
+    front: "Какие ключевые компоненты нужны для создания RSS-агрегатора?"
+    back: |
+      **Архитектура:**
+      - **Сетевой слой:** XML-парсер (Jsoup/специализированная RSS-библиотека)
+      - **База данных:** Room с сущностями Feed/Item (внешние ключи)
+      - **Синхронизация:** WorkManager для периодического фонового обновления
+      - **UI:** ViewModel + Flow + LazyColumn/RecyclerView
+
+      **Ключевые функции:**
+      - PagingSource из Room для элементов ленты
+      - RemoteMediator для offline-first
+      - Отметка прочитанного, избранное, pull-to-refresh
+      - Очистка старых элементов (например, старше 30 дней)
+      - Уведомления о новом контенте
+    tags:
+      - android_architecture
+      - android_room
+      - android_workmanager
+      - difficulty::medium
 title: RSS Feed Aggregator / Агрегатор RSS лент
 aliases: [RSS Feed Aggregator, Агрегатор RSS лент]
 topic: android

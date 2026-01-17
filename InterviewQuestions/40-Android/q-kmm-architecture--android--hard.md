@@ -15,6 +15,55 @@ created: 2025-10-15
 updated: 2025-11-11
 sources: []
 tags: [android, android/architecture-clean, android/kmp, difficulty/hard, kmm, kotlin, multiplatform]
+anki_cards:
+  - slug: android-435-0-en
+    front: "What is the KMM architecture and how do you share code between Android and iOS?"
+    back: |
+      **Structure:**
+      - `commonMain` - business logic, networking, data layer
+      - `androidMain` - Android-specific (Context, drivers)
+      - `iosMain` - iOS-specific (UIKit, Foundation)
+
+      **expect/actual mechanism:**
+      ```kotlin
+      // commonMain
+      expect fun generateUUID(): String
+
+      // androidMain
+      actual fun generateUUID() = UUID.randomUUID().toString()
+
+      // iosMain
+      actual fun generateUUID() = NSUUID().UUIDString()
+      ```
+
+      Keep UI platform-specific. Achieve ~60-80% code reuse.
+    tags:
+      - android_architecture
+      - difficulty::hard
+  - slug: android-435-0-ru
+    front: "Что такое архитектура KMM и как делиться кодом между Android и iOS?"
+    back: |
+      **Структура:**
+      - `commonMain` - бизнес-логика, сеть, data layer
+      - `androidMain` - Android-специфичное (Context, drivers)
+      - `iosMain` - iOS-специфичное (UIKit, Foundation)
+
+      **Механизм expect/actual:**
+      ```kotlin
+      // commonMain
+      expect fun generateUUID(): String
+
+      // androidMain
+      actual fun generateUUID() = UUID.randomUUID().toString()
+
+      // iosMain
+      actual fun generateUUID() = NSUUID().UUIDString()
+      ```
+
+      UI остаётся платформенным. Достигается ~60-80% переиспользования кода.
+    tags:
+      - android_architecture
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

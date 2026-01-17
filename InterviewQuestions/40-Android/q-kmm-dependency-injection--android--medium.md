@@ -15,6 +15,61 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/di-koin, android/kmp, di, difficulty/medium, koin, kotlin]
+anki_cards:
+  - slug: android-222-0-en
+    front: "How do you implement dependency injection in KMM projects?"
+    back: |
+      **Koin for KMM** (most popular):
+      ```kotlin
+      // commonMain
+      val sharedModule = module {
+          single<TaskRepository> { TaskRepositoryImpl(get()) }
+      }
+
+      // androidMain
+      val androidModule = module {
+          single { DatabaseDriverFactory(androidContext()) }
+      }
+      ```
+
+      **Comparison:**
+      | Framework | Multiplatform | Compile-time safe |
+      |-----------|---------------|-------------------|
+      | Koin | Yes | No (runtime) |
+      | Dagger/Hilt | No (Android only) | Yes |
+      | Manual DI | Yes | Yes |
+
+      Use expect/actual for platform-specific factories.
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-222-0-ru
+    front: "Как реализовать dependency injection в KMM проектах?"
+    back: |
+      **Koin для KMM** (самый популярный):
+      ```kotlin
+      // commonMain
+      val sharedModule = module {
+          single<TaskRepository> { TaskRepositoryImpl(get()) }
+      }
+
+      // androidMain
+      val androidModule = module {
+          single { DatabaseDriverFactory(androidContext()) }
+      }
+      ```
+
+      **Сравнение:**
+      | Фреймворк | Multiplatform | Compile-time safe |
+      |-----------|---------------|-------------------|
+      | Koin | Да | Нет (runtime) |
+      | Dagger/Hilt | Нет (только Android) | Да |
+      | Manual DI | Да | Да |
+
+      Используйте expect/actual для платформенных фабрик.
+    tags:
+      - android_architecture
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

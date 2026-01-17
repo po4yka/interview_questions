@@ -1,21 +1,43 @@
----\
+---
 id: dp-006
-title: "Mediator Pattern / Mediator Паттерн"
-aliases: [Mediator Pattern, Mediator Паттерн]
+title: Mediator Pattern / Mediator Паттерн
+aliases:
+- Mediator Pattern
+- Mediator Паттерн
 topic: cs
-subtopics: [design-patterns, behavioral, coupling-reduction]
+subtopics:
+- design-patterns
+- behavioral
+- coupling-reduction
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral, coupling, difficulty/medium, gof-patterns, mediator]
-
----\
+tags:
+- behavioral
+- coupling
+- difficulty/medium
+- gof-patterns
+- mediator
+anki_cards:
+- slug: dp-006-0-en
+  language: en
+  anki_id: 1768455662145
+  synced_at: '2026-01-15T09:43:17.092267'
+- slug: dp-006-0-ru
+  language: ru
+  anki_id: 1768455662171
+  synced_at: '2026-01-15T09:43:17.093640'
+---
 # Вопрос (RU)
 > Что такое паттерн Mediator? Когда и зачем его следует использовать?
 

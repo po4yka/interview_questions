@@ -14,6 +14,48 @@ related: [c-savedstatehandle, c-viewmodel, q-activity-lifecycle-methods--android
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android, android/lifecycle, android/ui-views, difficulty/medium, recyclerview, scrollview, state-preservation]
+anki_cards:
+  - slug: android-423-0-en
+    front: "How to save scroll state when Activity is recreated?"
+    back: |
+      **ScrollView:** Assign stable `android:id` - automatic save
+
+      **RecyclerView:**
+      ```kotlin
+      override fun onSaveInstanceState(outState: Bundle) {
+          super.onSaveInstanceState(outState)
+          outState.putParcelable("state",
+              layoutManager.onSaveInstanceState())
+      }
+      // Restore: layoutManager.onRestoreInstanceState(saved)
+      ```
+
+      **ViewModel approach:** Store `Parcelable` state in `SavedStateHandle`
+    tags:
+      - android_lifecycle
+      - android_layouts
+      - difficulty::medium
+  - slug: android-423-0-ru
+    front: "Как сохранить состояние скролла при пересоздании Activity?"
+    back: |
+      **ScrollView:** Назначить стабильный `android:id` - автосохранение
+
+      **RecyclerView:**
+      ```kotlin
+      override fun onSaveInstanceState(outState: Bundle) {
+          super.onSaveInstanceState(outState)
+          outState.putParcelable("state",
+              layoutManager.onSaveInstanceState())
+      }
+      // Восстановить: layoutManager.onRestoreInstanceState(saved)
+      ```
+
+      **ViewModel подход:** Хранить `Parcelable` состояние в `SavedStateHandle`
+    tags:
+      - android_lifecycle
+      - android_layouts
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

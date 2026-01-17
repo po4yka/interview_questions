@@ -1,21 +1,47 @@
----\
+---
 id: cs-013
-title: "Decorator Pattern / Паттерн Декоратор"
-aliases: ["Decorator Pattern", "Паттерн Декоратор"]
+title: Decorator Pattern / Паттерн Декоратор
+aliases:
+- Decorator Pattern
+- Паттерн Декоратор
 topic: cs
-subtopics: [design-patterns, kotlin, structural-patterns]
+subtopics:
+- design-patterns
+- kotlin
+- structural-patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-kotlin-features]
+related:
+- c-architecture-patterns
+- c-kotlin-features
 created: 2025-10-15
 updated: 2025-11-11
-tags: [decorator, design-patterns, difficulty/medium, gof-patterns, kotlin, structural-patterns, wrapper]
-sources: ["https://refactoring.guru/design-patterns/decorator"]
----\
+tags:
+- decorator
+- design-patterns
+- difficulty/medium
+- gof-patterns
+- kotlin
+- structural-patterns
+- wrapper
+sources:
+- https://refactoring.guru/design-patterns/decorator
+anki_cards:
+- slug: cs-013-0-en
+  language: en
+  anki_id: 1768454342690
+  synced_at: '2026-01-15T09:43:17.031433'
+- slug: cs-013-0-ru
+  language: ru
+  anki_id: 1768454342715
+  synced_at: '2026-01-15T09:43:17.032851'
+---
 # Вопрос (RU)
 > Что такое паттерн Decorator? Когда и зачем его использовать?
 

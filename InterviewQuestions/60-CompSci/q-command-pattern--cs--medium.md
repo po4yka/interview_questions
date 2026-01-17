@@ -1,19 +1,44 @@
----id: cs-034
-title: "Command Pattern / Паттерн Command"
-aliases: ["Command Pattern", "Паттерн Command"]
+---
+id: cs-034
+title: Command Pattern / Паттерн Command
+aliases:
+- Command Pattern
+- Паттерн Command
 topic: cs
-subtopics: [behavioral]
+subtopics:
+- behavioral
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-command-pattern, c-dao-pattern, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- c-command-pattern
+- c-dao-pattern
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral, command, design-patterns, difficulty/medium, gof-patterns]
-sources: ["https://en.wikipedia.org/wiki/Command_pattern"]
+tags:
+- behavioral
+- command
+- design-patterns
+- difficulty/medium
+- gof-patterns
+sources:
+- https://en.wikipedia.org/wiki/Command_pattern
+anki_cards:
+- slug: cs-034-0-en
+  language: en
+  anki_id: 1768454033789
+  synced_at: '2026-01-15T09:43:17.126350'
+- slug: cs-034-0-ru
+  language: ru
+  anki_id: 1768454033815
+  synced_at: '2026-01-15T09:43:17.128197'
 ---
 # Вопрос (RU)
 > Что такое паттерн Command? Когда и зачем его использовать?

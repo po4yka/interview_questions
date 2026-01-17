@@ -1,4 +1,5 @@
 ---id: android-149
+id: android-743
 title: Which Class To Catch Gestures / Какой класс для ловли жестов
 aliases: [Which Class To Catch Gestures, Какой класс для ловли жестов]
 topic: android

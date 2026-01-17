@@ -1,20 +1,50 @@
 ---
 id: net-001
-title: "GraphQL vs REST / GraphQL против REST"
-aliases: ["GraphQL vs REST", "GraphQL против REST"]
+title: GraphQL vs REST / GraphQL против REST
+aliases:
+- GraphQL vs REST
+- GraphQL против REST
 topic: databases
-subtopics: [api-design, http]
+subtopics:
+- api-design
+- http
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-backend
-related: [c-architecture-patterns, q-http-protocols-comparison--android--medium, q-large-file-upload-app--android--hard]
+related:
+- c-architecture-patterns
+- q-http-protocols-comparison--android--medium
+- q-large-file-upload-app--android--hard
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [difficulty/easy, graphql, networking/http, rest]
+tags:
+- difficulty/easy
+- graphql
+- networking/http
+- rest
+anki_cards:
+- slug: net-001-0-en
+  language: en
+  anki_id: 1768460896436
+  synced_at: '2026-01-15T11:08:17.071722'
+- slug: net-001-0-ru
+  language: ru
+  anki_id: 1768460896461
+  synced_at: '2026-01-15T11:08:17.074608'
+- slug: net-001-1-en
+  language: en
+  anki_id: 1768460896485
+  synced_at: '2026-01-15T11:08:17.077427'
+- slug: net-001-1-ru
+  language: ru
+  anki_id: 1768460896511
+  synced_at: '2026-01-15T11:08:17.079730'
 ---
 # Вопрос (RU)
 

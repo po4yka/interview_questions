@@ -15,6 +15,37 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/background-execution, android/coroutines, background, difficulty/hard, workmanager]
+anki_cards:
+  - slug: android-173-0-en
+    front: "How do you chain workers in WorkManager?"
+    back: |
+      **Sequential:** `beginWith(A).then(B).then(C).enqueue()`
+
+      **Parallel (fan-out):** `.then(listOf(B, C, D))`
+
+      **Fan-in:** `beginWith(listOf(A, B, C)).then(aggregator)`
+
+      **Data passing:** Use `workDataOf()` in Result.success(), read via `inputData` in next worker. Keep data < 10KB.
+
+      **Error handling:** Result.retry() for transient errors, Result.failure() stops chain. Use soft-failure (success + error flag) for fallback patterns.
+    tags:
+      - android_workmanager
+      - difficulty::hard
+  - slug: android-173-0-ru
+    front: "Как создавать цепочки воркеров в WorkManager?"
+    back: |
+      **Последовательно:** `beginWith(A).then(B).then(C).enqueue()`
+
+      **Параллельно (fan-out):** `.then(listOf(B, C, D))`
+
+      **Fan-in:** `beginWith(listOf(A, B, C)).then(aggregator)`
+
+      **Передача данных:** Используйте `workDataOf()` в Result.success(), читайте через `inputData` в следующем воркере. Данные < 10KB.
+
+      **Обработка ошибок:** Result.retry() для временных ошибок, Result.failure() останавливает цепь. Используйте soft-failure (success + флаг ошибки) для fallback паттернов.
+    tags:
+      - android_workmanager
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

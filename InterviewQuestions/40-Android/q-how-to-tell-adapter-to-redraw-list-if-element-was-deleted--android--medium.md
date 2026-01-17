@@ -16,6 +16,42 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [adapter, android, android/ui-views, difficulty/medium, recyclerview]
+anki_cards:
+  - slug: android-392-0-en
+    front: "What are the notify methods for RecyclerView adapter updates?"
+    back: |
+      **Specific methods (preferred):**
+      - `notifyItemRemoved(pos)` - deletion
+      - `notifyItemInserted(pos)` - insertion
+      - `notifyItemChanged(pos)` - update
+      - `notifyItemMoved(from, to)` - move
+
+      **Batch:**
+      - `notifyItemRangeChanged/Inserted/Removed(start, count)`
+
+      **Last resort:**
+      - `notifyDataSetChanged()` - full redraw, no animation
+    tags:
+      - android_layouts
+      - difficulty::medium
+  - slug: android-392-0-ru
+    front: "Какие notify-методы для обновления адаптера RecyclerView?"
+    back: |
+      **Специфичные методы (предпочтительно):**
+      - `notifyItemRemoved(pos)` - удаление
+      - `notifyItemInserted(pos)` - вставка
+      - `notifyItemChanged(pos)` - обновление
+      - `notifyItemMoved(from, to)` - перемещение
+
+      **Пакетные:**
+      - `notifyItemRangeChanged/Inserted/Removed(start, count)`
+
+      **В крайнем случае:**
+      - `notifyDataSetChanged()` - полная перерисовка, нет анимации
+    tags:
+      - android_layouts
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

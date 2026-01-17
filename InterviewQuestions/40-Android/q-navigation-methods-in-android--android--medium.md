@@ -15,6 +15,41 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-modularization, android/intents-deeplinks, android/ui-navigation, difficulty/medium, navigation, ui]
+anki_cards:
+  - slug: android-345-0-en
+    front: "What are the main navigation methods in Android?"
+    back: |
+      **7 Navigation Methods:**
+
+      1. **Intent** - Activity-to-Activity (explicit/implicit)
+      2. **FragmentManager** - Fragment transactions within Activity
+      3. **Navigation Component** - Jetpack declarative navigation, SafeArgs
+      4. **Bottom/Tab Navigation** - BottomNavigationView, TabLayout
+      5. **Deep Links/App Links** - URL-based external navigation
+      6. **Compose Navigation** - NavHost + NavController for Compose
+      7. **Navigation Drawer** - Side menu for secondary sections
+
+      **Modern approach:** Single-Activity + Navigation Component or Compose Navigation
+    tags:
+      - android_navigation
+      - difficulty::medium
+  - slug: android-345-0-ru
+    front: "Какие основные методы навигации существуют в Android?"
+    back: |
+      **7 методов навигации:**
+
+      1. **Intent** - между Activity (явный/неявный)
+      2. **FragmentManager** - транзакции Fragment внутри Activity
+      3. **Navigation Component** - декларативная навигация Jetpack, SafeArgs
+      4. **Bottom/Tab Navigation** - BottomNavigationView, TabLayout
+      5. **Deep Links/App Links** - URL-навигация извне
+      6. **Compose Navigation** - NavHost + NavController для Compose
+      7. **Navigation Drawer** - боковое меню для вторичных разделов
+
+      **Современный подход:** Single-Activity + Navigation Component или Compose Navigation
+    tags:
+      - android_navigation
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

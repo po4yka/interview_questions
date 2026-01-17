@@ -1,5 +1,36 @@
----\
+---
 id: android-485
+anki_cards:
+  - slug: android-485-0-en
+    front: "What are key components for designing offline maps and navigation?"
+    back: |
+      **Architecture:**
+      - **Vector tiles** with LRU cache (2-4GB limit)
+      - **Local routing graph** for offline Dijkstra/A*
+      - **Fused location** with Kalman filter + road snapping
+
+      **Requirements:**
+      - Reroute <1.5s without network
+      - Battery <2%/hr during navigation
+      - WorkManager for region downloads
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-485-0-ru
+    front: "Какие ключевые компоненты для проектирования офлайн карт и навигации?"
+    back: |
+      **Архитектура:**
+      - **Векторные тайлы** с LRU кешем (лимит 2-4GB)
+      - **Локальный граф маршрутизации** для офлайн Dijkstra/A*
+      - **Fused location** с фильтром Калмана + привязка к дорогам
+
+      **Требования:**
+      - Reroute <1.5с без сети
+      - Батарея <2%/ч при навигации
+      - WorkManager для загрузки регионов
+    tags:
+      - android_general
+      - difficulty::hard
 title: Design Offline Maps & Navigation / Проектирование офлайн карт и навигации
 aliases: [Design Offline Maps & Navigation, Проектирование офлайн карт и навигации]
 topic: android

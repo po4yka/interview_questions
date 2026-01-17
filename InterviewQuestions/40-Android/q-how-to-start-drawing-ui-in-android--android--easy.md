@@ -1,4 +1,56 @@
 ---id: android-137
+id: android-704
+anki_cards:
+  - slug: android-137-0-en
+    front: "What needs to be done to start drawing UI in Android?"
+    back: |
+      **Create an Activity and set its content:**
+
+      **1. XML Layout (View-based):**
+      ```kotlin
+      setContentView(R.layout.activity_main)
+      ```
+
+      **2. Jetpack Compose:**
+      ```kotlin
+      setContent { Text("Hello") }
+      ```
+
+      **3. Custom View:**
+      ```kotlin
+      setContentView(CustomView(this))
+      ```
+
+      Activity is the entry point - it hosts the UI hierarchy.
+    tags:
+      - android_activities
+      - android_views
+      - difficulty::easy
+  - slug: android-137-0-ru
+    front: "Что нужно сделать чтобы начать рисовать UI в Android?"
+    back: |
+      **Создать Activity и задать содержимое:**
+
+      **1. XML Layout (View-based):**
+      ```kotlin
+      setContentView(R.layout.activity_main)
+      ```
+
+      **2. Jetpack Compose:**
+      ```kotlin
+      setContent { Text("Hello") }
+      ```
+
+      **3. Custom View:**
+      ```kotlin
+      setContentView(CustomView(this))
+      ```
+
+      Activity - точка входа, которая содержит иерархию UI.
+    tags:
+      - android_activities
+      - android_views
+      - difficulty::easy
 title: "How To Start Drawing UI In Android / Как начать рисовать UI в Android"
 aliases: ["How To Start Drawing UI In Android", "Как начать рисовать UI в Android"]
 topic: android

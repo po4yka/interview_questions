@@ -1,22 +1,46 @@
----\
+---
 id: sysdes-001
-title: "Microservices vs Monolith Architecture / Микросервисы vs Монолитная архитектура"
-aliases: ["Microservices vs Monolith", "Микросервисы vs Монолит"]
+title: Microservices vs Monolith Architecture / Микросервисы vs Монолитная архитектура
+aliases:
+- Microservices vs Monolith
+- Микросервисы vs Монолит
 topic: system-design
-subtopics: [distributed-systems, microservices, scalability]
+subtopics:
+- distributed-systems
+- microservices
+- scalability
 question_kind: system-design
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [c-architecture-patterns, q-load-balancing-strategies--system-design--medium, q-message-queues-event-driven--system-design--medium]
+related:
+- c-architecture-patterns
+- q-load-balancing-strategies--system-design--medium
+- q-message-queues-event-driven--system-design--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [architecture, difficulty/hard, distributed-systems, microservices, system-design]
-sources: ["https://en.wikipedia.org/wiki/Microservices"]
-
----\
+tags:
+- architecture
+- difficulty/hard
+- distributed-systems
+- microservices
+- system-design
+sources:
+- https://en.wikipedia.org/wiki/Microservices
+anki_cards:
+- slug: sysdes-001-0-en
+  language: en
+  anki_id: 1768468551511
+  synced_at: '2026-01-15T13:15:51.988675'
+- slug: sysdes-001-0-ru
+  language: ru
+  anki_id: 1768468551534
+  synced_at: '2026-01-15T13:15:51.993718'
+---
 # Вопрос (RU)
 > Каковы ключевые различия между микросервисами и монолитной архитектурой? Когда следует использовать каждый подход, и каковы компромиссы?
 

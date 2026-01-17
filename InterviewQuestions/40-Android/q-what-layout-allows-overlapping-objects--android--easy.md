@@ -1,4 +1,5 @@
 ---id: android-186
+id: android-738
 title: Layout Overlapping Objects / Макет для перекрывающихся объектов
 aliases: [Overlapping Layout, Макет для перекрывания]
 topic: android

@@ -15,6 +15,39 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/background-execution, android/lifecycle, android/service, difficulty/medium]
+anki_cards:
+  - slug: android-144-0-en
+    front: "When can the Android system restart a service?"
+    back: |
+      System may restart a **started service** killed due to resources, based on `onStartCommand()` return value:
+
+      | Mode | Restart | Intent on restart |
+      |------|---------|-------------------|
+      | START_STICKY | Yes | null |
+      | START_REDELIVER_INTENT | Yes | Last pending Intent |
+      | START_NOT_STICKY | No | - |
+
+      **No restart if:** explicitly stopped (stopSelf, Force Stop).
+      **Foreground services:** higher priority, less likely killed, restart still depends on mode.
+    tags:
+      - android_services
+      - difficulty::medium
+  - slug: android-144-0-ru
+    front: "Когда система Android может перезапустить сервис?"
+    back: |
+      Система может перезапустить **started service**, убитый из-за нехватки ресурсов, в зависимости от значения `onStartCommand()`:
+
+      | Режим | Перезапуск | Intent при перезапуске |
+      |-------|------------|------------------------|
+      | START_STICKY | Да | null |
+      | START_REDELIVER_INTENT | Да | Последний необработанный Intent |
+      | START_NOT_STICKY | Нет | - |
+
+      **Нет перезапуска если:** явно остановлен (stopSelf, Force Stop).
+      **Foreground сервисы:** выше приоритет, реже убиваются, перезапуск зависит от режима.
+    tags:
+      - android_services
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

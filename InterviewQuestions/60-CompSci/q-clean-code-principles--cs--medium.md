@@ -1,22 +1,44 @@
----\
+---
 id: cs-001
-title: "Clean Code Principles / Принципы чистого кода"
-aliases: ["Clean Code Principles", "Принципы чистого кода"]
+title: Clean Code Principles / Принципы чистого кода
+aliases:
+- Clean Code Principles
+- Принципы чистого кода
 topic: cs
-subtopics: [clean-code, code-quality, software-engineering]
+subtopics:
+- clean-code
+- code-quality
+- software-engineering
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [q-abstract-class-purpose--cs--medium]
+related:
+- q-abstract-class-purpose--cs--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [best-practices, clean-code, code-quality, difficulty/medium, refactoring]
-sources: ["https://en.wikipedia.org/wiki/Clean_code"]
-
----\
+tags:
+- best-practices
+- clean-code
+- code-quality
+- difficulty/medium
+- refactoring
+sources:
+- https://en.wikipedia.org/wiki/Clean_code
+anki_cards:
+- slug: cs-001-0-en
+  language: en
+  anki_id: 1768454033388
+  synced_at: '2026-01-15T09:41:02.779770'
+- slug: cs-001-0-ru
+  language: ru
+  anki_id: 1768454033413
+  synced_at: '2026-01-15T09:41:02.782333'
+---
 # Вопрос (RU)
 > Что такое принципы чистого кода? Как писать осмысленные имена, хорошие функции и понятные комментарии? Что такое code smells и как их рефакторить?
 

@@ -16,6 +16,57 @@ related: [c-clean-architecture, c-mvvm, c-viewmodel, q-clean-architecture-androi
 created: 2025-10-12
 updated: 2025-11-11
 tags: [android/architecture-clean, android/architecture-mvvm, difficulty/medium, en, ru]
+anki_cards:
+  - slug: android-070-0-en
+    front: "What is the Repository pattern in Android and its key principles?"
+    back: |
+      **Repository** abstracts data sources (API, DB, cache) behind clean API.
+
+      **Key principles:**
+      1. **Single source of truth** - usually database
+      2. **ViewModel calls Repository**, not data sources directly
+      3. `Flow` for reactive data, `suspend` for one-shot
+
+      ```kotlin
+      class UserRepository(val api: UserApi, val dao: UserDao) {
+          fun getUser(id: String): Flow<User> = flow {
+              dao.getUser(id)?.let { emit(it) }
+              val fresh = api.getUser(id)
+              dao.insertUser(fresh)
+              emit(fresh)
+          }
+      }
+      ```
+
+      **Benefits:** Testability, caching, separation of concerns
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-070-0-ru
+    front: "Что такое паттерн Repository в Android и его ключевые принципы?"
+    back: |
+      **Repository** абстрагирует источники данных (API, БД, кэш) за чистым API.
+
+      **Ключевые принципы:**
+      1. **Единый источник истины** - обычно база данных
+      2. **ViewModel вызывает Repository**, не источники напрямую
+      3. `Flow` для реактивных данных, `suspend` для разовых
+
+      ```kotlin
+      class UserRepository(val api: UserApi, val dao: UserDao) {
+          fun getUser(id: String): Flow<User> = flow {
+              dao.getUser(id)?.let { emit(it) }
+              val fresh = api.getUser(id)
+              dao.insertUser(fresh)
+              emit(fresh)
+          }
+      }
+      ```
+
+      **Преимущества:** Тестируемость, кэширование, разделение ответственности
+    tags:
+      - android_architecture
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

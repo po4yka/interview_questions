@@ -1,21 +1,42 @@
----\
+---
 id: oop-002
-title: "Inheritance, Composition, Aggregation / Наследование, композиция и агрегация"
-aliases: [Inheritance Composition Aggregation, композиция и агрегация, Наследование]
+title: Inheritance, Composition, Aggregation / Наследование, композиция и агрегация
+anki_cards:
+- slug: oop-002-0-en
+  language: en
+  anki_id: 1768454534265
+  synced_at: '2026-01-15T09:43:17.045195'
+- slug: oop-002-0-ru
+  language: ru
+  anki_id: 1768454534290
+  synced_at: '2026-01-15T09:43:17.046931'
+aliases:
+- Inheritance Composition Aggregation
+- композиция и агрегация
+- Наследование
 topic: cs
-subtopics: [object-oriented, relationships]
+subtopics:
+- object-oriented
+- relationships
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science]
+related:
+- c-architecture-patterns
+- c-computer-science
 created: 2025-10-13
 updated: 2025-11-11
-tags: [cs/object-oriented, cs/relationships, design-patterns, difficulty/medium]
-
----\
+tags:
+- cs/object-oriented
+- cs/relationships
+- design-patterns
+- difficulty/medium
+---
 # Вопрос (RU)
 > В чём различия наследования, композиции, агрегации?
 

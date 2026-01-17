@@ -1,22 +1,49 @@
----\
+---
 id: cs-036
-title: "Database Fundamentals / 4fdff04121"
-aliases: ["04fdff04121", "Database Fundamentals"]
+title: Database Fundamentals / 4fdff04121
+aliases:
+- 04fdff04121
+- Database Fundamentals
 topic: cs
-subtopics: [databases, indexing, transactions]
+subtopics:
+- databases
+- indexing
+- transactions
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-database-design, c-relational-databases, q-sql-nosql-databases--system-design--medium]
-created: "2025-10-13"
-updated: "2025-11-11"
-tags: [acid, database, difficulty/hard, indexing, normalization, nosql, sql, transactions]
-sources: ["https://en.wikipedia.org/wiki/Database"]
-
----\
+related:
+- c-database-design
+- c-relational-databases
+- q-sql-nosql-databases--system-design--medium
+created: '2025-10-13'
+updated: '2025-11-11'
+tags:
+- acid
+- database
+- difficulty/hard
+- indexing
+- normalization
+- nosql
+- sql
+- transactions
+sources:
+- https://en.wikipedia.org/wiki/Database
+anki_cards:
+- slug: cs-036-0-en
+  language: en
+  anki_id: 1768454343388
+  synced_at: '2026-01-15T09:41:02.844683'
+- slug: cs-036-0-ru
+  language: ru
+  anki_id: 1768454343415
+  synced_at: '2026-01-15T09:41:02.847091'
+---
 # Вопрос (RU)
 > Объясните фундаментальные концепции баз данных. Что такое ACID, транзакции, индексы, нормализация? Когда использовать SQL vs NoSQL?
 

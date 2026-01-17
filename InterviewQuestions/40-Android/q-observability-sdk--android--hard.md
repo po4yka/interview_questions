@@ -16,6 +16,46 @@ sources: []
 created: 2025-10-29
 updated: 2025-10-29
 tags: [android/analytics, android/logging-tracing, android/performance-startup, difficulty/hard, topic/android]
+anki_cards:
+  - slug: android-487-0-en
+    front: "How do you design an observability SDK for Android?"
+    back: |
+      **Architecture:** metrics-core, trace, crash-anr, sampler, store, uploader (WorkManager)
+
+      **Crash/ANR:**
+      - UncaughtExceptionHandler (Java)
+      - Signal handlers (NDK)
+      - Looper watchdog for ANR
+
+      **Health Gates:** SLOs (crash-free >99.8%, ANR <0.3%, cold start p95 <2.5s)
+      Auto-rollback when thresholds breached.
+
+      **Upload:** Batching, backoff, Wi-Fi preferred, PII redaction on-device.
+
+      Init <100ms, battery overhead <0.3%/day.
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-487-0-ru
+    front: "Как спроектировать SDK наблюдаемости для Android?"
+    back: |
+      **Архитектура:** metrics-core, trace, crash-anr, sampler, store, uploader (WorkManager)
+
+      **Crash/ANR:**
+      - UncaughtExceptionHandler (Java)
+      - Signal handlers (NDK)
+      - Looper watchdog для ANR
+
+      **Health Gates:** SLO (crash-free >99.8%, ANR <0.3%, cold start p95 <2.5s)
+      Авто-откат при нарушении порогов.
+
+      **Upload:** Batching, backoff, Wi-Fi preferred, PII redaction на устройстве.
+
+      Init <100мс, overhead батареи <0.3%/день.
+    tags:
+      - android_general
+      - difficulty::hard
+
 ---\
 # Вопрос (RU)
 

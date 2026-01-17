@@ -1,21 +1,37 @@
----\
+---
 id: dp-010
-title: "Design Patterns Types / Типы паттернов проектирования"
-aliases: [Design Patterns Types, Типы паттернов проектирования]
+title: Design Patterns Types / Типы паттернов проектирования
+anki_cards:
+- slug: dp-010-0-en
+  language: en
+  anki_id: 1768454532913
+  synced_at: '2026-01-15T09:41:02.803453'
+- slug: dp-010-0-ru
+  language: ru
+  anki_id: 1768454532939
+  synced_at: '2026-01-15T09:41:02.805770'
+aliases:
+- Design Patterns Types
+- Типы паттернов проектирования
 topic: cs
-subtopics: [software-design]
+subtopics:
+- software-design
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science]
+related:
+- c-architecture-patterns
+- c-computer-science
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/medium]
-
----\
+tags:
+- difficulty/medium
+---
 # Вопрос (RU)
 > Какие основные типы паттернов проектирования? Опишите каждую категорию и приведите примеры.
 

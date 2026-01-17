@@ -1,20 +1,66 @@
----id: algo-004
-title: "Advanced Graph Algorithms (Dijkstra, MST, Floyd-Warshall) / Продвинутые алгоритмы на графах"
-aliases: ["Advanced Graph Algorithms", "Продвинутые алгоритмы на графах"]
+---
+id: algo-004
+title: Advanced Graph Algorithms (Dijkstra, MST, Floyd-Warshall) / Продвинутые алгоритмы
+  на графах
+aliases:
+- Advanced Graph Algorithms
+- Продвинутые алгоритмы на графах
 topic: algorithms
-subtopics: [graph, minimum-spanning-tree, shortest-path]
+subtopics:
+- graph
+- minimum-spanning-tree
+- shortest-path
 question_kind: coding
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, c-graph-algorithms, q-graph-algorithms-bfs-dfs--algorithms--hard]
+related:
+- c-algorithms
+- c-graph-algorithms
+- q-graph-algorithms-bfs-dfs--algorithms--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [algorithms, bellman-ford, difficulty/hard, dijkstra, floyd-warshall, graph, mst, shortest-path]
-sources: ["https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm", "https://en.wikipedia.org/wiki/Minimum_spanning_tree"]
-
+tags:
+- algorithms
+- bellman-ford
+- difficulty/hard
+- dijkstra
+- floyd-warshall
+- graph
+- mst
+- shortest-path
+sources:
+- https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+- https://en.wikipedia.org/wiki/Minimum_spanning_tree
+anki_cards:
+- slug: algo-004-0-en
+  language: en
+  anki_id: 1768457298477
+  synced_at: '2026-01-15T10:08:19.340724'
+- slug: algo-004-0-ru
+  language: ru
+  anki_id: 1768457298503
+  synced_at: '2026-01-15T10:08:19.343514'
+- slug: algo-004-1-en
+  language: en
+  anki_id: 1768457298528
+  synced_at: '2026-01-15T10:08:19.347687'
+- slug: algo-004-1-ru
+  language: ru
+  anki_id: 1768457298553
+  synced_at: '2026-01-15T10:08:19.350364'
+- slug: algo-004-2-en
+  language: en
+  anki_id: 1768457298578
+  synced_at: '2026-01-15T10:08:19.352874'
+- slug: algo-004-2-ru
+  language: ru
+  anki_id: 1768457298604
+  synced_at: '2026-01-15T10:08:19.355356'
 ---
 # Вопрос (RU)
 > Как работают алгоритмы Дейкстры, MST (Краскал, Прим), Флойда-Уоршелла и Беллмана-Форда?

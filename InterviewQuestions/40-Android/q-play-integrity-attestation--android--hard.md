@@ -17,6 +17,57 @@ tags: [android/billing, android/keystore-crypto, android/play-console, difficult
 sources:
   - "https://cloud.google.com/play-integrity/reference/rest"
   - "https://developer.android.com/google/play/integrity"
+anki_cards:
+  - slug: android-619-0-en
+    front: "How do you implement Play Integrity API for app attestation?"
+    back: |
+      **Client-side:**
+      ```kotlin
+      val token = IntegrityManagerFactory.create(context)
+          .requestIntegrityToken(
+              IntegrityTokenRequest.builder()
+                  .setNonce(generateNonce())
+                  .build()
+          ).await().token()
+      ```
+
+      **Server-side verification:**
+      - Decode via Play Integrity API (service account)
+      - Verify: `requestPackageName`, `nonce`, `timestampMillis`
+      - Check verdicts: `deviceRecognitionVerdict`, `appLicensingVerdict`
+
+      **Key points:**
+      - Nonce must be unique per request (replay protection)
+      - Never store keys on client
+      - Use capability tokens for offline scenarios
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-619-0-ru
+    front: "Как реализовать Play Integrity API для аттестации приложения?"
+    back: |
+      **На клиенте:**
+      ```kotlin
+      val token = IntegrityManagerFactory.create(context)
+          .requestIntegrityToken(
+              IntegrityTokenRequest.builder()
+                  .setNonce(generateNonce())
+                  .build()
+          ).await().token()
+      ```
+
+      **Проверка на сервере:**
+      - Декодирование через Play Integrity API (service account)
+      - Проверка: `requestPackageName`, `nonce`, `timestampMillis`
+      - Анализ вердиктов: `deviceRecognitionVerdict`, `appLicensingVerdict`
+
+      **Ключевые моменты:**
+      - Nonce уникален для каждого запроса (защита от replay)
+      - Никогда не храните ключи на клиенте
+      - Используйте capability tokens для оффлайн-сценариев
+    tags:
+      - android_general
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

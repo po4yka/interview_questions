@@ -1,22 +1,46 @@
----\
+---
 id: sysdes-002
-title: "SQL vs NoSQL Databases / SQL vs NoSQL базы данных"
-aliases: ["SQL vs NoSQL базы данных", "SQL vs NoSQL"]
+title: SQL vs NoSQL Databases / SQL vs NoSQL базы данных
+aliases:
+- SQL vs NoSQL базы данных
+- SQL vs NoSQL
 topic: system-design
-subtopics: [data-modeling, nosql, scalability]
+subtopics:
+- data-modeling
+- nosql
+- scalability
 question_kind: system-design
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [q-cap-theorem-distributed-systems--system-design--hard, q-database-sharding-partitioning--system-design--hard]
+related:
+- q-cap-theorem-distributed-systems--system-design--hard
+- q-database-sharding-partitioning--system-design--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [databases, difficulty/medium, nosql, scalability, sql, system-design]
-sources: ["https://en.wikipedia.org/wiki/NoSQL"]
-
----\
+tags:
+- databases
+- difficulty/medium
+- nosql
+- scalability
+- sql
+- system-design
+sources:
+- https://en.wikipedia.org/wiki/NoSQL
+anki_cards:
+- slug: sysdes-002-0-en
+  language: en
+  anki_id: 1768468551559
+  synced_at: '2026-01-15T13:15:51.996603'
+- slug: sysdes-002-0-ru
+  language: ru
+  anki_id: 1768468551584
+  synced_at: '2026-01-15T13:15:51.999224'
+---
 # Вопрос (RU)
 > Каковы ключевые различия между SQL и NoSQL базами данных? Когда следует использовать каждый тип, и каковы компромиссы?
 

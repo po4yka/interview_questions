@@ -1,5 +1,44 @@
----\
+---
 id: android-301
+anki_cards:
+  - slug: android-301-0-en
+    front: "What is Overdraw and how to optimize it in Android?"
+    back: |
+      **Overdraw** - multiple rendering of same pixel in one frame.
+
+      **Debug GPU Overdraw colors:**
+      - Blue: no overdraw
+      - Green: 1x (acceptable)
+      - Light red: 2x (monitor)
+      - Dark red: 3x+ (critical)
+
+      **Optimization:**
+      - Remove redundant backgrounds
+      - Use ConstraintLayout (flatten hierarchy)
+      - `window.setBackgroundDrawable(null)`
+      - ViewStub for lazy loading
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-301-0-ru
+    front: "Что такое Overdraw и как его оптимизировать в Android?"
+    back: |
+      **Overdraw** - многократная отрисовка одного пикселя за кадр.
+
+      **Цвета Debug GPU Overdraw:**
+      - Синий: нет overdraw
+      - Зеленый: 1x (приемлемо)
+      - Светло-красный: 2x (контролировать)
+      - Темно-красный: 3x+ (критично)
+
+      **Оптимизация:**
+      - Удалить избыточные фоны
+      - Использовать ConstraintLayout (плоская иерархия)
+      - `window.setBackgroundDrawable(null)`
+      - ViewStub для ленивой загрузки
+    tags:
+      - android_views
+      - difficulty::medium
 title: Overdraw Gpu Rendering / Overdraw и GPU рендеринг
 aliases: [Overdraw GPU Rendering, Overdraw и GPU рендеринг]
 topic: android

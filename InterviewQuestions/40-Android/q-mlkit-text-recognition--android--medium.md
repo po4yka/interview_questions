@@ -15,6 +15,49 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/camera, android/media, difficulty/medium, image-processing, mlkit, ocr, text-recognition]
+anki_cards:
+  - slug: android-398-0-en
+    front: "How do you implement text recognition (OCR) with ML Kit?"
+    back: |
+      ```kotlin
+      val recognizer = TextRecognition.getClient(
+          TextRecognizerOptions.DEFAULT_OPTIONS
+      )
+      recognizer.process(inputImage)
+          .addOnSuccessListener { text -> /* use text.text */ }
+      ```
+
+      **Best practices:**
+      - Throttle camera frames (1 fps)
+      - Preprocess: resize to ~1920, grayscale
+      - Close recognizer when done
+      - Latin bundled, other scripts downloaded
+
+      On-device: fast, offline, private.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-398-0-ru
+    front: "Как реализовать распознавание текста (OCR) с ML Kit?"
+    back: |
+      ```kotlin
+      val recognizer = TextRecognition.getClient(
+          TextRecognizerOptions.DEFAULT_OPTIONS
+      )
+      recognizer.process(inputImage)
+          .addOnSuccessListener { text -> /* use text.text */ }
+      ```
+
+      **Best practices:**
+      - Троттлинг кадров камеры (1 fps)
+      - Предобработка: resize до ~1920, grayscale
+      - Закрывать recognizer по завершении
+      - Latin встроен, другие скрипты загружаются
+
+      On-device: быстро, офлайн, приватно.
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---
 # Вопрос (RU)

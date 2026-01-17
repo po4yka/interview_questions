@@ -14,6 +14,51 @@ related: [c-android, c-android-lifecycle, q-save-data-outside-fragment--android-
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle, memory-management, viewmodel]
+anki_cards:
+  - slug: android-212-0-en
+    front: "Why does Fragment have a separate callback for UI creation (onCreateView) instead of creating views in onCreate like Activity?"
+    back: |
+      **Independent lifecycles of Fragment and View:**
+
+      ```
+      Fragment: onCreate() ─────────────────── onDestroy()
+                       └─> onCreateView() ─> onDestroyView() ─┘
+                              View Lifecycle (shorter!)
+      ```
+
+      **Reasons:**
+      1. **View can be destroyed without Fragment** - BackStack/ViewPager
+      2. **Fragment can exist without UI** - headless fragments
+      3. **Memory optimization** - views released while data kept
+      4. **ViewLifecycleOwner** - separate lifecycle for view observers
+
+      **Key:** Use `viewLifecycleOwner` for LiveData observers, null binding in `onDestroyView()`
+    tags:
+      - android_fragments
+      - android_lifecycle
+      - difficulty::hard
+  - slug: android-212-0-ru
+    front: "Почему у Fragment отдельный callback для создания UI (onCreateView) вместо создания views в onCreate как у Activity?"
+    back: |
+      **Независимые жизненные циклы Fragment и View:**
+
+      ```
+      Fragment: onCreate() ─────────────────── onDestroy()
+                       └─> onCreateView() ─> onDestroyView() ─┘
+                              View Lifecycle (короче!)
+      ```
+
+      **Причины:**
+      1. **View может быть уничтожен без Fragment** - BackStack/ViewPager
+      2. **Fragment может существовать без UI** - headless фрагменты
+      3. **Оптимизация памяти** - views освобождаются, данные сохраняются
+      4. **ViewLifecycleOwner** - отдельный lifecycle для view observers
+
+      **Ключевое:** Используйте `viewLifecycleOwner` для LiveData, обнуляйте binding в `onDestroyView()`
+    tags:
+      - android_fragments
+      - android_lifecycle
+      - difficulty::hard
 
 ---
 # Вопрос (RU)

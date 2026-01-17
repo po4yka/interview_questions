@@ -15,6 +15,35 @@ sources: []
 moc: moc-android
 related: [c-android-graphics-pipeline, c-android-surfaces, q-android-app-lag-analysis--android--medium]
 tags: [android, android/performance-rendering, android/threads-sync, android/ui-graphics, difficulty/hard, graphics, multithreading]
+anki_cards:
+  - slug: android-099-0-en
+    front: "Which class to use for rendering View content from a background thread?"
+    back: |
+      **SurfaceView** - primary choice for off-main-thread rendering.
+      - Separate surface buffer
+      - `lockCanvas()` / `unlockCanvasAndPost()` from background thread
+      - Best for games, video, high-performance rendering
+
+      **TextureView** - alternative with View transformations support.
+
+      **Remember:** Always unlock canvas in finally block!
+    tags:
+      - android_views
+      - difficulty::hard
+  - slug: android-099-0-ru
+    front: "Какой класс использовать для рендеринга View-контента из фонового потока?"
+    back: |
+      **SurfaceView** - основной выбор для рендеринга вне main-потока.
+      - Отдельный буфер поверхности
+      - `lockCanvas()` / `unlockCanvasAndPost()` из фонового потока
+      - Лучше для игр, видео, высокопроизводительного рендеринга
+
+      **TextureView** - альтернатива с поддержкой трансформаций View.
+
+      **Помните:** Всегда освобождайте canvas в блоке finally!
+    tags:
+      - android_views
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

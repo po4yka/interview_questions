@@ -1,4 +1,5 @@
----id: android-007
+---
+id: android-007
 title: Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули
 aliases: [Play Feature Delivery and Dynamic Modules, Play Feature Delivery и динамические модули]
 topic: android
@@ -15,6 +16,61 @@ updated: 2025-11-11
 tags: [android/app-bundle, android/architecture-modularization, app-bundle, difficulty/medium, dynamic-modules, modularization, play-feature-delivery]
 sources:
   - "https://developer.android.com/guide/app-bundle/dynamic-delivery"
+anki_cards:
+  - slug: android-007-0-en
+    front: "What are dynamic modules in Android and how do you configure them?"
+    back: |
+      **Dynamic modules** use `com.android.dynamic-feature` plugin, depend on base module, delivered via App Bundle.
+
+      **Configuration:**
+      ```groovy
+      // Dynamic module
+      plugins { id 'com.android.dynamic-feature' }
+      dependencies { implementation project(':app') }
+
+      // Base module
+      dynamicFeatures = [":dynamic_feature"]
+      ```
+
+      **Request installation:**
+      ```kotlin
+      val request = SplitInstallRequest.newBuilder()
+          .addModule("dynamic_feature")
+          .build()
+      splitInstallManager.startInstall(request)
+      ```
+
+      **Requires:** minSdk 21+, SplitCompat for API < 29.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-007-0-ru
+    front: "Что такое динамические модули в Android и как их настроить?"
+    back: |
+      **Динамические модули** используют плагин `com.android.dynamic-feature`, зависят от базового модуля, доставляются через App Bundle.
+
+      **Конфигурация:**
+      ```groovy
+      // Динамический модуль
+      plugins { id 'com.android.dynamic-feature' }
+      dependencies { implementation project(':app') }
+
+      // Базовый модуль
+      dynamicFeatures = [":dynamic_feature"]
+      ```
+
+      **Запрос установки:**
+      ```kotlin
+      val request = SplitInstallRequest.newBuilder()
+          .addModule("dynamic_feature")
+          .build()
+      splitInstallManager.startInstall(request)
+      ```
+
+      **Требуется:** minSdk 21+, SplitCompat для API < 29.
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---
 # Вопрос (RU)

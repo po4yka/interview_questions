@@ -1,22 +1,47 @@
----\
+---
 id: cs-021
-title: "MVVM Pattern / Паттерн MVVM (Model-View-ViewModel)"
-aliases: ["MVVM Pattern", "Паттерн MVVM"]
+title: MVVM Pattern / Паттерн MVVM (Model-View-ViewModel)
+aliases:
+- MVVM Pattern
+- Паттерн MVVM
 topic: cs
-subtopics: [architecture-patterns]
+subtopics:
+- architecture-patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium, q-android-architectural-patterns--android--medium]
+related:
+- c-architecture-patterns
+- q-abstract-factory-pattern--cs--medium
+- q-android-architectural-patterns--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android-architecture, architecture-patterns, data-binding, difficulty/medium, livedata, mvvm, reactive-programming, viewmodel]
-sources: ["https://developer.android.com/jetpack/guide"]
-
----\
+tags:
+- android-architecture
+- architecture-patterns
+- data-binding
+- difficulty/medium
+- livedata
+- mvvm
+- reactive-programming
+- viewmodel
+sources:
+- https://developer.android.com/jetpack/guide
+anki_cards:
+- slug: cs-021-0-en
+  language: en
+  anki_id: 1768455660994
+  synced_at: '2026-01-15T09:43:17.038449'
+- slug: cs-021-0-ru
+  language: ru
+  anki_id: 1768455661019
+  synced_at: '2026-01-15T09:43:17.040041'
+---
 # Вопрос (RU)
 > Что такое паттерн MVVM? Когда его использовать и как он работает?
 

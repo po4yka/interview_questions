@@ -15,6 +15,45 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/activity, android/datastore, android/lifecycle, difficulty/medium, state-management]
 sources: []
+anki_cards:
+  - slug: android-413-0-en
+    front: "How to save Activity state in Android?"
+    back: |
+      **Methods:**
+      1. `onSaveInstanceState(Bundle)` - lightweight UI state (~1MB limit)
+      2. `ViewModel + SavedStateHandle` - survives config changes + process death
+      3. `DataStore/Room` - persistent data
+
+      ```kotlin
+      override fun onSaveInstanceState(outState: Bundle) {
+          super.onSaveInstanceState(outState)
+          outState.putInt("counter", counter)
+      }
+      ```
+
+      **Restore in:** `onCreate(savedInstanceState)` or `onRestoreInstanceState()`
+    tags:
+      - android_lifecycle
+      - difficulty::medium
+  - slug: android-413-0-ru
+    front: "Как сохранить состояние Activity в Android?"
+    back: |
+      **Способы:**
+      1. `onSaveInstanceState(Bundle)` - легковесное UI-состояние (~1MB лимит)
+      2. `ViewModel + SavedStateHandle` - переживает config changes + process death
+      3. `DataStore/Room` - постоянные данные
+
+      ```kotlin
+      override fun onSaveInstanceState(outState: Bundle) {
+          super.onSaveInstanceState(outState)
+          outState.putInt("counter", counter)
+      }
+      ```
+
+      **Восстановить в:** `onCreate(savedInstanceState)` или `onRestoreInstanceState()`
+    tags:
+      - android_lifecycle
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

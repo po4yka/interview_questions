@@ -15,6 +15,55 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/notifications, android/ui-navigation, deeplink, difficulty/medium, fcm, navigation, notifications]
+anki_cards:
+  - slug: android-305-0-en
+    front: "How do you open a specific screen from a push notification?"
+    back: |
+      **Approach:**
+      1. FCM service creates PendingIntent with navigation data
+      2. Handle Intent in Activity via `onCreate()`/`onNewIntent()`
+
+      ```kotlin
+      // In FirebaseMessagingService
+      val intent = Intent(this, MainActivity::class.java).apply {
+          flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TOP
+          putExtra("screen", "details")
+          putExtra("item_id", itemId)
+      }
+      val pendingIntent = PendingIntent.getActivity(
+          this, requestCode, intent,
+          FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+      )
+      ```
+
+      **Key:** Use `singleTop` launch mode, handle both `onCreate()` and `onNewIntent()`.
+    tags:
+      - android_navigation
+      - difficulty::medium
+  - slug: android-305-0-ru
+    front: "Как открыть конкретный экран из push-уведомления?"
+    back: |
+      **Подход:**
+      1. FCM service создаёт PendingIntent с данными навигации
+      2. Обработать Intent в Activity через `onCreate()`/`onNewIntent()`
+
+      ```kotlin
+      // В FirebaseMessagingService
+      val intent = Intent(this, MainActivity::class.java).apply {
+          flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TOP
+          putExtra("screen", "details")
+          putExtra("item_id", itemId)
+      }
+      val pendingIntent = PendingIntent.getActivity(
+          this, requestCode, intent,
+          FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+      )
+      ```
+
+      **Ключевое:** Использовать `singleTop` launch mode, обрабатывать и `onCreate()`, и `onNewIntent()`.
+    tags:
+      - android_navigation
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

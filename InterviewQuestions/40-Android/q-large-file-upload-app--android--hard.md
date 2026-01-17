@@ -14,6 +14,43 @@ related: [c-android, c-coroutines, q-android-testing-strategies--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, android/networking-http, background-processing, difficulty/hard, file-upload, foreground-service, networking, retrofit, workmanager]
+anki_cards:
+  - slug: android-266-0-en
+    front: "How do you implement large file uploads on Android?"
+    back: |
+      **Architecture:**
+      1. **WorkManager** + ForegroundInfo for background upload
+      2. **Retrofit/OkHttp** with ProgressRequestBody
+      3. **Chunked upload** for very large files (>100MB)
+
+      **Key points:**
+      - Use constraints (network, battery)
+      - Exponential backoff for retry
+      - Show progress notification
+      - Clean temp files after upload
+
+      Never load entire file into memory.
+    tags:
+      - android_services
+      - difficulty::hard
+  - slug: android-266-0-ru
+    front: "Как реализовать загрузку больших файлов на Android?"
+    back: |
+      **Архитектура:**
+      1. **WorkManager** + ForegroundInfo для фоновой загрузки
+      2. **Retrofit/OkHttp** с ProgressRequestBody
+      3. **Chunked upload** для очень больших файлов (>100MB)
+
+      **Ключевые моменты:**
+      - Использовать constraints (сеть, батарея)
+      - Exponential backoff для retry
+      - Показывать уведомление о прогрессе
+      - Очищать временные файлы после загрузки
+
+      Никогда не загружать весь файл в память.
+    tags:
+      - android_services
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

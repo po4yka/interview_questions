@@ -1,20 +1,66 @@
----id: algo-007
-title: "Binary Search Trees and AVL Trees / Бинарные деревья поиска и AVL деревья"
-aliases: ["AVL Trees", "AVL деревья", "Binary Search Trees", "Бинарные деревья поиска"]
+---
+id: algo-007
+title: Binary Search Trees and AVL Trees / Бинарные деревья поиска и AVL деревья
+aliases:
+- AVL Trees
+- AVL деревья
+- Binary Search Trees
+- Бинарные деревья поиска
 topic: algorithms
-subtopics: [avl, bst, trees]
+subtopics:
+- avl
+- bst
+- trees
 question_kind: coding
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, c-binary-search, c-binary-search-tree, q-binary-search-variants--algorithms--medium]
+related:
+- c-algorithms
+- c-binary-search
+- c-binary-search-tree
+- q-binary-search-variants--algorithms--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [algorithms, avl, bst, data-structures, difficulty/hard, trees]
-sources: ["https://en.wikipedia.org/wiki/AVL_tree", "https://en.wikipedia.org/wiki/Binary_search_tree"]
-
+tags:
+- algorithms
+- avl
+- bst
+- data-structures
+- difficulty/hard
+- trees
+sources:
+- https://en.wikipedia.org/wiki/AVL_tree
+- https://en.wikipedia.org/wiki/Binary_search_tree
+anki_cards:
+- slug: algo-007-0-en
+  language: en
+  anki_id: 1768457298827
+  synced_at: '2026-01-15T10:08:19.380986'
+- slug: algo-007-0-ru
+  language: ru
+  anki_id: 1768457298852
+  synced_at: '2026-01-15T10:08:19.383314'
+- slug: algo-007-1-en
+  language: en
+  anki_id: 1768457298878
+  synced_at: '2026-01-15T10:08:19.385488'
+- slug: algo-007-1-ru
+  language: ru
+  anki_id: 1768457298904
+  synced_at: '2026-01-15T10:08:19.387651'
+- slug: algo-007-2-en
+  language: en
+  anki_id: 1768457298927
+  synced_at: '2026-01-15T10:08:19.390117'
+- slug: algo-007-2-ru
+  language: ru
+  anki_id: 1768457298953
+  synced_at: '2026-01-15T10:08:19.392258'
 ---
 # Вопрос (RU)
 > Как работают BST? Каковы основные операции? Как AVL деревья поддерживают баланс?

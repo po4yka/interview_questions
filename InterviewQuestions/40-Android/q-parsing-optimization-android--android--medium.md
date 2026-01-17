@@ -1,5 +1,40 @@
 ---\
 id: android-130
+anki_cards:
+  - slug: android-130-0-en
+    front: "What are the main parsing optimization techniques in Android?"
+    back: |
+      **7 key techniques:**
+
+      1. **Streaming** - XmlPullParser instead of DOM
+      2. **Reduce conversions** - parse from streams directly
+      3. **Caching** - cache parsed results
+      4. **Libraries** - Moshi/kotlinx.serialization over Gson/org.json
+      5. **Lazy parsing** - Sequence for large lists
+      6. **Background threads** - `Dispatchers.Default`
+      7. **Incremental** - JsonReader for large JSON
+
+      **Performance:** Moshi ~15ms, kotlinx ~18ms, Gson ~25ms, org.json ~45ms (1000 objects)
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-130-0-ru
+    front: "Какие основные техники оптимизации парсинга в Android?"
+    back: |
+      **7 ключевых техник:**
+
+      1. **Streaming** - XmlPullParser вместо DOM
+      2. **Меньше конвертаций** - парсинг из потоков напрямую
+      3. **Кеширование** - кеш распарсенных результатов
+      4. **Библиотеки** - Moshi/kotlinx.serialization вместо Gson/org.json
+      5. **Ленивый парсинг** - Sequence для больших списков
+      6. **Фоновые потоки** - `Dispatchers.Default`
+      7. **Инкрементальный** - JsonReader для больших JSON
+
+      **Производительность:** Moshi ~15ms, kotlinx ~18ms, Gson ~25ms, org.json ~45ms (1000 объектов)
+    tags:
+      - android_general
+      - difficulty::medium
 title: Parsing Optimization Android / Оптимизация парсинга Android
 aliases: [Parsing Optimization Android, Оптимизация парсинга Android]
 topic: android

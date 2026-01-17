@@ -15,6 +15,45 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/intents-deeplinks, android/lifecycle, android/service, binding, difficulty/medium, ipc, service]
 sources: []
+anki_cards:
+  - slug: android-177-0-en
+    front: "Can an Activity connect to a Service that was started before it?"
+    back: |
+      **Yes**, Activity can bind to an already running Service.
+
+      **Requirements:**
+      - Service implements `onBind()` returning `IBinder`
+      - Activity calls `bindService()` with `ServiceConnection`
+
+      ```kotlin
+      bindService(intent, connection, BIND_AUTO_CREATE)
+      ```
+
+      **BIND_AUTO_CREATE** creates Service if not running yet.
+
+      Order doesn't matter: bind works as long as Service is alive.
+    tags:
+      - android_services
+      - difficulty::medium
+  - slug: android-177-0-ru
+    front: "Может ли Activity подключиться к Service, который запустился раньше?"
+    back: |
+      **Да**, Activity может привязаться к уже запущенному Service.
+
+      **Требования:**
+      - Service реализует `onBind()`, возвращающий `IBinder`
+      - Activity вызывает `bindService()` с `ServiceConnection`
+
+      ```kotlin
+      bindService(intent, connection, BIND_AUTO_CREATE)
+      ```
+
+      **BIND_AUTO_CREATE** создаст Service, если не запущен.
+
+      Порядок не важен: bind работает пока Service жив.
+    tags:
+      - android_services
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

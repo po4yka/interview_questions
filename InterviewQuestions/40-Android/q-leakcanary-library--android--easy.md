@@ -15,6 +15,45 @@ tags: [android/performance-memory, android/profiling, debugging-tools, difficult
 moc: moc-android
 related: [c-garbage-collection, c-memory-management]
 sources: []
+anki_cards:
+  - slug: android-075-0-en
+    front: "What library is used for finding memory leaks in Android?"
+    back: |
+      **LeakCanary** by Square - de facto standard for memory leak detection.
+
+      **Features:**
+      - Auto-tracks Activity, Fragment, ViewModel leaks
+      - Works out of the box with minimal config
+      - Shows retention chain (why object is held)
+
+      ```kotlin
+      // build.gradle
+      debugImplementation("com.squareup.leakcanary:leakcanary-android")
+      ```
+
+      Watches objects after lifecycle end, triggers heap dump if not GC'd.
+    tags:
+      - android_general
+      - difficulty::easy
+  - slug: android-075-0-ru
+    front: "Какая библиотека используется для нахождения утечек памяти в Android?"
+    back: |
+      **LeakCanary** от Square - стандарт для обнаружения утечек памяти.
+
+      **Возможности:**
+      - Автоматически отслеживает утечки Activity, Fragment, ViewModel
+      - Работает из коробки с минимальной настройкой
+      - Показывает цепочку удержания (почему объект держится)
+
+      ```kotlin
+      // build.gradle
+      debugImplementation("com.squareup.leakcanary:leakcanary-android")
+      ```
+
+      Следит за объектами после окончания lifecycle, делает heap dump если не собран GC.
+    tags:
+      - android_general
+      - difficulty::easy
 
 ---
 # Вопрос (RU)

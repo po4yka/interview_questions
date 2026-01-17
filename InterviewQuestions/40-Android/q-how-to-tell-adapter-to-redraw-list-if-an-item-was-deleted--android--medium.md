@@ -15,6 +15,49 @@ created: 2025-10-15
 updated: 2025-11-11
 sources: []
 tags: [adapters, android, android/architecture-modularization, android/ui-views, android/ui-widgets, difficulty/medium, recyclerview, ui]
+anki_cards:
+  - slug: android-315-0-en
+    front: "How to notify RecyclerView adapter when an item is deleted?"
+    back: |
+      **Best approaches:**
+
+      1. **notifyItemRemoved(position)** - smooth animation
+      ```kotlin
+      items.removeAt(position)
+      notifyItemRemoved(position)
+      ```
+
+      2. **ListAdapter + DiffUtil** (recommended)
+      ```kotlin
+      val newList = currentList.toMutableList().apply { remove(item) }
+      submitList(newList)  // Auto-calculates changes
+      ```
+
+      **Avoid:** `notifyDataSetChanged()` - no animation, inefficient
+    tags:
+      - android_layouts
+      - difficulty::medium
+  - slug: android-315-0-ru
+    front: "Как уведомить адаптер RecyclerView об удалении элемента?"
+    back: |
+      **Лучшие подходы:**
+
+      1. **notifyItemRemoved(position)** - плавная анимация
+      ```kotlin
+      items.removeAt(position)
+      notifyItemRemoved(position)
+      ```
+
+      2. **ListAdapter + DiffUtil** (рекомендуется)
+      ```kotlin
+      val newList = currentList.toMutableList().apply { remove(item) }
+      submitList(newList)  // Авто-вычисление изменений
+      ```
+
+      **Избегать:** `notifyDataSetChanged()` - нет анимации, неэффективно
+    tags:
+      - android_layouts
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

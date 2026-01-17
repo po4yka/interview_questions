@@ -1,5 +1,56 @@
----\
+---
 id: android-627
+anki_cards:
+  - slug: android-627-0-en
+    front: "How to implement observability on Android with OpenTelemetry?"
+    back: |
+      **Three signals:** Logs, Metrics, Traces via OpenTelemetry SDK.
+
+      **Setup:**
+      ```kotlin
+      OpenTelemetrySdk.builder()
+          .setMeterProvider(meterProvider)
+          .setTracerProvider(tracerProvider)
+          .setLoggerProvider(loggerProvider)
+          .buildAndRegisterGlobal()
+      ```
+
+      **Export:** OTLP (gRPC/HTTP) with batching, offline buffer (DataStore/SQLite).
+
+      **Optimization:**
+      - Sampling (`TraceIdRatioBasedSampler(0.05)`)
+      - WorkManager with `Constraints`
+      - Privacy filters, no PII
+
+      **Key:** Battery-aware export, opt-in/opt-out, correlation via trace/span IDs.
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-627-0-ru
+    front: "Как реализовать наблюдаемость на Android с OpenTelemetry?"
+    back: |
+      **Три сигнала:** Логи, Метрики, Трейсы через OpenTelemetry SDK.
+
+      **Настройка:**
+      ```kotlin
+      OpenTelemetrySdk.builder()
+          .setMeterProvider(meterProvider)
+          .setTracerProvider(tracerProvider)
+          .setLoggerProvider(loggerProvider)
+          .buildAndRegisterGlobal()
+      ```
+
+      **Экспорт:** OTLP (gRPC/HTTP) с batching, офлайн-буфер (DataStore/SQLite).
+
+      **Оптимизация:**
+      - Sampling (`TraceIdRatioBasedSampler(0.05)`)
+      - WorkManager с `Constraints`
+      - Фильтры приватности, без PII
+
+      **Ключ:** Battery-aware экспорт, opt-in/opt-out, корреляция через trace/span ID.
+    tags:
+      - android_general
+      - difficulty::hard
 title: Mobile Observability with OpenTelemetry / Наблюдаемость на Android с OpenTelemetry
 aliases: [Mobile Observability with OpenTelemetry, Наблюдаемость на Android с OpenTelemetry]
 topic: android

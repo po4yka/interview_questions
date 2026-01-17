@@ -15,6 +15,39 @@ related: [c-android-storage-options, q-android-storage-types--android--medium]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/datastore, difficulty/easy, performance, sharedpreferences]
+anki_cards:
+  - slug: android-031-0-en
+    front: "What is the difference between commit() and apply() in SharedPreferences?"
+    back: |
+      | | `commit()` | `apply()` |
+      |-|-----------|----------|
+      | Return | Boolean (success) | void |
+      | Execution | Sync (blocks thread) | Async disk write |
+      | Use case | Need result/guarantee | Fire-and-forget |
+
+      **Default to apply()** - most cases don't need sync guarantee.
+      **Use commit()** only on background thread when result matters.
+
+      **Modern**: Prefer DataStore for new code.
+    tags:
+      - android_storage
+      - difficulty::easy
+  - slug: android-031-0-ru
+    front: "В чём разница между commit() и apply() в SharedPreferences?"
+    back: |
+      | | `commit()` | `apply()` |
+      |-|-----------|----------|
+      | Возврат | Boolean (успех) | void |
+      | Выполнение | Синхронно (блокирует) | Асинхронная запись |
+      | Применение | Нужен результат | Fire-and-forget |
+
+      **По умолчанию apply()** - в большинстве случаев не нужна гарантия.
+      **Используйте commit()** только на фоновом потоке когда важен результат.
+
+      **Современно**: предпочитайте DataStore для нового кода.
+    tags:
+      - android_storage
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

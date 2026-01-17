@@ -16,6 +16,41 @@ related: [c-clean-architecture, c-database-design, q-dagger-field-injection--and
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/architecture-clean, android/cache-offline, difficulty/medium, en, ru]
+anki_cards:
+  - slug: android-030-0-en
+    front: "What are common data source strategies in Repository pattern?"
+    back: |
+      **Strategies**:
+      1. **Single Source of Truth** - DB observed via Flow, network updates it
+      2. **Cache-first** - memory -> network -> update cache
+      3. **Network-first + fallback** - network -> DB if fails
+      4. **Stale-while-revalidate** - show cache, refresh in background
+      5. **Time-based** - check TTL before network request
+
+      ```kotlin
+      fun getProducts(): Flow<List<Product>> = dao.observeProducts()
+          .onStart { refreshFromNetwork() }
+      ```
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-030-0-ru
+    front: "Какие стратегии источников данных используются в паттерне Repository?"
+    back: |
+      **Стратегии**:
+      1. **Single Source of Truth** - БД наблюдается через Flow, сеть обновляет её
+      2. **Cache-first** - память -> сеть -> обновить кэш
+      3. **Network-first + fallback** - сеть -> БД при ошибке
+      4. **Stale-while-revalidate** - показать кэш, обновить в фоне
+      5. **Time-based** - проверить TTL перед запросом
+
+      ```kotlin
+      fun getProducts(): Flow<List<Product>> = dao.observeProducts()
+          .onStart { refreshFromNetwork() }
+      ```
+    tags:
+      - android_architecture
+      - difficulty::medium
 
 ---
 # Вопрос (RU)

@@ -15,6 +15,45 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/fragment, difficulty/medium, fragment]
+anki_cards:
+  - slug: android-375-0-en
+    front: "What is the correct way to pass parameters to a Fragment?"
+    back: |
+      **Use Bundle + newInstance factory method:**
+
+      ```kotlin
+      fun newInstance(userId: Long) = UserFragment().apply {
+          arguments = Bundle().apply {
+              putLong("USER_ID", userId)
+          }
+      }
+      ```
+
+      **Extract in onCreate:** `requireArguments().getLong("USER_ID")`
+
+      **Wrong:** constructor params, setters - data lost on rotation
+    tags:
+      - android_fragments
+      - difficulty::easy
+  - slug: android-375-0-ru
+    front: "Как правильно передать параметры во Fragment?"
+    back: |
+      **Используйте Bundle + фабричный метод newInstance:**
+
+      ```kotlin
+      fun newInstance(userId: Long) = UserFragment().apply {
+          arguments = Bundle().apply {
+              putLong("USER_ID", userId)
+          }
+      }
+      ```
+
+      **Извлекать в onCreate:** `requireArguments().getLong("USER_ID")`
+
+      **Неправильно:** конструктор, сеттеры - данные теряются при повороте
+    tags:
+      - android_fragments
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

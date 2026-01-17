@@ -14,6 +14,55 @@ related: [c-recyclerview, q-android-project-parts--android--easy, q-camerax-adva
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/ui-views, difficulty/medium]
+anki_cards:
+  - slug: android-350-0-en
+    front: "How does DiffUtil work and why use ListAdapter?"
+    back: |
+      **DiffUtil** - calculates diff between two lists using Myers algorithm O(N+D^2).
+
+      **Callback methods:**
+      - `areItemsTheSame()` - same identity (ID)
+      - `areContentsTheSame()` - same content
+
+      **ListAdapter (recommended):**
+      ```kotlin
+      class MyAdapter : ListAdapter<Item, VH>(ItemDiffCallback) {
+          object ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+              override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
+              override fun areContentsTheSame(old: Item, new: Item) = old == new
+          }
+      }
+      adapter.submitList(newList) // Auto diff on background thread
+      ```
+
+      **Benefits:** smooth animations, efficient updates, background calculation.
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-350-0-ru
+    front: "Как работает DiffUtil и зачем использовать ListAdapter?"
+    back: |
+      **DiffUtil** - вычисляет разницу между списками алгоритмом Myers O(N+D^2).
+
+      **Методы Callback:**
+      - `areItemsTheSame()` - одинаковая идентичность (ID)
+      - `areContentsTheSame()` - одинаковое содержимое
+
+      **ListAdapter (рекомендуется):**
+      ```kotlin
+      class MyAdapter : ListAdapter<Item, VH>(ItemDiffCallback) {
+          object ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+              override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
+              override fun areContentsTheSame(old: Item, new: Item) = old == new
+          }
+      }
+      adapter.submitList(newList) // Авто-diff в фоне
+      ```
+
+      **Преимущества:** плавные анимации, эффективные обновления, расчёт в фоне.
+    tags:
+      - android_views
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

@@ -1,21 +1,42 @@
 ---
 id: test-001
-title: "Flaky Test Prevention / Предотвращение нестабильных тестов"
-aliases: ["Flaky Test Prevention", "Предотвращение нестабильных тестов"]
+title: Flaky Test Prevention / Предотвращение нестабильных тестов
+anki_cards:
+- slug: test-001-0-en
+  language: en
+  anki_id: 1768454532351
+  synced_at: '2026-01-15T09:41:02.784952'
+- slug: test-001-0-ru
+  language: ru
+  anki_id: 1768454532449
+  synced_at: '2026-01-15T09:41:02.787384'
+aliases:
+- Flaky Test Prevention
+- Предотвращение нестабильных тестов
 topic: cs
-subtopics: [testing, best-practices]
+subtopics:
+- testing
+- best-practices
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-testing, q-robolectric-vs-instrumented--android--medium, q-testing-compose-ui--android--medium]
+related:
+- c-testing
+- q-robolectric-vs-instrumented--android--medium
+- q-testing-compose-ui--android--medium
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [difficulty/medium, stability, testing/best-practices, testing/flaky-tests]
-
+tags:
+- difficulty/medium
+- stability
+- testing/best-practices
+- testing/flaky-tests
 ---
 # Вопрос (RU)
 

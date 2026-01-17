@@ -14,6 +14,53 @@ related: [c-dependency-injection, q-play-feature-delivery--android--medium, q-st
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/di-hilt, android/ui-navigation, dependency-injection, difficulty/medium, navigation, router]
+anki_cards:
+  - slug: android-215-0-en
+    front: "How to inject a Router into a Presenter in Android?"
+    back: |
+      **Use DI frameworks** with Router interface:
+
+      ```kotlin
+      interface Router {
+          fun navigateToDetails(id: String)
+          fun navigateBack()
+      }
+
+      class MainPresenter @Inject constructor(
+          private val router: Router  // Abstraction, not NavController
+      )
+      ```
+
+      **DI options:**
+      - **Hilt** - official, minimal boilerplate
+      - **Dagger 2** - compile-time, more control
+      - **Koin** - runtime, Kotlin DSL
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-215-0-ru
+    front: "Как инжектировать Router в Presenter в Android?"
+    back: |
+      **Использовать DI фреймворки** с интерфейсом Router:
+
+      ```kotlin
+      interface Router {
+          fun navigateToDetails(id: String)
+          fun navigateBack()
+      }
+
+      class MainPresenter @Inject constructor(
+          private val router: Router  // Абстракция, не NavController
+      )
+      ```
+
+      **Варианты DI:**
+      - **Hilt** - официальный, минимум boilerplate
+      - **Dagger 2** - compile-time, больше контроля
+      - **Koin** - runtime, Kotlin DSL
+    tags:
+      - android_architecture
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

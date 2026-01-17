@@ -15,6 +15,46 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/networking-http, difficulty/medium, http, networking]
+anki_cards:
+  - slug: android-283-0-en
+    front: "What tools are used for network operations in Android?"
+    back: |
+      **Main Tools:**
+      - **Retrofit** - type-safe REST client with coroutines
+      - **OkHttp** - HTTP client (connection pooling, interceptors, HTTP/2)
+      - **Ktor Client** - Kotlin Multiplatform async client
+      - **Volley** - Google's library for small requests
+
+      **Critical Rules:**
+      - Never block main thread (use `Dispatchers.IO`)
+      - Add `INTERNET` permission in manifest
+      - HTTPS required by default on Android 9+
+      - Handle `HttpException` and `IOException`
+
+      **Recommendation:** Retrofit + OkHttp + Coroutines
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-283-0-ru
+    front: "Какие инструменты используются для сетевых операций в Android?"
+    back: |
+      **Основные инструменты:**
+      - **Retrofit** - type-safe REST клиент с корутинами
+      - **OkHttp** - HTTP клиент (пул соединений, интерсепторы, HTTP/2)
+      - **Ktor Client** - Kotlin Multiplatform async клиент
+      - **Volley** - библиотека Google для мелких запросов
+
+      **Критические правила:**
+      - Никогда не блокировать main thread (использовать `Dispatchers.IO`)
+      - Добавить разрешение `INTERNET` в манифест
+      - HTTPS обязателен по умолчанию на Android 9+
+      - Обрабатывать `HttpException` и `IOException`
+
+      **Рекомендация:** Retrofit + OkHttp + Coroutines
+    tags:
+      - android_general
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

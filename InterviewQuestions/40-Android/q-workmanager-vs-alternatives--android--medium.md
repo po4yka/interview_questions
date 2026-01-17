@@ -15,6 +15,43 @@ created: 2025-10-12
 updated: 2025-11-10
 tags: [android/background-execution, difficulty/medium]
 sources: []
+anki_cards:
+  - slug: android-059-0-en
+    front: "When to use WorkManager vs AlarmManager vs Foreground Service?"
+    back: |
+      | API | Use Case |
+      |-----|----------|
+      | **WorkManager** | Deferrable, guaranteed background work (default choice) |
+      | **Foreground Service** | User-initiated, long-running (music, downloads) |
+      | **AlarmManager** | Exact time alarms (reminders, clocks) |
+      | **Coroutines** | Short-lived, app-scope work |
+
+      **Decision flow**:
+      1. Must run at exact time? -> AlarmManager
+      2. User-visible, long-running? -> Foreground Service
+      3. Deferrable, guaranteed? -> **WorkManager**
+      4. Short, app lifecycle? -> Coroutines
+    tags:
+      - android_workmanager
+      - difficulty::medium
+  - slug: android-059-0-ru
+    front: "Когда использовать WorkManager vs AlarmManager vs Foreground Service?"
+    back: |
+      | API | Применение |
+      |-----|------------|
+      | **WorkManager** | Отложенная, гарантированная фоновая работа (по умолчанию) |
+      | **Foreground Service** | Пользовательская, долгая (музыка, загрузки) |
+      | **AlarmManager** | Точное время (напоминания, будильники) |
+      | **Coroutines** | Короткая работа, жизненный цикл приложения |
+
+      **Алгоритм выбора**:
+      1. Точное время? -> AlarmManager
+      2. Видимая пользователю, долгая? -> Foreground Service
+      3. Отложенная, гарантированная? -> **WorkManager**
+      4. Короткая, в рамках приложения? -> Coroutines
+    tags:
+      - android_workmanager
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

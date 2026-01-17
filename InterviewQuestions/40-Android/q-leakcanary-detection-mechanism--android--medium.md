@@ -15,6 +15,35 @@ tags: [android/performance-memory, difficulty/medium, leakcanary, memory-leaks, 
 moc: moc-android
 related: [c-android-profiler, q-android-performance-measurement-tools--android--medium]
 sources: ["https://square.github.io/leakcanary/"]
+anki_cards:
+  - slug: android-095-0-en
+    front: "How does LeakCanary detect memory leaks?"
+    back: |
+      **Process:**
+      1. **Lifecycle hooks** - tracks Activity/Fragment destruction
+      2. **KeyedWeakReference** - creates weak ref to object
+      3. **GC trigger** - waits, triggers GC, checks if ref cleared
+      4. **Heap dump** - if still retained, creates dump
+      5. **Shark** - analyzes dump, finds retention chain
+
+      Key: WeakReference is cleared when no strong refs exist.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-095-0-ru
+    front: "Как LeakCanary обнаруживает утечки памяти?"
+    back: |
+      **Процесс:**
+      1. **Хуки жизненного цикла** - отслеживает onDestroy Activity/Fragment
+      2. **KeyedWeakReference** - создаёт слабую ссылку на объект
+      3. **Триггер GC** - ждёт, вызывает GC, проверяет очистку ссылки
+      4. **Heap dump** - если объект ещё удерживается, создаёт дамп
+      5. **Shark** - анализирует дамп, находит цепочку удержания
+
+      Ключ: WeakReference очищается при отсутствии сильных ссылок.
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

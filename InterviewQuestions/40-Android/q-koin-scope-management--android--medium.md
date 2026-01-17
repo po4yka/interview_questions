@@ -15,6 +15,57 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/di-koin, android/lifecycle, dependency-injection, difficulty/medium, koin, scopes]
+anki_cards:
+  - slug: android-203-0-en
+    front: "How do you manage scopes in Koin?"
+    back: |
+      **Scope types:**
+      - `single` - application-wide singleton
+      - `scoped` - lives within a Scope instance
+      - `factory` - new instance each time
+
+      **Usage pattern:**
+      ```kotlin
+      scope<MyActivity> {
+          scoped { MyPresenter(get()) }
+      }
+
+      // Activity
+      val activityScope = getKoin().createScope(
+          "id", scopeQualifier<MyActivity>()
+      )
+      activityScope.close() // in onDestroy
+      ```
+
+      Must explicitly `close()` scopes to avoid leaks.
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-203-0-ru
+    front: "Как управлять scope в Koin?"
+    back: |
+      **Типы scope:**
+      - `single` - синглтон на всё приложение
+      - `scoped` - живёт в рамках Scope
+      - `factory` - новый экземпляр каждый раз
+
+      **Паттерн использования:**
+      ```kotlin
+      scope<MyActivity> {
+          scoped { MyPresenter(get()) }
+      }
+
+      // Activity
+      val activityScope = getKoin().createScope(
+          "id", scopeQualifier<MyActivity>()
+      )
+      activityScope.close() // в onDestroy
+      ```
+
+      Обязательно вызывать `close()` для избежания утечек.
+    tags:
+      - android_architecture
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

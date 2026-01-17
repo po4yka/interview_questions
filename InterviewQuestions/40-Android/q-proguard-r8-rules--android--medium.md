@@ -15,6 +15,41 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/build-variants, android/obfuscation, android/static-analysis, difficulty/medium, proguard, r8, security]
+anki_cards:
+  - slug: android-153-0-en
+    front: "What are the key ProGuard/R8 rules for Android libraries?"
+    back: |
+      **R8 does:** Shrinking, optimization, obfuscation
+
+      **Key rules:**
+      - `-keepattributes SourceFile,LineNumberTable` (crash reports)
+      - `-keep @androidx.annotation.Keep class * { *; }` (reflection)
+      - `-keepclasseswithmembernames class * { native <methods>; }` (JNI)
+      - `-keep public class com.example.library.** { public protected *; }` (public API)
+
+      **Best practices:**
+      - Minimize keep rules, use @Keep annotation
+      - Test release builds, upload mapping.txt
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-153-0-ru
+    front: "Какие ключевые правила ProGuard/R8 для Android библиотек?"
+    back: |
+      **R8 выполняет:** Shrinking, оптимизация, обфускация
+
+      **Ключевые правила:**
+      - `-keepattributes SourceFile,LineNumberTable` (crash reports)
+      - `-keep @androidx.annotation.Keep class * { *; }` (рефлексия)
+      - `-keepclasseswithmembernames class * { native <methods>; }` (JNI)
+      - `-keep public class com.example.library.** { public protected *; }` (public API)
+
+      **Best practices:**
+      - Минимизировать keep правила, использовать @Keep
+      - Тестировать release сборки, загружать mapping.txt
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

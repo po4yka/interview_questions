@@ -1,5 +1,52 @@
 ---
 id: android-351
+anki_cards:
+  - slug: android-351-0-en
+    front: "What are the key features of MockK for Kotlin testing?"
+    back: |
+      **Relaxed mocks:** Return defaults for unstubbed calls
+      ```kotlin
+      val mock = mockk<Repo>(relaxed = true)
+      ```
+
+      **Spy:** Partial mocking with real implementation
+      ```kotlin
+      val spy = spyk(RealClass())
+      ```
+
+      **Coroutines:** `coEvery` / `coVerify` for suspend functions
+
+      **Annotations:** `@MockK`, `@RelaxedMockK`, `@SpyK`, `@InjectMockKs`
+
+      **Advanced:** `answers {}`, `slot<T>()` capture, `verifyOrder`, object/static mocking.
+
+      **Key:** Kotlin-first DSL, built-in final class support.
+    tags:
+      - android_testing
+      - difficulty::medium
+  - slug: android-351-0-ru
+    front: "Какие ключевые возможности MockK для тестирования на Kotlin?"
+    back: |
+      **Relaxed моки:** Возвращают значения по умолчанию
+      ```kotlin
+      val mock = mockk<Repo>(relaxed = true)
+      ```
+
+      **Spy:** Частичное мокирование с реальной реализацией
+      ```kotlin
+      val spy = spyk(RealClass())
+      ```
+
+      **Корутины:** `coEvery` / `coVerify` для suspend-функций
+
+      **Аннотации:** `@MockK`, `@RelaxedMockK`, `@SpyK`, `@InjectMockKs`
+
+      **Продвинутое:** `answers {}`, захват `slot<T>()`, `verifyOrder`, мокирование object/static.
+
+      **Ключ:** Kotlin-first DSL, встроенная поддержка final классов.
+    tags:
+      - android_testing
+      - difficulty::medium
 title: MockK Advanced Features / Продвинутые возможности MockK
 aliases: [MockK Advanced Features, Продвинутые возможности MockK]
 topic: android

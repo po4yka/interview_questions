@@ -1,5 +1,56 @@
 ---\
 id: android-276
+anki_cards:
+  - slug: android-276-0-en
+    front: "What are the key steps to set up Retrofit for network requests in Android?"
+    back: |
+      **5 key steps:**
+
+      1. **Add dependencies** - retrofit, converter-gson, logging-interceptor
+      2. **Create data model** - `data class User(val id: Int, val name: String)`
+      3. **Define API interface** - with @GET/@POST annotations
+      4. **Build Retrofit instance** - with baseUrl, OkHttp client, converter
+      5. **Use in Repository** - wrap calls with error handling
+
+      ```kotlin
+      interface ApiService {
+          @GET("users/{id}")
+          suspend fun getUser(@Path("id") id: Int): User
+      }
+
+      val retrofit = Retrofit.Builder()
+          .baseUrl("https://api.example.com/")
+          .addConverterFactory(GsonConverterFactory.create())
+          .build()
+      ```
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-276-0-ru
+    front: "Какие ключевые шаги для настройки Retrofit для сетевых запросов в Android?"
+    back: |
+      **5 ключевых шагов:**
+
+      1. **Добавить зависимости** - retrofit, converter-gson, logging-interceptor
+      2. **Создать модель данных** - `data class User(val id: Int, val name: String)`
+      3. **Определить API интерфейс** - с аннотациями @GET/@POST
+      4. **Создать экземпляр Retrofit** - с baseUrl, OkHttp клиентом, конвертером
+      5. **Использовать в Repository** - обернуть вызовы с обработкой ошибок
+
+      ```kotlin
+      interface ApiService {
+          @GET("users/{id}")
+          suspend fun getUser(@Path("id") id: Int): User
+      }
+
+      val retrofit = Retrofit.Builder()
+          .baseUrl("https://api.example.com/")
+          .addConverterFactory(GsonConverterFactory.create())
+          .build()
+      ```
+    tags:
+      - android_general
+      - difficulty::medium
 title: "Retrofit Usage Tutorial / Retrofit Использование Tutorial"
 aliases: ["Retrofit Usage Tutorial", "Retrofit Использование Tutorial"]
 topic: android

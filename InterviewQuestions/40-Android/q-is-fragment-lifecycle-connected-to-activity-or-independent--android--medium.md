@@ -15,6 +15,37 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/fragment, android/lifecycle, difficulty/medium]
+anki_cards:
+  - slug: android-156-0-en
+    front: "Is Fragment lifecycle connected to Activity or independent?"
+    back: |
+      **Connected to Activity** but has additional states.
+
+      **Key points:**
+      - Fragment lifecycle mirrors Activity lifecycle
+      - When Activity pauses/stops, Fragment does too
+      - Fragment has extra callbacks: `onAttach`, `onCreateView`, `onDestroyView`, `onDetach`
+      - `viewLifecycleOwner` - separate lifecycle for view (onCreate to onDestroyView)
+      - Fragment can outlive its view (when in backstack)
+    tags:
+      - android_fragments
+      - android_lifecycle
+      - difficulty::medium
+  - slug: android-156-0-ru
+    front: "Связан ли жизненный цикл Fragment с Activity или независим?"
+    back: |
+      **Связан с Activity**, но имеет дополнительные состояния.
+
+      **Ключевые моменты:**
+      - Жизненный цикл Fragment отражает жизненный цикл Activity
+      - Когда Activity паузится/останавливается, Fragment тоже
+      - Fragment имеет доп. колбэки: `onAttach`, `onCreateView`, `onDestroyView`, `onDetach`
+      - `viewLifecycleOwner` - отдельный lifecycle для view (onCreate до onDestroyView)
+      - Fragment может пережить свой view (в backstack)
+    tags:
+      - android_fragments
+      - android_lifecycle
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

@@ -15,6 +15,39 @@ related: [q-app-startup-optimization--android--medium, q-baseline-profiles-optim
 created: 2025-10-11
 updated: 2025-11-10
 tags: [android/lifecycle, android/performance-memory, android/profiling, difficulty/medium]
+anki_cards:
+  - slug: android-045-0-en
+    front: "What are the most common memory leak patterns in Android?"
+    back: |
+      **Common leak patterns**:
+      1. **Static Activity/Fragment refs** - use WeakReference or avoid
+      2. **Inner classes/Handler** - remove callbacks in onDestroy
+      3. **Unregistered listeners** - unregister in onPause/onDestroy
+      4. **Fragment View refs** - clear binding in onDestroyView
+      5. **ViewModel with Activity Context** - use AndroidViewModel
+      6. **observeForever** - use observe(lifecycleOwner)
+      7. **GlobalScope** - use lifecycleScope/viewModelScope
+
+      **Tools**: LeakCanary (debug), Memory Profiler, MAT
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-045-0-ru
+    front: "Какие самые распространённые паттерны утечек памяти в Android?"
+    back: |
+      **Распространённые утечки**:
+      1. **Статические ссылки на Activity/Fragment** - WeakReference или избегать
+      2. **Внутренние классы/Handler** - убирать callback в onDestroy
+      3. **Незакрытые слушатели** - отписка в onPause/onDestroy
+      4. **Ссылки на View во Fragment** - очищать binding в onDestroyView
+      5. **ViewModel с Activity Context** - использовать AndroidViewModel
+      6. **observeForever** - использовать observe(lifecycleOwner)
+      7. **GlobalScope** - использовать lifecycleScope/viewModelScope
+
+      **Инструменты**: LeakCanary (debug), Memory Profiler, MAT
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

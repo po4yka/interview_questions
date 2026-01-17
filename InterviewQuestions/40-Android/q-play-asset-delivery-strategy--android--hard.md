@@ -1,5 +1,60 @@
----\
+---
 id: android-639
+anki_cards:
+  - slug: android-639-0-en
+    front: "What are the three Play Asset Delivery modes and when to use each?"
+    back: |
+      **Delivery modes:**
+
+      | Mode | When Downloaded | Use For |
+      |------|-----------------|---------|
+      | **install-time** | With APK | Critical core assets |
+      | **fast-follow** | After install (auto) | Large, likely needed soon |
+      | **on-demand** | When requested | Optional/rare content |
+
+      **Runtime management:**
+      ```kotlin
+      val manager = AssetPackManagerFactory.getInstance(ctx)
+      manager.fetch(listOf("pack_name"))
+      manager.registerListener { state ->
+          when (state.status()) {
+              DOWNLOADING -> showProgress()
+              COMPLETED -> loadAssets()
+          }
+      }
+      ```
+
+      **Benefits:** Asset-only updates without full release, size optimization via ABI/texture splits.
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-639-0-ru
+    front: "Какие три режима Play Asset Delivery и когда использовать каждый?"
+    back: |
+      **Режимы доставки:**
+
+      | Режим | Когда загружается | Для чего |
+      |-------|-------------------|----------|
+      | **install-time** | С APK | Критичные ассеты |
+      | **fast-follow** | После установки (авто) | Крупные, скоро нужны |
+      | **on-demand** | По запросу | Опциональный контент |
+
+      **Runtime управление:**
+      ```kotlin
+      val manager = AssetPackManagerFactory.getInstance(ctx)
+      manager.fetch(listOf("pack_name"))
+      manager.registerListener { state ->
+          when (state.status()) {
+              DOWNLOADING -> showProgress()
+              COMPLETED -> loadAssets()
+          }
+      }
+      ```
+
+      **Преимущества:** Обновление ассетов без релиза, оптимизация размера через ABI/texture splits.
+    tags:
+      - android_general
+      - difficulty::hard
 title: Play Asset Delivery Strategy / Стратегия Play Asset Delivery
 aliases: [Play Asset Delivery Strategy, Стратегия Play Asset Delivery]
 topic: android

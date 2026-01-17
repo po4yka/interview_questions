@@ -1,4 +1,42 @@
----\
+---
+id: android-720
+anki_cards:
+  - slug: android-286-0-en
+    front: "What are Server-Sent Events (SSE) and how do they compare to WebSockets?"
+    back: |
+      **SSE** is a one-way streaming protocol where server pushes updates to client.
+
+      **Comparison**:
+      | Feature | SSE | WebSocket |
+      |---------|-----|-----------|
+      | Direction | Server to client | Bidirectional |
+      | Protocol | HTTP | WS |
+      | Reconnection | Automatic | Manual |
+      | Use case | Live feeds, notifications | Chat, gaming |
+
+      **OkHttp implementation**:
+      - Use `EventSource` or manual SSE parsing
+      - Parse `data:`, `event:`, `id:` fields
+      - Handle `text/event-stream` content type
+    tags: ["android_general", "difficulty::medium"]
+  - slug: android-286-0-ru
+    front: "Что такое Server-Sent Events (SSE) и чем они отличаются от WebSocket?"
+    back: |
+      **SSE** - протокол однонаправленной потоковой передачи от сервера к клиенту.
+
+      **Сравнение**:
+      | Характеристика | SSE | WebSocket |
+      |----------------|-----|-----------|
+      | Направление | Сервер к клиенту | Двунаправленное |
+      | Протокол | HTTP | WS |
+      | Переподключение | Автоматическое | Ручное |
+      | Применение | Ленты новостей, уведомления | Чат, игры |
+
+      **Реализация на OkHttp**:
+      - Использовать `EventSource` или ручной парсинг SSE
+      - Парсить поля `data:`, `event:`, `id:`
+      - Обрабатывать тип контента `text/event-stream`
+    tags: ["android_general", "difficulty::medium"]
 id: android-286
 title: Server-Sent Events (SSE) / Server-Sent Events (SSE)
 aliases: [Server-Sent Events, SSE]

@@ -14,6 +14,45 @@ related: [c-android-testing, q-android-manifest-file--android--easy, q-android-t
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-instrumented, difficulty/medium]
+anki_cards:
+  - slug: android-120-0-en
+    front: "What are the main integration testing strategies in Android?"
+    back: |
+      **Testing pyramid:**
+      Unit -> Integration -> E2E
+
+      **Key strategies:**
+      1. **ViewModel + Repository + Room** - fake network only
+      2. **Repository + Network** - use MockWebServer
+      3. **UI + ViewModel** - Robolectric or Instrumented
+
+      **Tools:**
+      - MockWebServer (OkHttp)
+      - Room in-memory DB
+      - Hilt test modules
+      - Turbine for Flow testing
+    tags:
+      - android_testing
+      - difficulty::medium
+  - slug: android-120-0-ru
+    front: "Какие основные стратегии интеграционного тестирования в Android?"
+    back: |
+      **Пирамида тестирования:**
+      Unit -> Integration -> E2E
+
+      **Ключевые стратегии:**
+      1. **ViewModel + Repository + Room** - фейк только для сети
+      2. **Repository + Network** - использовать MockWebServer
+      3. **UI + ViewModel** - Robolectric или Instrumented
+
+      **Инструменты:**
+      - MockWebServer (OkHttp)
+      - Room in-memory БД
+      - Hilt test modules
+      - Turbine для тестирования Flow
+    tags:
+      - android_testing
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

@@ -14,6 +14,40 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, hook-method, template-method]
 
+anki_cards:
+- slug: dp-003-0-en
+  front: |
+    What is the Template Method pattern and how does it work?
+  back: |
+    **Template Method**: Behavioral pattern defining algorithm skeleton in base class.
+    
+    **Structure**:
+    - Base class: `final` template method + abstract/hook methods
+    - Subclasses: Override steps, NOT the template
+    
+    **Use when**: Common algorithm with varying steps.
+    
+    **Example**: File processing (open, process, close).
+  language: en
+  difficulty: 0.5
+  tags: [cs_patterns, difficulty::medium]
+- slug: dp-003-0-ru
+  front: |
+    Что такое паттерн Шаблонный метод и как он работает?
+  back: |
+    **Шаблонный метод**: Поведенческий паттерн, определяющий скелет алгоритма в базовом классе.
+    
+    **Структура**:
+    - Базовый класс: `final` шаблонный метод + абстрактные/hook методы
+    - Подклассы: Переопределяют шаги, НЕ шаблон
+    
+    **Используйте когда**: Общий алгоритм с варьируемыми шагами.
+    
+    **Пример**: Обработка файлов (открыть, обработать, закрыть).
+  language: ru
+  difficulty: 0.5
+  tags: [cs_patterns, difficulty::medium]
+
 ---
 # Вопрос (RU)
 > Что такое паттерн Template Method? Когда и зачем его следует использовать?

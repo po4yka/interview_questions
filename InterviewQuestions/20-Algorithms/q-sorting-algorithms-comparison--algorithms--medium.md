@@ -1,20 +1,55 @@
----id: algo-008
-title: "Sorting Algorithms Comparison / Сравнение алгоритмов сортировки"
-aliases: ["Sorting Algorithms", "Сравнение алгоритмов сортировки"]
+---
+id: algo-008
+title: Sorting Algorithms Comparison / Сравнение алгоритмов сортировки
+aliases:
+- Sorting Algorithms
+- Сравнение алгоритмов сортировки
 topic: algorithms
-subtopics: [heapsort, mergesort, quicksort]
+subtopics:
+- heapsort
+- mergesort
+- quicksort
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, c-sorting-algorithms, q-binary-search-variants--algorithms--medium, q-graph-algorithms-bfs-dfs--algorithms--hard]
+related:
+- c-algorithms
+- c-sorting-algorithms
+- q-binary-search-variants--algorithms--medium
+- q-graph-algorithms-bfs-dfs--algorithms--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [algorithms, complexity, difficulty/medium, mergesort, quicksort, sorting]
-sources: ["https://en.wikipedia.org/wiki/Sorting_algorithm"]
-
+tags:
+- algorithms
+- complexity
+- difficulty/medium
+- mergesort
+- quicksort
+- sorting
+sources:
+- https://en.wikipedia.org/wiki/Sorting_algorithm
+anki_cards:
+- slug: algo-008-0-en
+  language: en
+  anki_id: 1768457298979
+  synced_at: '2026-01-15T10:08:19.394438'
+- slug: algo-008-0-ru
+  language: ru
+  anki_id: 1768457299002
+  synced_at: '2026-01-15T10:08:19.396564'
+- slug: algo-008-1-en
+  language: en
+  anki_id: 1768457299027
+  synced_at: '2026-01-15T10:08:19.398818'
+- slug: algo-008-1-ru
+  language: ru
+  anki_id: 1768457299053
+  synced_at: '2026-01-15T10:08:19.401279'
 ---
 # Вопрос (RU)
 > Каковы основные алгоритмы сортировки? Сравните их временную/пространственную сложность и когда следует использовать каждый алгоритм?

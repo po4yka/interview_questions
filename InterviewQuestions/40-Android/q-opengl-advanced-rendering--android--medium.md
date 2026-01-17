@@ -1,5 +1,34 @@
----\
+---
 id: android-383
+anki_cards:
+  - slug: android-383-0-en
+    front: "What are the key components for OpenGL ES rendering in Android?"
+    back: |
+      **Core components:**
+      - **GLSurfaceView + Renderer** - manages OpenGL context
+      - **ShaderProgram** - vertex + fragment shaders
+      - **VAO/VBO/EBO** - vertex data management
+      - **Texture** - with mipmaps and filtering
+      - **FBO** - render-to-texture for post-processing
+
+      **Best practices:** Cache shaders, use VAOs, generate mipmaps, minimize state changes.
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-383-0-ru
+    front: "Какие ключевые компоненты для OpenGL ES рендеринга в Android?"
+    back: |
+      **Основные компоненты:**
+      - **GLSurfaceView + Renderer** - управляет OpenGL контекстом
+      - **ShaderProgram** - вершинный + фрагментный шейдеры
+      - **VAO/VBO/EBO** - управление вершинными данными
+      - **Texture** - с mipmaps и фильтрацией
+      - **FBO** - render-to-texture для пост-обработки
+
+      **Лучшие практики:** Кешировать шейдеры, использовать VAO, генерировать mipmaps, минимизировать смену состояний.
+    tags:
+      - android_views
+      - difficulty::medium
 title: "OpenGL Advanced Rendering / Продвинутый рендеринг OpenGL"
 aliases: ["OpenGL Advanced Rendering", "Продвинутый рендеринг OpenGL"]
 topic: android

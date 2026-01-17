@@ -25,6 +25,56 @@ updated: 2025-11-10
 
 # Tags
 tags: [android/architecture-clean, android/room, difficulty/medium, embedded, relations]
+anki_cards:
+  - slug: android-148-0-en
+    front: "What is the difference between @Embedded and @Relation in Room?"
+    back: |
+      **@Embedded** - flattens object fields into single table:
+      ```kotlin
+      @Embedded val address: Address  // Creates street, city columns
+      ```
+      Use prefix to avoid conflicts: `@Embedded(prefix = "home_")`
+
+      **@Relation** - models relationships between separate entities:
+      ```kotlin
+      @Relation(parentColumn = "userId", entityColumn = "authorId")
+      val posts: List<Post>
+      ```
+
+      | Aspect | @Embedded | @Relation |
+      |--------|-----------|-----------|
+      | Tables | Single | Multiple |
+      | Use case | Address, Coords | One-to-many, Many-to-many |
+
+      Many-to-many uses `Junction(EnrollmentTable::class)`.
+    tags:
+      - android_room
+      - difficulty::medium
+  - slug: android-148-0-ru
+    front: "В чём разница между @Embedded и @Relation в Room?"
+    back: |
+      **@Embedded** - встраивает поля объекта в одну таблицу:
+      ```kotlin
+      @Embedded val address: Address  // Создаёт колонки street, city
+      ```
+      Используйте prefix для избежания конфликтов: `@Embedded(prefix = "home_")`
+
+      **@Relation** - моделирует связи между отдельными сущностями:
+      ```kotlin
+      @Relation(parentColumn = "userId", entityColumn = "authorId")
+      val posts: List<Post>
+      ```
+
+      | Аспект | @Embedded | @Relation |
+      |--------|-----------|-----------|
+      | Таблицы | Одна | Несколько |
+      | Использование | Address, Coords | One-to-many, Many-to-many |
+
+      Many-to-many использует `Junction(EnrollmentTable::class)`.
+    tags:
+      - android_room
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

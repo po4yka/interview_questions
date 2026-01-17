@@ -15,6 +15,33 @@ tags: [android/performance-memory, difficulty/medium, heap-dump, leakcanary, mem
 moc: moc-android
 related: [c-android-profiling, q-leakcanary-detection-mechanism--android--medium]
 sources: []
+anki_cards:
+  - slug: android-089-0-en
+    front: "How to detect a memory leak in a heap dump using LeakCanary?"
+    back: |
+      **LeakCanary + Shark process:**
+      1. Wrap watched objects in `KeyedWeakReference`
+      2. After GC cycles, if object still retained - dump heap
+      3. Shark builds object graph from GC roots
+      4. Find retention chain to leaked object
+
+      **Leak = object should be unreachable but is strongly reachable from GC root.**
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-089-0-ru
+    front: "Как обнаружить утечку памяти в heap dump с помощью LeakCanary?"
+    back: |
+      **Процесс LeakCanary + Shark:**
+      1. Оборачиваем объекты в `KeyedWeakReference`
+      2. После циклов GC, если объект удерживается - снимаем heap dump
+      3. Shark строит граф объектов от GC roots
+      4. Находим цепочку удержания до утёкшего объекта
+
+      **Утечка = объект должен быть недостижим, но сильно достижим от GC root.**
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---
 # Вопрос (RU)

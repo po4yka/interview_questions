@@ -15,6 +15,35 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/ui-navigation, difficulty/medium, navigation]
+anki_cards:
+  - slug: android-150-0-en
+    front: "What are the main navigation methods in Android?"
+    back: |
+      **5 approaches:**
+      1. **Activity Navigation (Intent)** - traditional, heavy overhead
+      2. **FragmentManager** - manual back stack management
+      3. **Navigation Component** - graph-based, Safe Args, recommended
+      4. **Compose Navigation** - declarative NavHost
+      5. **Deep Links/App Links** - URL-based from external sources
+
+      **Best practice:** Single-Activity + Navigation Component or Compose Navigation
+    tags:
+      - android_navigation
+      - difficulty::medium
+  - slug: android-150-0-ru
+    front: "Какие основные методы навигации существуют в Android?"
+    back: |
+      **5 подходов:**
+      1. **Activity Navigation (Intent)** - традиционный, тяжёлый overhead
+      2. **FragmentManager** - ручное управление back stack
+      3. **Navigation Component** - граф, Safe Args, рекомендуемый
+      4. **Compose Navigation** - декларативный NavHost
+      5. **Deep Links/App Links** - URL из внешних источников
+
+      **Best practice:** Single-Activity + Navigation Component или Compose Navigation
+    tags:
+      - android_navigation
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

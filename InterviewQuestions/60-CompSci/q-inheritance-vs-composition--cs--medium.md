@@ -1,19 +1,41 @@
----id: oop-001
-title: "Inheritance Vs Composition / Наследование против композиции"
-aliases: [Inheritance Vs Composition, Наследование против композиции]
+---
+id: oop-001
+title: Inheritance Vs Composition / Наследование против композиции
+anki_cards:
+- slug: oop-001-0-en
+  language: en
+  anki_id: 1768454534763
+  synced_at: '2026-01-15T09:43:17.074151'
+- slug: oop-001-0-ru
+  language: ru
+  anki_id: 1768454534791
+  synced_at: '2026-01-15T09:43:17.075761'
+aliases:
+- Inheritance Vs Composition
+- Наследование против композиции
 topic: cs
-subtopics: [c-architecture-patterns, c-clean-code, c-cs]
+subtopics:
+- c-architecture-patterns
+- c-clean-code
+- c-cs
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science, c-inheritance, q-when-inheritance-useful--cs--medium]
+related:
+- c-architecture-patterns
+- c-computer-science
+- c-inheritance
+- q-when-inheritance-useful--cs--medium
 created: 2025-10-13
 updated: 2025-11-11
-tags: [cs, difficulty/medium]
-
+tags:
+- cs
+- difficulty/medium
 ---
 # Вопрос (RU)
 > Какие отличия наследования от композиции?

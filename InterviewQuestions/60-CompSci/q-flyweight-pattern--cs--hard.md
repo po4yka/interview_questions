@@ -1,21 +1,45 @@
----\
+---
 id: dp-002
-title: "Flyweight Pattern / Паттерн легкий вес"
-aliases: [Flyweight Pattern, Паттерн легкий вес]
+title: Flyweight Pattern / Паттерн легкий вес
+anki_cards:
+- slug: dp-002-0-en
+  language: en
+  anki_id: 1768454532864
+  synced_at: '2026-01-15T09:41:02.798845'
+- slug: dp-002-0-ru
+  language: ru
+  anki_id: 1768454532889
+  synced_at: '2026-01-15T09:41:02.801031'
+aliases:
+- Flyweight Pattern
+- Паттерн легкий вес
 topic: cs
-subtopics: [design-patterns, memory-optimization, structural-patterns]
+subtopics:
+- design-patterns
+- memory-optimization
+- structural-patterns
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- c-computer-science
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [cs, difficulty/hard, flyweight, gof-patterns, memory-optimization, structural-patterns]
-
----\
+tags:
+- cs
+- difficulty/hard
+- flyweight
+- gof-patterns
+- memory-optimization
+- structural-patterns
+---
 # Вопрос (RU)
 > Что такое паттерн Flyweight? Когда и зачем его использовать?
 

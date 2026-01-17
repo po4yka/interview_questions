@@ -15,6 +15,61 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/ui-navigation, difficulty/medium, navigation]
+anki_cards:
+  - slug: android-344-0-en
+    front: "What are the 3 main navigation approaches in Android Kotlin apps?"
+    back: |
+      **1. Navigation Component (Recommended)**
+      ```kotlin
+      val action = HomeFragmentDirections.actionHomeToDetail(itemId = 123)
+      findNavController().navigate(action)
+      ```
+      Type-safe with SafeArgs, deep link support, automatic backstack.
+
+      **2. Intent (Activity navigation)**
+      ```kotlin
+      val intent = Intent(this, DetailActivity::class.java)
+      intent.putExtra("ITEM_ID", 123)
+      startActivity(intent)
+      ```
+
+      **3. FragmentTransaction (Manual)**
+      ```kotlin
+      supportFragmentManager.beginTransaction()
+          .replace(R.id.container, DetailFragment())
+          .addToBackStack(null)
+          .commit()
+      ```
+    tags:
+      - android_navigation
+      - difficulty::medium
+  - slug: android-344-0-ru
+    front: "Какие 3 основных подхода к навигации в Android Kotlin приложениях?"
+    back: |
+      **1. Navigation Component (Рекомендуемый)**
+      ```kotlin
+      val action = HomeFragmentDirections.actionHomeToDetail(itemId = 123)
+      findNavController().navigate(action)
+      ```
+      Type-safe с SafeArgs, поддержка deep link, автоматический backstack.
+
+      **2. Intent (навигация Activity)**
+      ```kotlin
+      val intent = Intent(this, DetailActivity::class.java)
+      intent.putExtra("ITEM_ID", 123)
+      startActivity(intent)
+      ```
+
+      **3. FragmentTransaction (Ручной)**
+      ```kotlin
+      supportFragmentManager.beginTransaction()
+          .replace(R.id.container, DetailFragment())
+          .addToBackStack(null)
+          .commit()
+      ```
+    tags:
+      - android_navigation
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

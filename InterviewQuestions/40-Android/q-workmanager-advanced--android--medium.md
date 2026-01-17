@@ -15,6 +15,57 @@ created: 2025-10-12
 updated: 2025-11-10
 tags: [android/background-execution, background-processing, difficulty/medium, jetpack, workmanager]
 sources: ["https://developer.android.com/topic/libraries/architecture/workmanager"]
+anki_cards:
+  - slug: android-065-0-en
+    front: "What are the advanced features of WorkManager?"
+    back: |
+      **Constraints:** Execute when conditions met (WiFi, battery)
+      ```kotlin
+      Constraints.Builder()
+          .setRequiredNetworkType(NetworkType.UNMETERED)
+          .setRequiresBatteryNotLow(true).build()
+      ```
+
+      **Chaining:** Sequential/parallel with data passing
+      ```kotlin
+      beginWith(download).then(process).then(upload).enqueue()
+      ```
+
+      **ExistingWorkPolicy:** REPLACE, KEEP, APPEND_OR_REPLACE
+
+      **Periodic:** Min 15min interval with flex window
+
+      **Persistence:** SQLite-backed, survives reboots
+
+      **Progress:** `setProgress()` + `getWorkInfoByIdLiveData()`
+    tags:
+      - android_workmanager
+      - difficulty::medium
+  - slug: android-065-0-ru
+    front: "Какие продвинутые возможности WorkManager?"
+    back: |
+      **Constraints:** Выполнение при соблюдении условий (WiFi, батарея)
+      ```kotlin
+      Constraints.Builder()
+          .setRequiredNetworkType(NetworkType.UNMETERED)
+          .setRequiresBatteryNotLow(true).build()
+      ```
+
+      **Chaining:** Последовательное/параллельное с передачей данных
+      ```kotlin
+      beginWith(download).then(process).then(upload).enqueue()
+      ```
+
+      **ExistingWorkPolicy:** REPLACE, KEEP, APPEND_OR_REPLACE
+
+      **Periodic:** Мин. 15 минут с гибким окном
+
+      **Persistence:** SQLite, выживает после перезагрузки
+
+      **Progress:** `setProgress()` + `getWorkInfoByIdLiveData()`
+    tags:
+      - android_workmanager
+      - difficulty::medium
 ---\
 # Вопрос (RU)
 > Какие продвинутые возможности `WorkManager`?

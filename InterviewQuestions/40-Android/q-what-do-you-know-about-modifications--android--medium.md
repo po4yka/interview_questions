@@ -1,4 +1,5 @@
 ---id: android-298
+id: android-733
 title: Compose Modifiers / Модификаторы в Compose
 aliases: [Compose Modifiers, Jetpack Compose Modifiers, Модификаторы в Compose]
 topic: android

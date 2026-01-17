@@ -14,6 +14,36 @@ updated: 2025-11-10
 tags: [android, android/architecture-clean, android/cache-offline, android/room, architecture, difficulty/hard, offline-first, sync, workmanager]
 moc: moc-android
 related: [c-clean-architecture, c-database-design, q-clean-architecture-android--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-multi-module-best-practices--android--hard, q-play-billing-v6-architecture--android--hard, q-quick-settings-tiles-architecture--android--medium]
+anki_cards:
+  - slug: android-097-0-en
+    front: "What are key principles of offline-first architecture in Android?"
+    back: |
+      **Principles:**
+      1. **Room DB as single source of truth**
+      2. **Write local first**, sync later
+      3. **WorkManager** for reliable background sync
+      4. **NetworkMonitor** - observe connectivity
+      5. **Conflict resolution** - Last-Write-Wins or Three-Way Merge
+
+      **Sync metadata:** `isSynced`, `pendingAction` fields in Entity.
+    tags:
+      - android_architecture
+      - difficulty::hard
+  - slug: android-097-0-ru
+    front: "Какие ключевые принципы offline-first архитектуры в Android?"
+    back: |
+      **Принципы:**
+      1. **Room DB как единственный источник истины**
+      2. **Сначала пишем локально**, потом синхронизируем
+      3. **WorkManager** для надёжной фоновой синхронизации
+      4. **NetworkMonitor** - наблюдать за соединением
+      5. **Разрешение конфликтов** - Last-Write-Wins или Three-Way Merge
+
+      **Метаданные синхронизации:** поля `isSynced`, `pendingAction` в Entity.
+    tags:
+      - android_architecture
+      - difficulty::hard
+
 ---\
 # Вопрос (RU)
 

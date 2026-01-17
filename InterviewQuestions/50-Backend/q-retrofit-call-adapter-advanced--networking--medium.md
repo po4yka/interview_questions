@@ -1,22 +1,52 @@
----\
+---
 id: net-002
-title: "Retrofit Call Adapter Advanced / Продвинутый CallAdapter для Retrofit"
-aliases: ["Retrofit Call Adapter Advanced", "Продвинутый CallAdapter для Retrofit"]
+title: Retrofit Call Adapter Advanced / Продвинутый CallAdapter для Retrofit
+aliases:
+- Retrofit Call Adapter Advanced
+- Продвинутый CallAdapter для Retrofit
 topic: databases
-subtopics: [api-clients, retrofit]
+subtopics:
+- api-clients
+- retrofit
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-backend
-related: [c-backend, q-android-architectural-patterns--android--medium]
+related:
+- c-backend
+- q-android-architectural-patterns--android--medium
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [backend, call-adapter, difficulty/medium, networking, result, retrofit]
-
----\
+tags:
+- backend
+- call-adapter
+- difficulty/medium
+- networking
+- result
+- retrofit
+anki_cards:
+- slug: net-002-0-en
+  language: en
+  anki_id: 1768460896535
+  synced_at: '2026-01-15T11:08:17.082655'
+- slug: net-002-0-ru
+  language: ru
+  anki_id: 1768460896561
+  synced_at: '2026-01-15T11:08:17.085314'
+- slug: net-002-1-en
+  language: en
+  anki_id: 1768460896585
+  synced_at: '2026-01-15T11:08:17.087844'
+- slug: net-002-1-ru
+  language: ru
+  anki_id: 1768460896611
+  synced_at: '2026-01-15T11:08:17.090103'
+---
 # Вопрос (RU)
 
 > Как реализовать кастомный `Retrofit` CallAdapter для типа `Result<T>`? Как централизованно обрабатывать разные типы ошибок с помощью sealed классов?

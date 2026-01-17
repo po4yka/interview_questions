@@ -16,6 +16,49 @@ related: [c-background-tasks, q-dagger-build-time-optimization--android--medium,
 created: 2025-10-06
 updated: 2025-11-11
 tags: [android/background-execution, android/notifications, difficulty/medium]
+anki_cards:
+  - slug: android-032-0-en
+    front: "How to schedule local notifications at exact time in Android?"
+    back: |
+      Use **AlarmManager** + **PendingIntent** -> **BroadcastReceiver**:
+
+      ```kotlin
+      alarmManager.setExactAndAllowWhileIdle(
+          AlarmManager.RTC_WAKEUP,
+          triggerAtMillis,
+          pendingIntent
+      )
+      ```
+
+      **Key points**:
+      - Android 12+: need `SCHEDULE_EXACT_ALARM` permission
+      - Receiver creates and shows notification
+      - Alarms lost on reboot (handle `BOOT_COMPLETED`)
+      - Prefer inexact alarms when possible
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-032-0-ru
+    front: "Как запланировать локальные уведомления на точное время в Android?"
+    back: |
+      Используйте **AlarmManager** + **PendingIntent** -> **BroadcastReceiver**:
+
+      ```kotlin
+      alarmManager.setExactAndAllowWhileIdle(
+          AlarmManager.RTC_WAKEUP,
+          triggerAtMillis,
+          pendingIntent
+      )
+      ```
+
+      **Ключевые моменты**:
+      - Android 12+: нужно разрешение `SCHEDULE_EXACT_ALARM`
+      - Receiver создаёт и показывает уведомление
+      - Будильники теряются при перезагрузке (обработайте `BOOT_COMPLETED`)
+      - Предпочитайте неточные будильники где возможно
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 

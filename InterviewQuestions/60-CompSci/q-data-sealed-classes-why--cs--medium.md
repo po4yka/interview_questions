@@ -1,19 +1,140 @@
----id: cs-010
-title: "Why Data and Sealed Classes / Зачем Data и Sealed Classes"
-aliases: ["Why Data and Sealed Classes", "Зачем Data и Sealed Classes"]
+---
+id: cs-010
+title: Why Data and Sealed Classes / Зачем Data и Sealed Classes
+aliases:
+- Why Data and Sealed Classes
+- Зачем Data и Sealed Classes
 topic: cs
-subtopics: [data-classes, kotlin, sealed-classes]
+subtopics:
+- data-classes
+- kotlin
+- sealed-classes
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-aggregation, c-app-signing, c-backend, c-binary-search, c-binary-search-tree, c-binder, c-biometric-authentication, c-bm25-ranking, c-by-type, c-cap-theorem, c-ci-cd, c-ci-cd-pipelines, c-clean-code, c-compiler-optimization, c-compose-modifiers, c-compose-phases, c-compose-semantics, c-computer-science, c-concurrency, c-cross-platform-development, c-cross-platform-mobile, c-cs, c-data-classes, c-data-loading, c-debugging, c-declarative-programming, c-deep-linking, c-density-independent-pixels, c-dimension-units, c-dp-sp-units, c-dsl-builders, c-dynamic-programming, c-espresso-testing, c-event-handling, c-folder, c-functional-programming, c-gdpr-compliance, c-gesture-detection, c-gradle-build-cache, c-gradle-build-system, c-https-tls, c-image-formats, c-inheritance, c-jit-aot-compilation, c-kmm, c-kotlin, c-lambda-expressions, c-lazy-grid, c-lazy-initialization, c-level, c-load-balancing, c-manifest, c-memory-optimization, c-memory-profiler, c-microservices, c-multipart-form-data, c-multithreading, c-mutablestate, c-networking, c-offline-first-architecture, c-oop, c-oop-concepts, c-oop-fundamentals, c-oop-principles, c-play-console, c-play-feature-delivery, c-programming-languages, c-properties, c-real-time-communication, c-references, c-scaling-strategies, c-scoped-storage, c-security, c-serialization, c-server-sent-events, c-shader-programming, c-snapshot-system, c-specific, c-strictmode, c-system-ui, c-test-doubles, c-test-sharding, c-testing-pyramid, c-testing-strategies, c-theming, c-to-folder, c-token-management, c-touch-input, c-turbine-testing, c-two-pointers, c-ui-testing, c-ui-ux-accessibility, c-value-classes, c-variable, c-weak-references, c-windowinsets, c-xml, q-sealed-classes--kotlin--medium]
+related:
+- c-aggregation
+- c-app-signing
+- c-backend
+- c-binary-search
+- c-binary-search-tree
+- c-binder
+- c-biometric-authentication
+- c-bm25-ranking
+- c-by-type
+- c-cap-theorem
+- c-ci-cd
+- c-ci-cd-pipelines
+- c-clean-code
+- c-compiler-optimization
+- c-compose-modifiers
+- c-compose-phases
+- c-compose-semantics
+- c-computer-science
+- c-concurrency
+- c-cross-platform-development
+- c-cross-platform-mobile
+- c-cs
+- c-data-classes
+- c-data-loading
+- c-debugging
+- c-declarative-programming
+- c-deep-linking
+- c-density-independent-pixels
+- c-dimension-units
+- c-dp-sp-units
+- c-dsl-builders
+- c-dynamic-programming
+- c-espresso-testing
+- c-event-handling
+- c-folder
+- c-functional-programming
+- c-gdpr-compliance
+- c-gesture-detection
+- c-gradle-build-cache
+- c-gradle-build-system
+- c-https-tls
+- c-image-formats
+- c-inheritance
+- c-jit-aot-compilation
+- c-kmm
+- c-kotlin
+- c-lambda-expressions
+- c-lazy-grid
+- c-lazy-initialization
+- c-level
+- c-load-balancing
+- c-manifest
+- c-memory-optimization
+- c-memory-profiler
+- c-microservices
+- c-multipart-form-data
+- c-multithreading
+- c-mutablestate
+- c-networking
+- c-offline-first-architecture
+- c-oop
+- c-oop-concepts
+- c-oop-fundamentals
+- c-oop-principles
+- c-play-console
+- c-play-feature-delivery
+- c-programming-languages
+- c-properties
+- c-real-time-communication
+- c-references
+- c-scaling-strategies
+- c-scoped-storage
+- c-security
+- c-serialization
+- c-server-sent-events
+- c-shader-programming
+- c-snapshot-system
+- c-specific
+- c-strictmode
+- c-system-ui
+- c-test-doubles
+- c-test-sharding
+- c-testing-pyramid
+- c-testing-strategies
+- c-theming
+- c-to-folder
+- c-token-management
+- c-touch-input
+- c-turbine-testing
+- c-two-pointers
+- c-ui-testing
+- c-ui-ux-accessibility
+- c-value-classes
+- c-variable
+- c-weak-references
+- c-windowinsets
+- c-xml
+- q-sealed-classes--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [data-classes, difficulty/medium, kotlin, programming-languages, sealed-classes]
-sources: ["https://kotlinlang.org/docs/sealed-classes.html"]
+tags:
+- data-classes
+- difficulty/medium
+- kotlin
+- programming-languages
+- sealed-classes
+sources:
+- https://kotlinlang.org/docs/sealed-classes.html
+anki_cards:
+- slug: cs-010-0-en
+  language: en
+  anki_id: 1768454342339
+  synced_at: '2026-01-15T09:43:17.024737'
+- slug: cs-010-0-ru
+  language: ru
+  anki_id: 1768454342365
+  synced_at: '2026-01-15T09:43:17.026476'
 ---
 # Вопрос (RU)
 > Зачем нужны Data Class и Sealed Classes? Какие проблемы они решают?

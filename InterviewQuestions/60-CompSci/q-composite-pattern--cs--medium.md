@@ -1,22 +1,46 @@
----\
+---
 id: cs-025
-title: "Composite Pattern / Паттерн Composite"
-aliases: ["Composite Pattern", "Паттерн Composite"]
+title: Composite Pattern / Паттерн Composite
+aliases:
+- Composite Pattern
+- Паттерн Composite
 topic: cs
-subtopics: [design-patterns, gof-patterns, structural-patterns]
+subtopics:
+- design-patterns
+- gof-patterns
+- structural-patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-adapter-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- q-adapter-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [composite, design-patterns, difficulty/medium, gof-patterns, structural-patterns, tree-structure]
-sources: ["https://en.wikipedia.org/wiki/Composite_pattern"]
-
----\
+tags:
+- composite
+- design-patterns
+- difficulty/medium
+- gof-patterns
+- structural-patterns
+- tree-structure
+sources:
+- https://en.wikipedia.org/wiki/Composite_pattern
+anki_cards:
+- slug: cs-025-0-en
+  language: en
+  anki_id: 1768454343541
+  synced_at: '2026-01-15T09:43:17.066760'
+- slug: cs-025-0-ru
+  language: ru
+  anki_id: 1768454343565
+  synced_at: '2026-01-15T09:43:17.068781'
+---
 # Вопрос (RU)
 > Что такое паттерн Composite? Когда и зачем его использовать?
 

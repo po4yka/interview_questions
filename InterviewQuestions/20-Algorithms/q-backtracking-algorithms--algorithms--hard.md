@@ -1,20 +1,56 @@
----id: algo-006
-title: "Backtracking Algorithms (N-Queens, Sudoku, Subsets) / Алгоритмы с откатом"
-aliases: ["Backtracking Algorithms", "Алгоритмы с откатом"]
+---
+id: algo-006
+title: Backtracking Algorithms (N-Queens, Sudoku, Subsets) / Алгоритмы с откатом
+aliases:
+- Backtracking Algorithms
+- Алгоритмы с откатом
 topic: algorithms
-subtopics: [backtracking, combinatorics, recursion]
+subtopics:
+- backtracking
+- combinatorics
+- recursion
 question_kind: coding
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, c-backtracking-algorithm, q-advanced-graph-algorithms--algorithms--hard]
+related:
+- c-algorithms
+- c-backtracking-algorithm
+- q-advanced-graph-algorithms--algorithms--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [algorithms, backtracking, combinations, difficulty/hard, n-queens, permutations, recursion, sudoku]
-sources: ["https://en.wikipedia.org/wiki/Backtracking"]
-
+tags:
+- algorithms
+- backtracking
+- combinations
+- difficulty/hard
+- n-queens
+- permutations
+- recursion
+- sudoku
+sources:
+- https://en.wikipedia.org/wiki/Backtracking
+anki_cards:
+- slug: algo-006-0-en
+  language: en
+  anki_id: 1768457298728
+  synced_at: '2026-01-15T10:08:19.368937'
+- slug: algo-006-0-ru
+  language: ru
+  anki_id: 1768457298754
+  synced_at: '2026-01-15T10:08:19.371590'
+- slug: algo-006-1-en
+  language: en
+  anki_id: 1768457298777
+  synced_at: '2026-01-15T10:08:19.374472'
+- slug: algo-006-1-ru
+  language: ru
+  anki_id: 1768457298802
+  synced_at: '2026-01-15T10:08:19.377000'
 ---
 # Вопрос (RU)
 > Что такое backtracking? Как решать задачи N-Queens, Sudoku, Permutations, Combinations и Subsets?

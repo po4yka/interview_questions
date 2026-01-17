@@ -1,21 +1,61 @@
 ---
 id: algo-009
-title: "Dynamic Programming Fundamentals / Основы динамического программирования"
-aliases: ["Dynamic Programming", "Основы динамического программирования"]
+title: Dynamic Programming Fundamentals / Основы динамического программирования
+aliases:
+- Dynamic Programming
+- Основы динамического программирования
 topic: algorithms
-subtopics: [dp, dynamic-programming, memoization]
+subtopics:
+- dp
+- dynamic-programming
+- memoization
 question_kind: coding
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, q-advanced-graph-algorithms--algorithms--hard]
+related:
+- c-algorithms
+- q-advanced-graph-algorithms--algorithms--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [algorithms, difficulty/hard, dp, dynamic-programming, memoization, optimization]
-sources: ["https://en.wikipedia.org/wiki/Dynamic_programming"]
-
+tags:
+- algorithms
+- difficulty/hard
+- dp
+- dynamic-programming
+- memoization
+- optimization
+sources:
+- https://en.wikipedia.org/wiki/Dynamic_programming
+anki_cards:
+- slug: algo-009-0-en
+  language: en
+  anki_id: 1768457299077
+  synced_at: '2026-01-15T10:08:19.403363'
+- slug: algo-009-0-ru
+  language: ru
+  anki_id: 1768457299102
+  synced_at: '2026-01-15T10:08:19.405793'
+- slug: algo-009-1-en
+  language: en
+  anki_id: 1768457299126
+  synced_at: '2026-01-15T10:08:19.408381'
+- slug: algo-009-1-ru
+  language: ru
+  anki_id: 1768457299152
+  synced_at: '2026-01-15T10:08:19.410735'
+- slug: algo-009-2-en
+  language: en
+  anki_id: 1768457299177
+  synced_at: '2026-01-15T10:08:19.412860'
+- slug: algo-009-2-ru
+  language: ru
+  anki_id: 1768457299202
+  synced_at: '2026-01-15T10:08:19.415348'
 ---
 # Вопрос (RU)
 > Что такое динамическое программирование? Чем оно отличается от рекурсии? Каковы основные паттерны DP и классические задачи?

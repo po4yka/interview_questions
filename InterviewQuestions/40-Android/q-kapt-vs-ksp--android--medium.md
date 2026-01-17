@@ -16,6 +16,41 @@ related: [c-gradle, q-fix-slow-app-startup-legacy--android--hard, q-flutter-comp
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/gradle, difficulty/medium, en, ru]
+anki_cards:
+  - slug: android-020-0-en
+    front: "What is the difference between kapt and KSP in Android?"
+    back: |
+      **kapt**: Kotlin Annotation Processing Tool
+      - Generates Java stubs, slower
+      - Uses Java APT (JSR 269)
+      - Works with all Java annotation processors
+
+      **KSP**: Kotlin Symbol Processing
+      - Kotlin-first, no stubs, ~2x faster
+      - Better incremental builds
+      - Room, Moshi, Hilt 2.44+ support KSP
+
+      **Prefer KSP** when library supports it; keep kapt only for legacy processors.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-020-0-ru
+    front: "В чём разница между kapt и KSP в Android?"
+    back: |
+      **kapt**: Kotlin Annotation Processing Tool
+      - Генерирует Java stubs, медленнее
+      - Использует Java APT (JSR 269)
+      - Работает со всеми Java процессорами
+
+      **KSP**: Kotlin Symbol Processing
+      - Kotlin-first, без stubs, ~2x быстрее
+      - Лучшая инкрементальная сборка
+      - Room, Moshi, Hilt 2.44+ поддерживают KSP
+
+      **Предпочитайте KSP** когда библиотека поддерживает; kapt только для legacy.
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

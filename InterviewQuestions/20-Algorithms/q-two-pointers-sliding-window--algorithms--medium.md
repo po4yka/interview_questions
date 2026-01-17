@@ -1,21 +1,58 @@
----\
+---
 id: algo-003
-title: "Two Pointers and Sliding Window Patterns / Паттерны двух указателей и скользящего окна"
-aliases: ["Sliding Window", "Two Pointers", "Два указателя", "Скользящее окно"]
+title: Two Pointers and Sliding Window Patterns / Паттерны двух указателей и скользящего
+  окна
+aliases:
+- Sliding Window
+- Two Pointers
+- Два указателя
+- Скользящее окно
 topic: algorithms
-subtopics: [array, sliding-window, string, two-pointers]
+subtopics:
+- array
+- sliding-window
+- string
+- two-pointers
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-algorithms
-related: [c-sliding-window, c-two-pointers]
+related:
+- c-sliding-window
+- c-two-pointers
 created: 2025-10-12
 updated: 2025-01-25
-tags: [algorithms, array, difficulty/medium, optimization, sliding-window, two-pointers]
-sources: [https://en.wikipedia.org/wiki/Two_pointer_technique]
----\
+tags:
+- algorithms
+- array
+- difficulty/medium
+- optimization
+- sliding-window
+- two-pointers
+sources:
+- https://en.wikipedia.org/wiki/Two_pointer_technique
+anki_cards:
+- slug: algo-003-0-en
+  language: en
+  anki_id: 1768457298377
+  synced_at: '2026-01-15T10:08:19.329302'
+- slug: algo-003-0-ru
+  language: ru
+  anki_id: 1768457298402
+  synced_at: '2026-01-15T10:08:19.333671'
+- slug: algo-003-1-en
+  language: en
+  anki_id: 1768457298427
+  synced_at: '2026-01-15T10:08:19.336187'
+- slug: algo-003-1-ru
+  language: ru
+  anki_id: 1768457298452
+  synced_at: '2026-01-15T10:08:19.338568'
+---
 # Вопрос (RU)
 > Что такое техники двух указателей и скользящего окна? Когда их следует использовать? Каковы распространённые паттерны задач?
 

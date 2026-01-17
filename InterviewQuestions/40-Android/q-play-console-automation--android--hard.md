@@ -1,4 +1,5 @@
----id: android-638
+---
+id: android-638
 title: Play Console Automation / Автоматизация Play Console
 aliases: [Play Console Automation, Автоматизация Play Console]
 topic: android
@@ -17,6 +18,41 @@ sources:
   - "https://developer.android.com/distribute/google-play/developer-api"
   - "https://support.google.com/googleplay/android-developer/answer/9842756"
   - "https://support.google.com/googleplay/android-developer/answer/9844778"
+anki_cards:
+  - slug: android-638-0-en
+    front: "How do you automate Google Play Console release management?"
+    back: |
+      **Key automation components:**
+
+      1. **Publishing API** - upload AAB, manage tracks via `edits.insert`, `bundles.upload`, `tracks.update`
+      2. **Play Vitals** - monitor via Reporting API or BigQuery export
+      3. **Staged rollout** - 5% -> 20% -> 50% -> 100% with metric checks
+      4. **Rollback** - update track config to re-promote stable version
+
+      **CI/CD integration:**
+      - Service account with JSON key (server-only)
+      - Release notes from VCS
+      - Quality gates before publish
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-638-0-ru
+    front: "Как автоматизировать управление релизами в Google Play Console?"
+    back: |
+      **Ключевые компоненты автоматизации:**
+
+      1. **Publishing API** - загрузка AAB, управление треками через `edits.insert`, `bundles.upload`, `tracks.update`
+      2. **Play Vitals** - мониторинг через Reporting API или BigQuery экспорт
+      3. **Staged rollout** - 5% -> 20% -> 50% -> 100% с проверкой метрик
+      4. **Откат** - обновление конфигурации трека для возврата стабильной версии
+
+      **CI/CD интеграция:**
+      - Service account с JSON-ключом (только на сервере)
+      - Release notes из VCS
+      - Quality gates перед публикацией
+    tags:
+      - android_general
+      - difficulty::hard
 ---
 # Вопрос (RU)
 > Как автоматизировать управление релизами в Google Play Console: мониторинг Play Vitals, публикация через Play Developer API, предзапусковые отчёты, откаты и поэтапные выкаты?

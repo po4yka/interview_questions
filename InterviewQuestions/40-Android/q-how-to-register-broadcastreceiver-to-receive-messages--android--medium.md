@@ -15,6 +15,55 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/broadcast-receiver, difficulty/medium]
 sources: []
+anki_cards:
+  - slug: android-163-0-en
+    front: "How to register a BroadcastReceiver in Android?"
+    back: |
+      **Dynamic (runtime):**
+      ```kotlin
+      registerReceiver(receiver, IntentFilter("action"),
+          RECEIVER_NOT_EXPORTED) // API 33+
+      unregisterReceiver(receiver) // in onStop
+      ```
+
+      **Static (manifest):**
+      ```xml
+      <receiver android:name=".BootReceiver"
+          android:exported="false">
+          <intent-filter>
+              <action android:name="android.intent.action.BOOT_COMPLETED"/>
+          </intent-filter>
+      </receiver>
+      ```
+
+      **Dynamic:** Lives with component. **Static:** Survives process death
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-163-0-ru
+    front: "Как зарегистрировать BroadcastReceiver в Android?"
+    back: |
+      **Динамическая (runtime):**
+      ```kotlin
+      registerReceiver(receiver, IntentFilter("action"),
+          RECEIVER_NOT_EXPORTED) // API 33+
+      unregisterReceiver(receiver) // в onStop
+      ```
+
+      **Статическая (manifest):**
+      ```xml
+      <receiver android:name=".BootReceiver"
+          android:exported="false">
+          <intent-filter>
+              <action android:name="android.intent.action.BOOT_COMPLETED"/>
+          </intent-filter>
+      </receiver>
+      ```
+
+      **Динамическая:** Живёт с компонентом. **Статическая:** Переживает смерть процесса
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

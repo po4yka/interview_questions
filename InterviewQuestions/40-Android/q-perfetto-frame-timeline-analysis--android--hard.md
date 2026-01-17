@@ -1,5 +1,38 @@
----\
+---
 id: android-625
+anki_cards:
+  - slug: android-625-0-en
+    front: "What are the key concepts in Perfetto Frame Timeline analysis?"
+    back: |
+      **Two frame types:**
+      - **AppFrame** - App finished preparing frame (RenderThread)
+      - **DisplayFrame** - SurfaceFlinger showed frame on screen
+
+      **Jank detection:** AppFrame misses vsync deadline for DisplayFrame.
+
+      **Analysis steps:**
+      1. Capture with `android.app_frame_timeline` data source
+      2. Correlate with Choreographer#doFrame, RenderThread, GPU
+      3. Query via `trace_processor_shell` for `jank_type != 0`
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-625-0-ru
+    front: "Какие ключевые концепции анализа Frame Timeline в Perfetto?"
+    back: |
+      **Два типа кадров:**
+      - **AppFrame** - Приложение завершило подготовку кадра (RenderThread)
+      - **DisplayFrame** - SurfaceFlinger показал кадр на экране
+
+      **Обнаружение jank:** AppFrame не успевает к vsync дедлайну DisplayFrame.
+
+      **Шаги анализа:**
+      1. Захват с data source `android.app_frame_timeline`
+      2. Корреляция с Choreographer#doFrame, RenderThread, GPU
+      3. Запрос через `trace_processor_shell` для `jank_type != 0`
+    tags:
+      - android_general
+      - difficulty::hard
 title: Perfetto Frame Timeline Analysis / Анализ Frame Timeline в Perfetto
 aliases: [Perfetto Frame Timeline Analysis, Анализ Frame Timeline в Perfetto]
 topic: android

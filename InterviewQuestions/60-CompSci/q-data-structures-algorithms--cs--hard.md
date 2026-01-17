@@ -1,22 +1,53 @@
----\
+---
 id: cs-035
-title: "Data Structures and Algorithms Fundamentals / Фундаментальные структуры данных и алгоритмы"
-aliases: ["Data Structures and Algorithms Fundamentals", "Фундаментальные структуры данных и алгоритмы"]
+title: Data Structures and Algorithms Fundamentals / Фундаментальные структуры данных
+  и алгоритмы
+aliases:
+- Data Structures and Algorithms Fundamentals
+- Фундаментальные структуры данных и алгоритмы
 topic: cs
-subtopics: [algorithms, complexity-analysis, data-structures]
+subtopics:
+- algorithms
+- complexity-analysis
+- data-structures
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-algorithms, c-data-structures, q-sorting-algorithms-comparison--algorithms--medium]
-created: "2025-01-13"
-updated: "2025-01-25"
-tags: [algorithms, big-o, complexity, data-structures, difficulty/hard, dynamic-programming, graphs, recursion, searching, sorting, trees]
-sources: ["https://en.wikipedia.org/wiki/Data_structure"]
-
----\
+related:
+- c-algorithms
+- c-data-structures
+- q-sorting-algorithms-comparison--algorithms--medium
+created: '2025-01-13'
+updated: '2025-01-25'
+tags:
+- algorithms
+- big-o
+- complexity
+- data-structures
+- difficulty/hard
+- dynamic-programming
+- graphs
+- recursion
+- searching
+- sorting
+- trees
+sources:
+- https://en.wikipedia.org/wiki/Data_structure
+anki_cards:
+- slug: cs-035-0-en
+  language: en
+  anki_id: 1768454342639
+  synced_at: '2026-01-15T09:41:02.812787'
+- slug: cs-035-0-ru
+  language: ru
+  anki_id: 1768454342665
+  synced_at: '2026-01-15T09:41:02.815373'
+---
 # Вопрос (RU)
 > Объясните фундаментальные структуры данных и алгоритмы. Какие особенности у каждой структуры и когда их использовать?
 

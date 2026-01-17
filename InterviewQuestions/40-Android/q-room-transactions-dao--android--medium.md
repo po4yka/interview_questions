@@ -1,5 +1,62 @@
 ---\
 id: android-279
+anki_cards:
+  - slug: android-279-0-en
+    front: "How do you ensure atomicity for multi-table operations in Room?"
+    back: |
+      **Use @Transaction annotation** for atomic DAO operations:
+      ```kotlin
+      @Transaction
+      suspend fun insertUserWithPosts(user: User, posts: List<Post>) {
+          val userId = insertUser(user)
+          insertPosts(posts.map { it.copy(authorId = userId) })
+          // Rolls back if exception thrown
+      }
+      ```
+
+      **Use withTransaction** for complex logic:
+      ```kotlin
+      database.withTransaction {
+          userDao.insertUser(user)
+          statsDao.incrementUserCount()
+      }
+      ```
+
+      **Key points:**
+      - Transaction rolls back only on uncaught exception
+      - Keep transactions short (no network calls)
+      - Use batch operations instead of loops
+    tags:
+      - android_room
+      - difficulty::medium
+  - slug: android-279-0-ru
+    front: "Как обеспечить атомарность операций с несколькими таблицами в Room?"
+    back: |
+      **Используйте аннотацию @Transaction** для атомарных DAO-операций:
+      ```kotlin
+      @Transaction
+      suspend fun insertUserWithPosts(user: User, posts: List<Post>) {
+          val userId = insertUser(user)
+          insertPosts(posts.map { it.copy(authorId = userId) })
+          // Откатывается при исключении
+      }
+      ```
+
+      **Используйте withTransaction** для сложной логики:
+      ```kotlin
+      database.withTransaction {
+          userDao.insertUser(user)
+          statsDao.incrementUserCount()
+      }
+      ```
+
+      **Ключевые моменты:**
+      - Транзакция откатывается только при неперехваченном исключении
+      - Держите транзакции короткими (без сетевых вызовов)
+      - Используйте batch-операции вместо циклов
+    tags:
+      - android_room
+      - difficulty::medium
 title: "Room Transactions Dao / Транзакции DAO в Room"
 aliases: ["Room Transactions Dao", "Транзакции DAO в Room"]
 topic: android

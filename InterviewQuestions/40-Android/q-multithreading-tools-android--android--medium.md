@@ -15,6 +15,44 @@ created: 2024-10-15
 updated: 2025-11-10
 sources: ["https://developer.android.com/kotlin/coroutines", "https://developer.android.com/topic/libraries/architecture/workmanager"]
 tags: [android/background-execution, android/coroutines, android/performance-startup, concurrency, difficulty/medium, rxjava, workmanager]
+anki_cards:
+  - slug: android-275-0-en
+    front: "What multithreading tools are available in Android?"
+    back: |
+      **Recommended:**
+      1. **Kotlin Coroutines** - async/await, structured concurrency, Dispatchers (Main/IO/Default)
+      2. **WorkManager** - deferrable background tasks with constraints
+
+      **Others:**
+      - RxJava - reactive streams (complex, legacy)
+      - Handler/Looper - message queue
+      - Executor/ThreadPool - thread pools
+
+      **Deprecated:** AsyncTask (context leaks, inconsistent)
+
+      Use `viewModelScope.launch { withContext(Dispatchers.IO) { ... } }`
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-275-0-ru
+    front: "Какие инструменты многопоточности есть в Android?"
+    back: |
+      **Рекомендуемые:**
+      1. **Kotlin Coroutines** - async/await, структурированная конкурентность, Dispatchers (Main/IO/Default)
+      2. **WorkManager** - отложенные фоновые задачи с ограничениями
+
+      **Другие:**
+      - RxJava - реактивные потоки (сложный, legacy)
+      - Handler/Looper - очередь сообщений
+      - Executor/ThreadPool - пулы потоков
+
+      **Устарел:** AsyncTask (утечки context, непоследовательный)
+
+      Используйте `viewModelScope.launch { withContext(Dispatchers.IO) { ... } }`
+    tags:
+      - android_general
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

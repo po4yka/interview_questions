@@ -15,6 +15,29 @@ created: 2025-10-13
 updated: 2025-11-10
 sources: []
 tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/medium, hilt, koin]
+anki_cards:
+  - slug: android-093-0-en
+    front: "Compare Koin vs Hilt: when to choose each?"
+    back: |
+      **Koin:** Runtime DI via DSL, fast build, KMM support, easy to learn
+      **Hilt:** Compile-time DI (Dagger), type-safe, slower build, Android only
+
+      **Choose Koin:** KMM, prototypes, small/medium apps
+      **Choose Hilt:** Large teams, type-safety critical, long-term maintenance
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-093-0-ru
+    front: "Сравните Koin и Hilt: когда выбирать каждый?"
+    back: |
+      **Koin:** Runtime DI через DSL, быстрая сборка, поддержка KMM, легко изучить
+      **Hilt:** Compile-time DI (Dagger), типобезопасность, медленная сборка, только Android
+
+      **Выбирайте Koin:** KMM, прототипы, малые/средние приложения
+      **Выбирайте Hilt:** Большие команды, критична типобезопасность, долгосрочная поддержка
+    tags:
+      - android_architecture
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

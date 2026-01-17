@@ -16,6 +16,37 @@ related: [c-perfetto, c-performance, q-compose-gesture-detection--android--mediu
 created: 2025-10-11
 updated: 2025-11-11
 tags: [android/monitoring-slo, android/performance-rendering, difficulty/medium, en, ru]
+anki_cards:
+  - slug: android-053-0-en
+    front: "How to detect and measure jank (frame drops) in Android?"
+    back: |
+      **Frame budget**: 16ms (60fps), 11ms (90fps), 8ms (120fps)
+
+      **Detection tools**:
+      - `FrameMetricsAggregator` - aggregates frame timings (API 24+)
+      - `OnFrameMetricsAvailableListener` - per-frame callback
+      - Perfetto/Systrace - system-level tracing
+      - GPU Profiler bars in DevOptions
+
+      **Common causes**: overdraw, deep view hierarchy, main thread blocking, heavy onBindViewHolder, bitmap decoding on UI thread, GC pauses
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-053-0-ru
+    front: "Как обнаружить и измерить jank (пропуск кадров) в Android?"
+    back: |
+      **Бюджет кадра**: 16мс (60fps), 11мс (90fps), 8мс (120fps)
+
+      **Инструменты обнаружения**:
+      - `FrameMetricsAggregator` - агрегирует тайминги кадров (API 24+)
+      - `OnFrameMetricsAvailableListener` - callback на каждый кадр
+      - Perfetto/Systrace - системная трассировка
+      - GPU Profiler в настройках разработчика
+
+      **Частые причины**: overdraw, глубокая иерархия view, блокировка главного потока, тяжёлый onBindViewHolder, декодирование bitmap в UI, паузы GC
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

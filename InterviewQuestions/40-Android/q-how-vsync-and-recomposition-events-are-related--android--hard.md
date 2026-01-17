@@ -1,4 +1,42 @@
 ---id: android-110
+id: android-705
+anki_cards:
+  - slug: android-110-0-en
+    front: "How are VSYNC and recomposition events related in Jetpack Compose?"
+    back: |
+      **VSYNC synchronizes frame rendering with display refresh rate.**
+
+      **Mechanism:**
+      1. State change marks composables for recomposition
+      2. Recomposition scheduled on next frame callback (Choreographer)
+      3. VSYNC-synced frame processes: Composition -> Layout -> Draw
+      4. CPU work must fit frame budget (~16.6ms at 60Hz)
+
+      **Key points:**
+      - State batching: multiple changes -> single recomposition
+      - Intermediate states may be skipped if updates > refresh rate
+      - Use `derivedStateOf`, `drawWithContent` to optimize
+    tags:
+      - android_compose
+      - difficulty::hard
+  - slug: android-110-0-ru
+    front: "Как связаны VSYNC и события рекомпозиции в Jetpack Compose?"
+    back: |
+      **VSYNC синхронизирует рендеринг с частотой обновления экрана.**
+
+      **Механизм:**
+      1. Изменение состояния помечает composable для рекомпозиции
+      2. Рекомпозиция планируется на следующий frame callback (Choreographer)
+      3. VSYNC-синхронизированный кадр выполняет: Composition -> Layout -> Draw
+      4. CPU-работа должна уложиться в бюджет кадра (~16.6мс при 60Hz)
+
+      **Ключевые моменты:**
+      - Батчинг состояний: несколько изменений -> одна рекомпозиция
+      - Промежуточные состояния могут пропускаться при частых обновлениях
+      - Используйте `derivedStateOf`, `drawWithContent` для оптимизации
+    tags:
+      - android_compose
+      - difficulty::hard
 title: How VSYNC and Recomposition Events Are Related / Как связаны VSYNC и события рекомпозиции
 aliases: [VSYNC Recomposition, VSYNC и рекомпозиция]
 topic: android

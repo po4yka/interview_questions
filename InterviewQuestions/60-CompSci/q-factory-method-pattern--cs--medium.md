@@ -1,18 +1,49 @@
----id: dp-005
-title: "Factory Method Pattern / Паттерн фабричный метод"
-aliases: [Factory Method Pattern, Паттерн фабричный метод]
+---
+id: dp-005
+title: Factory Method Pattern / Паттерн фабричный метод
+anki_cards:
+- slug: dp-005-0-en
+  language: en
+  anki_id: 1768454535064
+  synced_at: '2026-01-15T09:43:17.089318'
+- slug: dp-005-0-ru
+  language: ru
+  anki_id: 1768454535088
+  synced_at: '2026-01-15T09:43:17.090961'
+aliases:
+- Factory Method Pattern
+- Паттерн фабричный метод
 topic: cs
-subtopics: [design-patterns, creational-patterns, factory-method]
+subtopics:
+- design-patterns
+- creational-patterns
+- factory-method
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-builder-pattern, c-ci-cd-patterns, c-command-pattern, c-dao-pattern, c-declarative-programming-patterns, c-decorator-pattern, c-factory-pattern, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- c-builder-pattern
+- c-ci-cd-patterns
+- c-command-pattern
+- c-dao-pattern
+- c-declarative-programming-patterns
+- c-decorator-pattern
+- c-factory-pattern
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [architecture-patterns, creational-patterns, difficulty/medium, factory-method, gof-patterns]
+tags:
+- architecture-patterns
+- creational-patterns
+- difficulty/medium
+- factory-method
+- gof-patterns
 ---
 # Вопрос (RU)
 > Что такое паттерн Factory Method? Чем он отличается от Abstract Factory?

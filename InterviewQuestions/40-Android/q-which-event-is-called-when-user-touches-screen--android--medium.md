@@ -15,6 +15,37 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-views, difficulty/medium, touch-events, ui]
+anki_cards:
+  - slug: android-155-0-en
+    front: "What event is called when user touches the screen in Android?"
+    back: |
+      **Touch event chain:**
+      1. `dispatchTouchEvent()` - distribution
+      2. `onInterceptTouchEvent()` - ViewGroup interception
+      3. `onTouchEvent()` - handling (ACTION_DOWN, MOVE, UP)
+      4. `performClick()` / `onClick()` - if click recognized
+
+      **Key:** Return `true` from onTouchEvent(ACTION_DOWN) to consume gesture.
+
+      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-155-0-ru
+    front: "Какое событие вызывается при касании экрана в Android?"
+    back: |
+      **Цепочка событий касания:**
+      1. `dispatchTouchEvent()` - распределение
+      2. `onInterceptTouchEvent()` - перехват ViewGroup
+      3. `onTouchEvent()` - обработка (ACTION_DOWN, MOVE, UP)
+      4. `performClick()` / `onClick()` - если распознан клик
+
+      **Ключевое:** Вернуть `true` из onTouchEvent(ACTION_DOWN) для потребления жеста.
+
+      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
+    tags:
+      - android_views
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

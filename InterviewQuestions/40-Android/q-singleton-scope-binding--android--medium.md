@@ -1,4 +1,44 @@
----\
+---
+id: android-726
+anki_cards:
+  - slug: android-324-0-en
+    front: "What scope is @Singleton bound to in Dagger/Hilt?"
+    back: |
+      **@Singleton is bound to component lifetime**, not a true global singleton.
+
+      In **Hilt**: bound to `SingletonComponent` (Application lifecycle)
+      - Created: `Application.onCreate()`
+      - Destroyed: when process terminates
+
+      **Different from Kotlin `object`**:
+      ```kotlin
+      val comp1 = DaggerAppComponent.create()
+      val comp2 = DaggerAppComponent.create()
+      // repo1 !== repo2 (different instances!)
+      ```
+
+      **Common mistake**: Injecting Activity into @Singleton causes memory leaks.
+      Use `@ApplicationContext` instead.
+    tags: ["android_general", "difficulty::medium"]
+  - slug: android-324-0-ru
+    front: "К какому scope привязан @Singleton в Dagger/Hilt?"
+    back: |
+      **@Singleton привязан к времени жизни компонента**, не глобальный синглтон.
+
+      В **Hilt**: привязан к `SingletonComponent` (жизненный цикл Application)
+      - Создаётся: `Application.onCreate()`
+      - Уничтожается: при завершении процесса
+
+      **Отличие от Kotlin `object`**:
+      ```kotlin
+      val comp1 = DaggerAppComponent.create()
+      val comp2 = DaggerAppComponent.create()
+      // repo1 !== repo2 (разные экземпляры!)
+      ```
+
+      **Частая ошибка**: Инжекция Activity в @Singleton вызывает утечку памяти.
+      Используйте `@ApplicationContext`.
+    tags: ["android_general", "difficulty::medium"]
 id: android-324
 title: "Singleton Scope Binding / Привязка Singleton скоупа"
 aliases: ["Singleton Scope Binding", "Привязка Singleton скоупа"]

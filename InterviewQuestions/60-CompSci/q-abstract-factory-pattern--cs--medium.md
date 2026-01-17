@@ -1,22 +1,47 @@
----\
+---
 id: cs-030
-title: "Abstract Factory Pattern / Abstract Factory Паттерн"
-aliases: ["Abstract Factory Pattern", "Паттерн Abstract Factory"]
+title: Abstract Factory Pattern / Abstract Factory Паттерн
+aliases:
+- Abstract Factory Pattern
+- Паттерн Abstract Factory
 topic: cs
-subtopics: [creational-patterns, design-patterns, factory]
+subtopics:
+- creational-patterns
+- design-patterns
+- factory
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science, q-abstract-class-purpose--cs--medium]
+related:
+- c-architecture-patterns
+- c-computer-science
+- q-abstract-class-purpose--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [abstract-factory, creational-patterns, design-patterns, difficulty/medium, factory, gof-patterns]
-sources: ["https://refactoring.guru/design-patterns/abstract-factory"]
-
----\
+tags:
+- abstract-factory
+- creational-patterns
+- design-patterns
+- difficulty/medium
+- factory
+- gof-patterns
+sources:
+- https://refactoring.guru/design-patterns/abstract-factory
+anki_cards:
+- slug: cs-030-0-en
+  language: en
+  anki_id: 1768454033739
+  synced_at: '2026-01-15T09:43:17.106892'
+- slug: cs-030-0-ru
+  language: ru
+  anki_id: 1768454033764
+  synced_at: '2026-01-15T09:43:17.108401'
+---
 # Вопрос (RU)
 > Что такое паттерн Abstract Factory? Когда и зачем его использовать?
 

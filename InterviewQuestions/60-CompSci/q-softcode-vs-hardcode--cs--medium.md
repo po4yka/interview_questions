@@ -1,20 +1,44 @@
 ---
 id: sd-001
-title: "Softcode Vs Hardcode / Softcode против Hardcode"
-aliases: [Softcode Vs Hardcode, Softcode против Hardcode]
+title: Softcode Vs Hardcode / Softcode против Hardcode
+aliases:
+- Softcode Vs Hardcode
+- Softcode против Hardcode
 topic: cs
-subtopics: [architecture, clean-code, configuration]
+subtopics:
+- architecture
+- clean-code
+- configuration
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-13
 updated: 2025-11-11
-tags: [configuration, cs, difficulty/medium, flexibility, hardcoding, maintainability, softcoding]
-
+tags:
+- configuration
+- cs
+- difficulty/medium
+- flexibility
+- hardcoding
+- maintainability
+- softcoding
+anki_cards:
+- slug: cs-soft-hard-0-en
+  language: en
+  anki_id: 1768455796644
+  synced_at: '2026-01-15T09:43:17.114486'
+- slug: cs-soft-hard-0-ru
+  language: ru
+  anki_id: 1768455796669
+  synced_at: '2026-01-15T09:43:17.116683'
 ---
 # Вопрос (RU)
 > Что такое софткод и чем он отличается от хардкода?

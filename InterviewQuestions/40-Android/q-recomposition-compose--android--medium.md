@@ -15,6 +15,47 @@ created: 2025-10-12
 updated: 2025-11-10
 sources: ["https://developer.android.com/jetpack/compose/lifecycle"]
 tags: [android/performance-rendering, android/ui-compose, android/ui-state, difficulty/medium, performance, recomposition, state]
+anki_cards:
+  - slug: android-060-0-en
+    front: "What is recomposition in Jetpack Compose and what triggers it?"
+    back: |
+      **Recomposition** = re-executing composables when state/parameters change.
+
+      **Triggers:**
+      - `mutableStateOf` value changes
+      - Flow emissions via `collectAsState()`
+      - LiveData via `observeAsState()`
+      - Parameter changes from parent
+
+      **Key concepts:**
+      - Compose recomposes at **narrowest scope** around changed state
+      - Can **skip** if parameters are stable and equal
+      - `List` is unstable by default (use `ImmutableList` or `@Stable` wrapper)
+
+      **Control tools:** `remember {}`, `remember(key) {}`, `derivedStateOf {}`
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-060-0-ru
+    front: "Что такое рекомпозиция в Jetpack Compose и что её вызывает?"
+    back: |
+      **Рекомпозиция** = повторное выполнение composable при изменении состояния/параметров.
+
+      **Триггеры:**
+      - Изменение `mutableStateOf`
+      - Эмиссии Flow через `collectAsState()`
+      - LiveData через `observeAsState()`
+      - Изменение параметров от родителя
+
+      **Ключевые концепции:**
+      - Compose рекомпозирует **минимальную область** вокруг изменённого состояния
+      - Может **пропустить**, если параметры стабильны и равны
+      - `List` нестабилен по умолчанию (используйте `ImmutableList` или `@Stable` обёртку)
+
+      **Инструменты контроля:** `remember {}`, `remember(key) {}`, `derivedStateOf {}`
+    tags:
+      - android_compose
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

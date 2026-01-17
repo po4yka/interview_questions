@@ -1,22 +1,54 @@
----\
+---
 id: algo-005
-title: "Binary Search and Variants / Бинарный поиск и варианты"
-aliases: ["Binary Search", "Бинарный поиск"]
+title: Binary Search and Variants / Бинарный поиск и варианты
+aliases:
+- Binary Search
+- Бинарный поиск
 topic: algorithms
-subtopics: [binary-search, divide-and-conquer, searching]
+subtopics:
+- binary-search
+- divide-and-conquer
+- searching
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, q-binary-search-trees-bst--algorithms--hard, q-two-pointers-sliding-window--algorithms--medium]
+related:
+- c-algorithms
+- q-binary-search-trees-bst--algorithms--hard
+- q-two-pointers-sliding-window--algorithms--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [algorithms, binary-search, difficulty/medium, log-n, searching]
-sources: ["https://en.wikipedia.org/wiki/Binary_search_algorithm"]
-
----\
+tags:
+- algorithms
+- binary-search
+- difficulty/medium
+- log-n
+- searching
+sources:
+- https://en.wikipedia.org/wiki/Binary_search_algorithm
+anki_cards:
+- slug: algo-005-0-en
+  language: en
+  anki_id: 1768457298628
+  synced_at: '2026-01-15T10:08:19.358183'
+- slug: algo-005-0-ru
+  language: ru
+  anki_id: 1768457298652
+  synced_at: '2026-01-15T10:08:19.360748'
+- slug: algo-005-1-en
+  language: en
+  anki_id: 1768457298677
+  synced_at: '2026-01-15T10:08:19.363618'
+- slug: algo-005-1-ru
+  language: ru
+  anki_id: 1768457298702
+  synced_at: '2026-01-15T10:08:19.366424'
+---
 # Вопрос (RU)
 > Как работает бинарный поиск? Каковы распространённые варианты и граничные случаи?
 

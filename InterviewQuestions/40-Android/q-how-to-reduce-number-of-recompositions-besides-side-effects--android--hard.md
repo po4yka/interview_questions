@@ -1,4 +1,48 @@
 ---id: android-281
+id: android-703
+anki_cards:
+  - slug: android-281-0-en
+    front: "How to reduce recompositions in Compose besides using side effects?"
+    back: |
+      **Key techniques:**
+
+      1. **`remember`** - Cache expensive calculations
+      2. **`derivedStateOf`** - For derived state that filters/transforms
+      3. **Stable data models** - Use `@Immutable`/`@Stable` annotations
+      4. **Immutable collections** - `PersistentList` from kotlinx
+      5. **Proper state placement** - Keep state close to usage
+      6. **`key()`** - Stable keys in lists
+      7. **Stable lambdas** - Avoid recreating lambdas
+
+      ```kotlin
+      val filtered by remember {
+          derivedStateOf { items.filter { ... } }
+      }
+      ```
+    tags:
+      - android_compose
+      - difficulty::hard
+  - slug: android-281-0-ru
+    front: "Как уменьшить количество рекомпозиций в Compose кроме side effects?"
+    back: |
+      **Ключевые техники:**
+
+      1. **`remember`** - Кешировать дорогие вычисления
+      2. **`derivedStateOf`** - Для производного состояния
+      3. **Стабильные модели** - Аннотации `@Immutable`/`@Stable`
+      4. **Неизменяемые коллекции** - `PersistentList` из kotlinx
+      5. **Правильное размещение состояния** - Держать ближе к использованию
+      6. **`key()`** - Стабильные ключи в списках
+      7. **Стабильные лямбды** - Не пересоздавать лямбды
+
+      ```kotlin
+      val filtered by remember {
+          derivedStateOf { items.filter { ... } }
+      }
+      ```
+    tags:
+      - android_compose
+      - difficulty::hard
 title: "How To Reduce Number Of Recompositions Besides Side Effects / Как уменьшить количество рекомпозиций кроме побочных эффектов"
 aliases: ["Compose Performance", "Reduce Recompositions", "Производительность Compose", "Уменьшить рекомпозиции"]
 topic: android

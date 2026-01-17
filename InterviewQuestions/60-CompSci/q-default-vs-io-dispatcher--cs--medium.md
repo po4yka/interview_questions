@@ -1,22 +1,47 @@
----\
+---
 id: cs-006
-title: "Default vs IO Dispatcher / Разница между Default и IO Dispatcher"
-aliases: ["Default vs IO Dispatcher", "Разница между Default и IO Dispatcher"]
+title: Default vs IO Dispatcher / Разница между Default и IO Dispatcher
+aliases:
+- Default vs IO Dispatcher
+- Разница между Default и IO Dispatcher
 topic: cs
-subtopics: [coroutines, dispatchers, kotlin]
+subtopics:
+- coroutines
+- dispatchers
+- kotlin
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-coroutines, c-structured-concurrency]
+related:
+- c-coroutines
+- c-structured-concurrency
 created: 2025-10-13
 updated: 2025-11-11
-tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, programming-languages]
-sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
-
----\
+tags:
+- coroutines
+- default
+- difficulty/medium
+- dispatchers
+- io
+- kotlin
+- programming-languages
+sources:
+- https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html
+anki_cards:
+- slug: cs-006-0-en
+  language: en
+  anki_id: 1768454343989
+  synced_at: '2026-01-15T09:43:17.097928'
+- slug: cs-006-0-ru
+  language: ru
+  anki_id: 1768454344014
+  synced_at: '2026-01-15T09:43:17.099595'
+---
 # Вопрос (RU)
 > В чем разница между Default и IO dispatcher? Когда использовать каждый из них?
 

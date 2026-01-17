@@ -14,6 +14,39 @@ related: [c-android-components, q-android-components-besides-activity--android--
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/lifecycle, android/service, difficulty/medium]
+anki_cards:
+  - slug: android-206-0-en
+    front: "What unites the 4 main Android components?"
+    back: |
+      **4 Components:** Activity, Service, BroadcastReceiver, ContentProvider
+
+      **Common traits:**
+      1. Declared in AndroidManifest.xml
+      2. System-managed lifecycle (not manually instantiated)
+      3. Intent-based communication (ContentProvider via ContentResolver)
+      4. Access to Context
+      5. Defined lifecycle callbacks
+      6. Run in app process by default
+      7. Permission-based security model
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-206-0-ru
+    front: "Что объединяет 4 основных компонента Android?"
+    back: |
+      **4 компонента:** Activity, Service, BroadcastReceiver, ContentProvider
+
+      **Общие черты:**
+      1. Объявляются в AndroidManifest.xml
+      2. Управляются системой (не создаются вручную)
+      3. Взаимодействие через Intent (ContentProvider через ContentResolver)
+      4. Доступ к Context
+      5. Определённые lifecycle callbacks
+      6. Работают в процессе приложения по умолчанию
+      7. Единая модель безопасности на основе разрешений
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

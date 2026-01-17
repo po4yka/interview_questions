@@ -1,22 +1,47 @@
----\
+---
 id: cs-009
-title: "Adapter Pattern / Adapter Паттерн"
-aliases: ["Adapter Pattern", "Паттерн Adapter"]
+title: Adapter Pattern / Adapter Паттерн
+aliases:
+- Adapter Pattern
+- Паттерн Adapter
 topic: cs
-subtopics: [adapter, design-patterns, structural-patterns]
+subtopics:
+- adapter
+- design-patterns
+- structural-patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-adapter-pattern, c-design-patterns, q-abstract-factory-pattern--cs--medium]
+related:
+- c-adapter-pattern
+- c-design-patterns
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [adapter, design-patterns, difficulty/medium, gof-patterns, structural-patterns, wrapper]
-sources: ["https://refactoring.guru/design-patterns/adapter"]
-
----\
+tags:
+- adapter
+- design-patterns
+- difficulty/medium
+- gof-patterns
+- structural-patterns
+- wrapper
+sources:
+- https://refactoring.guru/design-patterns/adapter
+anki_cards:
+- slug: cs-009-0-en
+  language: en
+  anki_id: 1768454033342
+  synced_at: '2026-01-15T09:41:02.774967'
+- slug: cs-009-0-ru
+  language: ru
+  anki_id: 1768454033362
+  synced_at: '2026-01-15T09:41:02.777609'
+---
 # Вопрос (RU)
 > Что такое паттерн `Adapter`? Когда и зачем его использовать?
 

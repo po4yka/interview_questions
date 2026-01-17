@@ -15,6 +15,45 @@ related: [c-android, q-android-app-components--android--easy]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, difficulty/medium]
+anki_cards:
+  - slug: android-023-0-en
+    front: "What are the key differences between React Native and Flutter?"
+    back: |
+      **React Native** (JS/React):
+      - Uses native UI components
+      - JS bridge (new arch: JSI/Fabric)
+      - NPM ecosystem, React skills transfer
+
+      **Flutter** (Dart):
+      - Own rendering engine (Skia)
+      - AOT compiled, no bridge
+      - Pixel-perfect cross-platform UI
+      - pub.dev ecosystem
+
+      **Choose RN**: JS team, web code sharing
+      **Choose Flutter**: performance-critical UI, pixel-perfect design
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-023-0-ru
+    front: "Какие ключевые различия между React Native и Flutter?"
+    back: |
+      **React Native** (JS/React):
+      - Использует нативные UI компоненты
+      - JS bridge (новая арх: JSI/Fabric)
+      - NPM экосистема, навыки React
+
+      **Flutter** (Dart):
+      - Собственный движок рендеринга (Skia)
+      - AOT компиляция, без bridge
+      - Pixel-perfect UI на всех платформах
+      - pub.dev экосистема
+
+      **Выбирайте RN**: JS команда, шаринг кода с web
+      **Выбирайте Flutter**: критичная производительность UI, pixel-perfect дизайн
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

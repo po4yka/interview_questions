@@ -1,4 +1,40 @@
 ---id: android-295
+id: android-714
+anki_cards:
+  - slug: android-295-0-en
+    front: "What is the difference between remember and rememberSaveable in Compose?"
+    back: |
+      **remember:**
+      - Survives recomposition only
+      - Lost on config change/process death
+      - No serialization overhead
+      - Use for: ephemeral state, expensive objects
+
+      **rememberSaveable:**
+      - Survives recomposition + config changes + process death
+      - Requires Bundle-compatible types or Saver
+      - ~1MB Bundle limit
+      - Use for: user input, selections, expanded/collapsed
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-295-0-ru
+    front: "В чём разница между remember и rememberSaveable в Compose?"
+    back: |
+      **remember:**
+      - Переживает только рекомпозицию
+      - Теряется при config change/смерти процесса
+      - Без накладных расходов на сериализацию
+      - Для: эфемерного состояния, дорогих объектов
+
+      **rememberSaveable:**
+      - Переживает рекомпозицию + config changes + смерть процесса
+      - Требует Bundle-совместимые типы или Saver
+      - Лимит Bundle ~1MB
+      - Для: пользовательского ввода, выбора, expanded/collapsed
+    tags:
+      - android_compose
+      - difficulty::medium
 title: Remember vs RememberSaveable in Compose / Remember vs RememberSaveable в Compose
 aliases: [Remember vs RememberSaveable in Compose, Remember vs RememberSaveable в Compose]
 topic: android

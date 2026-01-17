@@ -15,6 +15,39 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, architecture, difficulty/medium, mvvm, state-management, viewmodel]
+anki_cards:
+  - slug: android-197-0-en
+    front: "What is ViewModel in Android?"
+    back: |
+      **Architecture Component** that holds UI-related state and logic, scoped to Activity/Fragment.
+
+      **Key benefits:**
+      - Survives configuration changes (rotation)
+      - Does NOT survive process death (use SavedStateHandle)
+      - `viewModelScope` auto-cancels coroutines in onCleared()
+
+      **Usage:** `by viewModels<MyViewModel>()` in Activity/Fragment
+
+      **Rule:** Never hold View/Activity/Context references in ViewModel (memory leak)
+    tags:
+      - android_viewmodel
+      - difficulty::medium
+  - slug: android-197-0-ru
+    front: "Что такое ViewModel в Android?"
+    back: |
+      **Компонент архитектуры**, который хранит UI-состояние и логику, привязан к Activity/Fragment.
+
+      **Ключевые преимущества:**
+      - Переживает изменения конфигурации (поворот)
+      - НЕ переживает смерть процесса (используйте SavedStateHandle)
+      - `viewModelScope` авто-отменяет корутины в onCleared()
+
+      **Использование:** `by viewModels<MyViewModel>()` в Activity/Fragment
+
+      **Правило:** Никогда не хранить ссылки на View/Activity/Context во ViewModel (утечка памяти)
+    tags:
+      - android_viewmodel
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

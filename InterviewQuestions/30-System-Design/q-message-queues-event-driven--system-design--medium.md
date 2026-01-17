@@ -1,22 +1,50 @@
----\
+---
 id: sysdes-008
-title: "Message Queues and Event-Driven Architecture / Очереди сообщений и событийная архитектура"
-aliases: ["Event-Driven Architecture", "Message Queues", "Очереди сообщений", "Событийная архитектура"]
+title: Message Queues and Event-Driven Architecture / Очереди сообщений и событийная
+  архитектура
+aliases:
+- Event-Driven Architecture
+- Message Queues
+- Очереди сообщений
+- Событийная архитектура
 topic: system-design
-subtopics: [async-processing, event-driven, kafka]
+subtopics:
+- async-processing
+- event-driven
+- kafka
 question_kind: system-design
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [c-architecture-patterns, q-caching-strategies--system-design--medium, q-microservices-vs-monolith--system-design--hard]
+related:
+- c-architecture-patterns
+- q-caching-strategies--system-design--medium
+- q-microservices-vs-monolith--system-design--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [async, difficulty/medium, event-driven, kafka, message-queues, system-design]
-sources: ["https://en.wikipedia.org/wiki/Message_queue"]
-
----\
+tags:
+- async
+- difficulty/medium
+- event-driven
+- kafka
+- message-queues
+- system-design
+sources:
+- https://en.wikipedia.org/wiki/Message_queue
+anki_cards:
+- slug: sysdes-008-0-en
+  language: en
+  anki_id: 1768468551859
+  synced_at: '2026-01-15T13:15:52.027639'
+- slug: sysdes-008-0-ru
+  language: ru
+  anki_id: 1768468551883
+  synced_at: '2026-01-15T13:15:52.030043'
+---
 # Вопрос (RU)
 > Что такое очереди сообщений? Когда их следует использовать? В чём разница между Kafka, RabbitMQ и другими системами обмена сообщениями?
 

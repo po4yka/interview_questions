@@ -1,20 +1,45 @@
----id: cs-015
-title: "Builder Pattern / Builder Паттерн"
-aliases: ["Builder Pattern", "Паттерн Builder"]
+---
+id: cs-015
+title: Builder Pattern / Builder Паттерн
+aliases:
+- Builder Pattern
+- Паттерн Builder
 topic: cs
-subtopics: [builder, creational-patterns, design-patterns]
+subtopics:
+- builder
+- creational-patterns
+- design-patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-builder-pattern, c-dao-pattern, q-factory-method-pattern--cs--medium]
+related:
+- c-builder-pattern
+- c-dao-pattern
+- q-factory-method-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [builder, creational-patterns, design-patterns, difficulty/medium, gof-patterns]
-sources: ["https://refactoring.guru/design-patterns/builder"]
-
+tags:
+- builder
+- creational-patterns
+- design-patterns
+- difficulty/medium
+- gof-patterns
+sources:
+- https://refactoring.guru/design-patterns/builder
+anki_cards:
+- slug: cs-015-0-en
+  language: en
+  anki_id: 1768454033488
+  synced_at: '2026-01-15T09:41:02.822862'
+- slug: cs-015-0-ru
+  language: ru
+  anki_id: 1768454033513
+  synced_at: '2026-01-15T09:41:02.825447'
 ---
 # Вопрос (RU)
 > Что такое паттерн Builder? Когда его использовать и как он решает проблему телескопических конструкторов?

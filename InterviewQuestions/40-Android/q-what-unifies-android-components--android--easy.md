@@ -14,6 +14,49 @@ related: [c-android-components, c-intent, c-lifecycle, q-android-components-besi
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, android/intent, android/service, difficulty/easy]
+anki_cards:
+  - slug: android-209-0-en
+    front: "What are the three things that unify Android application components?"
+    back: |
+      **Three unifying aspects:**
+
+      1. **Context** - All components work with `Context` for resources and system services
+         - Activity/Service extend Context
+         - BroadcastReceiver receives Context in `onReceive()`
+         - Fragment uses `requireContext()`
+
+      2. **AndroidManifest.xml** - Four core components declared here:
+         - Activity, Service, BroadcastReceiver, ContentProvider
+         - Fragment is NOT declared in manifest
+
+      3. **Intent** - Activation mechanism (where applicable):
+         - Start Activity/Service via Intent
+         - Send broadcasts via Intent
+         - ContentProvider uses URI/ContentResolver instead
+    tags:
+      - android_general
+      - difficulty::easy
+  - slug: android-209-0-ru
+    front: "Какие три вещи объединяют компоненты Android-приложения?"
+    back: |
+      **Три объединяющих аспекта:**
+
+      1. **Context** - Все компоненты работают с `Context` для доступа к ресурсам
+         - Activity/Service наследуют Context
+         - BroadcastReceiver получает Context в `onReceive()`
+         - Fragment использует `requireContext()`
+
+      2. **AndroidManifest.xml** - Четыре основных компонента объявляются здесь:
+         - Activity, Service, BroadcastReceiver, ContentProvider
+         - Fragment НЕ объявляется в манифесте
+
+      3. **Intent** - Механизм активации (где применимо):
+         - Запуск Activity/Service через Intent
+         - Отправка broadcasts через Intent
+         - ContentProvider использует URI/ContentResolver
+    tags:
+      - android_general
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

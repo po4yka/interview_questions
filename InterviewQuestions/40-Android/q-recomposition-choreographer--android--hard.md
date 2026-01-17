@@ -1,4 +1,5 @@
----id: android-165
+---
+id: android-165
 title: "Recomposition Choreographer / Рекомпозиция и Choreographer"
 aliases: ["Recomposition Choreographer", "Рекомпозиция и Choreographer"]
 topic: android
@@ -14,6 +15,41 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/coroutines, android/performance-rendering, android/ui-compose, choreographer, difficulty/hard, vsync]
+anki_cards:
+  - slug: android-165-0-en
+    front: "How is Compose recomposition coordinated with Android Choreographer?"
+    back: |
+      **Process:**
+      1. `MutableState` change marks composables as "invalid"
+      2. Compose runtime schedules recomposition task
+      3. Choreographer VSYNC callback triggers frame processing
+      4. Recomposition + layout + draw within frame budget
+
+      **Frame budget:**
+      - 60Hz: ~16.67ms
+      - 120Hz: ~8.33ms
+
+      **Key point:** Not random - Compose uses Choreographer's VSYNC-aligned callbacks to batch and apply changes for smooth 60/120fps rendering.
+    tags:
+      - android_compose
+      - difficulty::hard
+  - slug: android-165-0-ru
+    front: "Как рекомпозиция Compose координируется с Android Choreographer?"
+    back: |
+      **Процесс:**
+      1. Изменение `MutableState` помечает composable как "невалидные"
+      2. Рантайм Compose планирует задачу рекомпозиции
+      3. Choreographer VSYNC callback запускает обработку кадра
+      4. Рекомпозиция + layout + draw в рамках бюджета кадра
+
+      **Бюджет кадра:**
+      - 60Hz: ~16.67ms
+      - 120Hz: ~8.33ms
+
+      **Ключевое:** Не случайный процесс - Compose использует VSYNC-синхронизированные callback Choreographer для батчинга и применения изменений для плавного 60/120fps рендеринга.
+    tags:
+      - android_compose
+      - difficulty::hard
 ---
 # Вопрос (RU)
 

@@ -1,4 +1,60 @@
 ---id: android-243
+id: android-702
+anki_cards:
+  - slug: android-243-0-en
+    front: "How to implement View behavior when it's added to the view tree?"
+    back: |
+      Override **`onAttachedToWindow()`** - called when View attaches to Window.
+
+      ```kotlin
+      override fun onAttachedToWindow() {
+          super.onAttachedToWindow()
+          startAnimation()
+          registerListeners()
+      }
+
+      override fun onDetachedFromWindow() {
+          stopAnimation()
+          unregisterListeners()
+          super.onDetachedFromWindow()
+      }
+      ```
+
+      **Key points:**
+      - Always call `super`
+      - Clean up in `onDetachedFromWindow()`
+      - May be called multiple times if View is moved
+    tags:
+      - android_views
+      - android_lifecycle
+      - difficulty::easy
+  - slug: android-243-0-ru
+    front: "Как реализовать поведение View при добавлении в дерево?"
+    back: |
+      Переопределите **`onAttachedToWindow()`** - вызывается при прикреплении View к Window.
+
+      ```kotlin
+      override fun onAttachedToWindow() {
+          super.onAttachedToWindow()
+          startAnimation()
+          registerListeners()
+      }
+
+      override fun onDetachedFromWindow() {
+          stopAnimation()
+          unregisterListeners()
+          super.onDetachedFromWindow()
+      }
+      ```
+
+      **Ключевые моменты:**
+      - Всегда вызывайте `super`
+      - Очищайте ресурсы в `onDetachedFromWindow()`
+      - Может вызываться несколько раз при перемещении View
+    tags:
+      - android_views
+      - android_lifecycle
+      - difficulty::easy
 title: How To Implement View Behavior When It Is Added To The Tree / Как реализовать поведение View при добавлении в дерево
 aliases: [How To Implement View Behavior When It Is Added To The Tree, Как реализовать поведение View при добавлении в дерево]
 topic: android

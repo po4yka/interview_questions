@@ -1,4 +1,5 @@
 ---id: android-113
+id: android-739
 title: UI Setup in Android Project / Настройка UI в проекте Android
 aliases: [UI Setup, Настройка UI]
 topic: android

@@ -1,20 +1,43 @@
 ---
 id: cs-033
-title: "Nothing Class Purpose / Назначение класса Nothing"
-aliases: ["Nothing Class", "Класс Nothing"]
+title: Nothing Class Purpose / Назначение класса Nothing
+aliases:
+- Nothing Class
+- Класс Nothing
 topic: cs
-subtopics: [type-system]
+subtopics:
+- type-system
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-computer-science, q-abstract-class-purpose--cs--medium]
+related:
+- c-computer-science
+- q-abstract-class-purpose--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [control-flow, difficulty/medium, exceptions, kotlin, type-system, unreachable-code]
-sources: ["https://kotlinlang.org/docs/whatsnew15.html"]
+tags:
+- control-flow
+- difficulty/medium
+- exceptions
+- kotlin
+- type-system
+- unreachable-code
+sources:
+- https://kotlinlang.org/docs/whatsnew15.html
+anki_cards:
+- slug: cs-033-0-en
+  language: en
+  anki_id: 1768455662644
+  synced_at: '2026-01-15T09:43:17.122726'
+- slug: cs-033-0-ru
+  language: ru
+  anki_id: 1768455662670
+  synced_at: '2026-01-15T09:43:17.124362'
 ---
 # Вопрос (RU)
 > Зачем нужен класс `Nothing` в Kotlin? Какую роль он играет в системе типов?

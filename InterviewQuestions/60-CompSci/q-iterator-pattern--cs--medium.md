@@ -1,21 +1,43 @@
----\
+---
 id: cs-008
-title: "Iterator Pattern / Паттерн Итератор"
-aliases: ["Iterator Pattern", "Паттерн Итератор"]
+title: Iterator Pattern / Паттерн Итератор
+aliases:
+- Iterator Pattern
+- Паттерн Итератор
 topic: cs
-subtopics: [behavioral]
+subtopics:
+- behavioral
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-collections]
+related:
+- c-architecture-patterns
+- c-collections
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral-patterns, collection-traversal, design-patterns, difficulty/medium, iterator]
-sources: ["https://refactoring.guru/design-patterns/iterator"]
----\
+tags:
+- behavioral-patterns
+- collection-traversal
+- design-patterns
+- difficulty/medium
+- iterator
+sources:
+- https://refactoring.guru/design-patterns/iterator
+anki_cards:
+- slug: cs-008-0-en
+  language: en
+  anki_id: 1768455658849
+  synced_at: '2026-01-15T09:43:17.020627'
+- slug: cs-008-0-ru
+  language: ru
+  anki_id: 1768455658869
+  synced_at: '2026-01-15T09:43:17.022965'
+---
 # Вопрос (RU)
 > Что такое паттерн Итератор? Когда его использовать и как он работает?
 

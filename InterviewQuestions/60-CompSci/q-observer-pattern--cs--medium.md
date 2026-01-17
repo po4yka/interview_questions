@@ -1,22 +1,47 @@
----\
+---
 id: cs-028
-title: "Observer Pattern / Паттерн Observer"
-aliases: ["Observer Pattern", "Паттерн Observer"]
+title: Observer Pattern / Паттерн Observer
+aliases:
+- Observer Pattern
+- Паттерн Observer
 topic: cs
-subtopics: [behavioral-patterns, design-patterns, publish-subscribe]
+subtopics:
+- behavioral-patterns
+- design-patterns
+- publish-subscribe
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns]
+related:
+- c-architecture-patterns
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral-patterns, design-patterns, difficulty/medium, flow, gof-patterns, livedata, observer, publish-subscribe]
-sources: ["https://refactoring.guru/design-patterns/observer"]
-
----\
+tags:
+- behavioral-patterns
+- design-patterns
+- difficulty/medium
+- flow
+- gof-patterns
+- livedata
+- observer
+- publish-subscribe
+sources:
+- https://refactoring.guru/design-patterns/observer
+anki_cards:
+- slug: cs-028-0-en
+  language: en
+  anki_id: 1768455662195
+  synced_at: '2026-01-15T09:43:17.094949'
+- slug: cs-028-0-ru
+  language: ru
+  anki_id: 1768455662219
+  synced_at: '2026-01-15T09:43:17.096530'
+---
 # Вопрос (RU)
 > Что такое паттерн `Observer`? Когда его использовать и как он работает?
 

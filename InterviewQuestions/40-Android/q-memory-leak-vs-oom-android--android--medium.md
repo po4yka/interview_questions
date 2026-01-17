@@ -15,6 +15,33 @@ sources: []
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android, android/performance-battery, android/performance-memory, difficulty/medium, leakcanary, memory-leak, oom]
+anki_cards:
+  - slug: android-084-0-en
+    front: "What is the difference between memory leak and OOM in Android?"
+    back: |
+      **Memory Leak** - logical bug: objects no longer needed remain reachable, GC can't collect them.
+      - Cause: static Activity refs, forgotten listeners, Handler callbacks
+
+      **OOM (OutOfMemoryError)** - symptom: allocation fails, heap exhausted.
+      - Cause: leaks OR legitimate large allocations (big bitmaps)
+
+      **Detection:** LeakCanary (leaks), Android Profiler (both)
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-084-0-ru
+    front: "В чём разница между утечкой памяти и OOM в Android?"
+    back: |
+      **Утечка памяти** - логическая ошибка: ненужные объекты остаются достижимыми, GC не может их собрать.
+      - Причины: статические ссылки на Activity, забытые слушатели, Handler
+
+      **OOM (OutOfMemoryError)** - симптом: не удалось выделить память, heap исчерпан.
+      - Причины: утечки ИЛИ законно большие аллокации (bitmap)
+
+      **Обнаружение:** LeakCanary (утечки), Android Profiler (оба)
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

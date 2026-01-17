@@ -15,6 +15,57 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium, kotlin, multiplatform, testing]
+anki_cards:
+  - slug: android-400-0-en
+    front: "How do you test KMM projects across platforms?"
+    back: |
+      **Test structure:**
+      - `commonTest` - shared tests (business logic)
+      - `androidUnitTest` - Android-specific (JVM)
+      - `iosTest` - iOS-specific
+
+      **Key approaches:**
+      - Use `kotlin.test` assertions
+      - Turbine for Flow testing
+      - expect/actual for platform test drivers
+      - Fakes over mocks in commonTest
+
+      ```kotlin
+      @Test
+      fun test() = runTest {
+          repository.observeTasks().test {
+              assertEquals(emptyList(), awaitItem())
+          }
+      }
+      ```
+    tags:
+      - android_testing
+      - difficulty::medium
+  - slug: android-400-0-ru
+    front: "Как тестировать KMM проекты на разных платформах?"
+    back: |
+      **Структура тестов:**
+      - `commonTest` - общие тесты (бизнес-логика)
+      - `androidUnitTest` - Android-специфичные (JVM)
+      - `iosTest` - iOS-специфичные
+
+      **Ключевые подходы:**
+      - Используйте `kotlin.test` assertions
+      - Turbine для тестирования Flow
+      - expect/actual для платформенных тестовых драйверов
+      - Fakes вместо mocks в commonTest
+
+      ```kotlin
+      @Test
+      fun test() = runTest {
+          repository.observeTasks().test {
+              assertEquals(emptyList(), awaitItem())
+          }
+      }
+      ```
+    tags:
+      - android_testing
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

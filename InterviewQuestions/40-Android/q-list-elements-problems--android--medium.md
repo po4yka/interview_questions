@@ -1,5 +1,52 @@
----\
+---
 id: android-100
+anki_cards:
+  - slug: android-100-0-en
+    front: "What are the four main categories of RecyclerView list problems?"
+    back: |
+      **1. OOM (Memory):**
+      - Large images without scaling
+      - Solution: Glide/Coil + RecyclerView recycling
+
+      **2. Lagging scroll:**
+      - Heavy work in `onBindViewHolder`
+      - Solution: Pre-process in ViewModel
+
+      **3. Data inconsistency:**
+      - Wrong `notify*` calls
+      - Solution: `ListAdapter` + `DiffUtil`
+
+      **4. Concurrency:**
+      - Multi-threaded updates
+      - Solution: LiveData/Flow on main thread
+
+      **Key:** Use `bindingAdapterPosition` for safe clicks.
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-100-0-ru
+    front: "Какие четыре основные категории проблем RecyclerView?"
+    back: |
+      **1. OOM (память):**
+      - Большие изображения без масштабирования
+      - Решение: Glide/Coil + переиспользование RecyclerView
+
+      **2. Тормоза прокрутки:**
+      - Тяжелая работа в `onBindViewHolder`
+      - Решение: предобработка в ViewModel
+
+      **3. Несогласованность данных:**
+      - Неправильные `notify*` вызовы
+      - Решение: `ListAdapter` + `DiffUtil`
+
+      **4. Многопоточность:**
+      - Обновления из разных потоков
+      - Решение: LiveData/Flow на main thread
+
+      **Ключ:** Используйте `bindingAdapterPosition` для безопасных кликов.
+    tags:
+      - android_views
+      - difficulty::medium
 title: "List Elements Problems / Проблемы элементов списка"
 aliases: ["List Elements Problems", "RecyclerView Issues", "Проблемы RecyclerView", "Проблемы элементов списка"]
 topic: android

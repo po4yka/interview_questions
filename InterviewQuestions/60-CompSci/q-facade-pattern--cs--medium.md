@@ -1,20 +1,44 @@
----\
+---
 id: dp-009
-title: "Facade Pattern / Паттерн фасад"
-aliases: [Facade Pattern, Паттерн фасад]
+title: Facade Pattern / Паттерн фасад
+anki_cards:
+- slug: dp-009-0-en
+  language: en
+  anki_id: 1768454534215
+  synced_at: '2026-01-15T09:41:02.855618'
+- slug: dp-009-0-ru
+  language: ru
+  anki_id: 1768454534239
+  synced_at: '2026-01-15T09:41:02.858248'
+aliases:
+- Facade Pattern
+- Паттерн фасад
 topic: cs
-subtopics: [abstraction, design-patterns, structural-patterns]
+subtopics:
+- abstraction
+- design-patterns
+- structural-patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science, q-adapter-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- c-computer-science
+- q-adapter-pattern--cs--medium
 created: 2023-10-15
 updated: 2025-11-11
-tags: [cs, difficulty/medium, facade, gof-patterns, structural-patterns]
----\
+tags:
+- cs
+- difficulty/medium
+- facade
+- gof-patterns
+- structural-patterns
+---
 # Вопрос (RU)
 > Что такое паттерн Facade? Когда и зачем его использовать?
 

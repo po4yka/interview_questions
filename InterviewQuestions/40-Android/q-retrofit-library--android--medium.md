@@ -1,5 +1,46 @@
 ---\
 id: android-369
+anki_cards:
+  - slug: android-369-0-en
+    front: "What is Retrofit and what are its key features?"
+    back: |
+      **Retrofit** is a type-safe HTTP client by Square that transforms REST APIs into Kotlin/Java interfaces.
+
+      **Key features:**
+      - **Declarative API** - define endpoints with annotations (@GET, @POST, @Path, @Query, @Body)
+      - **Auto serialization** - JSON to objects via Gson/Moshi converters
+      - **Coroutines support** - suspend functions for async calls
+      - **OkHttp integration** - interceptors, timeouts, logging
+
+      ```kotlin
+      interface ApiService {
+          @GET("users/{id}")
+          suspend fun getUser(@Path("id") id: Int): User
+      }
+      ```
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-369-0-ru
+    front: "Что такое Retrofit и каковы его ключевые возможности?"
+    back: |
+      **Retrofit** - типобезопасный HTTP-клиент от Square, преобразующий REST API в Kotlin/Java интерфейсы.
+
+      **Ключевые возможности:**
+      - **Декларативный API** - определение эндпоинтов через аннотации (@GET, @POST, @Path, @Query, @Body)
+      - **Автосериализация** - JSON в объекты через Gson/Moshi конвертеры
+      - **Поддержка корутин** - suspend-функции для асинхронных вызовов
+      - **Интеграция с OkHttp** - интерсепторы, таймауты, логирование
+
+      ```kotlin
+      interface ApiService {
+          @GET("users/{id}")
+          suspend fun getUser(@Path("id") id: Int): User
+      }
+      ```
+    tags:
+      - android_general
+      - difficulty::medium
 title: "Retrofit Library / Библиотека Retrofit"
 aliases: ["Retrofit Library", "Библиотека Retrofit"]
 topic: android

@@ -15,6 +15,49 @@ created: 2024-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/lifecycle, android/processes, android/service, difficulty/medium, foreground-service, lifecycle, process-priority, services]
+anki_cards:
+  - slug: android-147-0-en
+    front: "How can you raise process priority in Android?"
+    back: |
+      **Yes**, indirectly via **foreground service** with `startForeground()`.
+
+      **Process priority levels (high to low):**
+      1. Foreground - active UI, foreground service
+      2. Visible - visible but not focused
+      3. Service - background service
+      4. Cached - recently used, no active components
+      5. Empty - killed first
+
+      **Requirements:**
+      - Must show notification
+      - Call `startForeground()` within ~5 seconds
+      - Declare `foregroundServiceType` on Android 10+
+
+      Cannot directly change Linux nice/priority.
+    tags:
+      - android_lifecycle
+      - difficulty::medium
+  - slug: android-147-0-ru
+    front: "Как можно повысить приоритет процесса в Android?"
+    back: |
+      **Да**, косвенно через **foreground service** с `startForeground()`.
+
+      **Уровни приоритета процессов (от высшего к низшему):**
+      1. Foreground - активный UI, foreground service
+      2. Visible - видим, но не в фокусе
+      3. Service - фоновый сервис
+      4. Cached - недавно использованный, без активных компонентов
+      5. Empty - убивается первым
+
+      **Требования:**
+      - Обязательно показывать уведомление
+      - Вызвать `startForeground()` в течение ~5 секунд
+      - Указать `foregroundServiceType` на Android 10+
+
+      Нельзя напрямую менять Linux nice/priority.
+    tags:
+      - android_lifecycle
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

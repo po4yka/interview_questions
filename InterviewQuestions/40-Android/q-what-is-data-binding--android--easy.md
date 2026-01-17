@@ -1,4 +1,5 @@
 ---id: android-141
+id: android-736
 title: What Is Data Binding / Что такое Data Binding
 aliases: [Android Data Binding, Data Binding, Что такое Data Binding]
 topic: android

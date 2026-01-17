@@ -1,5 +1,52 @@
----\
+---
 id: android-116
+anki_cards:
+  - slug: android-116-0-en
+    front: "How do you upload large files reliably in Android?"
+    back: |
+      **Use WorkManager + Retrofit:**
+
+      **Key components:**
+      - `CoroutineWorker` with `setForeground()` for long uploads
+      - Constraints: `NetworkType.CONNECTED` or `UNMETERED`
+      - Exponential backoff for retries
+
+      **For files >50MB - chunked upload:**
+      ```kotlin
+      val contentRange = "bytes $start-$end/$total"
+      api.uploadChunk(fileId, contentRange, chunk)
+      ```
+
+      **Best practices:**
+      - Track progress via `ProgressRequestBody`
+      - WiFi-only for very large files
+      - Resumable uploads with server support
+    tags:
+      - android_workmanager
+      - difficulty::medium
+  - slug: android-116-0-ru
+    front: "Как надежно загружать большие файлы в Android?"
+    back: |
+      **Используйте WorkManager + Retrofit:**
+
+      **Ключевые компоненты:**
+      - `CoroutineWorker` с `setForeground()` для долгих загрузок
+      - Constraints: `NetworkType.CONNECTED` или `UNMETERED`
+      - Exponential backoff для повторов
+
+      **Для файлов >50MB - chunked upload:**
+      ```kotlin
+      val contentRange = "bytes $start-$end/$total"
+      api.uploadChunk(fileId, contentRange, chunk)
+      ```
+
+      **Лучшие практики:**
+      - Отслеживание прогресса через `ProgressRequestBody`
+      - Только WiFi для очень больших файлов
+      - Возобновляемые загрузки с поддержкой сервера
+    tags:
+      - android_workmanager
+      - difficulty::medium
 title: Large File Upload / Загрузка больших файлов
 aliases: [Large File Upload, Загрузка больших файлов]
 topic: android

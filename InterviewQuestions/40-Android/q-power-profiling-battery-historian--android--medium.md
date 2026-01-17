@@ -16,6 +16,49 @@ updated: 2025-11-10
 tags: [android/monitoring-slo, android/performance-battery, android/profiling, battery, difficulty/medium]
 sources:
   - "https://developer.android.com/topic/performance/power/battery-historian"
+anki_cards:
+  - slug: android-626-0-en
+    front: "How do you analyze app power consumption with Battery Historian?"
+    back: |
+      **Setup:**
+      1. `adb shell dumpsys batterystats --reset`
+      2. Run scenario (15-30 min)
+      3. `adb bugreport bugreport.zip`
+      4. Upload to Battery Historian
+
+      **Analyze:**
+      - **Wakelocks** - look for long PARTIAL wakelocks
+      - **JobScheduler/Alarms** - frequent triggers
+      - **Network** - Mobile radio spikes
+
+      **Fix:**
+      - Release wakelocks in `finally`
+      - Batch network requests
+      - Use WorkManager for background tasks
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-626-0-ru
+    front: "Как анализировать энергопотребление приложения с Battery Historian?"
+    back: |
+      **Подготовка:**
+      1. `adb shell dumpsys batterystats --reset`
+      2. Запустить сценарий (15-30 мин)
+      3. `adb bugreport bugreport.zip`
+      4. Загрузить в Battery Historian
+
+      **Анализ:**
+      - **Wakelocks** - искать длинные PARTIAL wakelocks
+      - **JobScheduler/Alarms** - частые срабатывания
+      - **Network** - пики Mobile radio
+
+      **Исправления:**
+      - Освобождать wakelock в `finally`
+      - Объединять сетевые запросы
+      - Использовать WorkManager для фоновых задач
+    tags:
+      - android_general
+      - difficulty::medium
 ---\
 # Вопрос (RU)
 > Как провести анализ энергопотребления приложения с помощью Battery Historian и Energy Profiler: сбор данных, интерпретация wakelock, сетевой активности и план устранения проблем?

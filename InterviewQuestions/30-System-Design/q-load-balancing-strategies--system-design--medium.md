@@ -1,22 +1,47 @@
----\
+---
 id: sysdes-007
-title: "Load Balancing Algorithms and Strategies / Алгоритмы и стратегии балансировки нагрузки"
-aliases: ["Load Balancing Algorithms", "Алгоритмы балансировки нагрузки"]
+title: Load Balancing Algorithms and Strategies / Алгоритмы и стратегии балансировки
+  нагрузки
+aliases:
+- Load Balancing Algorithms
+- Алгоритмы балансировки нагрузки
 topic: system-design
-subtopics: [distributed-systems, load-balancing, scalability]
+subtopics:
+- distributed-systems
+- load-balancing
+- scalability
 question_kind: system-design
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [c-caching-strategies, q-caching-strategies--system-design--medium, q-horizontal-vertical-scaling--system-design--medium]
+related:
+- c-caching-strategies
+- q-caching-strategies--system-design--medium
+- q-horizontal-vertical-scaling--system-design--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [algorithms, difficulty/medium, load-balancing, scalability, system-design]
-sources: ["https://en.wikipedia.org/wiki/Load_balancing_(computing)"]
-
----\
+tags:
+- algorithms
+- difficulty/medium
+- load-balancing
+- scalability
+- system-design
+sources:
+- https://en.wikipedia.org/wiki/Load_balancing_(computing)
+anki_cards:
+- slug: sysdes-007-0-en
+  language: en
+  anki_id: 1768468551809
+  synced_at: '2026-01-15T13:15:52.022383'
+- slug: sysdes-007-0-ru
+  language: ru
+  anki_id: 1768468551834
+  synced_at: '2026-01-15T13:15:52.025001'
+---
 # Вопрос (RU)
 > Каковы основные алгоритмы балансировки нагрузки? Когда следует использовать каждый алгоритм и каковы их компромиссы?
 

@@ -1,31 +1,45 @@
----\
+---
 id: db-003
-title: Storing unique data in relational tables / Хранение уникальных данных в реляционных таблицах
+title: Storing unique data in relational tables / Хранение уникальных данных в реляционных
+  таблицах
 aliases: []
-
-# Classification
 topic: databases
-subtopics: [databases]
+subtopics:
+- databases
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
 status: draft
 moc: moc-backend
-related: [c-database-design, c-relational-databases]
-
-# Timestamps
+related:
+- c-database-design
+- c-relational-databases
 created: 2025-10-03
 updated: 2025-11-11
-
-# Tags
-tags: [database, relational, primary-key, unique-constraints, indexes, difficulty/medium, kotlin, lang/ru, topic/databases]
----\
+tags:
+- database
+- relational
+- primary-key
+- unique-constraints
+- indexes
+- difficulty/medium
+- kotlin
+- lang/ru
+- topic/databases
+anki_cards:
+- slug: db-003-0-en
+  language: en
+  anki_id: 1768460896887
+  synced_at: '2026-01-15T11:08:17.116370'
+- slug: db-003-0-ru
+  language: ru
+  anki_id: 1768460896911
+  synced_at: '2026-01-15T11:08:17.118702'
+---
 # Вопрос (RU)
 > Как в реляционной таблице сохранить уникальную для каждого элемента информацию
 

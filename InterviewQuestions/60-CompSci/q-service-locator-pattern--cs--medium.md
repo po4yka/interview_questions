@@ -15,6 +15,40 @@ updated: 2025-11-11
 tags: [dependency-management, design-patterns, difficulty/medium, service-discovery, service-locator]
 sources: ["https://martinfowler.com/articles/injection.html"]
 
+anki_cards:
+- slug: cs-023-0-en
+  front: |
+    What is Service Locator pattern and why is it considered an anti-pattern?
+  back: |
+    **Service Locator**: Central registry providing access to dependencies.
+    
+    **Why anti-pattern**:
+    - Hidden dependencies (not visible in constructor)
+    - Global state
+    - Hard to test
+    - Violates explicit dependency principle
+    
+    **Prefer**: Dependency Injection with explicit constructor parameters.
+  language: en
+  difficulty: 0.5
+  tags: [cs_patterns, difficulty::medium]
+- slug: cs-023-0-ru
+  front: |
+    Что такое паттерн Service Locator и почему он считается анти-паттерном?
+  back: |
+    **Service Locator**: Центральный реестр для доступа к зависимостям.
+    
+    **Почему анти-паттерн**:
+    - Скрытые зависимости (не видны в конструкторе)
+    - Глобальное состояние
+    - Сложно тестировать
+    - Нарушает принцип явных зависимостей
+    
+    **Предпочитайте**: Dependency Injection с явными параметрами конструктора.
+  language: ru
+  difficulty: 0.5
+  tags: [cs_patterns, difficulty::medium]
+
 ---
 # Вопрос (RU)
 > Что такое паттерн `Service` Locator? Когда его использовать и как он работает?

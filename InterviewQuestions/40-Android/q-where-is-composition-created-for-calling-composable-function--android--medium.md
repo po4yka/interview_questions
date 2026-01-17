@@ -1,4 +1,5 @@
 ---id: android-410
+id: android-742
 title: "Где создается Composition для вызова composable функции / Where Is Composition Created For Calling Composable Function"
 aliases: ["Where Is Composition Created", "Где создается Composition"]
 topic: android

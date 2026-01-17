@@ -1,5 +1,52 @@
 ---\
 id: android-101
+anki_cards:
+  - slug: android-101-0-en
+    front: "What is Parcelable and when should you use it?"
+    back: |
+      **Parcelable** - Android interface for efficient object serialization.
+
+      **Use for:**
+      - Passing data via Intent between Activities
+      - Fragment arguments
+      - `onSaveInstanceState`
+      - IPC (AIDL, Messenger)
+
+      **Key points:**
+      - Faster than Serializable (no reflection)
+      - Use `@Parcelize` annotation
+      - ~1MB Binder transaction limit
+
+      ```kotlin
+      @Parcelize
+      data class User(val id: Int, val name: String) : Parcelable
+      ```
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-101-0-ru
+    front: "Что такое Parcelable и когда его использовать?"
+    back: |
+      **Parcelable** - Android интерфейс для эффективной сериализации объектов.
+
+      **Используется для:**
+      - Передачи данных через Intent между Activity
+      - Аргументов Fragment
+      - `onSaveInstanceState`
+      - IPC (AIDL, Messenger)
+
+      **Ключевые моменты:**
+      - Быстрее Serializable (без рефлексии)
+      - Используйте аннотацию `@Parcelize`
+      - Лимит транзакции Binder ~1MB
+
+      ```kotlin
+      @Parcelize
+      data class User(val id: Int, val name: String) : Parcelable
+      ```
+    tags:
+      - android_general
+      - difficulty::medium
 title: "Parcelable Implementation / Реализация Parcelable"
 aliases: [Android Parcelable, Parcelable, Parcelable Implementation, Реализация Parcelable]
 topic: android

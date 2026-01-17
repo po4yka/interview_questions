@@ -1,4 +1,5 @@
 ---id: android-629
+id: android-730
 title: TFLite Acceleration Strategies / Стратегии ускорения TFLite
 aliases: [TFLite Acceleration Strategies, Стратегии ускорения TFLite]
 topic: android

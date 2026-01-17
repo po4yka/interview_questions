@@ -1,21 +1,42 @@
----\
+---
 id: dp-004
-title: "Strategy Pattern / Strategy Паттерн"
-aliases: [Strategy Pattern, Strategy Паттерн]
+title: Strategy Pattern / Strategy Паттерн
+aliases:
+- Strategy Pattern
+- Strategy Паттерн
 topic: cs
-subtopics: [behavioral-patterns]
+subtopics:
+- behavioral-patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, policy-pattern, strategy]
-
----\
+tags:
+- behavioral-patterns
+- design-patterns
+- difficulty/medium
+- gof-patterns
+- policy-pattern
+- strategy
+anki_cards:
+- slug: dp-004-0-en
+  language: en
+  anki_id: 1768455794444
+  synced_at: '2026-01-15T09:43:17.041421'
+- slug: dp-004-0-ru
+  language: ru
+  anki_id: 1768455794469
+  synced_at: '2026-01-15T09:43:17.043341'
+---
 # Вопрос (RU)
 > Что такое паттерн Strategy? Когда и зачем его следует использовать?
 

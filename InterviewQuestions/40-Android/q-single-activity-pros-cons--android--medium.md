@@ -15,6 +15,47 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/activity, android/ui-navigation, difficulty/medium, navigation, single-activity, viewmodel]
+anki_cards:
+  - slug: android-171-0-en
+    front: "What are the pros and cons of Single Activity approach?"
+    back: |
+      **Pros:**
+      - Simplified navigation via NavController
+      - Shared ViewModel between screens
+      - Shared UI elements (Toolbar, BottomNav)
+      - Better animations between fragments
+      - Lower transition overhead
+
+      **Cons:**
+      - Complex Fragment lifecycle
+      - Memory leak risk (ViewBinding must be cleared in onDestroyView)
+      - FragmentManager complexity
+      - State loss issues (IllegalStateException)
+      - Testing requires FragmentScenario setup
+    tags:
+      - android_activities
+      - android_fragments
+      - difficulty::medium
+  - slug: android-171-0-ru
+    front: "Какие плюсы и минусы у подхода Single Activity?"
+    back: |
+      **Плюсы:**
+      - Упрощённая навигация через NavController
+      - Общий ViewModel между экранами
+      - Общие UI элементы (Toolbar, BottomNav)
+      - Лучшие анимации между фрагментами
+      - Меньше накладных расходов на переходы
+
+      **Минусы:**
+      - Сложный lifecycle Fragment
+      - Риск утечек памяти (ViewBinding нужно очищать в onDestroyView)
+      - Сложность FragmentManager
+      - Проблемы state loss (IllegalStateException)
+      - Тестирование требует настройки FragmentScenario
+    tags:
+      - android_activities
+      - android_fragments
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

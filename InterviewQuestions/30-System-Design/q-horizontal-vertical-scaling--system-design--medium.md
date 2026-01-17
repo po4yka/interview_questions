@@ -1,22 +1,45 @@
----\
+---
 id: sysdes-009
-title: "Horizontal vs Vertical Scaling / Горизонтальное vs Вертикальное масштабирование"
-aliases: ["Horizontal vs Vertical Scaling", "Горизонтальное vs Вертикальное масштабирование"]
+title: Horizontal vs Vertical Scaling / Горизонтальное vs Вертикальное масштабирование
+aliases:
+- Horizontal vs Vertical Scaling
+- Горизонтальное vs Вертикальное масштабирование
 topic: system-design
-subtopics: [distributed-systems, performance, scalability]
+subtopics:
+- distributed-systems
+- performance
+- scalability
 question_kind: system-design
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [q-database-sharding-partitioning--system-design--hard, q-load-balancing-strategies--system-design--medium]
+related:
+- q-database-sharding-partitioning--system-design--hard
+- q-load-balancing-strategies--system-design--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [architecture, difficulty/medium, distributed-systems, scalability, system-design]
-sources: ["https://en.wikipedia.org/wiki/Scalability"]
-
----\
+tags:
+- architecture
+- difficulty/medium
+- distributed-systems
+- scalability
+- system-design
+sources:
+- https://en.wikipedia.org/wiki/Scalability
+anki_cards:
+- slug: sysdes-009-0-en
+  language: en
+  anki_id: 1768468551909
+  synced_at: '2026-01-15T13:15:52.032157'
+- slug: sysdes-009-0-ru
+  language: ru
+  anki_id: 1768468551934
+  synced_at: '2026-01-15T13:15:52.034393'
+---
 # Вопрос (RU)
 > В чём разница между горизонтальным и вертикальным масштабированием? Когда следует использовать каждый подход, и каковы их компромиссы?
 

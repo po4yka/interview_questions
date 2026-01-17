@@ -1,22 +1,46 @@
----\
+---
 id: sysdes-003
-title: "Проектирование REST API / REST API Design Best Practices"
-aliases: ["REST API Design", "Проектирование REST API"]
+title: Проектирование REST API / REST API Design Best Practices
+aliases:
+- REST API Design
+- Проектирование REST API
 topic: system-design
-subtopics: [api-design, http, rest-api]
+subtopics:
+- api-design
+- http
+- rest-api
 question_kind: system-design
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [c-architecture-patterns, q-caching-strategies--system-design--medium, q-microservices-vs-monolith--system-design--hard]
+related:
+- c-architecture-patterns
+- q-caching-strategies--system-design--medium
+- q-microservices-vs-monolith--system-design--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [api-design, difficulty/medium, http, rest-api, system-design]
-sources: ["https://en.wikipedia.org/wiki/Representational_state_transfer"]
-
----\
+tags:
+- api-design
+- difficulty/medium
+- http
+- rest-api
+- system-design
+sources:
+- https://en.wikipedia.org/wiki/Representational_state_transfer
+anki_cards:
+- slug: sysdes-003-0-en
+  language: en
+  anki_id: 1768468551609
+  synced_at: '2026-01-15T13:15:52.002010'
+- slug: sysdes-003-0-ru
+  language: ru
+  anki_id: 1768468551633
+  synced_at: '2026-01-15T13:15:52.004573'
+---
 # Вопрос (RU)
 > Каковы лучшие практики проектирования RESTful API? Как структурировать endpoints, обрабатывать ошибки и обеспечивать качество API?
 

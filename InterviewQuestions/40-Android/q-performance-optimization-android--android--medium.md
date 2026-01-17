@@ -1,5 +1,40 @@
 ---\
 id: android-136
+anki_cards:
+  - slug: android-136-0-en
+    front: "What are the main areas of Android performance optimization?"
+    back: |
+      **7 key areas:**
+
+      1. **Startup** - lazy init, App Startup library, Baseline Profiles
+      2. **UI/Rendering** - flat layouts, ViewStub, 60 FPS target
+      3. **RecyclerView** - DiffUtil, stable IDs, prefetch
+      4. **Memory** - bitmap sampling, SparseArray, LeakCanary
+      5. **Network** - offline-first, OkHttp cache, pagination
+      6. **Battery** - WorkManager with constraints, location intervals
+      7. **Build** - R8 shrinking, ABI splits, App Bundle
+
+      **Targets:** Cold start <1s, 60 FPS, minimal APK size
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-136-0-ru
+    front: "Какие основные области оптимизации производительности Android?"
+    back: |
+      **7 ключевых областей:**
+
+      1. **Запуск** - lazy init, App Startup library, Baseline Profiles
+      2. **UI/Рендеринг** - плоские layouts, ViewStub, цель 60 FPS
+      3. **RecyclerView** - DiffUtil, stable IDs, prefetch
+      4. **Память** - bitmap sampling, SparseArray, LeakCanary
+      5. **Сеть** - offline-first, OkHttp cache, пагинация
+      6. **Батарея** - WorkManager с constraints, интервалы location
+      7. **Сборка** - R8 shrinking, ABI splits, App Bundle
+
+      **Цели:** Cold start <1с, 60 FPS, минимальный размер APK
+    tags:
+      - android_general
+      - difficulty::medium
 title: Performance Optimization Android / Performance Оптимизация Android
 aliases: [Performance Optimization Android, Performance Оптимизация Android]
 topic: android

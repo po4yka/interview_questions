@@ -1,5 +1,52 @@
 ---\
 id: android-270
+anki_cards:
+  - slug: android-270-0-en
+    front: "What are the main differences between Room and raw SQLite?"
+    back: |
+      **SQLite:**
+      - Low-level, manual SQL strings
+      - No compile-time validation
+      - Manual cursor handling, ContentValues
+      - No reactive streams
+
+      **Room:**
+      - High-level ORM-like abstraction
+      - SQL validated at compile time
+      - Type-safe annotations (@Entity, @Dao, @Query)
+      - Built-in Flow/LiveData support
+      - Structured migrations
+
+      **Room still uses SQLite internally** but provides:
+      - Less boilerplate
+      - Better safety
+      - Easier testing (in-memory DB)
+    tags:
+      - android_room
+      - difficulty::medium
+  - slug: android-270-0-ru
+    front: "Каковы основные различия между Room и сырым SQLite?"
+    back: |
+      **SQLite:**
+      - Низкоуровневый, ручные SQL-строки
+      - Нет проверки при компиляции
+      - Ручная обработка Cursor, ContentValues
+      - Нет реактивных потоков
+
+      **Room:**
+      - Высокоуровневая ORM-подобная абстракция
+      - SQL валидируется при компиляции
+      - Типобезопасные аннотации (@Entity, @Dao, @Query)
+      - Встроенная поддержка Flow/LiveData
+      - Структурированные миграции
+
+      **Room внутри использует SQLite**, но предоставляет:
+      - Меньше шаблонного кода
+      - Лучшую безопасность
+      - Простое тестирование (in-memory DB)
+    tags:
+      - android_room
+      - difficulty::medium
 title: Room vs SQLite / Room против SQLite
 aliases: [Room vs SQLite, Room против SQLite]
 topic: android

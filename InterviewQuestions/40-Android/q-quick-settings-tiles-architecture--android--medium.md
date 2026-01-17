@@ -19,6 +19,59 @@ sources:
   note: Quick Settings tile guide
 - url: "https://developer.android.com/develop/shortcutmanager"
   note: App Shortcuts documentation
+anki_cards:
+  - slug: android-631-0-en
+    front: "How do you implement a Quick Settings Tile in Android?"
+    back: |
+      **TileService lifecycle:**
+      - `onStartListening()` - update tile state
+      - `onClick()` - handle tap action
+      - `onStopListening()` - cleanup
+
+      ```kotlin
+      class SyncTileService : TileService() {
+          override fun onStartListening() {
+              qsTile?.apply {
+                  state = if (isEnabled) STATE_ACTIVE else STATE_INACTIVE
+                  updateTile()
+              }
+          }
+          override fun onClick() {
+              // Toggle or launch activity
+          }
+      }
+      ```
+
+      **Manifest:** permission `BIND_QUICK_SETTINGS_TILE`, intent-filter `QS_TILE`.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-631-0-ru
+    front: "Как реализовать Quick Settings Tile в Android?"
+    back: |
+      **Жизненный цикл TileService:**
+      - `onStartListening()` - обновить состояние тайла
+      - `onClick()` - обработать нажатие
+      - `onStopListening()` - очистка
+
+      ```kotlin
+      class SyncTileService : TileService() {
+          override fun onStartListening() {
+              qsTile?.apply {
+                  state = if (isEnabled) STATE_ACTIVE else STATE_INACTIVE
+                  updateTile()
+              }
+          }
+          override fun onClick() {
+              // Toggle или запуск activity
+          }
+      }
+      ```
+
+      **Манифест:** permission `BIND_QUICK_SETTINGS_TILE`, intent-filter `QS_TILE`.
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

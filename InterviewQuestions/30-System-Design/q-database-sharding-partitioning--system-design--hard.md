@@ -1,22 +1,47 @@
----\
+---
 id: sysdes-010
-title: "Database Sharding and Partitioning / Шардирование и партиционирование баз данных"
-aliases: ["Database Sharding", "Шардирование баз данных"]
+title: Database Sharding and Partitioning / Шардирование и партиционирование баз данных
+aliases:
+- Database Sharding
+- Шардирование баз данных
 topic: system-design
-subtopics: [partitioning, scalability, sharding]
+subtopics:
+- partitioning
+- scalability
+- sharding
 question_kind: system-design
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [c-architecture-patterns, q-cap-theorem-distributed-systems--system-design--hard, q-horizontal-vertical-scaling--system-design--medium]
+related:
+- c-architecture-patterns
+- q-cap-theorem-distributed-systems--system-design--hard
+- q-horizontal-vertical-scaling--system-design--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [database, difficulty/hard, partitioning, scalability, sharding, system-design]
-sources: ["https://en.wikipedia.org/wiki/Shard_(database_architecture)"]
-
----\
+tags:
+- database
+- difficulty/hard
+- partitioning
+- scalability
+- sharding
+- system-design
+sources:
+- https://en.wikipedia.org/wiki/Shard_(database_architecture)
+anki_cards:
+- slug: sysdes-010-0-en
+  language: en
+  anki_id: 1768468551959
+  synced_at: '2026-01-15T13:15:52.038319'
+- slug: sysdes-010-0-ru
+  language: ru
+  anki_id: 1768468551984
+  synced_at: '2026-01-15T13:15:52.040892'
+---
 # Вопрос (RU)
 > Что такое шардирование базы данных? Чем оно отличается от партиционирования? Каковы стратегии шардирования и какие компромиссы?
 

@@ -1,20 +1,141 @@
----id: cs-026
-title: "Delegates Java Compilation / Компиляция делегатов в Java"
-aliases: ["Delegates Java Compilation", "Компиляция делегатов в Java"]
+---
+id: cs-026
+title: Delegates Java Compilation / Компиляция делегатов в Java
+anki_cards:
+- slug: cs-026-0-en
+  language: en
+  anki_id: 1768454534814
+  synced_at: '2026-01-15T09:43:17.077333'
+- slug: cs-026-0-ru
+  language: ru
+  anki_id: 1768454534841
+  synced_at: '2026-01-15T09:43:17.078811'
+aliases:
+- Delegates Java Compilation
+- Компиляция делегатов в Java
 topic: cs
-subtopics: [compilation, delegates, kotlin]
+subtopics:
+- compilation
+- delegates
+- kotlin
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-aggregation, c-app-signing, c-backend, c-binary-search, c-binary-search-tree, c-binder, c-biometric-authentication, c-bm25-ranking, c-by-type, c-cap-theorem, c-ci-cd, c-ci-cd-pipelines, c-clean-code, c-compiler-optimization, c-compose-modifiers, c-compose-phases, c-compose-semantics, c-computer-science, c-concurrency, c-cross-platform-development, c-cross-platform-mobile, c-cs, c-data-classes, c-data-loading, c-debugging, c-declarative-programming, c-deep-linking, c-density-independent-pixels, c-dimension-units, c-dp-sp-units, c-dsl-builders, c-dynamic-programming, c-espresso-testing, c-event-handling, c-folder, c-functional-programming, c-gdpr-compliance, c-gesture-detection, c-gradle-build-cache, c-gradle-build-system, c-https-tls, c-image-formats, c-inheritance, c-jit-aot-compilation, c-kmm, c-kotlin, c-lambda-expressions, c-lazy-grid, c-lazy-initialization, c-level, c-load-balancing, c-manifest, c-memory-optimization, c-memory-profiler, c-microservices, c-multipart-form-data, c-multithreading, c-mutablestate, c-networking, c-offline-first-architecture, c-oop, c-oop-concepts, c-oop-fundamentals, c-oop-principles, c-play-console, c-play-feature-delivery, c-programming-languages, c-properties, c-real-time-communication, c-references, c-scaling-strategies, c-scoped-storage, c-security, c-serialization, c-server-sent-events, c-shader-programming, c-snapshot-system, c-specific, c-strictmode, c-system-ui, c-test-doubles, c-test-sharding, c-testing-pyramid, c-testing-strategies, c-theming, c-to-folder, c-token-management, c-touch-input, c-turbine-testing, c-two-pointers, c-ui-testing, c-ui-ux-accessibility, c-value-classes, c-variable, c-weak-references, c-windowinsets, c-xml]
+related:
+- c-aggregation
+- c-app-signing
+- c-backend
+- c-binary-search
+- c-binary-search-tree
+- c-binder
+- c-biometric-authentication
+- c-bm25-ranking
+- c-by-type
+- c-cap-theorem
+- c-ci-cd
+- c-ci-cd-pipelines
+- c-clean-code
+- c-compiler-optimization
+- c-compose-modifiers
+- c-compose-phases
+- c-compose-semantics
+- c-computer-science
+- c-concurrency
+- c-cross-platform-development
+- c-cross-platform-mobile
+- c-cs
+- c-data-classes
+- c-data-loading
+- c-debugging
+- c-declarative-programming
+- c-deep-linking
+- c-density-independent-pixels
+- c-dimension-units
+- c-dp-sp-units
+- c-dsl-builders
+- c-dynamic-programming
+- c-espresso-testing
+- c-event-handling
+- c-folder
+- c-functional-programming
+- c-gdpr-compliance
+- c-gesture-detection
+- c-gradle-build-cache
+- c-gradle-build-system
+- c-https-tls
+- c-image-formats
+- c-inheritance
+- c-jit-aot-compilation
+- c-kmm
+- c-kotlin
+- c-lambda-expressions
+- c-lazy-grid
+- c-lazy-initialization
+- c-level
+- c-load-balancing
+- c-manifest
+- c-memory-optimization
+- c-memory-profiler
+- c-microservices
+- c-multipart-form-data
+- c-multithreading
+- c-mutablestate
+- c-networking
+- c-offline-first-architecture
+- c-oop
+- c-oop-concepts
+- c-oop-fundamentals
+- c-oop-principles
+- c-play-console
+- c-play-feature-delivery
+- c-programming-languages
+- c-properties
+- c-real-time-communication
+- c-references
+- c-scaling-strategies
+- c-scoped-storage
+- c-security
+- c-serialization
+- c-server-sent-events
+- c-shader-programming
+- c-snapshot-system
+- c-specific
+- c-strictmode
+- c-system-ui
+- c-test-doubles
+- c-test-sharding
+- c-testing-pyramid
+- c-testing-strategies
+- c-theming
+- c-to-folder
+- c-token-management
+- c-touch-input
+- c-turbine-testing
+- c-two-pointers
+- c-ui-testing
+- c-ui-ux-accessibility
+- c-value-classes
+- c-variable
+- c-weak-references
+- c-windowinsets
+- c-xml
 created: 2025-10-15
 updated: 2025-11-11
-tags: [compilation, delegates, delegation, difficulty/hard, kotlin, kotlin-compiler, programming-languages]
-sources: ["https://kotlinlang.org/docs/delegated-properties.html"]
-
+tags:
+- compilation
+- delegates
+- delegation
+- difficulty/hard
+- kotlin
+- kotlin-compiler
+- programming-languages
+sources:
+- https://kotlinlang.org/docs/delegated-properties.html
 ---
 # Вопрос (RU)
 > Как делегаты Kotlin компилируются в Java? Что генерирует компилятор для property delegation?

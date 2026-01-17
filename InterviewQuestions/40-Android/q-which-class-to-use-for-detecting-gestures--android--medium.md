@@ -15,6 +15,39 @@ related: [c-compose-state, c-viewmodel, q-dagger-field-injection--android--mediu
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events]
+anki_cards:
+  - slug: android-196-0-en
+    front: "Which class detects gestures in Android?"
+    back: |
+      **GestureDetector** - for tap, double tap, long press, scroll, fling.
+
+      **Usage:**
+      1. Create `GestureDetector` with `SimpleOnGestureListener`
+      2. Override `onDown()` to return `true` (required!)
+      3. Call `gestureDetector.onTouchEvent(event)` in `onTouchEvent()`
+
+      **ScaleGestureDetector** - for pinch-zoom gestures.
+
+      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-196-0-ru
+    front: "Какой класс используется для распознавания жестов в Android?"
+    back: |
+      **GestureDetector** - для tap, double tap, long press, scroll, fling.
+
+      **Использование:**
+      1. Создать `GestureDetector` с `SimpleOnGestureListener`
+      2. Переопределить `onDown()` чтобы вернуть `true` (обязательно!)
+      3. Вызвать `gestureDetector.onTouchEvent(event)` в `onTouchEvent()`
+
+      **ScaleGestureDetector** - для pinch-zoom жестов.
+
+      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
+    tags:
+      - android_views
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

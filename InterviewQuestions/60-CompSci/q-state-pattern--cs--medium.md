@@ -1,21 +1,41 @@
----\
+---
 id: dp-011
-title: "State Pattern / Паттерн State"
-aliases: [State Pattern, State Паттерн]
+title: State Pattern / Паттерн State
+aliases:
+- State Pattern
+- State Паттерн
 topic: cs
-subtopics: [polymorphism, state-machine]
+subtopics:
+- polymorphism
+- state-machine
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- c-computer-science
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral, difficulty/medium, state-machine]
-
----\
+tags:
+- behavioral
+- difficulty/medium
+- state-machine
+anki_cards:
+- slug: dp-011-0-en
+  language: en
+  anki_id: 1768455795494
+  synced_at: '2026-01-15T09:43:17.080239'
+- slug: dp-011-0-ru
+  language: ru
+  anki_id: 1768455795520
+  synced_at: '2026-01-15T09:43:17.081643'
+---
 # Вопрос (RU)
 > Что такое паттерн State? Когда и зачем его следует использовать?
 

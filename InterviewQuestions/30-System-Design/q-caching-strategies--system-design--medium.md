@@ -1,22 +1,46 @@
----\
+---
 id: sysdes-005
-title: "Caching Strategies and Patterns / 2240"
-aliases: ["2240", "Caching Strategies"]
+title: Caching Strategies and Patterns / 2240
+aliases:
+- '2240'
+- Caching Strategies
 topic: system-design
-subtopics: [caching, memcached, redis]
+subtopics:
+- caching
+- memcached
+- redis
 question_kind: system-design
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [c-architecture-patterns, q-horizontal-vertical-scaling--system-design--medium, q-load-balancing-strategies--system-design--medium]
+related:
+- c-architecture-patterns
+- q-horizontal-vertical-scaling--system-design--medium
+- q-load-balancing-strategies--system-design--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [caching, difficulty/medium, performance, scalability, system-design]
-sources: ["https://en.wikipedia.org/wiki/Cache_(computing)"]
-
----\
+tags:
+- caching
+- difficulty/medium
+- performance
+- scalability
+- system-design
+sources:
+- https://en.wikipedia.org/wiki/Cache_(computing)
+anki_cards:
+- slug: sysdes-005-0-en
+  language: en
+  anki_id: 1768468551709
+  synced_at: '2026-01-15T13:15:52.011834'
+- slug: sysdes-005-0-ru
+  language: ru
+  anki_id: 1768468551734
+  synced_at: '2026-01-15T13:15:52.014007'
+---
 # Вопрос (RU)
 > Каковы основные стратегии кеширования? Когда следует использовать каждую стратегию, и каковы распространённые паттерны кеширования?
 

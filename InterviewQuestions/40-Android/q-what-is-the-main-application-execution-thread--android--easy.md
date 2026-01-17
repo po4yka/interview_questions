@@ -16,6 +16,36 @@ related: [c-android-components, q-handler-looper-main-thread--android--medium, q
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/easy]
+anki_cards:
+  - slug: android-207-0-en
+    front: "What is the Main Thread in Android?"
+    back: |
+      **UI Thread** - single thread where all UI operations and lifecycle callbacks run.
+
+      **Key rules:**
+      - Only Main Thread can access Views (CalledFromWrongThreadException otherwise)
+      - Uses Looper + MessageQueue for event processing
+      - Must complete work in ~16ms (60 FPS) to avoid jank
+
+      **Switch to Main:** `runOnUiThread {}`, `Handler(Looper.getMainLooper())`, `Dispatchers.Main`
+    tags:
+      - android_general
+      - difficulty::easy
+  - slug: android-207-0-ru
+    front: "Что такое Main Thread в Android?"
+    back: |
+      **UI Thread** - единственный поток, где выполняются все UI операции и lifecycle callbacks.
+
+      **Ключевые правила:**
+      - Только Main Thread может обращаться к Views (иначе CalledFromWrongThreadException)
+      - Использует Looper + MessageQueue для обработки событий
+      - Должен завершать работу за ~16мс (60 FPS) чтобы избежать лагов
+
+      **Переключение на Main:** `runOnUiThread {}`, `Handler(Looper.getMainLooper())`, `Dispatchers.Main`
+    tags:
+      - android_general
+      - difficulty::easy
+
 ---\
 # Вопрос (RU)
 

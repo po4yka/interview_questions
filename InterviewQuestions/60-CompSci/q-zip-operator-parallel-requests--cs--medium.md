@@ -15,6 +15,48 @@ updated: 2025-11-11
 tags: [concurrency, coroutines, difficulty/medium, flow, kotlin, parallel-requests, zip-operator]
 sources: ["https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/zip.html"]
 
+anki_cards:
+- slug: cs-zip-0-en
+  front: |
+    How do you make parallel requests and combine results in Kotlin coroutines?
+  back: |
+    **Parallel requests with coroutines**:
+    
+    ```kotlin
+    coroutineScope {
+      val a = async { fetchA() }
+      val b = async { fetchB() }
+      Result(a.await(), b.await())
+    }
+    ```
+    
+    **With Flow**: `zip` or `combine` operators.
+    
+    **Key**: `async` launches concurrently, `await` waits for result.
+  language: en
+  difficulty: 0.5
+  tags: [cs_concurrency, difficulty::medium]
+- slug: cs-zip-0-ru
+  front: |
+    Как делать параллельные запросы и объединять результаты в Kotlin корутинах?
+  back: |
+    **Параллельные запросы с корутинами**:
+    
+    ```kotlin
+    coroutineScope {
+      val a = async { fetchA() }
+      val b = async { fetchB() }
+      Result(a.await(), b.await())
+    }
+    ```
+    
+    **С Flow**: операторы `zip` или `combine`.
+    
+    **Ключ**: `async` запускает параллельно, `await` ждёт результат.
+  language: ru
+  difficulty: 0.5
+  tags: [cs_concurrency, difficulty::medium]
+
 ---
 # Вопрос (RU)
 > Как использовать оператор zip для параллельных запросов?

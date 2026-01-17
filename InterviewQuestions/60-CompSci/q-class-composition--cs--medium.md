@@ -1,19 +1,45 @@
 ---
 id: oop-003
-title: "Class Composition / Композиция классов"
-aliases: [Class Composition, Композиция классов]
+title: Class Composition / Композиция классов
+aliases:
+- Class Composition
+- Композиция классов
 topic: cs
-subtopics: [composition, encapsulation, inheritance]
+subtopics:
+- composition
+- encapsulation
+- inheritance
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-composition, c-computer-science, q-inheritance-vs-composition--cs--medium]
+related:
+- c-composition
+- c-computer-science
+- q-inheritance-vs-composition--cs--medium
 created: 2025-10-13
 updated: 2025-11-11
-tags: [code-reuse, composition, difficulty/medium, encapsulation, inheritance, oop, relationships]
+tags:
+- code-reuse
+- composition
+- difficulty/medium
+- encapsulation
+- inheritance
+- oop
+- relationships
+anki_cards:
+- slug: oop-003-0-en
+  language: en
+  anki_id: 1768454033439
+  synced_at: '2026-01-15T09:41:02.807780'
+- slug: oop-003-0-ru
+  language: ru
+  anki_id: 1768454033464
+  synced_at: '2026-01-15T09:41:02.810410'
 ---
 # Вопрос (RU)
 > Что известно о композиции классов?

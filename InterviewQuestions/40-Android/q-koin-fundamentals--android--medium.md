@@ -15,6 +15,43 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/architecture-clean, android/di-koin, android/lifecycle, architecture, difficulty/medium, injection, koin, service-locator]
+anki_cards:
+  - slug: android-160-0-en
+    front: "What is the difference between Koin and Dagger/Hilt?"
+    back: |
+      | Aspect | Koin | Dagger/Hilt |
+      |--------|------|-------------|
+      | Resolution | Runtime | Compile-time |
+      | Code gen | No | Yes (kapt/ksp) |
+      | Build speed | Faster | Slower |
+      | Error detection | Runtime | Compile-time |
+      | Multiplatform | Yes (KMM) | Android-focused |
+
+      **Koin definitions:**
+      - `single { }` - singleton
+      - `factory { }` - new instance each time
+      - `viewModel { }` - Android ViewModel integration
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-160-0-ru
+    front: "В чём разница между Koin и Dagger/Hilt?"
+    back: |
+      | Аспект | Koin | Dagger/Hilt |
+      |--------|------|-------------|
+      | Разрешение | Runtime | Compile-time |
+      | Code gen | Нет | Да (kapt/ksp) |
+      | Скорость сборки | Быстрее | Медленнее |
+      | Обнаружение ошибок | Runtime | Compile-time |
+      | Multiplatform | Да (KMM) | Android-focused |
+
+      **Определения Koin:**
+      - `single { }` - синглтон
+      - `factory { }` - новый экземпляр каждый раз
+      - `viewModel { }` - интеграция с Android ViewModel
+    tags:
+      - android_architecture
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

@@ -1,5 +1,60 @@
----\
+---
 id: android-634
+anki_cards:
+  - slug: android-634-0-en
+    front: "How do you build a video editing pipeline with Media3 Transformer?"
+    back: |
+      **Composition structure:**
+      ```kotlin
+      val item = EditedMediaItem.Builder(MediaItem.fromUri(uri))
+          .setEffects(Effects(videoEffects, audioEffects))
+          .setClippingConfiguration(...)
+          .build()
+      val composition = Composition.Builder(item1)
+          .addEditedMediaItem(item2)
+          .build()
+      ```
+
+      **Transformer setup:**
+      ```kotlin
+      TransformationRequest.Builder()
+          .setVideoMimeType(MimeTypes.VIDEO_H265)
+          .setEnableFallback(true)
+          .build()
+      transformer.start(composition, outputPath)
+      ```
+
+      **Key:** Use ForegroundService for long exports, track via Listener.
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-634-0-ru
+    front: "Как построить pipeline редактирования видео с Media3 Transformer?"
+    back: |
+      **Структура Composition:**
+      ```kotlin
+      val item = EditedMediaItem.Builder(MediaItem.fromUri(uri))
+          .setEffects(Effects(videoEffects, audioEffects))
+          .setClippingConfiguration(...)
+          .build()
+      val composition = Composition.Builder(item1)
+          .addEditedMediaItem(item2)
+          .build()
+      ```
+
+      **Настройка Transformer:**
+      ```kotlin
+      TransformationRequest.Builder()
+          .setVideoMimeType(MimeTypes.VIDEO_H265)
+          .setEnableFallback(true)
+          .build()
+      transformer.start(composition, outputPath)
+      ```
+
+      **Ключ:** Используйте ForegroundService для долгих экспортов, отслеживайте через Listener.
+    tags:
+      - android_general
+      - difficulty::hard
 title: Media3 Transformer Workflows / Пайплайны Media3 Transformer
 aliases: [Media3 Transformer Workflows, Пайплайны Media3 Transformer]
 topic: android

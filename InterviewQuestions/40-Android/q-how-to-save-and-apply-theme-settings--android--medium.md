@@ -15,6 +15,47 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/datastore, android/ui-compose, android/ui-theming, android/ui-views, dark-mode, difficulty/medium, sharedpreferences, themes]
 sources: []
+anki_cards:
+  - slug: android-231-0-en
+    front: "How to save and apply theme settings in Android?"
+    back: |
+      **Key:** Apply theme **before** UI renders
+
+      ```kotlin
+      // In Application.onCreate()
+      val mode = prefs.getInt("night_mode", MODE_NIGHT_FOLLOW_SYSTEM)
+      AppCompatDelegate.setDefaultNightMode(mode)
+      ```
+
+      **Options:**
+      - `MODE_NIGHT_NO` - light
+      - `MODE_NIGHT_YES` - dark
+      - `MODE_NIGHT_FOLLOW_SYSTEM` - system default
+
+      **Storage:** SharedPreferences or DataStore
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-231-0-ru
+    front: "Как сохранять и применять настройки темы в Android?"
+    back: |
+      **Ключевое:** Применить тему **до** отрисовки UI
+
+      ```kotlin
+      // В Application.onCreate()
+      val mode = prefs.getInt("night_mode", MODE_NIGHT_FOLLOW_SYSTEM)
+      AppCompatDelegate.setDefaultNightMode(mode)
+      ```
+
+      **Варианты:**
+      - `MODE_NIGHT_NO` - светлая
+      - `MODE_NIGHT_YES` - тёмная
+      - `MODE_NIGHT_FOLLOW_SYSTEM` - по системе
+
+      **Хранение:** SharedPreferences или DataStore
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

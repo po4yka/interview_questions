@@ -15,6 +15,49 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/files-media, android/intents-deeplinks, android/ui-graphics, difficulty/medium, image-processing]
+anki_cards:
+  - slug: android-257-0-en
+    front: "How to pass a photo to an editor in Android?"
+    back: |
+      **External editor:**
+      ```kotlin
+      Intent(ACTION_EDIT).apply {
+          setDataAndType(photoUri, "image/*")
+          addFlags(FLAG_GRANT_READ_URI_PERMISSION)
+      }
+      ```
+
+      **Internal editor:** Pass `content://` URI via FileProvider
+
+      **Rules:**
+      - Use `content://` not `file://`
+      - Never pass large bitmaps via Intent (~500KB limit)
+      - Use FileProvider for Android 7.0+
+    tags:
+      - android_intents
+      - android_storage
+      - difficulty::medium
+  - slug: android-257-0-ru
+    front: "Как передать фото в редактор в Android?"
+    back: |
+      **Внешний редактор:**
+      ```kotlin
+      Intent(ACTION_EDIT).apply {
+          setDataAndType(photoUri, "image/*")
+          addFlags(FLAG_GRANT_READ_URI_PERMISSION)
+      }
+      ```
+
+      **Внутренний редактор:** Передать `content://` URI через FileProvider
+
+      **Правила:**
+      - Использовать `content://`, не `file://`
+      - Не передавать большие bitmap через Intent (~500KB лимит)
+      - Использовать FileProvider для Android 7.0+
+    tags:
+      - android_intents
+      - android_storage
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

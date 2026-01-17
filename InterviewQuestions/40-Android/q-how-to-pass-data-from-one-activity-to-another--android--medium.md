@@ -15,6 +15,47 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [activity, android, android/activity, android/ui-navigation, difficulty/medium, intent, navigation]
 sources: []
+anki_cards:
+  - slug: android-366-0-en
+    front: "How to pass data from one Activity to another in Android?"
+    back: |
+      **Methods:**
+      1. **Intent Extras** - primitives, strings
+      2. **Parcelable** - complex objects (`@Parcelize`)
+      3. **Bundle** - grouped data
+      4. **ActivityResult API** - bidirectional
+
+      ```kotlin
+      val intent = Intent(this, SecondActivity::class.java)
+      intent.putExtra("user", user) // Parcelable
+      startActivity(intent)
+      ```
+
+      **Limits:** ~500KB payload (Binder ~1MB), use constants for keys
+    tags:
+      - android_activities
+      - android_intents
+      - difficulty::medium
+  - slug: android-366-0-ru
+    front: "Как передать данные из одной Activity в другую в Android?"
+    back: |
+      **Способы:**
+      1. **Intent Extras** - примитивы, строки
+      2. **Parcelable** - сложные объекты (`@Parcelize`)
+      3. **Bundle** - группировка данных
+      4. **ActivityResult API** - двусторонний обмен
+
+      ```kotlin
+      val intent = Intent(this, SecondActivity::class.java)
+      intent.putExtra("user", user) // Parcelable
+      startActivity(intent)
+      ```
+
+      **Ограничения:** ~500KB payload (Binder ~1MB), константы для ключей
+    tags:
+      - android_activities
+      - android_intents
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

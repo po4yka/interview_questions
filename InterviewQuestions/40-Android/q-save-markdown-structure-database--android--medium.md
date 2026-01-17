@@ -14,6 +14,56 @@ related: [c-android, c-database-design, q-database-encryption-android--android--
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/room, difficulty/medium]
+anki_cards:
+  - slug: android-218-0-en
+    front: "What are the approaches to save Markdown in an Android database?"
+    back: |
+      **4 approaches (often combined):**
+
+      1. **Plain text in Room** - Simple, store raw markdown as String
+      2. **AST/JSON + Room** - Parse to structure, store JSON for complex queries
+      3. **HTML + Room** - Pre-render HTML for fast WebView display
+      4. **Files (.md)** - Store content in files, Room for metadata/index
+
+      **Recommended hybrid:**
+      ```kotlin
+      @Entity
+      data class HybridDocument(
+          val markdownContent: String,  // Raw for editing
+          val htmlCache: String?,       // Fast display
+          val tags: String?             // Extracted metadata
+      )
+      ```
+
+      **Limit:** ~10KB for Room JSON; for large docs use files
+    tags:
+      - android_room
+      - difficulty::medium
+  - slug: android-218-0-ru
+    front: "Какие подходы для сохранения Markdown в базе данных Android?"
+    back: |
+      **4 подхода (часто комбинируются):**
+
+      1. **Обычный текст в Room** - Просто, хранить сырой markdown как String
+      2. **AST/JSON + Room** - Парсинг в структуру, JSON для сложных запросов
+      3. **HTML + Room** - Пред-рендеринг HTML для быстрого отображения в WebView
+      4. **Файлы (.md)** - Содержимое в файлах, Room для метаданных/индекса
+
+      **Рекомендуемый гибрид:**
+      ```kotlin
+      @Entity
+      data class HybridDocument(
+          val markdownContent: String,  // Сырой для редактирования
+          val htmlCache: String?,       // Быстрое отображение
+          val tags: String?             // Извлеченные метаданные
+      )
+      ```
+
+      **Лимит:** ~10KB для JSON в Room; для больших документов - файлы
+    tags:
+      - android_room
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 > Сохранение структуры Markdown в базе данных

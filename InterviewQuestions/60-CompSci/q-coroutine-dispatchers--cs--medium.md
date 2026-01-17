@@ -1,22 +1,46 @@
----\
+---
 id: cs-020
-title: "Coroutine Dispatchers / Диспетчеры корутин"
-aliases: ["Coroutine Dispatchers", "Диспетчеры корутин"]
+title: Coroutine Dispatchers / Диспетчеры корутин
+aliases:
+- Coroutine Dispatchers
+- Диспетчеры корутин
 topic: cs
-subtopics: [coroutines, kotlin, threading]
+subtopics:
+- coroutines
+- kotlin
+- threading
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-coroutines, q-abstract-class-purpose--cs--medium]
+related:
+- c-coroutines
+- q-abstract-class-purpose--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [coroutines, difficulty/medium, dispatchers, kotlin, programming-languages, threading]
-sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
-
----\
+tags:
+- coroutines
+- difficulty/medium
+- dispatchers
+- kotlin
+- programming-languages
+- threading
+sources:
+- https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html
+anki_cards:
+- slug: cs-020-0-en
+  language: en
+  anki_id: 1768454343438
+  synced_at: '2026-01-15T09:43:17.034860'
+- slug: cs-020-0-ru
+  language: ru
+  anki_id: 1768454343465
+  synced_at: '2026-01-15T09:43:17.037012'
+---
 # Вопрос (RU)
 > Что такое диспетчеры корутин? Какие типы диспетчеров существуют и когда их использовать?
 

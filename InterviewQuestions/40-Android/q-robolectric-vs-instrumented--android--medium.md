@@ -1,5 +1,44 @@
 ---\
 id: android-323
+anki_cards:
+  - slug: android-323-0-en
+    front: "When should you use Robolectric vs instrumented tests in Android?"
+    back: |
+      **Robolectric (JVM):**
+      - Fast, no device needed
+      - Good for: ViewModel, Activity/Fragment lifecycle, Resources, Context
+      - Easy CI/CD integration
+      - May differ from real device behavior
+
+      **Instrumented (real device):**
+      - Slower, requires emulator/device
+      - Good for: complex UI gestures, hardware, 3rd-party SDKs, screenshot tests
+      - Tests real Android behavior
+      - Can be flaky
+
+      **Testing pyramid:** 70% unit, 20% integration (Robolectric), 10% E2E (instrumented)
+    tags:
+      - android_testing
+      - difficulty::medium
+  - slug: android-323-0-ru
+    front: "Когда использовать Robolectric вместо инструментальных тестов в Android?"
+    back: |
+      **Robolectric (JVM):**
+      - Быстрые, без устройства
+      - Подходят для: ViewModel, жизненный цикл Activity/Fragment, Resources, Context
+      - Легко интегрируются в CI/CD
+      - Могут отличаться от поведения на реальном устройстве
+
+      **Инструментальные (реальное устройство):**
+      - Медленнее, требуют эмулятор/устройство
+      - Подходят для: сложные UI-жесты, hardware, сторонние SDK, скриншотные тесты
+      - Тестируют реальное поведение Android
+      - Могут быть нестабильными (flaky)
+
+      **Пирамида тестирования:** 70% unit, 20% интеграционные (Robolectric), 10% E2E (инструментальные)
+    tags:
+      - android_testing
+      - difficulty::medium
 title: "Robolectric Vs Instrumented / Robolectric против Instrumented"
 aliases: ["Robolectric Vs Instrumented", "Robolectric против Instrumented"]
 topic: android

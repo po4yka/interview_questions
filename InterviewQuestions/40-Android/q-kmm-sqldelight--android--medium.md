@@ -15,6 +15,56 @@ created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [android/kmp, android/room, android/sqldelight, Database, difficulty/medium, KMM, Kotlin, multiplatform, SQLDelight]
+anki_cards:
+  - slug: android-416-0-en
+    front: "How do you use SQLDelight for cross-platform database in KMM?"
+    back: |
+      **SQLDelight** - generates type-safe Kotlin from SQL.
+
+      **Setup:**
+      - `.sq` files with schema and named queries
+      - Platform drivers (AndroidSqliteDriver, NativeSqliteDriver)
+      - `.sqm` files for migrations
+
+      ```sql
+      selectById:
+      SELECT * FROM Task WHERE id = :id;
+      ```
+
+      ```kotlin
+      queries.selectById(id).executeAsOneOrNull()
+      queries.selectAll().asFlow().mapToList(dispatchers.io)
+      ```
+
+      Use `transaction {}` for bulk operations.
+    tags:
+      - android_room
+      - difficulty::medium
+  - slug: android-416-0-ru
+    front: "Как использовать SQLDelight для кроссплатформенной БД в KMM?"
+    back: |
+      **SQLDelight** - генерирует type-safe Kotlin из SQL.
+
+      **Настройка:**
+      - `.sq` файлы со схемой и именованными запросами
+      - Платформенные драйверы (AndroidSqliteDriver, NativeSqliteDriver)
+      - `.sqm` файлы для миграций
+
+      ```sql
+      selectById:
+      SELECT * FROM Task WHERE id = :id;
+      ```
+
+      ```kotlin
+      queries.selectById(id).executeAsOneOrNull()
+      queries.selectAll().asFlow().mapToList(dispatchers.io)
+      ```
+
+      Используйте `transaction {}` для bulk операций.
+    tags:
+      - android_room
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

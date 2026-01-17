@@ -1,22 +1,53 @@
----\
+---
 id: net-003
 title: Network Error Handling Strategies / Стратегии обработки сетевых ошибок
-aliases: [Network Error Handling Strategies, Стратегии обработки сетевых ошибок]
+aliases:
+- Network Error Handling Strategies
+- Стратегии обработки сетевых ошибок
 topic: databases
-subtopics: [api-clients, error-handling, http]
+subtopics:
+- api-clients
+- error-handling
+- http
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-backend
-related: [c-http-client, q-leakcanary-detection-mechanism--android--medium, q-presenter-notify-view--android--medium]
+related:
+- c-http-client
+- q-leakcanary-detection-mechanism--android--medium
+- q-presenter-notify-view--android--medium
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [architecture, difficulty/medium, error-handling, strategy, ux]
-
----\
+tags:
+- architecture
+- difficulty/medium
+- error-handling
+- strategy
+- ux
+anki_cards:
+- slug: net-003-0-en
+  language: en
+  anki_id: 1768460896636
+  synced_at: '2026-01-15T11:08:17.092491'
+- slug: net-003-0-ru
+  language: ru
+  anki_id: 1768460896662
+  synced_at: '2026-01-15T11:08:17.095037'
+- slug: net-003-1-en
+  language: en
+  anki_id: 1768460896686
+  synced_at: '2026-01-15T11:08:17.097365'
+- slug: net-003-1-ru
+  language: ru
+  anki_id: 1768460896712
+  synced_at: '2026-01-15T11:08:17.099541'
+---
 # Вопрос (RU)
 
 > Спроектируйте стратегию обработки сетевых ошибок. Обрабатывайте таймауты, отсутствие интернета, 4xx/5xx ошибки по-разному с понятными сообщениями пользователю.

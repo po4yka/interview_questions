@@ -16,6 +16,50 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [adapter, android/ui-views, difficulty/medium, diffutil, recyclerview]
+anki_cards:
+  - slug: android-374-0-en
+    front: "Why use ListAdapter with DiffUtil instead of manual notify calls?"
+    back: |
+      **ListAdapter + DiffUtil benefits:**
+      - Automatic change detection
+      - Smooth item animations
+      - Background diff calculation
+      - Less boilerplate code
+
+      ```kotlin
+      class MyAdapter : ListAdapter<Item, VH>(ItemDiffCallback()) {
+          fun updateList(newList: List<Item>) {
+              submitList(newList)  // Handles everything
+          }
+      }
+      ```
+
+      No need to call `notifyItemRemoved/Changed/Inserted` manually
+    tags:
+      - android_layouts
+      - difficulty::medium
+  - slug: android-374-0-ru
+    front: "Почему использовать ListAdapter с DiffUtil вместо ручных notify вызовов?"
+    back: |
+      **ListAdapter + DiffUtil преимущества:**
+      - Автоматическое определение изменений
+      - Плавные анимации элементов
+      - Вычисление diff в фоне
+      - Меньше шаблонного кода
+
+      ```kotlin
+      class MyAdapter : ListAdapter<Item, VH>(ItemDiffCallback()) {
+          fun updateList(newList: List<Item>) {
+              submitList(newList)  // Всё делает сам
+          }
+      }
+      ```
+
+      Не нужно вручную вызывать `notifyItemRemoved/Changed/Inserted`
+    tags:
+      - android_layouts
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

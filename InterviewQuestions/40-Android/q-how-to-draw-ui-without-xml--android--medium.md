@@ -1,4 +1,54 @@
 ---id: android-240
+id: android-701
+anki_cards:
+  - slug: android-240-0-en
+    front: "Compare Jetpack Compose vs Programmatic Views for building UI without XML"
+    back: |
+      | Aspect | Compose | Programmatic Views |
+      |--------|---------|-------------------|
+      | **Syntax** | Declarative | Imperative |
+      | **State** | Built-in reactive | Manual handling |
+      | **Preview** | `@Preview` support | No preview |
+      | **Boilerplate** | Less | More |
+
+      **Compose example:**
+      ```kotlin
+      setContent { Text("Hello") }
+      ```
+
+      **Views example:**
+      ```kotlin
+      val tv = TextView(this)
+      setContentView(tv)
+      ```
+    tags:
+      - android_compose
+      - android_views
+      - difficulty::medium
+  - slug: android-240-0-ru
+    front: "Сравните Jetpack Compose и программные Views для создания UI без XML"
+    back: |
+      | Аспект | Compose | Программные Views |
+      |--------|---------|-------------------|
+      | **Синтаксис** | Декларативный | Императивный |
+      | **Состояние** | Встроенное реактивное | Ручное управление |
+      | **Превью** | Поддержка `@Preview` | Нет превью |
+      | **Шаблонный код** | Меньше | Больше |
+
+      **Compose пример:**
+      ```kotlin
+      setContent { Text("Hello") }
+      ```
+
+      **Views пример:**
+      ```kotlin
+      val tv = TextView(this)
+      setContentView(tv)
+      ```
+    tags:
+      - android_compose
+      - android_views
+      - difficulty::medium
 title: How To Draw UI Without XML / Как рисовать UI без XML
 aliases: [Drawing UI without XML, Jetpack Compose UI, Programmatic UI, Программный UI, Рисование UI без XML]
 topic: android

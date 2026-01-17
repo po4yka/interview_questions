@@ -1,5 +1,54 @@
----\
+---
 id: android-358
+anki_cards:
+  - slug: android-358-0-en
+    front: "What are the four main Android application components?"
+    back: |
+      **1. Activity** - UI screen
+      - Single screen with user interaction
+      - Example: login, profile screens
+
+      **2. Service** - background operations
+      - Long-running tasks without UI
+      - Example: music playback, sync
+
+      **3. BroadcastReceiver** - system events
+      - Listens to system/app broadcasts
+      - Example: network change, low battery
+
+      **4. ContentProvider** - data sharing
+      - Centralized data storage
+      - Controlled access from other apps
+      - Example: Contacts, MediaStore
+
+      All declared in `AndroidManifest.xml` (except dynamic receivers).
+    tags:
+      - android_general
+      - difficulty::easy
+  - slug: android-358-0-ru
+    front: "Какие четыре основных компонента Android-приложения?"
+    back: |
+      **1. Activity** - экран UI
+      - Один экран с пользовательским взаимодействием
+      - Пример: экран входа, профиля
+
+      **2. Service** - фоновые операции
+      - Длительные задачи без UI
+      - Пример: воспроизведение музыки, синхронизация
+
+      **3. BroadcastReceiver** - системные события
+      - Слушает системные/app broadcasts
+      - Пример: изменение сети, низкий заряд
+
+      **4. ContentProvider** - обмен данными
+      - Централизованное хранилище данных
+      - Контролируемый доступ из других приложений
+      - Пример: Contacts, MediaStore
+
+      Все объявляются в `AndroidManifest.xml` (кроме динамических receivers).
+    tags:
+      - android_general
+      - difficulty::easy
 title: Main Android Components / Основные компоненты Android
 aliases: [Main Android Components, Основные компоненты Android]
 topic: android

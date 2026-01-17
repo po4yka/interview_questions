@@ -1,22 +1,54 @@
----\
+---
 id: net-005
-title: "Network Request Deduplication / Дедупликация сетевых запросов"
-aliases: [Network Request Deduplication, Request Deduplication, Дедупликация запросов, Дедупликация сетевых запросов]
+title: Network Request Deduplication / Дедупликация сетевых запросов
+aliases:
+- Network Request Deduplication
+- Request Deduplication
+- Дедупликация запросов
+- Дедупликация сетевых запросов
 topic: databases
-subtopics: [api-clients, concurrency]
+subtopics:
+- api-clients
+- concurrency
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-backend
-related: [c-algorithms, q-data-sync-unstable-network--android--hard, q-retrofit-call-adapter-advanced--networking--medium]
+related:
+- c-algorithms
+- q-data-sync-unstable-network--android--hard
+- q-retrofit-call-adapter-advanced--networking--medium
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [concurrency, deduplication, difficulty/hard, networking, performance]
-
----\
+tags:
+- concurrency
+- deduplication
+- difficulty/hard
+- networking
+- performance
+anki_cards:
+- slug: net-005-0-en
+  language: en
+  anki_id: 1768460896936
+  synced_at: '2026-01-15T11:08:17.121350'
+- slug: net-005-0-ru
+  language: ru
+  anki_id: 1768460896961
+  synced_at: '2026-01-15T11:08:17.123712'
+- slug: net-005-1-en
+  language: en
+  anki_id: 1768460896987
+  synced_at: '2026-01-15T11:08:17.125964'
+- slug: net-005-1-ru
+  language: ru
+  anki_id: 1768460897012
+  synced_at: '2026-01-15T11:08:17.128521'
+---
 # Вопрос (RU)
 > Как реализовать дедупликацию сетевых запросов в Android для предотвращения множественных идентичных вызовов API? Объясните стратегии с использованием Kotlin coroutines и `Flow`.
 

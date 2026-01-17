@@ -14,6 +14,41 @@ related: [c-activity-lifecycle, c-android-components, q-is-fragment-lifecycle-co
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, difficulty/medium]
+anki_cards:
+  - slug: android-187-0-en
+    front: "What is an Activity in Android?"
+    back: |
+      **Core Android component** representing a single screen or entry point.
+
+      **Purposes:**
+      1. Display UI via `setContentView()`
+      2. Handle user input
+      3. Manage lifecycle (onCreate, onStart, onResume, onPause, onStop, onDestroy)
+      4. Navigate between screens via Intent
+      5. Interact with other components (Service, BroadcastReceiver)
+
+      **Use Activity for:** Distinct screens, deep links, launcher entry points.
+      **Use Fragment for:** Sub-sections within Activity.
+    tags:
+      - android_activities
+      - difficulty::medium
+  - slug: android-187-0-ru
+    front: "Что такое Activity в Android?"
+    back: |
+      **Основной компонент Android**, представляющий один экран или точку входа.
+
+      **Назначения:**
+      1. Отображать UI через `setContentView()`
+      2. Обрабатывать ввод пользователя
+      3. Управлять lifecycle (onCreate, onStart, onResume, onPause, onStop, onDestroy)
+      4. Навигация между экранами через Intent
+      5. Взаимодействовать с другими компонентами (Service, BroadcastReceiver)
+
+      **Использовать Activity для:** Отдельных экранов, deep links, точек входа launcher.
+      **Использовать Fragment для:** Подсекций внутри Activity.
+    tags:
+      - android_activities
+      - difficulty::medium
 ---\
 # Вопрос (RU)
 > Компонент `Activity`

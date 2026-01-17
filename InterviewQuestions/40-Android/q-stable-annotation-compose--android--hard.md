@@ -1,4 +1,5 @@
 ---id: android-429
+id: android-727
 title: "Stable Annotation Compose / Stable Compose"
 aliases: ["Stable Annotation Compose", "Stable Compose"]
 topic: android

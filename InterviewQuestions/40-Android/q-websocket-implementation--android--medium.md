@@ -14,6 +14,33 @@ related: [c-android, q-cache-implementation-strategies--android--medium, q-custo
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/connectivity-caching, android/coroutines, android/websockets, difficulty/medium, okhttp, real-time, resilience, websocket]
+anki_cards:
+  - slug: android-092-0-en
+    front: "What are key components of a resilient WebSocket client on Android?"
+    back: |
+      **Components:**
+      1. **State machine** - Closed/Connecting/Connected/Disconnected
+      2. **Reconnection** - exponential backoff with jitter
+      3. **Heartbeat** - ping/pong to detect dead connections
+      4. **Message queue** - buffer for offline messages
+
+      **Library:** OkHttp WebSocket + Kotlin coroutines
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-092-0-ru
+    front: "Какие ключевые компоненты устойчивого WebSocket-клиента на Android?"
+    back: |
+      **Компоненты:**
+      1. **Машина состояний** - Closed/Connecting/Connected/Disconnected
+      2. **Переподключение** - экспоненциальный backoff с jitter
+      3. **Heartbeat** - ping/pong для обнаружения мёртвых соединений
+      4. **Очередь сообщений** - буфер для офлайн-сообщений
+
+      **Библиотека:** OkHttp WebSocket + Kotlin coroutines
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

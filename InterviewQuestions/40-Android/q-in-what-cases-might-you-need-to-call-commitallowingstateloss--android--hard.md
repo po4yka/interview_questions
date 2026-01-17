@@ -15,6 +15,47 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle]
+anki_cards:
+  - slug: android-418-0-en
+    front: "When should you use commitAllowingStateLoss() for Fragment transactions?"
+    back: |
+      **Use when:** Transaction loss is acceptable after `onSaveInstanceState()`
+
+      **Valid cases:**
+      - Non-critical UI updates (banners, notifications)
+      - Ephemeral dialogs that don't need restoration
+      - Better to lose transaction than crash with `IllegalStateException`
+
+      **Avoid for:**
+      - User navigation
+      - User data input
+      - Critical UI state
+
+      **Alternative:** Defer transaction until Activity is resumed
+    tags:
+      - android_fragments
+      - android_lifecycle
+      - difficulty::hard
+  - slug: android-418-0-ru
+    front: "Когда использовать commitAllowingStateLoss() для Fragment транзакций?"
+    back: |
+      **Использовать когда:** Допустима потеря транзакции после `onSaveInstanceState()`
+
+      **Допустимые случаи:**
+      - Некритичные UI обновления (баннеры, уведомления)
+      - Временные диалоги, не требующие восстановления
+      - Лучше потерять транзакцию, чем получить `IllegalStateException`
+
+      **Избегать для:**
+      - Навигации пользователя
+      - Пользовательского ввода
+      - Критичного UI состояния
+
+      **Альтернатива:** Отложить транзакцию до resumed состояния Activity
+    tags:
+      - android_fragments
+      - android_lifecycle
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

@@ -14,6 +14,48 @@ related: [q-dagger-build-time-optimization--android--medium, q-data-sync-unstabl
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/architecture-mvvm, android/ui-views, context, difficulty/medium, system-services]
+anki_cards:
+  - slug: android-118-0-en
+    front: "Is LayoutInflater a singleton and why?"
+    back: |
+      **No**, LayoutInflater is **not a singleton**.
+
+      **Each Context has its own instance:**
+      - Different theme/configuration per Context
+      - `LayoutInflater.from(context)` returns context-bound instance
+
+      **Why not singleton:**
+      - Theme affects inflated views
+      - Activity context != Application context
+      - Cloning creates new instance for different factory
+
+      ```kotlin
+      val inflater = LayoutInflater.from(context) // Context-specific
+      ```
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-118-0-ru
+    front: "Является ли LayoutInflater синглтоном и почему?"
+    back: |
+      **Нет**, LayoutInflater **не является синглтоном**.
+
+      **У каждого Context свой экземпляр:**
+      - Разная тема/конфигурация для каждого Context
+      - `LayoutInflater.from(context)` возвращает экземпляр, привязанный к контексту
+
+      **Почему не синглтон:**
+      - Тема влияет на инфлейтящиеся view
+      - Activity context != Application context
+      - Клонирование создаёт новый экземпляр для другой фабрики
+
+      ```kotlin
+      val inflater = LayoutInflater.from(context) // Привязан к контексту
+      ```
+    tags:
+      - android_views
+      - difficulty::medium
+
 ---
 # Вопрос (RU)
 

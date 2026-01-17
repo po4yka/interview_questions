@@ -1,4 +1,38 @@
 ---id: android-078
+id: android-708
+anki_cards:
+  - slug: android-078-0-en
+    front: "What are key differences between Material 2 and Material 3?"
+    back: |
+      | Feature | M2 | M3 |
+      |---------|----|----|
+      | Colors | Fixed palette | Dynamic color from wallpaper |
+      | Elevation | Shadow-based | Tonal surfaces |
+      | Personalization | Static | User-customized |
+
+      **Migration:**
+      - `BottomNavigation` -> `NavigationBar`
+      - `Card(elevation=4.dp)` -> `CardDefaults.cardElevation()`
+      - Use `MaterialTheme.colorScheme` roles
+    tags:
+      - android_compose
+      - difficulty::easy
+  - slug: android-078-0-ru
+    front: "Какие ключевые различия между Material 2 и Material 3?"
+    back: |
+      | Функция | M2 | M3 |
+      |---------|----|----|
+      | Цвета | Фиксированная палитра | Динамические из обоев |
+      | Elevation | На основе теней | Тональные поверхности |
+      | Персонализация | Статическая | Пользовательская |
+
+      **Миграция:**
+      - `BottomNavigation` -> `NavigationBar`
+      - `Card(elevation=4.dp)` -> `CardDefaults.cardElevation()`
+      - Используйте роли `MaterialTheme.colorScheme`
+    tags:
+      - android_compose
+      - difficulty::easy
 title: Material3 Components / Компоненты Material3
 aliases: [Material3 Components, Компоненты Material3]
 topic: android

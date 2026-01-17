@@ -1,31 +1,42 @@
----\
+---
 id: db-004
 title: Database migration purpose / Цель миграции баз данных
 aliases: []
-
-# Classification
 topic: databases
-subtopics: [migration]
+subtopics:
+- migration
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
 status: draft
 moc: moc-backend
-related: [c-database-design, c-migrations]
-
-# Timestamps
+related:
+- c-database-design
+- c-migrations
 created: 2025-10-03
 updated: 2025-11-11
-
-# Tags
-tags: [database, migration, schema-evolution, difficulty/medium, kotlin, lang/ru, topic/databases]
----\
+tags:
+- database
+- migration
+- schema-evolution
+- difficulty/medium
+- kotlin
+- lang/ru
+- topic/databases
+anki_cards:
+- slug: db-004-0-en
+  language: en
+  anki_id: 1768460897037
+  synced_at: '2026-01-15T11:08:17.131080'
+- slug: db-004-0-ru
+  language: ru
+  anki_id: 1768460897060
+  synced_at: '2026-01-15T11:08:17.133751'
+---
 # Вопрос (RU)
 > Что такое миграция баз данных и для чего она нужна
 

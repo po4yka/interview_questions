@@ -1,5 +1,68 @@
 ---
 id: android-431
+anki_cards:
+  - slug: android-431-0-en
+    front: "How to properly handle one-time events in MVI architecture?"
+    back: |
+      **Problem:** Events in State re-trigger on recreation.
+
+      **Solution 1 - SharedFlow (recommended):**
+      ```kotlin
+      private val _events = MutableSharedFlow<Event>(
+          replay = 0,
+          extraBufferCapacity = 1,
+          onBufferOverflow = DROP_OLDEST
+      )
+      ```
+
+      **Solution 2 - Channel:**
+      ```kotlin
+      private val _events = Channel<Event>(BUFFERED)
+      val events = _events.receiveAsFlow()
+      ```
+
+      **Collection:**
+      ```kotlin
+      repeatOnLifecycle(STARTED) {
+          viewModel.events.collect { ... }
+      }
+      ```
+
+      **Key:** Separate State (persistent) from Effects (one-time).
+    tags:
+      - android_architecture
+      - difficulty::hard
+  - slug: android-431-0-ru
+    front: "Как правильно обрабатывать одноразовые события в MVI архитектуре?"
+    back: |
+      **Проблема:** События в State повторяются при пересоздании.
+
+      **Решение 1 - SharedFlow (рекомендуется):**
+      ```kotlin
+      private val _events = MutableSharedFlow<Event>(
+          replay = 0,
+          extraBufferCapacity = 1,
+          onBufferOverflow = DROP_OLDEST
+      )
+      ```
+
+      **Решение 2 - Channel:**
+      ```kotlin
+      private val _events = Channel<Event>(BUFFERED)
+      val events = _events.receiveAsFlow()
+      ```
+
+      **Сбор:**
+      ```kotlin
+      repeatOnLifecycle(STARTED) {
+          viewModel.events.collect { ... }
+      }
+      ```
+
+      **Ключ:** Разделяйте State (постоянный) и Effects (одноразовые).
+    tags:
+      - android_architecture
+      - difficulty::hard
 title: MVI Handle One Time Events / Обработка одноразовых событий в MVI
 aliases: [Event Wrapper, MVI One-Time Events, SingleLiveEvent, Обработка событий MVI, Одноразовые события]
 topic: android

@@ -1,22 +1,46 @@
----\
+---
 id: cs-022
-title: "Coroutine Context Essence / Суть Coroutine Context"
-aliases: ["Coroutine Context", "Суть Coroutine Context"]
+title: Coroutine Context Essence / Суть Coroutine Context
+aliases:
+- Coroutine Context
+- Суть Coroutine Context
 topic: cs
-subtopics: [coroutines, kotlin, programming-languages]
+subtopics:
+- coroutines
+- kotlin
+- programming-languages
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
+related:
+- c-coroutines
+- q-advanced-coroutine-patterns--kotlin--hard
 created: 2025-10-15
 updated: 2025-11-11
-tags: [context, coroutinecontext, coroutines, difficulty/medium, kotlin, programming-languages]
-sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
-
----\
+tags:
+- context
+- coroutinecontext
+- coroutines
+- difficulty/medium
+- kotlin
+- programming-languages
+sources:
+- https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html
+anki_cards:
+- slug: cs-022-0-en
+  language: en
+  anki_id: 1768454343489
+  synced_at: '2026-01-15T09:43:17.051529'
+- slug: cs-022-0-ru
+  language: ru
+  anki_id: 1768454343515
+  synced_at: '2026-01-15T09:43:17.053513'
+---
 # Вопрос (RU)
 > Что является сущностью корутин контекста? Из каких элементов состоит CoroutineContext и как они работают?
 

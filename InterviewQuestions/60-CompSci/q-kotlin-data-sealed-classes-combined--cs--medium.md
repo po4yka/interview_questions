@@ -13,6 +13,46 @@ related: [c-computer-science, c-kotlin, q-channels-basics-types--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
+anki_cards:
+- slug: lang-210-0-en
+  front: |
+    How do data classes and sealed classes work together in Kotlin?
+  back: |
+    **Data classes**: Auto-generate `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`.
+    
+    **Sealed classes**: Restricted class hierarchies - all subclasses known at compile time.
+    
+    **Combined**: Type-safe state hierarchies with exhaustive `when` expressions.
+    
+    ```kotlin
+    sealed class Result<T> {
+      data class Success<T>(val data: T): Result<T>()
+      data class Error(val msg: String): Result<Nothing>()
+    }
+    ```
+  language: en
+  difficulty: 0.5
+  tags: [cs_types, difficulty::medium]
+- slug: lang-210-0-ru
+  front: |
+    Как data-классы и sealed-классы работают вместе в Kotlin?
+  back: |
+    **Data-классы**: Автогенерация `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`.
+    
+    **Sealed-классы**: Ограниченные иерархии - все подклассы известны компилятору.
+    
+    **Вместе**: Типобезопасные иерархии состояний с исчерпывающим `when`.
+    
+    ```kotlin
+    sealed class Result<T> {
+      data class Success<T>(val data: T): Result<T>()
+      data class Error(val msg: String): Result<Nothing>()
+    }
+    ```
+  language: ru
+  difficulty: 0.5
+  tags: [cs_types, difficulty::medium]
+
 ---
 # Вопрос (RU)
 > Расскажи про data классы и sealed классы и как их сочетать

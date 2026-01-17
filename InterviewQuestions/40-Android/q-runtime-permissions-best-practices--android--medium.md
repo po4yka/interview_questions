@@ -15,6 +15,41 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/permissions, difficulty/medium, permissions, security, ux]
+anki_cards:
+  - slug: android-213-0-en
+    front: "What are the best practices for runtime permissions in Android?"
+    back: |
+      **4 Permission States:** Not Requested, Granted, Denied, Permanently Denied
+
+      **Best practices:**
+      1. Request at point of use (not on app launch)
+      2. Show rationale before re-requesting
+      3. Handle permanent denial -> direct to Settings
+      4. Request minimum necessary permissions
+
+      **API:** ActivityResultContracts.RequestPermission(), shouldShowRequestPermissionRationale()
+
+      **Key:** Use viewLifecycleOwner in Compose: rememberPermissionState()
+    tags:
+      - android_permissions
+      - difficulty::medium
+  - slug: android-213-0-ru
+    front: "Какие лучшие практики для runtime разрешений в Android?"
+    back: |
+      **4 состояния разрешений:** Не запрошено, Предоставлено, Отклонено, Навсегда отклонено
+
+      **Лучшие практики:**
+      1. Запрашивать в момент использования (не при запуске)
+      2. Показывать обоснование перед повторным запросом
+      3. Обрабатывать постоянный отказ -> направлять в Settings
+      4. Запрашивать минимум необходимых разрешений
+
+      **API:** ActivityResultContracts.RequestPermission(), shouldShowRequestPermissionRationale()
+
+      **Ключевое:** В Compose: rememberPermissionState()
+    tags:
+      - android_permissions
+      - difficulty::medium
 ---\
 # Вопрос (RU)
 

@@ -1,19 +1,42 @@
----id: dp-012
-title: "Chain Of Responsibility / Цепочка обязанностей"
-aliases: [Chain Of Responsibility, Цепочка обязанностей]
+---
+id: dp-012
+title: Chain Of Responsibility / Цепочка обязанностей
+aliases:
+- Chain Of Responsibility
+- Цепочка обязанностей
 topic: cs
-subtopics: [design-patterns, behavioral, chain-of-responsibility]
+subtopics:
+- design-patterns
+- behavioral
+- chain-of-responsibility
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-dao-pattern, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- c-dao-pattern
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral, chain-of-responsibility, design-patterns, difficulty/medium]
-
+tags:
+- behavioral
+- chain-of-responsibility
+- design-patterns
+- difficulty/medium
+anki_cards:
+- slug: dp-012-0-en
+  language: en
+  anki_id: 1768454033689
+  synced_at: '2026-01-15T09:43:17.085490'
+- slug: dp-012-0-ru
+  language: ru
+  anki_id: 1768454033713
+  synced_at: '2026-01-15T09:43:17.087309'
 ---
 # Вопрос (RU)
 > Что такое паттерн Chain of Responsibility? Когда и зачем его использовать?

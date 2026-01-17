@@ -1,5 +1,54 @@
 ---\
 id: android-289
+anki_cards:
+  - slug: android-289-0-en
+    front: "How do you use @Path annotation in Retrofit to insert values into URLs?"
+    back: |
+      Use **@Path** to bind method parameters to URL placeholders in curly braces.
+
+      ```kotlin
+      @GET("users/{userId}/posts/{postId}")
+      suspend fun getPost(
+          @Path("userId") userId: String,
+          @Path("postId") postId: String
+      ): Response<Post>
+
+      // Call: api.getPost("123", "456")
+      // URL: /users/123/posts/456
+      ```
+
+      **@Path vs @Query:**
+      - `@Path` - in URL path: `/users/123` (resource IDs)
+      - `@Query` - in query string: `/users?id=123` (filters)
+
+      **URL encoding:** By default encodes special chars. Use `encoded = true` to preserve slashes.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-289-0-ru
+    front: "Как использовать аннотацию @Path в Retrofit для подстановки значений в URL?"
+    back: |
+      Используйте **@Path** для привязки параметров метода к плейсхолдерам в фигурных скобках.
+
+      ```kotlin
+      @GET("users/{userId}/posts/{postId}")
+      suspend fun getPost(
+          @Path("userId") userId: String,
+          @Path("postId") postId: String
+      ): Response<Post>
+
+      // Вызов: api.getPost("123", "456")
+      // URL: /users/123/posts/456
+      ```
+
+      **@Path vs @Query:**
+      - `@Path` - в пути URL: `/users/123` (ID ресурсов)
+      - `@Query` - в query-строке: `/users?id=123` (фильтры)
+
+      **URL-кодирование:** По умолчанию кодирует спецсимволы. Используйте `encoded = true` для сохранения слешей.
+    tags:
+      - android_general
+      - difficulty::medium
 title: Retrofit Path Parameter / Path параметр Retrofit
 aliases: [Path параметр Retrofit, Retrofit Path Parameter]
 topic: android

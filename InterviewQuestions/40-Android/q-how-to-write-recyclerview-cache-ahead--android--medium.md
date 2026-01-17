@@ -15,6 +15,54 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/cache-offline, android/performance-rendering, android/ui-views, difficulty/medium, optimization, prefetching, recyclerview]
+anki_cards:
+  - slug: android-314-0-en
+    front: "How to configure RecyclerView prefetching and caching?"
+    back: |
+      **Prefetching (enabled by default):**
+      ```kotlin
+      layoutManager.isItemPrefetchEnabled = true
+      layoutManager.initialPrefetchItemCount = 4
+      ```
+
+      **View cache:**
+      ```kotlin
+      recyclerView.setItemViewCacheSize(20) // default 2
+      ```
+
+      **RecycledViewPool (shared across RVs):**
+      ```kotlin
+      val pool = RecycledViewPool()
+      recyclerView.setRecycledViewPool(pool)
+      pool.setMaxRecycledViews(TYPE, 10)
+      ```
+    tags:
+      - android_layouts
+      - difficulty::medium
+  - slug: android-314-0-ru
+    front: "Как настроить предзагрузку и кэширование в RecyclerView?"
+    back: |
+      **Prefetching (включён по умолчанию):**
+      ```kotlin
+      layoutManager.isItemPrefetchEnabled = true
+      layoutManager.initialPrefetchItemCount = 4
+      ```
+
+      **View cache:**
+      ```kotlin
+      recyclerView.setItemViewCacheSize(20) // по умолчанию 2
+      ```
+
+      **RecycledViewPool (общий между RV):**
+      ```kotlin
+      val pool = RecycledViewPool()
+      recyclerView.setRecycledViewPool(pool)
+      pool.setMaxRecycledViews(TYPE, 10)
+      ```
+    tags:
+      - android_layouts
+      - difficulty::medium
+
 ---\
 # Вопрос (RU)
 

@@ -1,4 +1,5 @@
 ---id: android-249
+id: android-737
 title: "What Is Layout Performance Measured In / В чем измеряется производительность layout"
 aliases: ["Layout Performance Measurement", "Измерение производительности layout"]
 topic: android

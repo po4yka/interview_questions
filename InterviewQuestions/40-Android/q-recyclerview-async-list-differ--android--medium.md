@@ -14,6 +14,63 @@ related: [c-recyclerview, q-how-to-change-number-of-columns-in-recyclerview-base
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium]
+anki_cards:
+  - slug: android-224-0-en
+    front: "How does AsyncListDiffer work in RecyclerView?"
+    back: |
+      **AsyncListDiffer** calculates list diffs in background thread:
+
+      ```
+      Main Thread              Background Thread
+      submitList(new)  ->      DiffUtil.calculateDiff()
+      UI responsive    <-      Return DiffResult
+      dispatchUpdatesTo()
+      ```
+
+      **Key points:**
+      - `submitList()` must be called on main thread
+      - Diff computed in background automatically
+      - Use immutable lists (don't mutate after submit)
+
+      **vs ListAdapter:**
+      - `ListAdapter` built on `AsyncListDiffer` (simpler API)
+      - Use `AsyncListDiffer` for custom adapters
+
+      **Best practice:** Use commit callback for post-update actions:
+      ```kotlin
+      adapter.submitList(items) { recyclerView.scrollToPosition(0) }
+      ```
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-224-0-ru
+    front: "Как работает AsyncListDiffer в RecyclerView?"
+    back: |
+      **AsyncListDiffer** вычисляет разницу списков в фоновом потоке:
+
+      ```
+      Главный поток           Фоновый поток
+      submitList(new)  ->     DiffUtil.calculateDiff()
+      UI отзывчивый    <-     Возврат DiffResult
+      dispatchUpdatesTo()
+      ```
+
+      **Ключевые моменты:**
+      - `submitList()` вызывать только с главного потока
+      - Diff считается в фоне автоматически
+      - Используйте неизменяемые списки (не мутируйте после submit)
+
+      **vs ListAdapter:**
+      - `ListAdapter` построен на `AsyncListDiffer` (проще API)
+      - Используйте `AsyncListDiffer` для кастомных адаптеров
+
+      **Лучшая практика:** Callback для действий после обновления:
+      ```kotlin
+      adapter.submitList(items) { recyclerView.scrollToPosition(0) }
+      ```
+    tags:
+      - android_views
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

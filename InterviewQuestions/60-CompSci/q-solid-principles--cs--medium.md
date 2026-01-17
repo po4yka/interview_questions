@@ -1,20 +1,46 @@
 ---
 id: sd-002
-title: "SOLID Principles / Принципы SOLID"
-aliases: [SOLID Principles, Принципы SOLID]
+title: SOLID Principles / Принципы SOLID
+aliases:
+- SOLID Principles
+- Принципы SOLID
 topic: cs
-subtopics: [c-architecture-patterns, c-clean-code, c-cs]
+subtopics:
+- c-architecture-patterns
+- c-clean-code
+- c-cs
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns]
+related:
+- c-architecture-patterns
 created: 2025-10-13
 updated: 2025-11-11
-tags: [architecture, design-principles, difficulty/medium, dip, isp, lsp, ocp, oop, solid, srp]
-
+tags:
+- architecture
+- design-principles
+- difficulty/medium
+- dip
+- isp
+- lsp
+- ocp
+- oop
+- solid
+- srp
+anki_cards:
+- slug: sd-002-0-en
+  language: en
+  anki_id: 1768455794995
+  synced_at: '2026-01-15T09:43:17.062772'
+- slug: sd-002-0-ru
+  language: ru
+  anki_id: 1768455795019
+  synced_at: '2026-01-15T09:43:17.064792'
 ---
 # Вопрос (RU)
 > Что такое принципы SOLID?

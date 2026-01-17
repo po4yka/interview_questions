@@ -1,5 +1,54 @@
----\
+---
 id: android-246
+anki_cards:
+  - slug: android-246-0-en
+    front: "What are the main causes of UI lag in Android apps?"
+    back: |
+      **1. Heavy operations on main thread:**
+      - Network, DB, file I/O
+      - Solution: `withContext(Dispatchers.IO)`
+
+      **2. Unoptimized layouts:**
+      - Deep nesting
+      - Solution: `ConstraintLayout`, flat hierarchy
+
+      **3. Image issues:**
+      - Large images without scaling
+      - Solution: Glide/Coil with caching
+
+      **4. Frequent UI updates:**
+      - `notifyDataSetChanged()` abuse
+      - Solution: `DiffUtil`, `ListAdapter`
+
+      **5. Heavy animations:**
+      - Solution: `ViewPropertyAnimator` (hardware-accelerated)
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-246-0-ru
+    front: "Какие основные причины тормозов UI в Android приложениях?"
+    back: |
+      **1. Тяжелые операции в главном потоке:**
+      - Сеть, БД, файловый I/O
+      - Решение: `withContext(Dispatchers.IO)`
+
+      **2. Неоптимизированные макеты:**
+      - Глубокая вложенность
+      - Решение: `ConstraintLayout`, плоская иерархия
+
+      **3. Проблемы с изображениями:**
+      - Большие изображения без масштабирования
+      - Решение: Glide/Coil с кэшированием
+
+      **4. Частые обновления UI:**
+      - Злоупотребление `notifyDataSetChanged()`
+      - Решение: `DiffUtil`, `ListAdapter`
+
+      **5. Тяжелые анимации:**
+      - Решение: `ViewPropertyAnimator` (hardware-accelerated)
+    tags:
+      - android_general
+      - difficulty::medium
 title: "Main Causes UI Lag / Основные причины тормозов UI"
 aliases: [Main Causes UI Lag, UI Lag, UI Performance, Основные причины тормозов UI]
 topic: android

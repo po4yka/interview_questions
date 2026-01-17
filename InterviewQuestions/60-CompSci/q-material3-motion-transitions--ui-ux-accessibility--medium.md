@@ -1,21 +1,42 @@
----\
+---
 id: ui-001
-title: "Material3 Motion Transitions / Движение и переходы Material3"
-aliases: ["Material3 Motion Transitions", "Движение и переходы Material3"]
+title: Material3 Motion Transitions / Движение и переходы Material3
+aliases:
+- Material3 Motion Transitions
+- Движение и переходы Material3
 topic: cs
-subtopics: [ui-ux-accessibility, ui-animation]
+subtopics:
+- ui-ux-accessibility
+- ui-animation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-animation, c-animation-framework, q-jetpack-compose-basics--android--medium]
+related:
+- c-animation
+- c-animation-framework
+- q-jetpack-compose-basics--android--medium
 created: 2025-10-13
 updated: 2025-11-11
 sources: []
-tags: [difficulty/medium, ui-animation, ui-ux-accessibility]
----\
+tags:
+- difficulty/medium
+- ui-animation
+- ui-ux-accessibility
+anki_cards:
+- slug: ui-mat3-0-en
+  language: en
+  anki_id: 1768455796394
+  synced_at: '2026-01-15T09:43:17.104046'
+- slug: ui-mat3-0-ru
+  language: ru
+  anki_id: 1768455796418
+  synced_at: '2026-01-15T09:43:17.105372'
+---
 # Вопрос (RU)
 
 > Каковы ключевые принципы движения в Material 3? Объясните shared element transitions, анимации предиктивного жеста назад и реализацию плавных переходов между composables в соответствии с рекомендациями Material Design.

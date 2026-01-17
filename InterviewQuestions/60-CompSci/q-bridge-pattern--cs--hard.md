@@ -1,22 +1,47 @@
----\
+---
 id: cs-018
-title: "Bridge Pattern / Bridge Паттерн"
-aliases: ["Bridge Pattern", "Паттерн Bridge"]
+title: Bridge Pattern / Bridge Паттерн
+aliases:
+- Bridge Pattern
+- Паттерн Bridge
 topic: cs
-subtopics: [bridge, design-patterns, structural-patterns]
+subtopics:
+- bridge
+- design-patterns
+- structural-patterns
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-adapter-pattern, c-architecture-patterns, c-design-patterns]
+related:
+- c-adapter-pattern
+- c-architecture-patterns
+- c-design-patterns
 created: 2025-10-15
 updated: 2025-11-11
-tags: [abstraction, bridge, design-patterns, difficulty/hard, gof-patterns, structural-patterns]
-sources: ["https://refactoring.guru/design-patterns/bridge"]
-
----\
+tags:
+- abstraction
+- bridge
+- design-patterns
+- difficulty/hard
+- gof-patterns
+- structural-patterns
+sources:
+- https://refactoring.guru/design-patterns/bridge
+anki_cards:
+- slug: cs-018-0-en
+  language: en
+  anki_id: 1768454033589
+  synced_at: '2026-01-15T09:41:02.839639'
+- slug: cs-018-0-ru
+  language: ru
+  anki_id: 1768454033615
+  synced_at: '2026-01-15T09:41:02.842285'
+---
 # Вопрос (RU)
 > Что такое паттерн Bridge? Когда и зачем его использовать?
 

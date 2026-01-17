@@ -15,6 +15,35 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/coroutines, android/ui-compose, difficulty/medium]
+anki_cards:
+  - slug: android-123-0-en
+    front: "What are the most important components of Jetpack Compose?"
+    back: |
+      **7 core components:**
+      1. **@Composable functions** - UI building blocks
+      2. **State + Recomposition** - reactive updates
+      3. **Modifiers** - appearance/behavior customization
+      4. **Layouts** - Column, Row, Box, LazyColumn
+      5. **Effect handlers** - LaunchedEffect, DisposableEffect
+      6. **Material components** - Button, TextField, Card
+      7. **Theme system** - MaterialTheme, colors, typography
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-123-0-ru
+    front: "Какие самые важные компоненты Jetpack Compose?"
+    back: |
+      **7 ключевых компонентов:**
+      1. **@Composable функции** - строительные блоки UI
+      2. **State + Recomposition** - реактивные обновления
+      3. **Modifiers** - настройка внешнего вида/поведения
+      4. **Layouts** - Column, Row, Box, LazyColumn
+      5. **Effect handlers** - LaunchedEffect, DisposableEffect
+      6. **Material components** - Button, TextField, Card
+      7. **Theme system** - MaterialTheme, цвета, типографика
+    tags:
+      - android_compose
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

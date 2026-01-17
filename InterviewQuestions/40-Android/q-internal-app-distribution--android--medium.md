@@ -15,6 +15,33 @@ sources: ["https://developer.android.com/distribute/best-practices/develop/in-ap
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ci-cd, android/play-console, beta-testing, difficulty/medium, firebase]
+anki_cards:
+  - slug: android-402-0-en
+    front: "What are the main options for internal app distribution in Android?"
+    back: |
+      **Distribution channels:**
+      1. **Firebase App Distribution** - quick testing, tester groups
+      2. **Google Play Internal Testing** - closed/internal tracks
+      3. **Enterprise MDM** - Samsung Knox, VMware, etc.
+      4. **Direct APK sharing** - manual, requires "unknown sources"
+
+      **For enterprise:** Managed Google Play, MDM solutions
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-402-0-ru
+    front: "Какие основные способы внутреннего распространения приложений Android?"
+    back: |
+      **Каналы распространения:**
+      1. **Firebase App Distribution** - быстрое тестирование, группы тестеров
+      2. **Google Play Internal Testing** - закрытые/внутренние треки
+      3. **Enterprise MDM** - Samsung Knox, VMware и др.
+      4. **Прямая раздача APK** - ручной способ, требует "неизвестные источники"
+
+      **Для энтерпрайза:** Managed Google Play, MDM решения
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

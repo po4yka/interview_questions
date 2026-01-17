@@ -15,6 +15,47 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium, foreground-service, jobscheduler, workmanager]
+anki_cards:
+  - slug: android-194-0-en
+    front: "How do you keep a service running in the background on Android?"
+    back: |
+      **Options by use case:**
+
+      | Approach | When to use |
+      |----------|-------------|
+      | **Foreground Service** | User-initiated, urgent (music, navigation) |
+      | **WorkManager** | Deferrable, survives restarts |
+      | **JobScheduler** | Condition-based (network, charging) |
+
+      **Foreground Service rules:**
+      - Must show notification
+      - Call `startForeground()` within 5 seconds
+      - Declare `foregroundServiceType` (Android 10+)
+
+      **Decision:** Urgent + user-initiated = Foreground Service. Deferrable = WorkManager.
+    tags:
+      - android_services
+      - difficulty::medium
+  - slug: android-194-0-ru
+    front: "Как сохранить работу сервиса в фоне на Android?"
+    back: |
+      **Варианты по сценарию:**
+
+      | Подход | Когда использовать |
+      |--------|-------------------|
+      | **Foreground Service** | Инициировано пользователем, срочно (музыка, навигация) |
+      | **WorkManager** | Может быть отложено, переживает перезапуск |
+      | **JobScheduler** | По условиям (сеть, зарядка) |
+
+      **Правила Foreground Service:**
+      - Обязательно уведомление
+      - Вызвать `startForeground()` в течение 5 секунд
+      - Указать `foregroundServiceType` (Android 10+)
+
+      **Решение:** Срочно + от пользователя = Foreground Service. Отложенное = WorkManager.
+    tags:
+      - android_services
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

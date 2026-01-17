@@ -15,6 +15,41 @@ created: 2024-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/lifecycle, android/room, data-persistence, datastore, difficulty/medium, fragments, sharedpreferences, viewmodel]
+anki_cards:
+  - slug: android-139-0-en
+    front: "How can you save data outside a Fragment in Android?"
+    back: |
+      **Methods by persistence:**
+
+      | Method | Survives rotation | Survives process death |
+      |--------|-------------------|------------------------|
+      | ViewModel | Yes | No |
+      | SavedStateHandle | Yes | Yes (small data) |
+      | SharedPreferences | Yes | Yes |
+      | DataStore | Yes | Yes |
+      | Room | Yes | Yes |
+
+      **Architecture:** Fragment -> ViewModel -> Repository -> Data Sources
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-139-0-ru
+    front: "Как сохранить данные за пределами Fragment в Android?"
+    back: |
+      **Методы по персистентности:**
+
+      | Метод | Переживает ротацию | Переживает смерть процесса |
+      |-------|--------------------|-----------------------------|
+      | ViewModel | Да | Нет |
+      | SavedStateHandle | Да | Да (малые данные) |
+      | SharedPreferences | Да | Да |
+      | DataStore | Да | Да |
+      | Room | Да | Да |
+
+      **Архитектура:** Fragment -> ViewModel -> Repository -> Data Sources
+    tags:
+      - android_architecture
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

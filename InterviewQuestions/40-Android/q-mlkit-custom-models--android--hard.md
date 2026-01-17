@@ -1,5 +1,58 @@
 ---
 id: android-126
+anki_cards:
+  - slug: android-126-0-en
+    front: "How do you integrate custom TensorFlow Lite models with ML Kit?"
+    back: |
+      **Model types:**
+      - **Bundled** - in APK, offline, increases size
+      - **Remote** - downloaded, updateable without release
+      - **AutoML** - trained via Vertex AI, exported as TFLite
+
+      **Integration:**
+      ```kotlin
+      val interpreter = Interpreter(modelBuffer, options)
+      // Always have local fallback
+      ```
+
+      **A/B testing:**
+      - Remote Config for model selection
+      - User-based bucketing for consistency
+      - Track inference time, accuracy, success rate
+
+      **Best practices:**
+      - GPU/NNAPI delegates for speedup
+      - Quantization to reduce size
+      - Gradual rollout (10% -> 50% -> 100%)
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-126-0-ru
+    front: "Как интегрировать пользовательские TensorFlow Lite модели с ML Kit?"
+    back: |
+      **Типы моделей:**
+      - **Локальные** - в APK, офлайн, увеличивают размер
+      - **Удаленные** - загружаются, обновляются без релиза
+      - **AutoML** - обучены через Vertex AI, экспортированы как TFLite
+
+      **Интеграция:**
+      ```kotlin
+      val interpreter = Interpreter(modelBuffer, options)
+      // Всегда имейте локальный fallback
+      ```
+
+      **A/B тестирование:**
+      - Remote Config для выбора модели
+      - User-based bucketing для консистентности
+      - Отслеживайте inference time, accuracy, success rate
+
+      **Лучшие практики:**
+      - GPU/NNAPI делегаты для ускорения
+      - Квантизация для уменьшения размера
+      - Постепенный rollout (10% -> 50% -> 100%)
+    tags:
+      - android_general
+      - difficulty::hard
 title: ML Kit Custom Models / Кастомные модели ML Kit
 aliases: [ML Kit Custom Models, Кастомные модели ML Kit]
 topic: android

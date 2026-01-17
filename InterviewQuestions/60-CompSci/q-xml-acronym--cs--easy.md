@@ -1,22 +1,45 @@
----\
+---
 id: cs-007
-title: "Xml Acronym / Расшифровка аббревиатуры XML"
-aliases: ["XML Acronym", "Аббревиатура XML"]
+title: Xml Acronym / Расшифровка аббревиатуры XML
+aliases:
+- XML Acronym
+- Аббревиатура XML
 topic: cs
-subtopics: [data-format, fundamentals, markup-language]
+subtopics:
+- data-format
+- fundamentals
+- markup-language
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-computer-science]
+related:
+- c-computer-science
 created: 2025-10-13
 updated: 2025-11-11
-tags: [cs, data-format, difficulty/easy, fundamentals, markup-language, xml]
-sources: ["https://www.w3.org/XML/"]
-
----\
+tags:
+- cs
+- data-format
+- difficulty/easy
+- fundamentals
+- markup-language
+- xml
+sources:
+- https://www.w3.org/XML/
+anki_cards:
+- slug: cs-xml-0-en
+  language: en
+  anki_id: 1768455796343
+  synced_at: '2026-01-15T09:43:17.101096'
+- slug: cs-xml-0-ru
+  language: ru
+  anki_id: 1768455796369
+  synced_at: '2026-01-15T09:43:17.102479'
+---
 # Вопрос (RU)
 > Как расшифровывается аббревиатура XML?
 

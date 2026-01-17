@@ -17,6 +17,33 @@ tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, configura
 sources:
   - "https://developer.android.com/guide/topics/resources/runtime-changes"
   - "https://developer.android.com/topic/libraries/architecture/saving-states"
+anki_cards:
+  - slug: android-096-0-en
+    front: "Why does user data disappear during screen rotation in Android?"
+    back: |
+      **Cause:** Android destroys and recreates Activity on config change. Variables reset.
+
+      **Solutions:**
+      - `onSaveInstanceState` - small UI state (Bundle size limits)
+      - `ViewModel` - survives config changes only
+      - `SavedStateHandle` - survives config change + process death (small data)
+      - View ID - auto-saves EditText, CheckBox state
+    tags:
+      - android_lifecycle
+      - difficulty::hard
+  - slug: android-096-0-ru
+    front: "Почему данные пользователя исчезают при повороте экрана в Android?"
+    back: |
+      **Причина:** Android уничтожает и пересоздаёт Activity при смене конфигурации. Переменные сбрасываются.
+
+      **Решения:**
+      - `onSaveInstanceState` - малое UI-состояние (лимит Bundle)
+      - `ViewModel` - переживает только config changes
+      - `SavedStateHandle` - переживает config change + process death (малые данные)
+      - View ID - автосохранение EditText, CheckBox
+    tags:
+      - android_lifecycle
+      - difficulty::hard
 
 ---\
 # Вопрос (RU)

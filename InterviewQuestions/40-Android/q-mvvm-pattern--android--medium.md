@@ -1,4 +1,30 @@
 ---id: android-125
+id: android-711
+anki_cards:
+  - slug: android-125-0-en
+    front: "What are the three components of MVVM pattern in Android?"
+    back: |
+      **Model** - Data layer (Repository, Use Cases)
+      **View** - UI layer (Activity, Fragment, Composable)
+      **ViewModel** - Manages UI state, survives config changes
+
+      **Key:** ViewModel exposes observable state (LiveData/StateFlow), View subscribes and updates UI. ViewModel never holds View references.
+    tags:
+      - android_architecture
+      - android_viewmodel
+      - difficulty::medium
+  - slug: android-125-0-ru
+    front: "Каковы три компонента паттерна MVVM в Android?"
+    back: |
+      **Model** - Слой данных (Repository, Use Cases)
+      **View** - Слой UI (Activity, Fragment, Composable)
+      **ViewModel** - Управляет UI-состоянием, переживает изменения конфигурации
+
+      **Ключевое:** ViewModel предоставляет observable-состояние (LiveData/StateFlow), View подписывается и обновляет UI. ViewModel никогда не хранит ссылки на View.
+    tags:
+      - android_architecture
+      - android_viewmodel
+      - difficulty::medium
 title: "MVVM Pattern / Паттерн MVVM"
 aliases: ["Model-View-ViewModel", "MVVM Pattern", "Паттерн MVVM"]
 topic: android

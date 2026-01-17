@@ -1,4 +1,40 @@
----\
+---
+id: android-718
+anki_cards:
+  - slug: android-637-0-en
+    front: "How should sensitive data be managed throughout its lifecycle in Android?"
+    back: |
+      **Data classification**: Identify sensitivity levels (PII, credentials, financial).
+
+      **Encryption at rest**:
+      - Use `EncryptedSharedPreferences` for key-value data
+      - Use `EncryptedFile` for file storage
+      - SQLCipher for Room databases
+
+      **Encryption in transit**: TLS 1.2+, certificate pinning.
+
+      **Secure deletion**:
+      - Overwrite memory with zeros before releasing
+      - Use crypto-shredding (delete encryption key)
+      - Clear arrays: `Arrays.fill(charArray, '\u0000')`
+    tags: ["android_storage", "difficulty::hard"]
+  - slug: android-637-0-ru
+    front: "Как следует управлять чувствительными данными на протяжении их жизненного цикла в Android?"
+    back: |
+      **Классификация данных**: определите уровни чувствительности (персональные данные, учётные данные, финансовые).
+
+      **Шифрование при хранении**:
+      - `EncryptedSharedPreferences` для пар ключ-значение
+      - `EncryptedFile` для файлов
+      - SQLCipher для баз данных Room
+
+      **Шифрование при передаче**: TLS 1.2+, закрепление сертификатов.
+
+      **Безопасное удаление**:
+      - Перезаписывать память нулями перед освобождением
+      - Криптошрединг (удаление ключа шифрования)
+      - Очистка массивов: `Arrays.fill(charArray, '\u0000')`
+    tags: ["android_storage", "difficulty::hard"]
 id: android-637
 title: Sensitive Data Lifecycle / Жизненный цикл чувствительных данных
 aliases: [Sensitive Data Lifecycle, Жизненный цикл чувствительных данных]

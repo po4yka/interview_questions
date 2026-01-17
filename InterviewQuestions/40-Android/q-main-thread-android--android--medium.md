@@ -15,6 +15,37 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/lifecycle, android/threads-sync, difficulty/medium, threading, ui-thread]
+anki_cards:
+  - slug: android-132-0-en
+    front: "What is the main thread in Android and what are its key characteristics?"
+    back: |
+      **Main Thread (UI Thread)** - handles all UI operations.
+
+      **Key characteristics:**
+      - Created by framework at app start
+      - All UI updates must happen here
+      - Uses Looper + MessageQueue event loop
+      - Blocking > 5sec causes ANR
+
+      **Avoid:** Network, DB, heavy computation on main thread.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-132-0-ru
+    front: "Что такое главный поток в Android и каковы его ключевые характеристики?"
+    back: |
+      **Main Thread (UI Thread)** - обрабатывает все UI операции.
+
+      **Ключевые характеристики:**
+      - Создаётся фреймворком при запуске приложения
+      - Все UI обновления должны происходить здесь
+      - Использует event loop Looper + MessageQueue
+      - Блокировка > 5сек вызывает ANR
+
+      **Избегать:** Сеть, БД, тяжёлые вычисления на главном потоке.
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

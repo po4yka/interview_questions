@@ -1,22 +1,45 @@
----\
+---
 id: sysdes-006
-title: "Design URL Shortener (like bit.ly) / Проектирование сокращателя URL"
-aliases: ["URL Shortener Design", "Проектирование сокращателя URL"]
+title: Design URL Shortener (like bit.ly) / Проектирование сокращателя URL
+aliases:
+- URL Shortener Design
+- Проектирование сокращателя URL
 topic: system-design
-subtopics: [scalability, url-shortener]
+subtopics:
+- scalability
+- url-shortener
 question_kind: system-design
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-system-design
-related: [c-caching-strategies, q-caching-strategies--system-design--medium, q-database-sharding-partitioning--system-design--hard]
+related:
+- c-caching-strategies
+- q-caching-strategies--system-design--medium
+- q-database-sharding-partitioning--system-design--hard
 created: 2025-10-12
 updated: 2025-11-11
-tags: [difficulty/medium, interview, scalability, system-design, url-shortener]
-sources: ["https://en.wikipedia.org/wiki/URL_shortening"]
-
----\
+tags:
+- difficulty/medium
+- interview
+- scalability
+- system-design
+- url-shortener
+sources:
+- https://en.wikipedia.org/wiki/URL_shortening
+anki_cards:
+- slug: sysdes-006-0-en
+  language: en
+  anki_id: 1768468551759
+  synced_at: '2026-01-15T13:15:52.016630'
+- slug: sysdes-006-0-ru
+  language: ru
+  anki_id: 1768468551784
+  synced_at: '2026-01-15T13:15:52.019814'
+---
 # Вопрос (RU)
 > Спроектируйте сервис сокращения URL (как bit.ly). Каковы требования, архитектура и ключевые компромиссы?
 

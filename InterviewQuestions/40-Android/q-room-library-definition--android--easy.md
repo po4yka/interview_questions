@@ -15,6 +15,35 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/room, difficulty/easy]
 sources: ["https://developer.android.com/codelabs/android-room-with-a-view-kotlin", "https://developer.android.com/training/data-storage/room"]
+anki_cards:
+  - slug: android-083-0-en
+    front: "What is the Room library in Android?"
+    back: |
+      **Room** is Google's ORM over SQLite with compile-time SQL validation.
+
+      **Three components:**
+      - `@Entity` - table definition (data class)
+      - `@Dao` - data access interface (queries)
+      - `@Database` - entry point (extends RoomDatabase)
+
+      **Benefits:** Type safety, LiveData/Flow/Coroutines support, migrations.
+    tags:
+      - android_room
+      - difficulty::easy
+  - slug: android-083-0-ru
+    front: "Что такое библиотека Room в Android?"
+    back: |
+      **Room** - ORM от Google над SQLite с проверкой SQL на этапе компиляции.
+
+      **Три компонента:**
+      - `@Entity` - определение таблицы (data class)
+      - `@Dao` - интерфейс доступа к данным (запросы)
+      - `@Database` - точка входа (наследует RoomDatabase)
+
+      **Преимущества:** Типобезопасность, поддержка LiveData/Flow/Coroutines, миграции.
+    tags:
+      - android_room
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

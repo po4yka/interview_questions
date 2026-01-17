@@ -1,4 +1,5 @@
 ---id: android-630
+id: android-731
 title: Wear Compose UX Patterns / UX-паттерны Wear Compose
 aliases: [UX-паттерны Wear Compose, Wear Compose UX Patterns]
 topic: android

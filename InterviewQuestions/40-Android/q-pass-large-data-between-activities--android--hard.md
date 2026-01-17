@@ -1,5 +1,38 @@
----\
+---
 id: android-365
+anki_cards:
+  - slug: android-365-0-en
+    front: "How to properly pass large data between Activities in Android?"
+    back: |
+      **Never put large data in Intent** - Binder limit ~1MB.
+
+      **Solutions:**
+      1. **FileProvider + URI** (recommended) - save to file, pass URI with `FLAG_GRANT_READ_URI_PERMISSION`
+      2. **Database + ID** - save to Room, pass ID
+      3. **Shared ViewModel** - only within same Activity's Fragments
+      4. **ContentProvider** - for cross-app sharing
+
+      **Wrong:** `intent.putExtra("image", bitmap)` - causes TransactionTooLargeException
+    tags:
+      - android_activities
+      - android_intents
+      - difficulty::hard
+  - slug: android-365-0-ru
+    front: "Как правильно передавать большие данные между Activity в Android?"
+    back: |
+      **Никогда не класть большие данные в Intent** - лимит Binder ~1MB.
+
+      **Решения:**
+      1. **FileProvider + URI** (рекомендуется) - сохранить в файл, передать URI с `FLAG_GRANT_READ_URI_PERMISSION`
+      2. **База данных + ID** - сохранить в Room, передать ID
+      3. **Shared ViewModel** - только внутри Fragment'ов одной Activity
+      4. **ContentProvider** - для межприложенного обмена
+
+      **Неправильно:** `intent.putExtra("image", bitmap)` - вызывает TransactionTooLargeException
+    tags:
+      - android_activities
+      - android_intents
+      - difficulty::hard
 title: Pass Large Data Between Activities / Передача больших данных между Activity
 aliases: [Content URI, FileProvider, Large Data Transfer, Pass Large Data Between Activities, Передача больших данных между Activity]
 topic: android

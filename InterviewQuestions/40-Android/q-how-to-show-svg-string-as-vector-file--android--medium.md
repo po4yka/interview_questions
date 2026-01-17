@@ -16,6 +16,47 @@ updated: 2025-11-10
 sources:
   - "https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources"
 tags: [android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, image-loading, svg, vector-graphics]
+anki_cards:
+  - slug: android-294-0-en
+    front: "How to display SVG string as a vector image in Android?"
+    back: |
+      **Android doesn't support SVG natively.** Use libraries:
+
+      **AndroidSVG (recommended for strings):**
+      ```kotlin
+      val svg = SVG.getFromString(svgString)
+      val drawable = PictureDrawable(svg.renderToPicture())
+      imageView.setLayerType(LAYER_TYPE_SOFTWARE, null)
+      imageView.setImageDrawable(drawable)
+      ```
+
+      **Coil + SvgDecoder** - for URL/files
+      **Glide + GlideSvgModule** - alternative
+
+      Note: Can't convert SVG to `VectorDrawable` at runtime
+    tags:
+      - android_views
+      - difficulty::medium
+  - slug: android-294-0-ru
+    front: "Как отобразить SVG строку как векторное изображение в Android?"
+    back: |
+      **Android не поддерживает SVG нативно.** Используйте библиотеки:
+
+      **AndroidSVG (рекомендуется для строк):**
+      ```kotlin
+      val svg = SVG.getFromString(svgString)
+      val drawable = PictureDrawable(svg.renderToPicture())
+      imageView.setLayerType(LAYER_TYPE_SOFTWARE, null)
+      imageView.setImageDrawable(drawable)
+      ```
+
+      **Coil + SvgDecoder** - для URL/файлов
+      **Glide + GlideSvgModule** - альтернатива
+
+      Примечание: Нельзя конвертировать SVG в `VectorDrawable` в runtime
+    tags:
+      - android_views
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

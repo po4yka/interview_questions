@@ -14,6 +14,38 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [creational-patterns, design-patterns, difficulty/medium, object-cloning, prototype]
 sources: ["https://refactoring.guru/design-patterns/prototype"]
+anki_cards:
+- slug: cs-024-0-en
+  front: |
+    What is the Prototype pattern and when should you use it?
+  back: |
+    **Prototype**: Creational pattern that creates objects by cloning existing prototypes.
+    
+    **Use when**:
+    - Object creation is expensive
+    - Need to determine type at runtime
+    - Avoid factory class hierarchies
+    
+    **In Kotlin**: `data class` with `copy()` is natural prototype.
+  language: en
+  difficulty: 0.5
+  tags: [cs_patterns, difficulty::medium]
+- slug: cs-024-0-ru
+  front: |
+    Что такое паттерн Прототип и когда его использовать?
+  back: |
+    **Прототип**: Порождающий паттерн, создающий объекты клонированием существующих прототипов.
+    
+    **Используйте когда**:
+    - Создание объекта дорогое
+    - Нужно определить тип в runtime
+    - Избегать иерархий фабрик
+    
+    **В Kotlin**: `data class` с `copy()` - естественный прототип.
+  language: ru
+  difficulty: 0.5
+  tags: [cs_patterns, difficulty::medium]
+
 ---
 # Вопрос (RU)
 > Что такое паттерн Prototype? Когда его использовать и как он работает?

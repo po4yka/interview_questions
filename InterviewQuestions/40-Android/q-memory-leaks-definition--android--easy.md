@@ -15,6 +15,35 @@ sources: []
 tags: [android/lifecycle, android/performance-memory, difficulty/easy, memory-leaks, performance]
 moc: moc-android
 related: [c-activity-lifecycle, c-android, q-coroutine-memory-leak-detection--kotlin--hard, q-coroutine-memory-leaks--kotlin--hard, q-optimize-memory-usage-android--android--medium, q-sharedpreferences-definition--android--easy, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
+anki_cards:
+  - slug: android-086-0-en
+    front: "What are memory leaks in Android and how do they occur?"
+    back: |
+      **Memory leak** - object no longer needed but remains reachable via strong references.
+
+      **Common causes:**
+      1. Static Activity references in companion object
+      2. Handler postDelayed without cleanup in onDestroy
+      3. Forgotten listeners (EventBus without unregister)
+
+      **Fix:** Clear refs in onDestroy, use WeakReference, LeakCanary for detection.
+    tags:
+      - android_general
+      - difficulty::easy
+  - slug: android-086-0-ru
+    front: "Что такое утечки памяти в Android и как они возникают?"
+    back: |
+      **Утечка памяти** - объект больше не нужен, но остаётся достижим через сильные ссылки.
+
+      **Частые причины:**
+      1. Статическая ссылка на Activity в companion object
+      2. Handler postDelayed без очистки в onDestroy
+      3. Забытые слушатели (EventBus без unregister)
+
+      **Решение:** Очищать ссылки в onDestroy, WeakReference, LeakCanary для обнаружения.
+    tags:
+      - android_general
+      - difficulty::easy
 
 ---\
 # Вопрос (RU)

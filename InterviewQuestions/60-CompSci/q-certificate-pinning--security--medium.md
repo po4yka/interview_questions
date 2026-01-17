@@ -1,20 +1,48 @@
----\
+---
 id: sec-002
 title: Certificate Pinning / Закрепление сертификатов
-aliases: [Certificate Pinning, Закрепление сертификатов]
+aliases:
+- Certificate Pinning
+- Закрепление сертификатов
 topic: cs
-subtopics: [security, networking, tls]
+subtopics:
+- security
+- networking
+- tls
 question_kind: android
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [c-computer-science, q-android-keystore-system--android--medium, q-android-security-practices-checklist--android--medium, q-api-rate-limiting-throttling--android--medium, q-app-security-best-practices--android--medium, q-okhttp-interceptors-advanced--networking--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
+related:
+- c-computer-science
+- q-android-keystore-system--android--medium
+- q-android-security-practices-checklist--android--medium
+- q-api-rate-limiting-throttling--android--medium
+- q-app-security-best-practices--android--medium
+- q-okhttp-interceptors-advanced--networking--medium
+- q-retrofit-coroutines-best-practices--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
 original_language: en
-language_tags: [en, ru]
-tags: [difficulty/medium, networking, okhttp, security, tls]
----\
+language_tags:
+- en
+- ru
+tags:
+- difficulty/medium
+- networking
+- okhttp
+- security
+- tls
+anki_cards:
+- slug: sec-002-0-en
+  language: en
+  anki_id: 1768454033640
+  synced_at: '2026-01-15T09:43:17.082954'
+- slug: sec-002-0-ru
+  language: ru
+  anki_id: 1768454033665
+  synced_at: '2026-01-15T09:43:17.084229'
+---
 # Вопрос (RU)
 > Что такое закрепление сертификатов, зачем оно нужно и как безопасно реализовать его в Android (`OkHttp` и Network Security Config)?
 

@@ -1,5 +1,36 @@
 ---\
 id: android-200
+anki_cards:
+  - slug: android-200-0-en
+    front: "What is the MVP pattern and what are its main components?"
+    back: |
+      **MVP (Model-View-Presenter):**
+
+      **Model** - data/business layer, independent of UI
+      **View** - UI layer, passive, displays what Presenter instructs
+      **Presenter** - mediator, gets data from Model, updates View via interface
+
+      **Key feature:** View and Presenter communicate via Contract interface.
+      **Benefit:** Presenter easily unit testable (mock View).
+      **Pitfall:** Memory leaks if View not detached in `onDestroy()`.
+    tags:
+      - android_architecture
+      - difficulty::medium
+  - slug: android-200-0-ru
+    front: "Что такое MVP паттерн и каковы его основные компоненты?"
+    back: |
+      **MVP (Model-View-Presenter):**
+
+      **Model** - слой данных/бизнес-логики, независим от UI
+      **View** - UI слой, пассивен, отображает то, что говорит Presenter
+      **Presenter** - посредник, получает данные из Model, обновляет View через интерфейс
+
+      **Ключевая особенность:** View и Presenter общаются через Contract интерфейс.
+      **Преимущество:** Presenter легко тестировать (mock View).
+      **Подводный камень:** Утечки памяти, если View не отвязать в `onDestroy()`.
+    tags:
+      - android_architecture
+      - difficulty::medium
 title: "MVP Pattern / MVP Паттерн"
 aliases: ["Model-View-Presenter", "MVP Pattern", "MVP Паттерн"]
 topic: android

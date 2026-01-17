@@ -15,6 +15,55 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/background-execution, android/coroutines, android/networking-http, background-tasks, difficulty/medium, polling]
 sources: []
+anki_cards:
+  - slug: android-363-0-en
+    front: "What are the main approaches to implement polling in Android?"
+    back: |
+      **1. Coroutines + Flow (UI-bound):**
+      ```kotlin
+      fun pollData(): Flow<Data> = flow {
+          while (currentCoroutineContext().isActive) {
+              emit(api.getData())
+              delay(5000)
+          }
+      }.flowOn(Dispatchers.IO)
+      ```
+
+      **2. WorkManager (Background):**
+      - Min 15 min interval
+      - Survives reboot
+      - Battery-aware constraints
+
+      **3. Adaptive intervals** - adjust frequency based on data changes
+
+      **Best practices:** lifecycle-aware cancellation, exponential backoff, network checks.
+    tags:
+      - android_general
+      - difficulty::medium
+  - slug: android-363-0-ru
+    front: "Какие основные подходы к реализации polling в Android?"
+    back: |
+      **1. Coroutines + Flow (UI-bound):**
+      ```kotlin
+      fun pollData(): Flow<Data> = flow {
+          while (currentCoroutineContext().isActive) {
+              emit(api.getData())
+              delay(5000)
+          }
+      }.flowOn(Dispatchers.IO)
+      ```
+
+      **2. WorkManager (Background):**
+      - Мин. интервал 15 минут
+      - Переживает перезагрузку
+      - Battery-aware constraints
+
+      **3. Adaptive intervals** - адаптация частоты по изменениям данных
+
+      **Best practices:** lifecycle-aware отмена, exponential backoff, проверка сети.
+    tags:
+      - android_general
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

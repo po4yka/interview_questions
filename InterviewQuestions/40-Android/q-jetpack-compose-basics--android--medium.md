@@ -1,4 +1,34 @@
 ---id: android-064
+id: android-706
+anki_cards:
+  - slug: android-064-0-en
+    front: "What are the core concepts of Jetpack Compose?"
+    back: |
+      **4 core concepts:**
+
+      1. **Composable functions** - `@Composable` annotated, emit UI
+      2. **State** - `remember { mutableStateOf() }` triggers recomposition
+      3. **Recomposition** - Re-execution when state changes
+      4. **Modifiers** - Chain to decorate composables
+
+      **Principle:** UI = f(state) - declarative, not imperative
+    tags:
+      - android_compose
+      - difficulty::medium
+  - slug: android-064-0-ru
+    front: "Какие основные концепции Jetpack Compose?"
+    back: |
+      **4 основные концепции:**
+
+      1. **Composable-функции** - с аннотацией `@Composable`, генерируют UI
+      2. **Состояние** - `remember { mutableStateOf() }` вызывает рекомпозицию
+      3. **Рекомпозиция** - Повторное выполнение при изменении состояния
+      4. **Модификаторы** - Цепочка для декорирования composable
+
+      **Принцип:** UI = f(state) - декларативный, не императивный
+    tags:
+      - android_compose
+      - difficulty::medium
 title: Jetpack Compose Basics / Основы Jetpack Compose
 aliases: [Jetpack Compose Basics, Основы Jetpack Compose]
 topic: android

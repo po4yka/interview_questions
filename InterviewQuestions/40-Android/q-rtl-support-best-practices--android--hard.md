@@ -1,5 +1,51 @@
 ---id: android-642
-title: RTL Support Best Practices / 1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL
+id: android-715
+anki_cards:
+  - slug: android-642-0-en
+    front: "What are key practices for RTL support in Android apps?"
+    back: |
+      **Enable RTL:**
+      - `android:supportsRtl="true"` in manifest (API 17+)
+      - Use system locale for layout direction
+
+      **Layouts:**
+      - Use `start`/`end` instead of `left`/`right`
+      - `Modifier.padding(start = ...)` in Compose
+      - `android:autoMirrored="true"` for directional icons
+
+      **BiDi text:**
+      - Use `BidiFormatter` for mixed LTR/RTL content
+      - Avoid string concatenation with mixed directions
+
+      **Testing:**
+      - Test with real RTL locales (ar, he, fa)
+      - Screenshot tests for LTR vs RTL comparison
+    tags:
+      - android_general
+      - difficulty::hard
+  - slug: android-642-0-ru
+    front: "Какие ключевые практики для поддержки RTL в Android-приложениях?"
+    back: |
+      **Включение RTL:**
+      - `android:supportsRtl="true"` в манифесте (API 17+)
+      - Используйте системную локаль для направления разметки
+
+      **Разметка:**
+      - Используйте `start`/`end` вместо `left`/`right`
+      - `Modifier.padding(start = ...)` в Compose
+      - `android:autoMirrored="true"` для направленных иконок
+
+      **BiDi текст:**
+      - Используйте `BidiFormatter` для смешанного LTR/RTL контента
+      - Избегайте конкатенации строк с разным направлением
+
+      **Тестирование:**
+      - Тестируйте с реальными RTL-локалями (ar, he, fa)
+      - Скриншотные тесты для сравнения LTR и RTL
+    tags:
+      - android_general
+      - difficulty::hard
+title: RTL Support Best Practices / Лучшие практики поддержки RTL
 aliases: [1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL, RTL Support Best Practices]
 topic: android
 subtopics: [i18n-l10n, ui-views]

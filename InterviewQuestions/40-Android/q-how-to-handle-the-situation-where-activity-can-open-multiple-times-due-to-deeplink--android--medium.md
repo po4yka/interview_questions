@@ -15,6 +15,35 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-15
 tags: [android, android/activity, android/intents-deeplinks, android/ui-navigation, difficulty/medium]
+anki_cards:
+  - slug: android-274-0-en
+    front: "How to prevent Activity from opening multiple times due to deeplink?"
+    back: |
+      **Solutions:**
+      1. **singleTop launch mode** - if Activity at top, calls `onNewIntent()` instead of new instance
+      2. **Intent flags** - `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP`
+      3. **Trampoline Activity** - intermediate Activity routes deeplinks
+      4. **Navigation Component** - automatic back stack management
+
+      **Best practice:** Use `singleTop` + implement `onNewIntent()` + call `setIntent(intent)`
+    tags:
+      - android_activities
+      - android_intents
+      - difficulty::medium
+  - slug: android-274-0-ru
+    front: "Как предотвратить многократное открытие Activity из-за deeplink?"
+    back: |
+      **Решения:**
+      1. **singleTop launch mode** - если Activity на вершине, вызывает `onNewIntent()` вместо нового экземпляра
+      2. **Intent flags** - `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP`
+      3. **Trampoline Activity** - промежуточная Activity маршрутизирует deeplinks
+      4. **Navigation Component** - автоматическое управление back stack
+
+      **Best practice:** Используйте `singleTop` + реализуйте `onNewIntent()` + вызовите `setIntent(intent)`
+    tags:
+      - android_activities
+      - android_intents
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

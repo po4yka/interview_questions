@@ -14,6 +14,37 @@ related: [c-testing, q-dagger-build-time-optimization--android--medium, q-jank-d
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/testing-instrumented, android/testing-unit, coverage, difficulty/medium, jacoco, metrics]
+anki_cards:
+  - slug: android-087-0-en
+    front: "What are key test coverage metrics in Android and how to use them?"
+    back: |
+      **Coverage types:**
+      - **Line** - % of code lines executed
+      - **Branch** - % of if/else branches taken
+      - **Method** - % of methods called
+      - **Class** - % of classes with executed code
+
+      **Tool:** JaCoCo + Gradle plugin
+
+      **Best practice:** 70-85% for core logic, focus on critical paths, not just %.
+    tags:
+      - android_testing
+      - difficulty::medium
+  - slug: android-087-0-ru
+    front: "Какие ключевые метрики покрытия тестами в Android и как их использовать?"
+    back: |
+      **Типы покрытия:**
+      - **Line** - % выполненных строк кода
+      - **Branch** - % пройденных веток if/else
+      - **Method** - % вызванных методов
+      - **Class** - % классов с выполненным кодом
+
+      **Инструмент:** JaCoCo + Gradle plugin
+
+      **Практика:** 70-85% для ключевой логики, фокус на критичных путях, не только на %.
+    tags:
+      - android_testing
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

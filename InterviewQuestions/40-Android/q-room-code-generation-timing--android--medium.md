@@ -1,5 +1,44 @@
 ---\
 id: android-122
+anki_cards:
+  - slug: android-122-0-en
+    front: "When is Room code generated - at compile time or runtime?"
+    back: |
+      **Room generates code at compile time** during Gradle build via annotation processors (kapt or KSP).
+
+      **Process:**
+      1. Annotate Entity/DAO classes
+      2. Configure processor (kapt or KSP)
+      3. Processor generates DAO_Impl classes in build/generated/
+
+      **Benefits:**
+      - SQL validated at compile time
+      - Type safety for columns
+      - No runtime reflection
+
+      **KSP vs kapt:** KSP is faster and recommended for new projects.
+    tags:
+      - android_room
+      - difficulty::medium
+  - slug: android-122-0-ru
+    front: "Когда генерируется код Room - во время компиляции или в рантайме?"
+    back: |
+      **Room генерирует код во время компиляции** в процессе сборки Gradle через процессоры аннотаций (kapt или KSP).
+
+      **Процесс:**
+      1. Аннотируем классы Entity/DAO
+      2. Настраиваем процессор (kapt или KSP)
+      3. Процессор генерирует классы DAO_Impl в build/generated/
+
+      **Преимущества:**
+      - SQL валидируется при компиляции
+      - Типобезопасность для колонок
+      - Нет runtime reflection
+
+      **KSP vs kapt:** KSP быстрее и рекомендуется для новых проектов.
+    tags:
+      - android_room
+      - difficulty::medium
 title: Room Code Generation Timing / Время генерации кода Room
 aliases: [Room Code Generation Timing, Время генерации кода Room]
 topic: android

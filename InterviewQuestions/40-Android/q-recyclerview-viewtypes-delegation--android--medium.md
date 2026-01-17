@@ -16,6 +16,37 @@ updated: 2025-11-10
 tags: [adapter, android/ui-views, design-patterns, difficulty/medium, view-types]
 sources:
   - "https://developer.android.com/guide/topics/ui/layout/recyclerview"
+anki_cards:
+  - slug: android-085-0-en
+    front: "How to handle multiple view types in RecyclerView?"
+    back: |
+      **Override three methods:**
+      - `getItemViewType(position)` - return type constant based on data
+      - `onCreateViewHolder(parent, viewType)` - inflate layout per type
+      - `onBindViewHolder(holder, position)` - bind to correct ViewHolder
+
+      **Best practices:**
+      - Use sealed classes for type safety
+      - Adapter Delegation pattern for cleaner code
+      - Stable viewType mapping to avoid recycling bugs
+    tags:
+      - android_layouts
+      - difficulty::medium
+  - slug: android-085-0-ru
+    front: "Как обрабатывать множественные типы view в RecyclerView?"
+    back: |
+      **Переопределить три метода:**
+      - `getItemViewType(position)` - вернуть константу типа по данным
+      - `onCreateViewHolder(parent, viewType)` - создать layout по типу
+      - `onBindViewHolder(holder, position)` - биндить в нужный ViewHolder
+
+      **Лучшие практики:**
+      - Sealed classes для типобезопасности
+      - Паттерн Adapter Delegation для чистого кода
+      - Стабильный маппинг viewType для избежания багов ресайклинга
+    tags:
+      - android_layouts
+      - difficulty::medium
 
 ---\
 # Вопрос (RU)

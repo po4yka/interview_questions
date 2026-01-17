@@ -15,6 +15,50 @@ created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [adapter, android/ui-views, delegates, difficulty/easy, recyclerview]
+anki_cards:
+  - slug: android-349-0-en
+    front: "How to organize work with text and images in a RecyclerView delegate?"
+    back: |
+      **Approach:** Separate delegates for different item types
+
+      **Implementation:**
+      1. Create `sealed class ListItem` with `TextItem`, `ImageItem`, `MixedItem`
+      2. Separate `ViewHolder` per type
+      3. Multi-view-type adapter with `getItemViewType()`
+
+      **Or use AdapterDelegates library:**
+      ```kotlin
+      class TextDelegate : AdapterDelegate<List<ListItem>>() {
+          override fun isForViewType(items, position) = items[position] is TextItem
+      }
+      ```
+
+      **Benefits:** Separation of concerns, reusability, scalability
+    tags:
+      - android_layouts
+      - difficulty::easy
+  - slug: android-349-0-ru
+    front: "Как организовать работу с текстом и картинками в делегате RecyclerView?"
+    back: |
+      **Подход:** Отдельные делегаты для разных типов элементов
+
+      **Реализация:**
+      1. Создать `sealed class ListItem` с `TextItem`, `ImageItem`, `MixedItem`
+      2. Отдельный `ViewHolder` на каждый тип
+      3. Multi-view-type адаптер с `getItemViewType()`
+
+      **Или использовать библиотеку AdapterDelegates:**
+      ```kotlin
+      class TextDelegate : AdapterDelegate<List<ListItem>>() {
+          override fun isForViewType(items, position) = items[position] is TextItem
+      }
+      ```
+
+      **Преимущества:** Разделение ответственности, переиспользование, масштабируемость
+    tags:
+      - android_layouts
+      - difficulty::easy
+
 ---\
 # Вопрос (RU)
 

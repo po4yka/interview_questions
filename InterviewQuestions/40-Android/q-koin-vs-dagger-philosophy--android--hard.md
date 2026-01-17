@@ -14,6 +14,45 @@ related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimiza
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/architecture-clean, android/di-hilt, android/di-koin, architecture/philosophy, dependency-injection, difficulty/hard]
+anki_cards:
+  - slug: android-612-0-en
+    front: "What is the philosophical difference between Koin and Dagger/Hilt?"
+    back: |
+      **Koin (runtime DI):**
+      - DSL + runtime registry
+      - Simple, flexible, fast iteration
+      - No compile-time validation
+      - Better for KMM, prototypes
+
+      **Dagger/Hilt (compile-time DI):**
+      - Annotations + code generation
+      - Compile-time graph validation
+      - Stronger contracts, more boilerplate
+      - Better for large codebases
+
+      Trade-off: simplicity vs safety.
+    tags:
+      - android_architecture
+      - difficulty::hard
+  - slug: android-612-0-ru
+    front: "В чём философская разница между Koin и Dagger/Hilt?"
+    back: |
+      **Koin (runtime DI):**
+      - DSL + runtime реестр
+      - Простой, гибкий, быстрые итерации
+      - Нет compile-time валидации
+      - Лучше для KMM, прототипов
+
+      **Dagger/Hilt (compile-time DI):**
+      - Аннотации + кодогенерация
+      - Compile-time валидация графа
+      - Строгие контракты, больше boilerplate
+      - Лучше для больших кодовых баз
+
+      Компромисс: простота vs безопасность.
+    tags:
+      - android_architecture
+      - difficulty::hard
 sources:
   - "https://dagger.dev/dev-guide/"
   - "https://developer.android.com/training/dependency-injection/hilt-android"

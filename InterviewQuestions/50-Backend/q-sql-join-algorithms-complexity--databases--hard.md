@@ -2,29 +2,44 @@
 id: db-002
 title: SQL JOIN algorithms and complexity / Алгоритмы SQL JOIN и их сложность
 aliases: []
-
-# Classification
 topic: databases
-subtopics: [sql, algorithms]
+subtopics:
+- sql
+- algorithms
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
 status: draft
 moc: moc-backend
-related: [c-sql-queries, c-database-performance, c-algorithms]
-
-# Timestamps
+related:
+- c-sql-queries
+- c-database-performance
+- c-algorithms
 created: 2025-10-03
 updated: 2025-11-11
-
-# Tags
-tags: [sql, join, algorithms, complexity, database-performance, difficulty/hard, kotlin, lang/ru, topic/databases]
+tags:
+- sql
+- join
+- algorithms
+- complexity
+- database-performance
+- difficulty/hard
+- kotlin
+- lang/ru
+- topic/databases
+anki_cards:
+- slug: db-002-0-en
+  language: en
+  anki_id: 1768460896836
+  synced_at: '2026-01-15T11:08:17.111613'
+- slug: db-002-0-ru
+  language: ru
+  anki_id: 1768460896861
+  synced_at: '2026-01-15T11:08:17.114144'
 ---
 # Вопрос (RU)
 > Как выглядит алгоритм запроса данных из двух таблиц и какая у него сложность?

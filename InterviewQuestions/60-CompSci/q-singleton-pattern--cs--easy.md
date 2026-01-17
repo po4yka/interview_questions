@@ -1,21 +1,42 @@
----\
+---
 id: dp-008
-title: "Singleton Pattern / Singleton Паттерн"
-aliases: [Singleton Pattern, Singleton Паттерн]
+title: Singleton Pattern / Singleton Паттерн
+aliases:
+- Singleton Pattern
+- Singleton Паттерн
 topic: cs
-subtopics: [creational-patterns, design-patterns, singleton]
+subtopics:
+- creational-patterns
+- design-patterns
+- singleton
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [creational-patterns, design-patterns, difficulty/easy, singleton]
-
----\
+tags:
+- creational-patterns
+- design-patterns
+- difficulty/easy
+- singleton
+anki_cards:
+- slug: dp-008-0-en
+  language: en
+  anki_id: 1768455795145
+  synced_at: '2026-01-15T09:43:17.070662'
+- slug: dp-008-0-ru
+  language: ru
+  anki_id: 1768455795169
+  synced_at: '2026-01-15T09:43:17.072258'
+---
 # Вопрос (RU)
 > Что такое паттерн Singleton? Когда и зачем его использовать?
 
