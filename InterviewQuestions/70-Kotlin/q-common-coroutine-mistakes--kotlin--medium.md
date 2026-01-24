@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-common-coroutine-mistakes--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286306
+  synced_at: '2026-01-23T17:03:51.105712'
 - slug: q-common-coroutine-mistakes--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286332
+  synced_at: '2026-01-23T17:03:51.108120'
 ---
 # Question (EN)
 > What are the most common mistakes when using Kotlin coroutines, and how do you fix them?

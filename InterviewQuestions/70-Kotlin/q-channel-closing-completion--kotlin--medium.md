@@ -37,22 +37,12 @@ tags:
 anki_cards:
 - slug: kotlin-078-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - channels
-  - cleanup
-  - coroutines
+  anki_id: 1768326282306
+  synced_at: '2026-01-23T17:03:50.710644'
 - slug: kotlin-078-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - channels
-  - cleanup
-  - coroutines
+  anki_id: 1768326282329
+  synced_at: '2026-01-23T17:03:50.712917'
 ---
 # Вопрос (RU)
 > Как правильно закрывать и завершать каналы? Объясните close(), cancel(), разницу между ClosedSendChannelException и ClosedReceiveChannelException и лучшие практики очистки ресурсов.

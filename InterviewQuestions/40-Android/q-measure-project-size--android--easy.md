@@ -1,59 +1,47 @@
----\
+---
 id: android-223
 title: Measure Project Size / Измерение размера проекта
-aliases: [Measure Project Size, Измерение размера проекта]
+aliases:
+- Measure Project Size
+- Измерение размера проекта
 topic: android
-subtopics: [architecture-modularization, gradle]
+subtopics:
+- architecture-modularization
+- gradle
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-gradle, q-how-navigation-is-implemented-in-android--android--medium, q-how-to-write-recyclerview-cache-ahead--android--medium, q-reduce-apk-size-techniques--android--medium, q-reduce-app-size--android--medium, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]
+related:
+- c-gradle
+- q-how-navigation-is-implemented-in-android--android--medium
+- q-how-to-write-recyclerview-cache-ahead--android--medium
+- q-reduce-apk-size-techniques--android--medium
+- q-reduce-app-size--android--medium
+- q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-modularization, android/gradle, codebase-analysis, difficulty/easy, project-metrics]
+tags:
+- android/architecture-modularization
+- android/gradle
+- codebase-analysis
+- difficulty/easy
+- project-metrics
 anki_cards:
-  - slug: android-223-0-en
-    front: "How can you measure Android project size?"
-    back: |
-      **Key metrics:**
-      1. **LOC** - `find . -name "*.kt" | xargs wc -l`
-      2. **Modules** - `grep include settings.gradle.kts | wc -l`
-      3. **APK size** - APK Analyzer in Android Studio
-      4. **Methods** - dexcount plugin (65K limit per DEX)
-
-      **Size guidelines:**
-      - Small: <10K LOC
-      - Medium: 10-50K LOC
-      - Large: 50-200K LOC
-
-      Tools: APK Analyzer, SonarQube, Detekt, Dexcount.
-    tags:
-      - android_general
-      - difficulty::easy
-  - slug: android-223-0-ru
-    front: "Как измерить размер Android проекта?"
-    back: |
-      **Ключевые метрики:**
-      1. **LOC** - `find . -name "*.kt" | xargs wc -l`
-      2. **Модули** - `grep include settings.gradle.kts | wc -l`
-      3. **Размер APK** - APK Analyzer в Android Studio
-      4. **Методы** - dexcount плагин (лимит 65K на DEX)
-
-      **Ориентиры по размеру:**
-      - Маленький: <10K LOC
-      - Средний: 10-50K LOC
-      - Большой: 50-200K LOC
-
-      Инструменты: APK Analyzer, SonarQube, Detekt, Dexcount.
-    tags:
-      - android_general
-      - difficulty::easy
-
----\
+- slug: android-223-0-en
+  language: en
+  anki_id: 1768397271730
+  synced_at: '2026-01-23T16:45:05.784045'
+- slug: android-223-0-ru
+  language: ru
+  anki_id: 1768397271755
+  synced_at: '2026-01-23T16:45:05.785541'
+---
 # Вопрос (RU)
 
 > Как можно измерить размер проекта?

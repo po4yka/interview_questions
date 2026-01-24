@@ -37,16 +37,12 @@ tags:
 anki_cards:
 - slug: q-flow-backpressure-strategies--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287907
+  synced_at: '2026-01-23T17:03:51.244236'
 - slug: q-flow-backpressure-strategies--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287931
+  synced_at: '2026-01-23T17:03:51.246161'
 ---
 # Вопрос (RU)
 > Реализуйте обработку противодавления в `Flow`. Сравните стратегии `buffer`, `conflate` и `collectLatest` с производительными бенчмарками.

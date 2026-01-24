@@ -36,22 +36,12 @@ tags:
 anki_cards:
 - slug: kotlin-113-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - polymorphism
-  - sealed-classes
+  anki_id: 1768326290379
+  synced_at: '2026-01-23T17:03:51.437464'
 - slug: kotlin-113-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - polymorphism
-  - sealed-classes
+  anki_id: 1768326290405
+  synced_at: '2026-01-23T17:03:51.439432'
 ---
 # Вопрос (RU)
 

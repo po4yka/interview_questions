@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-sam-conversions--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284754
+  synced_at: '2026-01-23T17:03:50.943850'
 - slug: q-kotlin-sam-conversions--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284780
+  synced_at: '2026-01-23T17:03:50.945659'
 ---
 # Question (EN)
 > How do SAM (Single Abstract Method) conversions work?

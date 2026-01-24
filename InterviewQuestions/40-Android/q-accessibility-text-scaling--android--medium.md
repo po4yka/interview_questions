@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-044-0-en
   language: en
   anki_id: 1768363328571
-  synced_at: '2026-01-14T09:17:53.289372'
+  synced_at: '2026-01-23T16:45:05.820549'
 - slug: android-044-0-ru
   language: ru
   anki_id: 1768363328596
-  synced_at: '2026-01-14T09:17:53.291493'
+  synced_at: '2026-01-23T16:45:05.821781'
 ---
 # Вопрос (RU)
 > Как обрабатывать масштабирование текста для доступности в Android?

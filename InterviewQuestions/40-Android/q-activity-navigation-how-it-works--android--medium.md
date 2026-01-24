@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-377-0-en
   language: en
   anki_id: 1768363502598
-  synced_at: '2026-01-14T09:17:53.681313'
+  synced_at: '2026-01-23T16:45:06.281726'
 - slug: android-377-0-ru
   language: ru
   anki_id: 1768363502622
-  synced_at: '2026-01-14T09:17:53.685828'
+  synced_at: '2026-01-23T16:45:06.282594'
 sources:
 - https://developer.android.com/guide/components/activities/tasks-and-back-stack
 - https://developer.android.com/guide/navigation

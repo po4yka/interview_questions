@@ -1,65 +1,49 @@
 ---
 id: android-212
-title: "Why Fragment Needs Separate Callback For Ui Creation / Почему Fragment нужен отдельный колбэк для создания UI"
-aliases: ["Fragment UI lifecycle separation", "Fragment view lifecycle", "onCreateView vs onCreate", "onCreateView против onCreate", "Жизненный цикл view фрагмента", "Разделение UI lifecycle во Fragment"]
+title: Why Fragment Needs Separate Callback For Ui Creation / Почему Fragment нужен
+  отдельный колбэк для создания UI
+aliases:
+- Fragment UI lifecycle separation
+- Fragment view lifecycle
+- onCreateView vs onCreate
+- onCreateView против onCreate
+- Жизненный цикл view фрагмента
+- Разделение UI lifecycle во Fragment
 topic: android
-subtopics: [fragment, lifecycle]
+subtopics:
+- fragment
+- lifecycle
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-android-lifecycle, q-save-data-outside-fragment--android--medium]
+related:
+- c-android
+- c-android-lifecycle
+- q-save-data-outside-fragment--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle, memory-management, viewmodel]
+tags:
+- android/fragment
+- android/lifecycle
+- difficulty/hard
+- fragments
+- lifecycle
+- memory-management
+- viewmodel
 anki_cards:
-  - slug: android-212-0-en
-    front: "Why does Fragment have a separate callback for UI creation (onCreateView) instead of creating views in onCreate like Activity?"
-    back: |
-      **Independent lifecycles of Fragment and View:**
-
-      ```
-      Fragment: onCreate() ─────────────────── onDestroy()
-                       └─> onCreateView() ─> onDestroyView() ─┘
-                              View Lifecycle (shorter!)
-      ```
-
-      **Reasons:**
-      1. **View can be destroyed without Fragment** - BackStack/ViewPager
-      2. **Fragment can exist without UI** - headless fragments
-      3. **Memory optimization** - views released while data kept
-      4. **ViewLifecycleOwner** - separate lifecycle for view observers
-
-      **Key:** Use `viewLifecycleOwner` for LiveData observers, null binding in `onDestroyView()`
-    tags:
-      - android_fragments
-      - android_lifecycle
-      - difficulty::hard
-  - slug: android-212-0-ru
-    front: "Почему у Fragment отдельный callback для создания UI (onCreateView) вместо создания views в onCreate как у Activity?"
-    back: |
-      **Независимые жизненные циклы Fragment и View:**
-
-      ```
-      Fragment: onCreate() ─────────────────── onDestroy()
-                       └─> onCreateView() ─> onDestroyView() ─┘
-                              View Lifecycle (короче!)
-      ```
-
-      **Причины:**
-      1. **View может быть уничтожен без Fragment** - BackStack/ViewPager
-      2. **Fragment может существовать без UI** - headless фрагменты
-      3. **Оптимизация памяти** - views освобождаются, данные сохраняются
-      4. **ViewLifecycleOwner** - отдельный lifecycle для view observers
-
-      **Ключевое:** Используйте `viewLifecycleOwner` для LiveData, обнуляйте binding в `onDestroyView()`
-    tags:
-      - android_fragments
-      - android_lifecycle
-      - difficulty::hard
-
+- slug: android-212-0-en
+  language: en
+  anki_id: 1768399145587
+  synced_at: '2026-01-23T16:45:05.713290'
+- slug: android-212-0-ru
+  language: ru
+  anki_id: 1768399145611
+  synced_at: '2026-01-23T16:45:05.714756'
 ---
 # Вопрос (RU)
 

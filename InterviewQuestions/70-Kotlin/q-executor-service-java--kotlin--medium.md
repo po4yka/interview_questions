@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-executor-service-java--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293381
+  synced_at: '2026-01-23T17:03:51.597449'
 - slug: q-executor-service-java--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293406
+  synced_at: '2026-01-23T17:03:51.598319'
 ---
 # Question (EN)
 > How do `Executor` and ExecutorService work in Java?

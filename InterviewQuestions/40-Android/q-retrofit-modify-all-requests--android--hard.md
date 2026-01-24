@@ -1,67 +1,46 @@
----\
+---
 id: android-090
-title: "Retrofit Modify All Requests / Изменение всех запросов Retrofit"
-aliases: ["Retrofit Modify All Requests", "Изменение всех запросов Retrofit"]
+title: Retrofit Modify All Requests / Изменение всех запросов Retrofit
+aliases:
+- Retrofit Modify All Requests
+- Изменение всех запросов Retrofit
 topic: android
-subtopics: [di-hilt, networking-http]
+subtopics:
+- di-hilt
+- networking-http
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-dependency-injection]
+related:
+- c-android
+- c-dependency-injection
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/di-hilt, android/networking-http, authentication, difficulty/hard, interceptor, logging, okhttp]
-sources: ["https://square.github.io/okhttp/interceptors/"]
+tags:
+- android/di-hilt
+- android/networking-http
+- authentication
+- difficulty/hard
+- interceptor
+- logging
+- okhttp
+sources:
+- https://square.github.io/okhttp/interceptors/
 anki_cards:
-  - slug: android-090-0-en
-    front: "How to modify all requests globally in Retrofit?"
-    back: |
-      Use **OkHttp Interceptors** on the OkHttpClient:
-
-      **Two types:**
-      - **Application** - before retries/redirects (auth, common params)
-      - **Network** - sees actual network requests
-
-      ```kotlin
-      class AuthInterceptor(val tokenManager: TokenManager) : Interceptor {
-          override fun intercept(chain: Chain): Response {
-              val request = chain.request().newBuilder()
-                  .header("Authorization", "Bearer ${tokenManager.getToken()}")
-                  .build()
-              return chain.proceed(request)
-          }
-      }
-      ```
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-090-0-ru
-    front: "Как глобально изменять все запросы в Retrofit?"
-    back: |
-      Используйте **OkHttp Interceptors** на OkHttpClient:
-
-      **Два типа:**
-      - **Application** - до повторов/редиректов (авторизация, общие параметры)
-      - **Network** - видит реальные сетевые запросы
-
-      ```kotlin
-      class AuthInterceptor(val tokenManager: TokenManager) : Interceptor {
-          override fun intercept(chain: Chain): Response {
-              val request = chain.request().newBuilder()
-                  .header("Authorization", "Bearer ${tokenManager.getToken()}")
-                  .build()
-              return chain.proceed(request)
-          }
-      }
-      ```
-    tags:
-      - android_general
-      - difficulty::hard
-
----\
+- slug: android-090-0-en
+  language: en
+  anki_id: 1768382308962
+  synced_at: '2026-01-23T16:45:06.089856'
+- slug: android-090-0-ru
+  language: ru
+  anki_id: 1768382308987
+  synced_at: '2026-01-23T16:45:06.090880'
+---
 # Вопрос (RU)
 > Как в `Retrofit` изменять все запросы глобально (добавлять заголовки, параметры, логирование)?
 

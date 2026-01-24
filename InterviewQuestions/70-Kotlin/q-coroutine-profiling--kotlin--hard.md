@@ -32,18 +32,12 @@ tags:
 anki_cards:
 - slug: q-coroutine-profiling--kotlin--hard-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
+  anki_id: 1768326281955
+  synced_at: '2026-01-23T17:03:50.679692'
 - slug: q-coroutine-profiling--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
+  anki_id: 1768326281980
+  synced_at: '2026-01-23T17:03:50.681729'
 ---
 # Вопрос (RU)
 > Профилирование и отладка корутин в Kotlin: какие инструменты и подходы использовать для эффективной диагностики, поиска утечек и оптимизации производительности?

@@ -1,49 +1,47 @@
----\
+---
 id: android-084
-title: "Memory Leak vs OOM / Утечка памяти vs OOM"
-aliases: ["Memory Leak vs OOM", "Утечка памяти vs OOM"]
+title: Memory Leak vs OOM / Утечка памяти vs OOM
+aliases:
+- Memory Leak vs OOM
+- Утечка памяти vs OOM
 topic: android
-subtopics: [performance-battery, performance-memory]
+subtopics:
+- performance-battery
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-garbage-collection, q-coroutine-memory-leak-detection--kotlin--hard, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
+related:
+- c-garbage-collection
+- q-coroutine-memory-leak-detection--kotlin--hard
+- q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium
+- q-what-is-the-main-application-execution-thread--android--easy
 sources: []
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android, android/performance-battery, android/performance-memory, difficulty/medium, leakcanary, memory-leak, oom]
+tags:
+- android
+- android/performance-battery
+- android/performance-memory
+- difficulty/medium
+- leakcanary
+- memory-leak
+- oom
 anki_cards:
-  - slug: android-084-0-en
-    front: "What is the difference between memory leak and OOM in Android?"
-    back: |
-      **Memory Leak** - logical bug: objects no longer needed remain reachable, GC can't collect them.
-      - Cause: static Activity refs, forgotten listeners, Handler callbacks
-
-      **OOM (OutOfMemoryError)** - symptom: allocation fails, heap exhausted.
-      - Cause: leaks OR legitimate large allocations (big bitmaps)
-
-      **Detection:** LeakCanary (leaks), Android Profiler (both)
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-084-0-ru
-    front: "В чём разница между утечкой памяти и OOM в Android?"
-    back: |
-      **Утечка памяти** - логическая ошибка: ненужные объекты остаются достижимыми, GC не может их собрать.
-      - Причины: статические ссылки на Activity, забытые слушатели, Handler
-
-      **OOM (OutOfMemoryError)** - симптом: не удалось выделить память, heap исчерпан.
-      - Причины: утечки ИЛИ законно большие аллокации (bitmap)
-
-      **Обнаружение:** LeakCanary (утечки), Android Profiler (оба)
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-084-0-en
+  language: en
+  anki_id: 1768382134811
+  synced_at: '2026-01-23T16:45:05.913908'
+- slug: android-084-0-ru
+  language: ru
+  anki_id: 1768382134836
+  synced_at: '2026-01-23T16:45:05.915573'
+---
 # Вопрос (RU)
 > В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
 

@@ -1,62 +1,45 @@
----\
+---
 id: android-219
-title: How To Create Chat Lists From A UI Perspective / Как создать списки чатов с точки зрения UI
-aliases: [How To Create Chat Lists From A UI Perspective, Как создать списки чатов с точки зрения UI]
+title: How To Create Chat Lists From A UI Perspective / Как создать списки чатов с
+  точки зрения UI
+aliases:
+- How To Create Chat Lists From A UI Perspective
+- Как создать списки чатов с точки зрения UI
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-recyclerview, q-how-dialog-differs-from-other-navigation--android--medium, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-network-error-handling-strategies--networking--medium, q-what-are-px-dp-sp--android--easy, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-what-is-known-about-recyclerview--android--easy]
+related:
+- c-recyclerview
+- q-how-dialog-differs-from-other-navigation--android--medium
+- q-how-to-create-dynamic-screens-at-runtime--android--hard
+- q-network-error-handling-strategies--networking--medium
+- q-what-are-px-dp-sp--android--easy
+- q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+- q-what-is-known-about-recyclerview--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/hard, recyclerview]
+tags:
+- android/ui-views
+- difficulty/hard
+- recyclerview
 anki_cards:
-  - slug: android-219-0-en
-    front: "What are the key components for building a chat list UI in Android?"
-    back: |
-      **1. Data model:**
-      - `ChatRoom` - id, name, avatar, lastMessage, time, unreadCount, isPinned
-
-      **2. RecyclerView setup:**
-      - `ListAdapter` + `DiffUtil` for efficient updates
-      - Multiple ViewHolder types (sent/received messages)
-
-      **3. Layout elements:**
-      - Avatar (Coil/Glide), name, preview, timestamp
-      - Unread badge, online/typing indicators, pin icon
-
-      **4. Sorting:** Pinned first, then by lastMessageTime DESC
-
-      **5. Performance:** `DiffUtil`, pagination, image caching
-    tags:
-      - android_layouts
-      - difficulty::hard
-  - slug: android-219-0-ru
-    front: "Какие ключевые компоненты для построения UI списка чатов в Android?"
-    back: |
-      **1. Модель данных:**
-      - `ChatRoom` - id, name, avatar, lastMessage, time, unreadCount, isPinned
-
-      **2. Настройка RecyclerView:**
-      - `ListAdapter` + `DiffUtil` для эффективных обновлений
-      - Несколько типов ViewHolder (отправленные/полученные)
-
-      **3. Элементы layout:**
-      - Аватар (Coil/Glide), имя, превью, время
-      - Бейдж непрочитанных, индикаторы online/typing, пин
-
-      **4. Сортировка:** Закрепленные первыми, затем по lastMessageTime DESC
-
-      **5. Производительность:** `DiffUtil`, пагинация, кеширование изображений
-    tags:
-      - android_layouts
-      - difficulty::hard
-
----\
+- slug: android-219-0-en
+  language: en
+  anki_id: 1768378887373
+  synced_at: '2026-01-23T16:45:05.751157'
+- slug: android-219-0-ru
+  language: ru
+  anki_id: 1768378887395
+  synced_at: '2026-01-23T16:45:05.753761'
+---
 # Вопрос (RU)
 > Как создать списки чатов с точки зрения UI
 

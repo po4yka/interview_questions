@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-450-0-en
   language: en
   anki_id: 1768366955681
-  synced_at: '2026-01-14T09:17:53.336193'
+  synced_at: '2026-01-23T16:45:05.874687'
 - slug: android-450-0-ru
   language: ru
   anki_id: 1768366955706
-  synced_at: '2026-01-14T09:17:53.339020'
+  synced_at: '2026-01-23T16:45:05.876018'
 sources:
 - https://developer.android.com/training/app-links
 ---

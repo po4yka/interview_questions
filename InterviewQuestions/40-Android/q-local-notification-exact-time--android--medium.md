@@ -1,67 +1,48 @@
----\
+---
 id: android-032
-title: How to schedule local notifications at exact time? / Как запланировать локальные уведомления на точное время?
-aliases: ["How to schedule local notifications at exact time?", "Как запланировать локальные уведомления на точное время?"]
+title: How to schedule local notifications at exact time? / Как запланировать локальные
+  уведомления на точное время?
+aliases:
+- How to schedule local notifications at exact time?
+- Как запланировать локальные уведомления на точное время?
 topic: android
-subtopics: [background-execution, notifications]
+subtopics:
+- background-execution
+- notifications
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 status: draft
 moc: moc-android
-related: [c-background-tasks, q-dagger-build-time-optimization--android--medium, q-fragments-history-and-purpose--android--hard, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-mvi-one-time-events--android--medium, q-recomposition-choreographer--android--hard, q-which-event-is-called-when-user-touches-screen--android--medium]
+related:
+- c-background-tasks
+- q-dagger-build-time-optimization--android--medium
+- q-fragments-history-and-purpose--android--hard
+- q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
+- q-mvi-one-time-events--android--medium
+- q-recomposition-choreographer--android--hard
+- q-which-event-is-called-when-user-touches-screen--android--medium
 created: 2025-10-06
 updated: 2025-11-11
-tags: [android/background-execution, android/notifications, difficulty/medium]
+tags:
+- android/background-execution
+- android/notifications
+- difficulty/medium
 anki_cards:
-  - slug: android-032-0-en
-    front: "How to schedule local notifications at exact time in Android?"
-    back: |
-      Use **AlarmManager** + **PendingIntent** -> **BroadcastReceiver**:
-
-      ```kotlin
-      alarmManager.setExactAndAllowWhileIdle(
-          AlarmManager.RTC_WAKEUP,
-          triggerAtMillis,
-          pendingIntent
-      )
-      ```
-
-      **Key points**:
-      - Android 12+: need `SCHEDULE_EXACT_ALARM` permission
-      - Receiver creates and shows notification
-      - Alarms lost on reboot (handle `BOOT_COMPLETED`)
-      - Prefer inexact alarms when possible
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-032-0-ru
-    front: "Как запланировать локальные уведомления на точное время в Android?"
-    back: |
-      Используйте **AlarmManager** + **PendingIntent** -> **BroadcastReceiver**:
-
-      ```kotlin
-      alarmManager.setExactAndAllowWhileIdle(
-          AlarmManager.RTC_WAKEUP,
-          triggerAtMillis,
-          pendingIntent
-      )
-      ```
-
-      **Ключевые моменты**:
-      - Android 12+: нужно разрешение `SCHEDULE_EXACT_ALARM`
-      - Receiver создаёт и показывает уведомление
-      - Будильники теряются при перезагрузке (обработайте `BOOT_COMPLETED`)
-      - Предпочитайте неточные будильники где возможно
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
-
+- slug: android-032-0-en
+  language: en
+  anki_id: 1768379978752
+  synced_at: '2026-01-23T16:45:06.387996'
+- slug: android-032-0-ru
+  language: ru
+  anki_id: 1768379978774
+  synced_at: '2026-01-23T16:45:06.388870'
+---
 # Вопрос (RU)
 > Как запланировать локальные уведомления на точное время?
 

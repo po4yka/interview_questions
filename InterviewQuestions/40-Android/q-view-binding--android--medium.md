@@ -1,57 +1,44 @@
 ---
 id: android-182
 title: View Binding / Привязка View
-aliases: [View Binding, Привязка View]
+aliases:
+- View Binding
+- Привязка View
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources:
-  - "https://developer.android.com/topic/libraries/view-binding"
+- https://developer.android.com/topic/libraries/view-binding
 status: draft
 moc: moc-android
-related: [c-gradle, q-reduce-apk-size-techniques--android--medium, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium, q-what-is-data-binding--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-is-viewmodel--android--medium]
+related:
+- c-gradle
+- q-reduce-apk-size-techniques--android--medium
+- q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
+- q-what-is-data-binding--android--easy
+- q-what-is-known-about-methods-that-redraw-view--android--medium
+- q-what-is-viewmodel--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/medium, view-binding]
+tags:
+- android/ui-views
+- difficulty/medium
+- view-binding
 anki_cards:
-  - slug: android-182-0-en
-    front: "What is View Binding in Android?"
-    back: |
-      **Generates type-safe binding classes** for XML layouts, replacing `findViewById`.
-
-      **Setup:** `buildFeatures { viewBinding = true }`
-
-      **Activity:** `binding = ActivityBinding.inflate(layoutInflater)`, then `setContentView(binding.root)`
-
-      **Fragment:** Use nullable `_binding`, set to null in `onDestroyView()` to prevent leaks.
-
-      **Benefits:** Null safety, type safety, no runtime errors from wrong IDs.
-
-      Class naming: `result_profile.xml` -> `ResultProfileBinding`
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-182-0-ru
-    front: "Что такое View Binding в Android?"
-    back: |
-      **Генерирует типобезопасные классы привязки** для XML layouts, заменяя `findViewById`.
-
-      **Настройка:** `buildFeatures { viewBinding = true }`
-
-      **Activity:** `binding = ActivityBinding.inflate(layoutInflater)`, затем `setContentView(binding.root)`
-
-      **Fragment:** Использовать nullable `_binding`, обнулять в `onDestroyView()` для предотвращения утечек.
-
-      **Преимущества:** Null safety, type safety, нет runtime ошибок от неправильных ID.
-
-      Именование классов: `result_profile.xml` -> `ResultProfileBinding`
-    tags:
-      - android_views
-      - difficulty::medium
-
+- slug: android-182-0-en
+  language: en
+  anki_id: 1768398630138
+  synced_at: '2026-01-23T16:45:05.590406'
+- slug: android-182-0-ru
+  language: ru
+  anki_id: 1768398630161
+  synced_at: '2026-01-23T16:45:05.592418'
 ---
 # Вопрос (RU)
 

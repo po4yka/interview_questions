@@ -32,19 +32,19 @@ anki_cards:
 - slug: net-001-0-en
   language: en
   anki_id: 1768460896436
-  synced_at: '2026-01-15T11:08:17.071722'
+  synced_at: '2026-01-23T15:20:42.942241'
 - slug: net-001-0-ru
   language: ru
   anki_id: 1768460896461
-  synced_at: '2026-01-15T11:08:17.074608'
+  synced_at: '2026-01-23T15:20:42.943459'
 - slug: net-001-1-en
   language: en
   anki_id: 1768460896485
-  synced_at: '2026-01-15T11:08:17.077427'
+  synced_at: '2026-01-23T15:20:42.944920'
 - slug: net-001-1-ru
   language: ru
   anki_id: 1768460896511
-  synced_at: '2026-01-15T11:08:17.079730'
+  synced_at: '2026-01-23T15:20:42.946755'
 ---
 # Вопрос (RU)
 

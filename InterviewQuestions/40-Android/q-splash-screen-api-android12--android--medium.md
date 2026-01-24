@@ -1,54 +1,45 @@
 ---
 id: android-185
-title: "Splash Screen API (Android 12+) / API Splash Screen (Android 12+)"
-aliases: ["API Splash Screen", "Splash Screen API"]
+title: Splash Screen API (Android 12+) / API Splash Screen (Android 12+)
+aliases:
+- API Splash Screen
+- Splash Screen API
 topic: android
-subtopics: [app-startup, ui-animation, ui-views]
+subtopics:
+- app-startup
+- ui-animation
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-lifecycle]
+related:
+- c-activity-lifecycle
+- c-lifecycle
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/app-startup, android/ui-animation, android/ui-views, android12, difficulty/medium, splash-screen]
-sources: ["https://github.com/Kirchhoff-/Android-Interview-Questions"]
+tags:
+- android/app-startup
+- android/ui-animation
+- android/ui-views
+- android12
+- difficulty/medium
+- splash-screen
+sources:
+- https://github.com/Kirchhoff-/Android-Interview-Questions
 anki_cards:
-  - slug: android-185-0-en
-    front: "What is the Splash Screen API in Android 12+?"
-    back: |
-      **System splash screen** shown automatically for launcher Activity on cold/warm start (API 31+).
-
-      **Setup:**
-      1. Call `installSplashScreen()` before `super.onCreate()`
-      2. Use `Theme.SplashScreen` parent theme
-      3. Set `postSplashScreenTheme` to main theme
-
-      **Features:** Custom icon via `windowSplashScreenAnimatedIcon`, background color, `setKeepOnScreenCondition` for delayed dismiss.
-
-      Use **androidx.core:core-splashscreen** for backward compatibility.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-185-0-ru
-    front: "Что такое Splash Screen API в Android 12+?"
-    back: |
-      **Системный splash screen** показывается автоматически для launcher Activity при холодном/тёплом старте (API 31+).
-
-      **Настройка:**
-      1. Вызвать `installSplashScreen()` до `super.onCreate()`
-      2. Использовать родительскую тему `Theme.SplashScreen`
-      3. Указать `postSplashScreenTheme` для основной темы
-
-      **Возможности:** Кастомная иконка через `windowSplashScreenAnimatedIcon`, цвет фона, `setKeepOnScreenCondition` для задержки скрытия.
-
-      Используйте **androidx.core:core-splashscreen** для обратной совместимости.
-    tags:
-      - android_general
-      - difficulty::medium
-
+- slug: android-185-0-en
+  language: en
+  anki_id: 1768398630483
+  synced_at: '2026-01-23T16:45:05.604928'
+- slug: android-185-0-ru
+  language: ru
+  anki_id: 1768398630513
+  synced_at: '2026-01-23T16:45:05.606930'
 ---
 # Вопрос (RU)
 

@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-garbage-collector-definition--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283254
+  synced_at: '2026-01-23T17:03:50.782721'
 - slug: q-garbage-collector-definition--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1769170309671
+  synced_at: '2026-01-23T17:03:50.783869'
 ---
 # Question (EN)
 > What is a garbage collector?

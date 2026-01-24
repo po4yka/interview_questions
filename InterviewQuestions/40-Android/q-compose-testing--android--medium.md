@@ -30,11 +30,11 @@ anki_cards:
 - slug: android-472-0-en
   language: en
   anki_id: 1768367872029
-  synced_at: '2026-01-14T09:17:53.840172'
+  synced_at: '2026-01-23T16:45:06.391270'
 - slug: android-472-0-ru
   language: ru
   anki_id: 1768367872055
-  synced_at: '2026-01-14T09:17:53.842872'
+  synced_at: '2026-01-23T16:45:06.392001'
 tags:
 - android/testing-ui
 - android/ui-compose

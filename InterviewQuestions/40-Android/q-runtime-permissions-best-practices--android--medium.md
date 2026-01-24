@@ -1,56 +1,47 @@
----\
+---
 id: android-213
 title: Runtime Permissions Best Practices / Лучшие практики runtime разрешений
-aliases: [Runtime Permissions Best Practices, Лучшие практики runtime разрешений]
+aliases:
+- Runtime Permissions Best Practices
+- Лучшие практики runtime разрешений
 topic: android
-subtopics: [permissions]
+subtopics:
+- permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-permissions, q-android-security-practices-checklist--android--medium, q-app-security-best-practices--android--medium, q-database-encryption-android--android--medium, q-multi-module-best-practices--android--hard, q-rtl-support-best-practices--android--hard]
+related:
+- c-permissions
+- q-android-security-practices-checklist--android--medium
+- q-app-security-best-practices--android--medium
+- q-database-encryption-android--android--medium
+- q-multi-module-best-practices--android--hard
+- q-rtl-support-best-practices--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/permissions, difficulty/medium, permissions, security, ux]
+tags:
+- android
+- android/permissions
+- difficulty/medium
+- permissions
+- security
+- ux
 anki_cards:
-  - slug: android-213-0-en
-    front: "What are the best practices for runtime permissions in Android?"
-    back: |
-      **4 Permission States:** Not Requested, Granted, Denied, Permanently Denied
-
-      **Best practices:**
-      1. Request at point of use (not on app launch)
-      2. Show rationale before re-requesting
-      3. Handle permanent denial -> direct to Settings
-      4. Request minimum necessary permissions
-
-      **API:** ActivityResultContracts.RequestPermission(), shouldShowRequestPermissionRationale()
-
-      **Key:** Use viewLifecycleOwner in Compose: rememberPermissionState()
-    tags:
-      - android_permissions
-      - difficulty::medium
-  - slug: android-213-0-ru
-    front: "Какие лучшие практики для runtime разрешений в Android?"
-    back: |
-      **4 состояния разрешений:** Не запрошено, Предоставлено, Отклонено, Навсегда отклонено
-
-      **Лучшие практики:**
-      1. Запрашивать в момент использования (не при запуске)
-      2. Показывать обоснование перед повторным запросом
-      3. Обрабатывать постоянный отказ -> направлять в Settings
-      4. Запрашивать минимум необходимых разрешений
-
-      **API:** ActivityResultContracts.RequestPermission(), shouldShowRequestPermissionRationale()
-
-      **Ключевое:** В Compose: rememberPermissionState()
-    tags:
-      - android_permissions
-      - difficulty::medium
----\
+- slug: android-213-0-en
+  language: en
+  anki_id: 1768399453139
+  synced_at: '2026-01-23T16:45:05.715921'
+- slug: android-213-0-ru
+  language: ru
+  anki_id: 1768399453162
+  synced_at: '2026-01-23T16:45:05.717000'
+---
 # Вопрос (RU)
 
 > Реализуйте обработку runtime-разрешений с правильным UX: показывайте обоснование запроса, корректно обрабатывайте постоянный отказ и используйте API ActivityResultContracts.

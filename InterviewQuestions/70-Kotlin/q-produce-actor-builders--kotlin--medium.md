@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-produce-actor-builders--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280055
+  synced_at: '2026-01-23T17:03:50.515127'
 - slug: q-produce-actor-builders--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280080
+  synced_at: '2026-01-23T17:03:50.516791'
 ---
 ## Ответ (RU)
 

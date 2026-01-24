@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-285-0-en
   language: en
   anki_id: 1768363950674
-  synced_at: '2026-01-14T09:17:53.421527'
+  synced_at: '2026-01-23T16:45:06.018965'
 - slug: android-285-0-ru
   language: ru
   anki_id: 1768363950698
-  synced_at: '2026-01-14T09:17:53.425019'
+  synced_at: '2026-01-23T16:45:06.020571'
 ---
 # Вопрос (RU)
 > Какие типы `Service` существуют в Android?

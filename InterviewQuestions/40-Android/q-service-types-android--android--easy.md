@@ -1,62 +1,46 @@
 ---
-id: android-722
-anki_cards:
-  - slug: android-340-0-en
-    front: "What are the three main types of Service in Android?"
-    back: |
-      **1. Foreground Service**:
-      - Performs user-visible operations
-      - Must display a persistent notification
-      - Use for music playback, navigation, workout tracking
-
-      **2. Background Service**:
-      - Runs without user interaction
-      - Restricted on API 26+ (use WorkManager/JobScheduler instead)
-
-      **3. Bound Service**:
-      - Provides interface via `bindService()`
-      - Lives only while clients are bound
-      - Returns `IBinder` from `onBind()`
-
-      Note: `IntentService` is deprecated since API 30.
-    tags: ["android_services", "difficulty::easy"]
-  - slug: android-340-0-ru
-    front: "Какие существуют три основных типа Service в Android?"
-    back: |
-      **1. Foreground Service**:
-      - Выполняет видимые пользователю операции
-      - Обязан отображать постоянное уведомление
-      - Для воспроизведения музыки, навигации, тренировок
-
-      **2. Background Service**:
-      - Работает без взаимодействия с пользователем
-      - Ограничен на API 26+ (используйте WorkManager/JobScheduler)
-
-      **3. Bound Service**:
-      - Предоставляет интерфейс через `bindService()`
-      - Живёт только пока есть привязанные клиенты
-      - Возвращает `IBinder` из `onBind()`
-
-      Примечание: `IntentService` устарел с API 30.
-    tags: ["android_services", "difficulty::easy"]
 id: android-340
-title: "Service Types Android / Типы Service в Android"
-aliases: ["Service Types Android", "Типы Service в Android"]
+anki_cards:
+- slug: android-340-0-en
+  language: en
+  anki_id: 1768447073707
+  synced_at: '2026-01-23T16:45:06.178962'
+- slug: android-340-0-ru
+  language: ru
+  anki_id: 1768447073732
+  synced_at: '2026-01-23T16:45:06.179736'
+- slug: android-722-0-en
+  language: en
+- slug: android-722-0-ru
+  language: ru
+title: Service Types Android / Типы Service в Android
+aliases:
+- Service Types Android
+- Типы Service в Android
 topic: android
-subtopics: [background-execution, service]
+subtopics:
+- background-execution
+- service
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-android-components, q-android-app-components--android--easy]
+related:
+- c-android-components
+- q-android-app-components--android--easy
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/background-execution, android/service, background-tasks, difficulty/easy]
-
----\
+tags:
+- android/background-execution
+- android/service
+- background-tasks
+- difficulty/easy
+---
 # Вопрос (RU)
 
 > Какие существуют типы `Service` в Android?

@@ -29,20 +29,12 @@ tags:
 anki_cards:
 - slug: lang-096-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - type-system
+  anki_id: 1768326292580
+  synced_at: '2026-01-23T17:03:51.561950'
 - slug: lang-096-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - type-system
+  anki_id: 1768326292605
+  synced_at: '2026-01-23T17:03:51.562982'
 ---
 # Вопрос (RU)
 > Какой механизм позволяет создавать неизменяемые (только для чтения) коллекции в Kotlin?

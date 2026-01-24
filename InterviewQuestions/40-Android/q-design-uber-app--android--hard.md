@@ -42,11 +42,11 @@ anki_cards:
 - slug: android-445-0-en
   language: en
   anki_id: 1768366954080
-  synced_at: '2026-01-14T09:17:53.224542'
+  synced_at: '2026-01-23T16:45:05.665681'
 - slug: android-445-0-ru
   language: ru
   anki_id: 1768366954106
-  synced_at: '2026-01-14T09:17:53.227373'
+  synced_at: '2026-01-23T16:45:05.667027'
 ---
 # Вопрос (RU)
 

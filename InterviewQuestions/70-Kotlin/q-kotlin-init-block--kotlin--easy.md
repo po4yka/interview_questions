@@ -35,22 +35,12 @@ tags:
 anki_cards:
 - slug: kotlin-001-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - constructors
-  - init-block
-  - initialization
+  anki_id: 1768326279105
+  synced_at: '2026-01-23T17:03:50.415426'
 - slug: kotlin-001-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - constructors
-  - init-block
-  - initialization
+  anki_id: 1768326279130
+  synced_at: '2026-01-23T17:03:50.418105'
 ---
 # Вопрос (RU)
 > Что такое блок init в Kotlin?

@@ -35,16 +35,12 @@ tags:
 anki_cards:
 - slug: q-suspend-functions-deep-dive--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289331
+  synced_at: '2026-01-23T17:03:51.350972'
 - slug: q-suspend-functions-deep-dive--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289355
+  synced_at: '2026-01-23T17:03:51.352967'
 ---
 # Вопрос (RU)
 

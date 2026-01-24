@@ -36,22 +36,12 @@ sources:
 anki_cards:
 - slug: kotlin-012-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - inheritance
-  - interfaces
+  anki_id: 1768326285705
+  synced_at: '2026-01-23T17:03:51.020444'
 - slug: kotlin-012-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - inheritance
-  - interfaces
+  anki_id: 1768326285731
+  synced_at: '2026-01-23T17:03:51.022159'
 ---
 # Вопрос (RU)
 > В чём разница между абстрактным классом и интерфейсом в Kotlin?

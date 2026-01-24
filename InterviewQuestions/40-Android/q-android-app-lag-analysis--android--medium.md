@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-105-0-en
   language: en
   anki_id: 1768363328821
-  synced_at: '2026-01-14T09:17:53.792976'
+  synced_at: '2026-01-23T16:45:06.344950'
 - slug: android-105-0-ru
   language: ru
   anki_id: 1768363328846
-  synced_at: '2026-01-14T09:17:53.795195'
+  synced_at: '2026-01-23T16:45:06.346416'
 ---
 # Вопрос (RU)
 

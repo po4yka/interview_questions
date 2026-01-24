@@ -26,16 +26,12 @@ tags:
 anki_cards:
 - slug: q-java-kotlin-abstract-classes-difference--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1769170307671
+  synced_at: '2026-01-23T17:03:50.743893'
 - slug: q-java-kotlin-abstract-classes-difference--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1769170307696
+  synced_at: '2026-01-23T17:03:50.745799'
 ---
 # Вопрос (RU)
 > Какое главное отличие между Java и Kotlin касательно абстрактных классов и методов?

@@ -28,16 +28,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-default-access-modifier--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296130
+  synced_at: '2026-01-23T17:03:51.709495'
 - slug: q-kotlin-default-access-modifier--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296156
+  synced_at: '2026-01-23T17:03:51.710244'
 ---
 # Вопрос (RU)
 > Какой модификатор доступа по умолчанию используется в Kotlin?

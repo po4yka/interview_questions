@@ -41,16 +41,12 @@ related:
 anki_cards:
 - slug: q-dispatchers-main-immediate--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292781
+  synced_at: '2026-01-23T17:03:51.569865'
 - slug: q-dispatchers-main-immediate--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292806
+  synced_at: '2026-01-23T17:03:51.570738'
 ---
 # Вопрос (RU)
 > Что такое `Dispatchers.Main.immediate`, чем он отличается от `Dispatchers.Main`? В каких случаях `Main.immediate` избегает дополнительной диспетчеризации и как это влияет на производительность? Приведите примеры из практики: обновление UI, изменение состояния представления, измерение производительности и стратегии тестирования.

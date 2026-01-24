@@ -1,69 +1,41 @@
----\
+---
 id: android-221
-title: "Для чего используются сервисы в Android / What Are Services Used For"
-aliases: ["What Are Services Used For", "Для чего используются Service"]
+title: Для чего используются сервисы в Android / What Are Services Used For
+aliases:
+- What Are Services Used For
+- Для чего используются Service
 topic: android
-subtopics: [background-execution, service]
+subtopics:
+- background-execution
+- service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-background-tasks, q-android-services-purpose--android--easy]
+related:
+- c-background-tasks
+- q-android-services-purpose--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/background-execution, android/service, difficulty/medium]
+tags:
+- android/background-execution
+- android/service
+- difficulty/medium
 anki_cards:
-  - slug: android-221-0-en
-    front: "What are Android Services used for?"
-    back: |
-      **Service** - component for long-running background operations without UI.
-
-      **3 types:**
-      1. **Foreground Service** - User-visible tasks (music, navigation)
-         - Requires ongoing notification
-         - Must call `startForeground()` within 5 seconds
-
-      2. **Background Service** - Restricted since Android 8.0+
-         - Use WorkManager instead for deferrable tasks
-
-      3. **Bound Service** - Components bind for IPC/interface
-         - Returns `IBinder` in `onBind()`
-
-      **Modern alternatives:**
-      - `WorkManager` - reliable background work
-      - Foreground Service - user-visible long tasks
-      - Bound Service - component communication
-    tags:
-      - android_services
-      - difficulty::medium
-  - slug: android-221-0-ru
-    front: "Для чего используются Service в Android?"
-    back: |
-      **Service** - компонент для длительных фоновых операций без UI.
-
-      **3 типа:**
-      1. **Foreground Service** - Пользовательски-заметные задачи (музыка, навигация)
-         - Требует постоянного уведомления
-         - Должен вызвать `startForeground()` в течение 5 секунд
-
-      2. **Background Service** - Ограничен с Android 8.0+
-         - Используйте WorkManager для отложенных задач
-
-      3. **Bound Service** - Компоненты привязываются для IPC
-         - Возвращает `IBinder` в `onBind()`
-
-      **Современные альтернативы:**
-      - `WorkManager` - надежная фоновая работа
-      - Foreground Service - пользовательски-заметные задачи
-      - Bound Service - коммуникация компонентов
-    tags:
-      - android_services
-      - difficulty::medium
-
----\
+- slug: android-221-0-en
+  language: en
+  anki_id: 1768399454339
+  synced_at: '2026-01-23T16:45:05.766853'
+- slug: android-221-0-ru
+  language: ru
+  anki_id: 1768399454364
+  synced_at: '2026-01-23T16:45:05.768325'
+---
 # Вопрос (RU)
 
 > Для чего используются сервисы в Android?

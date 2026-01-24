@@ -1,55 +1,48 @@
 ---
 id: android-165
-title: "Recomposition Choreographer / Рекомпозиция и Choreographer"
-aliases: ["Recomposition Choreographer", "Рекомпозиция и Choreographer"]
+title: Recomposition Choreographer / Рекомпозиция и Choreographer
+aliases:
+- Recomposition Choreographer
+- Рекомпозиция и Choreographer
 topic: android
-subtopics: [coroutines, performance-rendering, ui-compose]
+subtopics:
+- coroutines
+- performance-rendering
+- ui-compose
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-jetpack-compose, c-recomposition, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
+related:
+- c-compose-recomposition
+- c-jetpack-compose
+- c-recomposition
+- q-compose-performance-optimization--android--hard
+- q-compose-stability-skippability--android--hard
+- q-recomposition-compose--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/coroutines, android/performance-rendering, android/ui-compose, choreographer, difficulty/hard, vsync]
+tags:
+- android/coroutines
+- android/performance-rendering
+- android/ui-compose
+- choreographer
+- difficulty/hard
+- vsync
 anki_cards:
-  - slug: android-165-0-en
-    front: "How is Compose recomposition coordinated with Android Choreographer?"
-    back: |
-      **Process:**
-      1. `MutableState` change marks composables as "invalid"
-      2. Compose runtime schedules recomposition task
-      3. Choreographer VSYNC callback triggers frame processing
-      4. Recomposition + layout + draw within frame budget
-
-      **Frame budget:**
-      - 60Hz: ~16.67ms
-      - 120Hz: ~8.33ms
-
-      **Key point:** Not random - Compose uses Choreographer's VSYNC-aligned callbacks to batch and apply changes for smooth 60/120fps rendering.
-    tags:
-      - android_compose
-      - difficulty::hard
-  - slug: android-165-0-ru
-    front: "Как рекомпозиция Compose координируется с Android Choreographer?"
-    back: |
-      **Процесс:**
-      1. Изменение `MutableState` помечает composable как "невалидные"
-      2. Рантайм Compose планирует задачу рекомпозиции
-      3. Choreographer VSYNC callback запускает обработку кадра
-      4. Рекомпозиция + layout + draw в рамках бюджета кадра
-
-      **Бюджет кадра:**
-      - 60Hz: ~16.67ms
-      - 120Hz: ~8.33ms
-
-      **Ключевое:** Не случайный процесс - Compose использует VSYNC-синхронизированные callback Choreographer для батчинга и применения изменений для плавного 60/120fps рендеринга.
-    tags:
-      - android_compose
-      - difficulty::hard
+- slug: android-165-0-en
+  language: en
+  anki_id: 1768418239756
+  synced_at: '2026-01-23T16:45:05.503643'
+- slug: android-165-0-ru
+  language: ru
+  anki_id: 1768418239774
+  synced_at: '2026-01-23T16:45:05.504869'
 ---
 # Вопрос (RU)
 

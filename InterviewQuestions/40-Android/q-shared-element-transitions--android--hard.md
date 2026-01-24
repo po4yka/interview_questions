@@ -1,70 +1,57 @@
 ---
-id: android-723
-anki_cards:
-  - slug: android-420-0-en
-    front: "How do you implement shared element transitions (hero animations) in Jetpack Compose?"
-    back: |
-      Use **SharedTransitionLayout** (Compose 1.6+, experimental):
-
-      ```kotlin
-      SharedTransitionLayout { sharedScope ->
-        AnimatedContent(targetState) { isDetail ->
-          Image(
-            modifier = Modifier.sharedElement(
-              state = rememberSharedContentState(key = "img-${id}"),
-              animatedVisibilityScope = this
-            )
-          )
-        }
-      }
-      ```
-
-      **Key points**:
-      - Wrap NavHost with `SharedTransitionLayout`
-      - Use unique, stable keys (item IDs, not indices)
-      - Both source and target need matching keys
-      - Pass `SharedTransitionScope` and `AnimatedVisibilityScope` to composables
-    tags: ["android_compose", "difficulty::hard"]
-  - slug: android-420-0-ru
-    front: "Как реализовать переходы с общими элементами (hero animations) в Jetpack Compose?"
-    back: |
-      Используйте **SharedTransitionLayout** (Compose 1.6+, экспериментальный):
-
-      ```kotlin
-      SharedTransitionLayout { sharedScope ->
-        AnimatedContent(targetState) { isDetail ->
-          Image(
-            modifier = Modifier.sharedElement(
-              state = rememberSharedContentState(key = "img-${id}"),
-              animatedVisibilityScope = this
-            )
-          )
-        }
-      }
-      ```
-
-      **Ключевые моменты**:
-      - Оберните NavHost в `SharedTransitionLayout`
-      - Используйте уникальные, стабильные ключи (ID элементов, не индексы)
-      - Оба экрана должны иметь совпадающие ключи
-      - Передавайте `SharedTransitionScope` и `AnimatedVisibilityScope` в composable
-    tags: ["android_compose", "difficulty::hard"]
 id: android-420
-title: "Shared Element Transitions / Переходы с общими элементами"
-aliases: [Hero Animations, Shared Element Transitions, Анимация героя, Переходы с общими элементами]
+anki_cards:
+- slug: android-420-0-en
+  language: en
+  anki_id: 1768447084155
+  synced_at: '2026-01-23T16:45:06.383468'
+- slug: android-420-0-ru
+  language: ru
+  anki_id: 1768447084185
+  synced_at: '2026-01-23T16:45:06.384320'
+- slug: android-723-0-en
+  language: en
+- slug: android-723-0-ru
+  language: ru
+title: Shared Element Transitions / Переходы с общими элементами
+aliases:
+- Hero Animations
+- Shared Element Transitions
+- Анимация героя
+- Переходы с общими элементами
 topic: android
-subtopics: [ui-animation, ui-compose, ui-navigation]
+subtopics:
+- ui-animation
+- ui-compose
+- ui-navigation
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-jetpack-compose, c-recomposition, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium]
+related:
+- c-compose-recomposition
+- c-jetpack-compose
+- c-recomposition
+- q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
+- q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium
 created: 2025-10-15
 updated: 2025-10-27
-sources: [https://developer.android.com/jetpack/compose/animation/overview]
-tags: [android/ui-animation, android/ui-compose, android/ui-navigation, animations, difficulty/hard, hero-animations, navigation, shared-elements, transitions]
+sources:
+- https://developer.android.com/jetpack/compose/animation/overview
+tags:
+- android/ui-animation
+- android/ui-compose
+- android/ui-navigation
+- animations
+- difficulty/hard
+- hero-animations
+- navigation
+- shared-elements
+- transitions
 ---
 # Вопрос (RU)
 

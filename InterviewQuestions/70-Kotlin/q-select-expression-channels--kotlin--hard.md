@@ -33,16 +33,12 @@ tags:
 anki_cards:
 - slug: q-select-expression-channels--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281306
+  synced_at: '2026-01-23T17:03:50.625201'
 - slug: q-select-expression-channels--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281331
+  synced_at: '2026-01-23T17:03:50.627470'
 ---
 # Вопрос (RU)
 > Что такое выражение `select` для каналов в Kotlin? Объясните, как мультиплексировать несколько каналов, обрабатывать таймауты с `onTimeout`, реализовать приоритетный выбор и продвинутые паттерны fan-in/fan-out.

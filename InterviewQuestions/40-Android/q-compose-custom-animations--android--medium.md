@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-073-0-en
   language: en
   anki_id: 1768365654776
-  synced_at: '2026-01-14T09:09:33.477524'
+  synced_at: '2026-01-23T16:45:05.271189'
 - slug: android-073-0-ru
   language: ru
   anki_id: 1768365654799
-  synced_at: '2026-01-14T09:09:33.479433'
+  synced_at: '2026-01-23T16:45:05.272970'
 ---
 # Вопрос (RU)
 > Как реализовать кастомные анимации в Jetpack Compose и когда использовать разные Animation API?

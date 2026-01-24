@@ -1,74 +1,42 @@
----\
+---
 id: android-230
 anki_cards:
-  - slug: android-230-0-en
-    front: "How do you implement Room database migrations from version 1 to 3?"
-    back: |
-      **Room migrations** preserve user data when schema changes.
-
-      **Steps:**
-      1. Increment database version
-      2. Create Migration objects for each version step
-      3. Add migrations to database builder
-
-      ```kotlin
-      val MIGRATION_1_2 = object : Migration(1, 2) {
-          override fun migrate(db: SupportSQLiteDatabase) {
-              db.execSQL("ALTER TABLE users ADD COLUMN age INTEGER NOT NULL DEFAULT 0")
-          }
-      }
-
-      Room.databaseBuilder(...)
-          .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
-          .build()
-      ```
-
-      **Best practices:** exportSchema=true, test migrations, avoid destructive fallback in production.
-    tags:
-      - android_room
-      - difficulty::medium
-  - slug: android-230-0-ru
-    front: "Как реализовать миграции базы данных Room с версии 1 до 3?"
-    back: |
-      **Миграции Room** сохраняют данные пользователей при изменении схемы.
-
-      **Шаги:**
-      1. Увеличить версию базы данных
-      2. Создать объекты Migration для каждого шага
-      3. Добавить миграции в builder базы данных
-
-      ```kotlin
-      val MIGRATION_1_2 = object : Migration(1, 2) {
-          override fun migrate(db: SupportSQLiteDatabase) {
-              db.execSQL("ALTER TABLE users ADD COLUMN age INTEGER NOT NULL DEFAULT 0")
-          }
-      }
-
-      Room.databaseBuilder(...)
-          .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
-          .build()
-      ```
-
-      **Best practices:** exportSchema=true, тестировать миграции, избегать деструктивного fallback в production.
-    tags:
-      - android_room
-      - difficulty::medium
-title: "Room Database Migrations / Миграции базы данных Room"
-aliases: ["Room Database Migrations", "Миграции базы данных Room"]
+- slug: android-230-0-en
+  language: en
+  anki_id: 1768420253901
+  synced_at: '2026-01-23T16:45:05.806275'
+- slug: android-230-0-ru
+  language: ru
+  anki_id: 1768420253944
+  synced_at: '2026-01-23T16:45:05.807744'
+title: Room Database Migrations / Миграции базы данных Room
+aliases:
+- Room Database Migrations
+- Миграции базы данных Room
 topic: android
-subtopics: [room, testing-instrumented]
+subtopics:
+- room
+- testing-instrumented
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-room-transactions-dao--android--medium, q-room-type-converters-advanced--android--medium]
+related:
+- c-android-components
+- q-room-transactions-dao--android--medium
+- q-room-type-converters-advanced--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/room, android/testing-instrumented, difficulty/medium]
----\
+tags:
+- android/room
+- android/testing-instrumented
+- difficulty/medium
+---
 # Вопрос (RU)
 
 > Реализуйте сложные миграции базы данных `Room` с версии 1 до 3. Обработайте деструктивные и недеструктивные миграции с тестированием.

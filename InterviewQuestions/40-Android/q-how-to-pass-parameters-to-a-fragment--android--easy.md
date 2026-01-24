@@ -1,66 +1,39 @@
 ---
 id: android-332
-title: "How To Pass Parameters To A Fragment / Как передать параметры во Fragment"
-aliases: [Pass Parameters to Fragment, Передача параметров во фрагмент]
+title: How To Pass Parameters To A Fragment / Как передать параметры во Fragment
+aliases:
+- Pass Parameters to Fragment
+- Передача параметров во фрагмент
 topic: android
-subtopics: [fragment]
+subtopics:
+- fragment
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-navigation, c-bundle, q-android-app-components--android--easy]
+related:
+- c-android-navigation
+- c-bundle
+- q-android-app-components--android--easy
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [android/fragment, difficulty/easy]
+tags:
+- android/fragment
+- difficulty/easy
 anki_cards:
-  - slug: android-332-0-en
-    front: "How to pass parameters to a Fragment in Android?"
-    back: |
-      **Use Bundle via arguments property:**
-
-      ```kotlin
-      companion object {
-          fun newInstance(id: Int) = MyFragment().apply {
-              arguments = Bundle().apply {
-                  putInt("ARG_ID", id)
-              }
-          }
-      }
-
-      private val id by lazy { requireArguments().getInt("ARG_ID") }
-      ```
-
-      **Never:** constructor params, setter methods (lost on config change)
-      **Use:** `Parcelable` for complex objects
-    tags:
-      - android_fragments
-      - difficulty::easy
-  - slug: android-332-0-ru
-    front: "Как передать параметры во Fragment в Android?"
-    back: |
-      **Используйте Bundle через свойство arguments:**
-
-      ```kotlin
-      companion object {
-          fun newInstance(id: Int) = MyFragment().apply {
-              arguments = Bundle().apply {
-                  putInt("ARG_ID", id)
-              }
-          }
-      }
-
-      private val id by lazy { requireArguments().getInt("ARG_ID") }
-      ```
-
-      **Нельзя:** параметры конструктора, сеттеры (теряются при повороте)
-      **Используйте:** `Parcelable` для сложных объектов
-    tags:
-      - android_fragments
-      - difficulty::easy
-
+- slug: android-332-0-en
+  language: en
+  anki_id: 1768380831509
+  synced_at: '2026-01-23T16:45:06.161048'
+- slug: android-332-0-ru
+  language: ru
+  anki_id: 1768380831531
+  synced_at: '2026-01-23T16:45:06.162044'
 ---
 # Вопрос (RU)
 

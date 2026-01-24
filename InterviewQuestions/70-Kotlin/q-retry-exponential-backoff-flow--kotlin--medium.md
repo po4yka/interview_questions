@@ -41,16 +41,12 @@ tags:
 anki_cards:
 - slug: q-retry-exponential-backoff-flow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288781
+  synced_at: '2026-01-23T17:03:51.302614'
 - slug: q-retry-exponential-backoff-flow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288806
+  synced_at: '2026-01-23T17:03:51.305609'
 ---
 # Вопрос (RU)
 > Как реализовать retry логику с экспоненциальным backoff в Kotlin `Flow`? Объясните операторы `retry()` и `retryWhen()`, кастомные retry политики, jitter, интеграцию с circuit breaker и стратегии тестирования. Приведите production-ready примеры для сетевых запросов, операций с БД и устойчивых потоков данных.

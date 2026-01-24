@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-exception-handling--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283655
+  synced_at: '2026-01-23T17:03:50.806990'
 - slug: q-flow-exception-handling--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283682
+  synced_at: '2026-01-23T17:03:50.808719'
 ---
 ## Answer (EN)
 

@@ -33,20 +33,12 @@ tags:
 anki_cards:
 - slug: lang-095-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - inheritance
-  - type-system
+  anki_id: 1768326294032
+  synced_at: '2026-01-23T17:03:51.621058'
 - slug: lang-095-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - inheritance
-  - type-system
+  anki_id: 1768326294056
+  synced_at: '2026-01-23T17:03:51.621849'
 ---
 # Вопрос (RU)
 > Какое ключевое слово используется для определения метода, который должен быть переопределен в подклассе?

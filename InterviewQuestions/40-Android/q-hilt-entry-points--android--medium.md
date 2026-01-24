@@ -31,11 +31,11 @@ anki_cards:
 - slug: android-035-0-en
   language: en
   anki_id: 1768367580655
-  synced_at: '2026-01-14T09:13:16.043995'
+  synced_at: '2026-01-23T16:45:05.283553'
 - slug: android-035-0-ru
   language: ru
   anki_id: 1768367580680
-  synced_at: '2026-01-14T09:13:16.046588'
+  synced_at: '2026-01-23T16:45:05.285703'
 sources:
 - https://dagger.dev/hilt/entry-points.html
 ---

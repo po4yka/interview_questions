@@ -1,60 +1,44 @@
----\
+---
 id: android-122
 anki_cards:
-  - slug: android-122-0-en
-    front: "When is Room code generated - at compile time or runtime?"
-    back: |
-      **Room generates code at compile time** during Gradle build via annotation processors (kapt or KSP).
-
-      **Process:**
-      1. Annotate Entity/DAO classes
-      2. Configure processor (kapt or KSP)
-      3. Processor generates DAO_Impl classes in build/generated/
-
-      **Benefits:**
-      - SQL validated at compile time
-      - Type safety for columns
-      - No runtime reflection
-
-      **KSP vs kapt:** KSP is faster and recommended for new projects.
-    tags:
-      - android_room
-      - difficulty::medium
-  - slug: android-122-0-ru
-    front: "Когда генерируется код Room - во время компиляции или в рантайме?"
-    back: |
-      **Room генерирует код во время компиляции** в процессе сборки Gradle через процессоры аннотаций (kapt или KSP).
-
-      **Процесс:**
-      1. Аннотируем классы Entity/DAO
-      2. Настраиваем процессор (kapt или KSP)
-      3. Процессор генерирует классы DAO_Impl в build/generated/
-
-      **Преимущества:**
-      - SQL валидируется при компиляции
-      - Типобезопасность для колонок
-      - Нет runtime reflection
-
-      **KSP vs kapt:** KSP быстрее и рекомендуется для новых проектов.
-    tags:
-      - android_room
-      - difficulty::medium
+- slug: android-122-0-en
+  language: en
+  anki_id: 1768420238141
+  synced_at: '2026-01-23T16:45:05.280070'
+- slug: android-122-0-ru
+  language: ru
+  anki_id: 1768420238183
+  synced_at: '2026-01-23T16:45:05.281927'
 title: Room Code Generation Timing / Время генерации кода Room
-aliases: [Room Code Generation Timing, Время генерации кода Room]
+aliases:
+- Room Code Generation Timing
+- Время генерации кода Room
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-room, q-dagger-framework-overview--android--hard, q-kapt-ksp-migration--android--medium, q-kapt-vs-ksp--android--medium, q-room-database-migrations--android--medium, q-room-relations-embedded--android--medium, q-room-type-converters-advanced--android--medium]
+related:
+- c-room
+- q-dagger-framework-overview--android--hard
+- q-kapt-ksp-migration--android--medium
+- q-kapt-vs-ksp--android--medium
+- q-room-database-migrations--android--medium
+- q-room-relations-embedded--android--medium
+- q-room-type-converters-advanced--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/room, difficulty/medium]
----\
+tags:
+- android/room
+- difficulty/medium
+---
 # Вопрос (RU)
 
 > В какой момент генерируется код при использовании SQLite/Room?

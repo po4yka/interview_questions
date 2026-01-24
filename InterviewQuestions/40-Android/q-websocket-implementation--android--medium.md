@@ -1,48 +1,49 @@
----\
+---
 id: android-092
 title: WebSocket Implementation / Реализация WebSocket
-aliases: [WebSocket Implementation, Реализация WebSocket]
+aliases:
+- WebSocket Implementation
+- Реализация WebSocket
 topic: android
-subtopics: [connectivity-caching, coroutines, websockets]
+subtopics:
+- connectivity-caching
+- coroutines
+- websockets
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-cache-implementation-strategies--android--medium, q-custom-drawable-implementation--android--medium, q-http-protocols-comparison--android--medium, q-what-are-services-for--android--easy]
+related:
+- c-android
+- q-cache-implementation-strategies--android--medium
+- q-custom-drawable-implementation--android--medium
+- q-http-protocols-comparison--android--medium
+- q-what-are-services-for--android--easy
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/connectivity-caching, android/coroutines, android/websockets, difficulty/medium, okhttp, real-time, resilience, websocket]
+tags:
+- android/connectivity-caching
+- android/coroutines
+- android/websockets
+- difficulty/medium
+- okhttp
+- real-time
+- resilience
+- websocket
 anki_cards:
-  - slug: android-092-0-en
-    front: "What are key components of a resilient WebSocket client on Android?"
-    back: |
-      **Components:**
-      1. **State machine** - Closed/Connecting/Connected/Disconnected
-      2. **Reconnection** - exponential backoff with jitter
-      3. **Heartbeat** - ping/pong to detect dead connections
-      4. **Message queue** - buffer for offline messages
-
-      **Library:** OkHttp WebSocket + Kotlin coroutines
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-092-0-ru
-    front: "Какие ключевые компоненты устойчивого WebSocket-клиента на Android?"
-    back: |
-      **Компоненты:**
-      1. **Машина состояний** - Closed/Connecting/Connected/Disconnected
-      2. **Переподключение** - экспоненциальный backoff с jitter
-      3. **Heartbeat** - ping/pong для обнаружения мёртвых соединений
-      4. **Очередь сообщений** - буфер для офлайн-сообщений
-
-      **Библиотека:** OkHttp WebSocket + Kotlin coroutines
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-092-0-en
+  language: en
+  anki_id: 1768382310439
+  synced_at: '2026-01-23T16:45:06.159200'
+- slug: android-092-0-ru
+  language: ru
+  anki_id: 1768382310462
+  synced_at: '2026-01-23T16:45:06.160162'
+---
 # Вопрос (RU)
 > Реализация WebSocket-клиента на Android (устойчивое, отказоустойчивое подключение для реального времени)
 

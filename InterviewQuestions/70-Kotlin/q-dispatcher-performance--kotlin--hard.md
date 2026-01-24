@@ -8,11 +8,11 @@ anki_cards:
 - slug: kotlin112-0-en
   language: en
   anki_id: 1768327345663
-  synced_at: '2026-01-13T22:02:25.711135'
+  synced_at: '2026-01-23T17:03:51.433410'
 - slug: kotlin112-1-ru
   language: ru
   anki_id: 1768327345708
-  synced_at: '2026-01-13T22:02:25.713879'
+  synced_at: '2026-01-23T17:03:51.435540'
 topic: kotlin
 subtopics:
 - coroutines

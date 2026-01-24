@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-jit-compilation-definition--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294680
+  synced_at: '2026-01-23T17:03:51.646179'
 - slug: q-jit-compilation-definition--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294705
+  synced_at: '2026-01-23T17:03:51.646994'
 ---
 # Question (EN)
 

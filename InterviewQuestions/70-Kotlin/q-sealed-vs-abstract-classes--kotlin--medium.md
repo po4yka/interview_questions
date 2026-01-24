@@ -34,20 +34,12 @@ tags:
 anki_cards:
 - slug: kotlin-209-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - sealed-classes
+  anki_id: 1768326291631
+  synced_at: '2026-01-23T17:03:51.519843'
 - slug: kotlin-209-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - sealed-classes
+  anki_id: 1768326291656
+  synced_at: '2026-01-23T17:03:51.520769'
 ---
 # Вопрос (RU)
 

@@ -34,28 +34,28 @@ sources:
 anki_cards:
 - slug: algo-009-0-en
   language: en
-  anki_id: 1768457299077
-  synced_at: '2026-01-15T10:08:19.403363'
+  anki_id: 1769168920573
+  synced_at: '2026-01-23T15:48:41.171979'
 - slug: algo-009-0-ru
   language: ru
   anki_id: 1768457299102
-  synced_at: '2026-01-15T10:08:19.405793'
+  synced_at: '2026-01-23T15:48:41.173364'
 - slug: algo-009-1-en
   language: en
   anki_id: 1768457299126
-  synced_at: '2026-01-15T10:08:19.408381'
+  synced_at: '2026-01-23T15:48:41.174734'
 - slug: algo-009-1-ru
   language: ru
   anki_id: 1768457299152
-  synced_at: '2026-01-15T10:08:19.410735'
+  synced_at: '2026-01-23T15:48:41.175754'
 - slug: algo-009-2-en
   language: en
   anki_id: 1768457299177
-  synced_at: '2026-01-15T10:08:19.412860'
+  synced_at: '2026-01-23T15:48:41.176911'
 - slug: algo-009-2-ru
   language: ru
   anki_id: 1768457299202
-  synced_at: '2026-01-15T10:08:19.415348'
+  synced_at: '2026-01-23T15:48:41.178031'
 ---
 # Вопрос (RU)
 > Что такое динамическое программирование? Чем оно отличается от рекурсии? Каковы основные паттерны DP и классические задачи?

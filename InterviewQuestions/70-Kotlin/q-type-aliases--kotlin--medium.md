@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-type-aliases--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291031
+  synced_at: '2026-01-23T17:03:51.485042'
 - slug: q-type-aliases--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291055
+  synced_at: '2026-01-23T17:03:51.487154'
 ---
 # Question (EN)
 > What are type aliases in Kotlin and when should you use them?

@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-extensions-concept--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279354
+  synced_at: '2026-01-23T17:03:50.518731'
 - slug: q-extensions-concept--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279380
+  synced_at: '2026-01-23T17:03:50.520239'
 ---
 # Question (EN)
 > What are Extensions?

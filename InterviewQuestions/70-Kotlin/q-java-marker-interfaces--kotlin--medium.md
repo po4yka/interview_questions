@@ -31,20 +31,12 @@ tags:
 anki_cards:
 - slug: lang-003-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - interfaces
-  - java
+  anki_id: 1768326282005
+  synced_at: '2026-01-23T17:03:50.683958'
 - slug: lang-003-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - interfaces
-  - java
+  anki_id: 1768326282030
+  synced_at: '2026-01-23T17:03:50.686271'
 ---
 # Вопрос (RU)
 > Перечислите маркерные интерфейсы в Java.

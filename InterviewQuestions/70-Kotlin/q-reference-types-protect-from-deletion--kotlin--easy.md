@@ -133,16 +133,12 @@ tags:
 anki_cards:
 - slug: q-reference-types-protect-from-deletion--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282406
+  synced_at: '2026-01-23T17:03:50.717916'
 - slug: q-reference-types-protect-from-deletion--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282430
+  synced_at: '2026-01-23T17:03:50.719551'
 ---
 # Вопрос (RU)
 > Все ли виды ссылок защищают объект от удаления (сборки мусора)?

@@ -1,60 +1,51 @@
----\
+---
 id: android-008
 title: Android Service Component / Компонент Service в Android
-aliases: [Android Service Component, Компонент Service в Android]
+aliases:
+- Android Service Component
+- Компонент Service в Android
 topic: android
-subtopics: [background-execution, lifecycle, service]
+subtopics:
+- background-execution
+- lifecycle
+- service
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
-related: [c-background-tasks, c-lifecycle, c-service, q-android-service-types--android--easy, q-android-services-purpose--android--easy, q-anr-application-not-responding--android--medium, q-service-types-android--android--easy]
+related:
+- c-background-tasks
+- c-lifecycle
+- c-service
+- q-android-service-types--android--easy
+- q-android-services-purpose--android--easy
+- q-anr-application-not-responding--android--medium
+- q-service-types-android--android--easy
 created: 2025-10-05
 updated: 2025-11-10
-tags: [android/background-execution, android/lifecycle, android/service, difficulty/medium, en, ru]
+tags:
+- android/background-execution
+- android/lifecycle
+- android/service
+- difficulty/medium
+- en
+- ru
 anki_cards:
-  - slug: android-008-0-en
-    front: "What are the three types of Android Services?"
-    back: |
-      **Three types**:
-
-      1. **Foreground** - user-visible, must show notification (e.g., music player)
-      2. **Background** - not noticed by user, limited on modern Android
-      3. **Bound** - client-server interface via `bindService()`, destroyed when all unbind
-
-      **Key callbacks**:
-      - `onStartCommand()` - for started services
-      - `onBind()` - returns IBinder for bound services
-      - `onCreate()` / `onDestroy()` - lifecycle
-
-      Note: Use `WorkManager` for most background tasks on modern Android.
-    tags:
-      - android_services
-      - difficulty::medium
-  - slug: android-008-0-ru
-    front: "Какие три типа Service существуют в Android?"
-    back: |
-      **Три типа**:
-
-      1. **Foreground** - видимый пользователю, должен показывать уведомление (например, музыкальный плеер)
-      2. **Background** - незаметный для пользователя, ограничен на современном Android
-      3. **Bound** - клиент-серверный интерфейс через `bindService()`, уничтожается когда все отвяжутся
-
-      **Ключевые callbacks**:
-      - `onStartCommand()` - для started-сервисов
-      - `onBind()` - возвращает IBinder для bound-сервисов
-      - `onCreate()` / `onDestroy()` - жизненный цикл
-
-      Примечание: используйте `WorkManager` для большинства фоновых задач.
-    tags:
-      - android_services
-      - difficulty::medium
-
----\
+- slug: android-008-0-en
+  language: en
+  anki_id: 1768379415774
+  synced_at: '2026-01-23T16:45:06.096661'
+- slug: android-008-0-ru
+  language: ru
+  anki_id: 1769172275458
+  synced_at: '2026-01-23T16:45:06.098012'
+---
 # Вопрос (RU)
 > Что такое `Service`?
 

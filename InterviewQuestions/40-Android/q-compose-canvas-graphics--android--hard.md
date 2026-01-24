@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-042-0-en
   language: en
   anki_id: 1768365657324
-  synced_at: '2026-01-14T09:17:53.251665'
+  synced_at: '2026-01-23T16:45:05.732499'
 - slug: android-042-0-ru
   language: ru
   anki_id: 1768365657349
-  synced_at: '2026-01-14T09:17:53.253726'
+  synced_at: '2026-01-23T16:45:05.733791'
 ---
 # Вопрос (RU)
 > Как эффективно работать с `Canvas` и графикой в Jetpack Compose?

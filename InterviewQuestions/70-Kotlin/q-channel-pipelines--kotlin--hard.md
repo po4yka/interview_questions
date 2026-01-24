@@ -42,22 +42,52 @@ tags:
 anki_cards:
 - slug: q-channel-pipelines--kotlin--hard-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - channels
-  - coroutines
-  - pipelines
+  anki_id: 1768326278888
+  synced_at: '2026-01-23T17:03:50.386804'
 - slug: q-channel-pipelines--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - channels
-  - coroutines
-  - pipelines
+  anki_id: 1768326278918
+  synced_at: '2026-01-23T17:03:50.390723'
+- slug: q-channel-pipelines-atomic-pipeline-definition-0-en
+  language: en
+  anki_id: 1769172777782
+  synced_at: '2026-01-23T17:03:50.393597'
+- slug: q-channel-pipelines-atomic-pipeline-definition-0-ru
+  language: ru
+  anki_id: 1769172777805
+  synced_at: '2026-01-23T17:03:50.395896'
+- slug: q-channel-pipelines-atomic-fan-out-pattern-1-en
+  language: en
+  anki_id: 1769172777831
+  synced_at: '2026-01-23T17:03:50.398013'
+- slug: q-channel-pipelines-atomic-fan-out-pattern-1-ru
+  language: ru
+  anki_id: 1769172777855
+  synced_at: '2026-01-23T17:03:50.400374'
+- slug: q-channel-pipelines-atomic-fan-in-pattern-2-en
+  language: en
+  anki_id: 1769172777881
+  synced_at: '2026-01-23T17:03:50.402494'
+- slug: q-channel-pipelines-atomic-fan-in-pattern-2-ru
+  language: ru
+  anki_id: 1769172777907
+  synced_at: '2026-01-23T17:03:50.404091'
+- slug: q-channel-pipelines-atomic-buffering-strategies-3-en
+  language: en
+  anki_id: 1769172777931
+  synced_at: '2026-01-23T17:03:50.405477'
+- slug: q-channel-pipelines-atomic-buffering-strategies-3-ru
+  language: ru
+  anki_id: 1769172777955
+  synced_at: '2026-01-23T17:03:50.407241'
+- slug: q-channel-pipelines-atomic-pipeline-error-handling-4-en
+  language: en
+  anki_id: 1769172777981
+  synced_at: '2026-01-23T17:03:50.408728'
+- slug: q-channel-pipelines-atomic-pipeline-error-handling-4-ru
+  language: ru
+  anki_id: 1769172778005
+  synced_at: '2026-01-23T17:03:50.409916'
 ---
 # Вопрос (RU)
 > Объясните конвейеры каналов в корутинах Kotlin. Как реализовать паттерны производитель-потребитель, fan-out, fan-in и стратегии буферизации? Приведите примеры реальных архитектур конвейеров.

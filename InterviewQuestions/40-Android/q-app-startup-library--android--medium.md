@@ -32,11 +32,11 @@ anki_cards:
 - slug: android-251-0-en
   language: en
   anki_id: 1768364696197
-  synced_at: '2026-01-14T09:17:53.352019'
+  synced_at: '2026-01-23T16:45:05.888578'
 - slug: android-251-0-ru
   language: ru
   anki_id: 1768364696222
-  synced_at: '2026-01-14T09:17:53.354630'
+  synced_at: '2026-01-23T16:45:05.890128'
 ---
 # Вопрос (RU)
 > Зачем нужна библиотека App Startup?

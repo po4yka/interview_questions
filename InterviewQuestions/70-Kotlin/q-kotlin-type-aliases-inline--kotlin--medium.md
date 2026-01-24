@@ -37,16 +37,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-type-aliases-inline--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283407
+  synced_at: '2026-01-23T17:03:50.793935'
 - slug: q-kotlin-type-aliases-inline--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283430
+  synced_at: '2026-01-23T17:03:50.795094'
 ---
 # Вопрос (RU)
 

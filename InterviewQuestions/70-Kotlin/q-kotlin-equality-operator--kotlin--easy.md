@@ -24,16 +24,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-equality-operator--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295430
+  synced_at: '2026-01-23T17:03:51.675875'
 - slug: q-kotlin-equality-operator--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295456
+  synced_at: '2026-01-23T17:03:51.676745'
 ---
 # Вопрос (RU)
 > Что происходит когда делаешь ==?

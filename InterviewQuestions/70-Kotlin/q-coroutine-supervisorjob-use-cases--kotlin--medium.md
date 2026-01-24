@@ -35,16 +35,12 @@ subtopics:
 anki_cards:
 - slug: q-coroutine-supervisorjob-use-cases--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289431
+  synced_at: '2026-01-23T17:03:51.358250'
 - slug: q-coroutine-supervisorjob-use-cases--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289455
+  synced_at: '2026-01-23T17:03:51.359926'
 ---
 # Вопрос (RU)
 

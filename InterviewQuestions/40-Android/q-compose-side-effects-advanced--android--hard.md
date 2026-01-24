@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-254-0-en
   language: en
   anki_id: 1768366069025
-  synced_at: '2026-01-14T09:17:53.361865'
+  synced_at: '2026-01-23T16:45:05.894287'
 - slug: android-254-0-ru
   language: ru
   anki_id: 1768366069050
-  synced_at: '2026-01-14T09:17:53.364208'
+  synced_at: '2026-01-23T16:45:05.895681'
 ---
 # Вопрос (RU)
 > Как выбирать и правильно использовать API побочных эффектов Compose (LaunchedEffect, DisposableEffect, SideEffect, produceState)?

@@ -1,54 +1,47 @@
----\
+---
 id: android-199
 title: Hilt / Фреймворк Hilt
-aliases: [Hilt, Фреймворк Hilt]
+aliases:
+- Hilt
+- Фреймворк Hilt
 topic: android
-subtopics: [architecture-mvvm, di-hilt]
+subtopics:
+- architecture-mvvm
+- di-hilt
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, c-hilt, q-hilt-assisted-injection--android--medium, q-hilt-entry-points--android--medium, q-koin-vs-dagger-philosophy--android--hard, q-what-is-known-about-recyclerview--android--easy]
+related:
+- c-dependency-injection
+- c-hilt
+- q-hilt-assisted-injection--android--medium
+- q-hilt-entry-points--android--medium
+- q-koin-vs-dagger-philosophy--android--hard
+- q-what-is-known-about-recyclerview--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/di-hilt, dependency-injection, di, difficulty/medium, hilt]
+tags:
+- android/architecture-mvvm
+- android/di-hilt
+- dependency-injection
+- di
+- difficulty/medium
+- hilt
 anki_cards:
-  - slug: android-199-0-en
-    front: "What is Hilt in Android?"
-    back: |
-      **DI framework** built on Dagger, designed for Android.
-
-      **Key annotations:**
-      - `@HiltAndroidApp` - Application class
-      - `@AndroidEntryPoint` - Activity/Fragment/Service
-      - `@HiltViewModel` - ViewModel
-      - `@Module` + `@InstallIn` - provide dependencies
-      - `@Inject` - constructor/field injection
-
-      **Benefits:** Predefined Android scopes, compile-time safety, Jetpack integration, less boilerplate than Dagger
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-199-0-ru
-    front: "Что такое Hilt в Android?"
-    back: |
-      **DI фреймворк** построенный на Dagger, разработан для Android.
-
-      **Ключевые аннотации:**
-      - `@HiltAndroidApp` - класс Application
-      - `@AndroidEntryPoint` - Activity/Fragment/Service
-      - `@HiltViewModel` - ViewModel
-      - `@Module` + `@InstallIn` - предоставление зависимостей
-      - `@Inject` - инъекция в конструктор/поле
-
-      **Преимущества:** Предопределённые Android scopes, compile-time безопасность, интеграция с Jetpack, меньше boilerplate чем Dagger
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-199-0-en
+  language: en
+  anki_id: 1768398851863
+  synced_at: '2026-01-23T16:45:05.652446'
+- slug: android-199-0-ru
+  language: ru
+  anki_id: 1768398851887
+  synced_at: '2026-01-23T16:45:05.655200'
+---
 # Вопрос (RU)
 > Фреймворк `Hilt`
 

@@ -32,16 +32,12 @@ tags:
 anki_cards:
 - slug: q-error-handling-in-coroutines--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293982
+  synced_at: '2026-01-23T17:03:51.619364'
 - slug: q-error-handling-in-coroutines--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294006
+  synced_at: '2026-01-23T17:03:51.620198'
 ---
 # Вопрос (RU)
 > Какие известны способы обработки ошибок в корутинах?

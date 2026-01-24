@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-lifecycle-aware-coroutines--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294881
+  synced_at: '2026-01-23T17:03:51.655158'
 - slug: q-lifecycle-aware-coroutines--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294906
+  synced_at: '2026-01-23T17:03:51.655959'
 ---
 # Question (EN)
 > Explain lifecycle-aware coroutines in Android. How do viewModelScope, lifecycleScope, and repeatOnLifecycle work? What are best practices for handling configuration changes, process death, and memory leaks? Provide comprehensive examples.

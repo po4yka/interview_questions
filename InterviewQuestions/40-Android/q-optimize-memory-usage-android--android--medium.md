@@ -1,75 +1,44 @@
----\
+---
 id: android-077
-title: "Memory Optimization in Android / Оптимизация памяти в Android"
-aliases: ["Memory Optimization in Android", "Оптимизация памяти в Android"]
+title: Memory Optimization in Android / Оптимизация памяти в Android
+aliases:
+- Memory Optimization in Android
+- Оптимизация памяти в Android
 topic: android
-subtopics: [performance-memory, profiling]
+subtopics:
+- performance-memory
+- profiling
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/performance-memory, android/profiling, difficulty/medium, performance, profiling]
+tags:
+- android/performance-memory
+- android/profiling
+- difficulty/medium
+- performance
+- profiling
 moc: moc-android
-related: [c-memory-management, q-how-to-fix-a-bad-element-layout--android--easy, q-list-to-detail-navigation--android--medium]
+related:
+- c-memory-management
+- q-how-to-fix-a-bad-element-layout--android--easy
+- q-list-to-detail-navigation--android--medium
 sources: []
 anki_cards:
-  - slug: android-077-0-en
-    front: "What are key techniques to optimize memory usage in Android?"
-    back: |
-      **1. Avoid leaks:**
-      - Don't hold Activity/Fragment refs in singletons
-      - Use `applicationContext` when UI context not needed
-      - Use lifecycle-aware scopes
-
-      **2. LruCache for caching:**
-      ```kotlin
-      val cache = LruCache<String, Bitmap>(maxSizeKb)
-      ```
-
-      **3. Optimize Bitmap:** Load at required size, use `RGB_565`
-
-      **4. Handle low memory:**
-      ```kotlin
-      override fun onTrimMemory(level: Int) {
-          when (level) {
-              TRIM_MEMORY_UI_HIDDEN -> clearCaches()
-          }
-      }
-      ```
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-077-0-ru
-    front: "Какие основные техники оптимизации памяти в Android?"
-    back: |
-      **1. Избегать утечек:**
-      - Не хранить ссылки на Activity/Fragment в синглтонах
-      - Использовать `applicationContext` когда UI контекст не нужен
-      - Использовать lifecycle-aware скоупы
-
-      **2. LruCache для кеширования:**
-      ```kotlin
-      val cache = LruCache<String, Bitmap>(maxSizeKb)
-      ```
-
-      **3. Оптимизировать Bitmap:** Загружать нужного размера, использовать `RGB_565`
-
-      **4. Обрабатывать низкую память:**
-      ```kotlin
-      override fun onTrimMemory(level: Int) {
-          when (level) {
-              TRIM_MEMORY_UI_HIDDEN -> clearCaches()
-          }
-      }
-      ```
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-077-0-en
+  language: en
+  anki_id: 1768381949687
+  synced_at: '2026-01-23T16:45:05.450996'
+- slug: android-077-0-ru
+  language: ru
+  anki_id: 1768381949713
+  synced_at: '2026-01-23T16:45:05.452234'
+---
 # Вопрос (RU)
 
 > Как оптимизировать использование памяти в Android-приложении?

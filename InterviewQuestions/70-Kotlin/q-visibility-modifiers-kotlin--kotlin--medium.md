@@ -30,18 +30,12 @@ sources:
 anki_cards:
 - slug: kotlin-236-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - visibility-modifiers
+  anki_id: 1768326292831
+  synced_at: '2026-01-23T17:03:51.571566'
 - slug: kotlin-236-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - visibility-modifiers
+  anki_id: 1768326292856
+  synced_at: '2026-01-23T17:03:51.572391'
 ---
 # Вопрос (RU)
 > Какие модификаторы видимости есть в Kotlin и чем они отличаются?

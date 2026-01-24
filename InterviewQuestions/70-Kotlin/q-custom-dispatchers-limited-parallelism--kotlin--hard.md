@@ -9,11 +9,11 @@ anki_cards:
 - slug: kotlin117-0-en
   language: en
   anki_id: 1768327343516
-  synced_at: '2026-01-13T22:02:23.569497'
+  synced_at: '2026-01-23T17:03:51.507830'
 - slug: kotlin117-1-ru
   language: ru
   anki_id: 1768327343566
-  synced_at: '2026-01-13T22:02:23.573710'
+  synced_at: '2026-01-23T17:03:51.508725'
 topic: kotlin
 subtopics:
 - coroutines

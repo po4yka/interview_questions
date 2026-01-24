@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-236-0-en
   language: en
   anki_id: 1768367363481
-  synced_at: '2026-01-14T09:17:53.293583'
+  synced_at: '2026-01-23T16:45:05.823054'
 - slug: android-236-0-ru
   language: ru
   anki_id: 1768367363504
-  synced_at: '2026-01-14T09:17:53.296861'
+  synced_at: '2026-01-23T16:45:05.824312'
 ---
 # Вопрос (RU)
 > Gradle Основы

@@ -29,12 +29,12 @@ sources: []
 anki_cards:
 - slug: android-463-0-en
   language: en
-  anki_id: 1768366560928
-  synced_at: '2026-01-14T09:17:53.633864'
+  anki_id: 1769172286407
+  synced_at: '2026-01-23T16:45:06.234195'
 - slug: android-463-0-ru
   language: ru
   anki_id: 1768366560950
-  synced_at: '2026-01-14T09:17:53.635936'
+  synced_at: '2026-01-23T16:45:06.234989'
 tags:
 - android/di-hilt
 - dagger

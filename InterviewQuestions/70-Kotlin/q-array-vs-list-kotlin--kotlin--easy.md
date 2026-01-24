@@ -33,22 +33,12 @@ subtopics:
 anki_cards:
 - slug: kotlin-137-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - array
-  - collections
-  - list
+  anki_id: 1768326286756
+  synced_at: '2026-01-23T17:03:51.137342'
 - slug: kotlin-137-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - array
-  - collections
-  - list
+  anki_id: 1768326286780
+  synced_at: '2026-01-23T17:03:51.138572'
 ---
 # Вопрос (RU)
 > В чём разница между `Array` и `List` в Kotlin?

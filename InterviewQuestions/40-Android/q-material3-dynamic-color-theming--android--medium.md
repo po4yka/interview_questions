@@ -1,72 +1,49 @@
 ---
 id: android-157
 anki_cards:
-  - slug: android-157-0-en
-    front: "How does Material 3 dynamic color work in Compose?"
-    back: |
-      **System extracts colors from wallpaper (Android 12+):**
-
-      ```kotlin
-      val colorScheme = when {
-          dynamicColor && Build.VERSION.SDK_INT >= S -> {
-              if (darkTheme) dynamicDarkColorScheme(context)
-              else dynamicLightColorScheme(context)
-          }
-          darkTheme -> DarkColorScheme
-          else -> LightColorScheme
-      }
-      MaterialTheme(colorScheme = colorScheme)
-      ```
-
-      **Key points:**
-      - Always provide fallback for Android < 12
-      - Use semantic roles: `MaterialTheme.colorScheme.primary`
-      - Avoid hardcoded colors
-      - Tonal elevation: higher = more surface tint
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-157-0-ru
-    front: "Как работает динамический цвет Material 3 в Compose?"
-    back: |
-      **Система извлекает цвета из обоев (Android 12+):**
-
-      ```kotlin
-      val colorScheme = when {
-          dynamicColor && Build.VERSION.SDK_INT >= S -> {
-              if (darkTheme) dynamicDarkColorScheme(context)
-              else dynamicLightColorScheme(context)
-          }
-          darkTheme -> DarkColorScheme
-          else -> LightColorScheme
-      }
-      MaterialTheme(colorScheme = colorScheme)
-      ```
-
-      **Ключевые моменты:**
-      - Всегда предоставляйте fallback для Android < 12
-      - Используйте семантические роли: `MaterialTheme.colorScheme.primary`
-      - Избегайте хардкод цветов
-      - Тональная elevation: выше = больше surface tint
-    tags:
-      - android_compose
-      - difficulty::medium
+- slug: android-157-0-en
+  language: en
+  anki_id: 1768414358968
+  synced_at: '2026-01-23T16:45:05.463653'
+- slug: android-157-0-ru
+  language: ru
+  anki_id: 1768414358994
+  synced_at: '2026-01-23T16:45:05.465490'
 title: Material3 Dynamic Color Theming / Динамические цвета Material3
-aliases: [Material3 Dynamic Color Theming, Динамические цвета Material3]
+aliases:
+- Material3 Dynamic Color Theming
+- Динамические цвета Material3
 topic: android
-subtopics: [ui-compose, ui-theming]
+subtopics:
+- ui-compose
+- ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-accessibility-color-contrast--android--medium, q-compose-semantics--android--medium, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-material3-components--android--easy, q-single-activity-approach--android--medium]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-accessibility-color-contrast--android--medium
+- q-compose-semantics--android--medium
+- q-how-to-create-dynamic-screens-at-runtime--android--hard
+- q-material3-components--android--easy
+- q-single-activity-approach--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/ui-compose, android/ui-theming, design, difficulty/medium, dynamic-color, material3]
----\
+tags:
+- android/ui-compose
+- android/ui-theming
+- design
+- difficulty/medium
+- dynamic-color
+- material3
+---
 # Вопрос (RU)
 > Как работает динамический цвет Material 3? Объясните генерацию цветовой схемы из обоев, реализацию пользовательских тем и обработку светлого/тёмного режимов с динамической темизацией.
 

@@ -1,58 +1,56 @@
 ---
 id: android-365
 anki_cards:
-  - slug: android-365-0-en
-    front: "How to properly pass large data between Activities in Android?"
-    back: |
-      **Never put large data in Intent** - Binder limit ~1MB.
-
-      **Solutions:**
-      1. **FileProvider + URI** (recommended) - save to file, pass URI with `FLAG_GRANT_READ_URI_PERMISSION`
-      2. **Database + ID** - save to Room, pass ID
-      3. **Shared ViewModel** - only within same Activity's Fragments
-      4. **ContentProvider** - for cross-app sharing
-
-      **Wrong:** `intent.putExtra("image", bitmap)` - causes TransactionTooLargeException
-    tags:
-      - android_activities
-      - android_intents
-      - difficulty::hard
-  - slug: android-365-0-ru
-    front: "Как правильно передавать большие данные между Activity в Android?"
-    back: |
-      **Никогда не класть большие данные в Intent** - лимит Binder ~1MB.
-
-      **Решения:**
-      1. **FileProvider + URI** (рекомендуется) - сохранить в файл, передать URI с `FLAG_GRANT_READ_URI_PERMISSION`
-      2. **База данных + ID** - сохранить в Room, передать ID
-      3. **Shared ViewModel** - только внутри Fragment'ов одной Activity
-      4. **ContentProvider** - для межприложенного обмена
-
-      **Неправильно:** `intent.putExtra("image", bitmap)` - вызывает TransactionTooLargeException
-    tags:
-      - android_activities
-      - android_intents
-      - difficulty::hard
+- slug: android-365-0-en
+  language: en
+  anki_id: 1768400157920
+  synced_at: '2026-01-23T16:45:06.242630'
+- slug: android-365-0-ru
+  language: ru
+  anki_id: 1768400157942
+  synced_at: '2026-01-23T16:45:06.243395'
 title: Pass Large Data Between Activities / Передача больших данных между Activity
-aliases: [Content URI, FileProvider, Large Data Transfer, Pass Large Data Between Activities, Передача больших данных между Activity]
+aliases:
+- Content URI
+- FileProvider
+- Large Data Transfer
+- Pass Large Data Between Activities
+- Передача больших данных между Activity
 topic: android
-subtopics: [activity, content-provider, intents-deeplinks]
+subtopics:
+- activity
+- content-provider
+- intents-deeplinks
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-binder, q-android-security-best-practices--android--medium, q-how-to-pass-data-from-one-activity-to-another--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium, q-why-use-fragments-when-we-have-activities--android--medium]
+related:
+- c-android
+- c-binder
+- q-android-security-best-practices--android--medium
+- q-how-to-pass-data-from-one-activity-to-another--android--medium
+- q-how-to-pass-data-from-one-fragment-to-another--android--medium
+- q-why-use-fragments-when-we-have-activities--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources:
-  - "https://developer.android.com/guide/topics/providers/content-providers"
-  - "https://developer.android.com/reference/androidx/core/content/FileProvider"
-  - "https://developer.android.com/training/secure-file-sharing"
-tags: [android/activity, android/content-provider, android/intents-deeplinks, binder, difficulty/hard, file-provider, ipc]
-
----\
+- https://developer.android.com/guide/topics/providers/content-providers
+- https://developer.android.com/reference/androidx/core/content/FileProvider
+- https://developer.android.com/training/secure-file-sharing
+tags:
+- android/activity
+- android/content-provider
+- android/intents-deeplinks
+- binder
+- difficulty/hard
+- file-provider
+- ipc
+---
 # Вопрос (RU)
 
 > Как правильно передать большой объем данных (например, изображение) между `Activity`?

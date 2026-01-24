@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-conversion-functions--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281856
+  synced_at: '2026-01-23T17:03:50.667363'
 - slug: q-kotlin-conversion-functions--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281880
+  synced_at: '2026-01-23T17:03:50.669508'
 ---
 ## Ответ (RU)
 

@@ -1,55 +1,47 @@
 ---
 id: android-005
 title: Android Modularization Patterns / Паттерны модуляризации в Android
-aliases: [Android Modularization Patterns, Паттерны модуляризации в Android]
+aliases:
+- Android Modularization Patterns
+- Паттерны модуляризации в Android
 topic: android
-subtopics: [architecture-clean, architecture-modularization]
+subtopics:
+- architecture-clean
+- architecture-modularization
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
-related: [c-clean-architecture, q-android-architectural-patterns--android--medium, q-android-lint-tool--android--medium, q-android-modularization--android--medium, q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
+related:
+- c-clean-architecture
+- q-android-architectural-patterns--android--medium
+- q-android-lint-tool--android--medium
+- q-android-modularization--android--medium
+- q-does-state-made-in-compose-help-avoid-race-condition--android--medium
+- q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
 created: 2025-10-05
 updated: 2025-11-11
-tags: [android/architecture-clean, android/architecture-modularization, difficulty/hard, en, ru]
+tags:
+- android/architecture-clean
+- android/architecture-modularization
+- difficulty/hard
+- en
+- ru
 anki_cards:
-  - slug: android-005-0-en
-    front: "What are the key principles of Android modularization?"
-    back: |
-      **High cohesion, low coupling**:
-
-      - **Low coupling**: modules independent, changes don't affect others
-      - **High cohesion**: related code grouped together
-
-      **Key patterns**:
-      1. **Dependency inversion** - depend on abstractions, not implementations
-      2. **Mediator module** - app module coordinates feature modules
-      3. **Prefer Kotlin/Java modules** over Android modules when possible
-      4. **Expose minimum** - use `internal`, prefer `implementation` over `api`
-    tags:
-      - android_architecture
-      - difficulty::hard
-  - slug: android-005-0-ru
-    front: "Какие ключевые принципы модуляризации в Android?"
-    back: |
-      **Высокая связность, слабое зацепление**:
-
-      - **Слабое зацепление**: модули независимы, изменения не влияют на другие
-      - **Высокая связность**: связанный код сгруппирован вместе
-
-      **Ключевые паттерны**:
-      1. **Инверсия зависимостей** - зависеть от абстракций, не от реализаций
-      2. **Модуль-посредник** - app-модуль координирует feature-модули
-      3. **Предпочитать Kotlin/Java модули** вместо Android-модулей где возможно
-      4. **Раскрывать минимум** - использовать `internal`, предпочитать `implementation` вместо `api`
-    tags:
-      - android_architecture
-      - difficulty::hard
-
+- slug: android-005-0-en
+  language: en
+  anki_id: 1768379410322
+  synced_at: '2026-01-23T16:45:05.688986'
+- slug: android-005-0-ru
+  language: ru
+  anki_id: 1768379410348
+  synced_at: '2026-01-23T16:45:05.690249'
 ---
 # Вопрос (RU)
 > Какие паттерны модуляризации вы знаете?

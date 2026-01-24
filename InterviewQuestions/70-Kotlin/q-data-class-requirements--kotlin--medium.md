@@ -124,16 +124,12 @@ tags:
 anki_cards:
 - slug: q-data-class-requirements--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292381
+  synced_at: '2026-01-23T17:03:51.552409'
 - slug: q-data-class-requirements--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292405
+  synced_at: '2026-01-23T17:03:51.554894'
 ---
 # Вопрос (RU)
 > Какие требования при создании data class в Kotlin?

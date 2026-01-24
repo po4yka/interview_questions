@@ -35,20 +35,12 @@ sources:
 anki_cards:
 - slug: kotlin-231-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - enums
-  - kotlin-features
+  anki_id: 1768326289832
+  synced_at: '2026-01-23T17:03:51.386403'
 - slug: kotlin-231-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - enums
-  - kotlin-features
+  anki_id: 1768326289857
+  synced_at: '2026-01-23T17:03:51.388470'
 ---
 # Вопрос (RU)
 > Какие продвинутые возможности есть у enum классов в Kotlin?

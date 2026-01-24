@@ -1,68 +1,44 @@
----\
+---
 id: android-248
-title: How To Create List Like RecyclerView In Compose / Как создать список как RecyclerView в Compose
-aliases: [How To Create List Like RecyclerView In Compose, Как создать список как RecyclerView в Compose]
+title: How To Create List Like RecyclerView In Compose / Как создать список как RecyclerView
+  в Compose
+aliases:
+- How To Create List Like RecyclerView In Compose
+- Как создать список как RecyclerView в Compose
 topic: android
-subtopics: [ui-compose]
+subtopics:
+- ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-compose-testing--android--medium, q-how-does-jetpackcompose-work--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-compose-core-components--android--medium
+- q-compose-custom-animations--android--medium
+- q-compose-testing--android--medium
+- q-how-does-jetpackcompose-work--android--medium
+- q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/ui-compose, difficulty/medium]
+tags:
+- android/ui-compose
+- difficulty/medium
 anki_cards:
-  - slug: android-248-0-en
-    front: "How to create lists like RecyclerView in Jetpack Compose?"
-    back: |
-      Use **lazy layouts**: `LazyColumn`, `LazyRow`, `LazyVerticalGrid`.
-
-      **Key differences from RecyclerView**:
-      - No Adapter or ViewHolder needed
-      - Use `items {}` DSL directly
-      - Provide stable `key` for item identity
-      - Only visible items are composed
-
-      ```kotlin
-      LazyColumn {
-          items(users, key = { it.id }) { user ->
-              UserItem(user)
-          }
-      }
-      ```
-
-      **Performance tips**: Use stable keys, extract complex items to separate composables.
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-248-0-ru
-    front: "Как создать список аналогичный RecyclerView в Jetpack Compose?"
-    back: |
-      Используйте **ленивые компоненты**: `LazyColumn`, `LazyRow`, `LazyVerticalGrid`.
-
-      **Ключевые отличия от RecyclerView**:
-      - Не нужны Adapter и ViewHolder
-      - Используется DSL `items {}` напрямую
-      - Передавайте стабильный `key` для идентификации элементов
-      - Композируются только видимые элементы
-
-      ```kotlin
-      LazyColumn {
-          items(users, key = { it.id }) { user ->
-              UserItem(user)
-          }
-      }
-      ```
-
-      **Советы по производительности**: используйте стабильные ключи, выносите сложные элементы в отдельные composable.
-    tags:
-      - android_compose
-      - difficulty::medium
-
----\
+- slug: android-248-0-en
+  language: en
+  anki_id: 1768379209571
+  synced_at: '2026-01-23T16:45:05.877319'
+- slug: android-248-0-ru
+  language: ru
+  anki_id: 1768379209596
+  synced_at: '2026-01-23T16:45:05.878990'
+---
 # Вопрос (RU)
 > Как создать список как `RecyclerView` в Compose
 

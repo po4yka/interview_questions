@@ -1,81 +1,48 @@
----\
+---
 id: android-210
-title: "WorkManager Data Passing / Передача данных WorkManager"
-aliases: [WorkManager Data Passing, WorkManager Input Output, WorkManager workDataOf, Передача данных WorkManager]
+title: WorkManager Data Passing / Передача данных WorkManager
+aliases:
+- WorkManager Data Passing
+- WorkManager Input Output
+- WorkManager workDataOf
+- Передача данных WorkManager
 topic: android
-subtopics: [background-execution, coroutines]
+subtopics:
+- background-execution
+- coroutines
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, c-workmanager, q-workmanager-execution-guarantee--android--medium]
+related:
+- c-coroutines
+- c-workmanager
+- q-workmanager-execution-guarantee--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-sources: ["https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration"]
-tags: [android/background-execution, android/coroutines, background-processing, data-passing, difficulty/medium, workmanager]
+sources:
+- https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration
+tags:
+- android/background-execution
+- android/coroutines
+- background-processing
+- data-passing
+- difficulty/medium
+- workmanager
 anki_cards:
-  - slug: android-210-0-en
-    front: "How do you pass data to a WorkManager Worker and receive results back?"
-    back: |
-      **Input data** - use `workDataOf()`:
-      ```kotlin
-      val inputData = workDataOf("user_id" to "123", "count" to 42)
-      val request = OneTimeWorkRequestBuilder<MyWorker>()
-          .setInputData(inputData)
-          .build()
-      ```
-
-      **In Worker** - access via `inputData`:
-      ```kotlin
-      val userId = inputData.getString("user_id")
-      return Result.success(workDataOf("result" to value))
-      ```
-
-      **Get output** - observe WorkInfo:
-      ```kotlin
-      workManager.getWorkInfoByIdLiveData(request.id)
-          .observe(owner) { info ->
-              val result = info.outputData.getString("result")
-          }
-      ```
-
-      **Limit: ~10KB** for entire Data payload
-    tags:
-      - android_workmanager
-      - difficulty::medium
-  - slug: android-210-0-ru
-    front: "Как передать данные в Worker WorkManager и получить результат обратно?"
-    back: |
-      **Входные данные** - используйте `workDataOf()`:
-      ```kotlin
-      val inputData = workDataOf("user_id" to "123", "count" to 42)
-      val request = OneTimeWorkRequestBuilder<MyWorker>()
-          .setInputData(inputData)
-          .build()
-      ```
-
-      **В Worker** - доступ через `inputData`:
-      ```kotlin
-      val userId = inputData.getString("user_id")
-      return Result.success(workDataOf("result" to value))
-      ```
-
-      **Получение результата** - наблюдайте WorkInfo:
-      ```kotlin
-      workManager.getWorkInfoByIdLiveData(request.id)
-          .observe(owner) { info ->
-              val result = info.outputData.getString("result")
-          }
-      ```
-
-      **Лимит: ~10KB** для всего Data payload
-    tags:
-      - android_workmanager
-      - difficulty::medium
-
----\
+- slug: android-210-0-en
+  language: en
+  anki_id: 1768399145536
+  synced_at: '2026-01-23T16:45:05.705808'
+- slug: android-210-0-ru
+  language: ru
+  anki_id: 1768399145561
+  synced_at: '2026-01-23T16:45:05.707134'
+---
 # Вопрос (RU)
 
 > Как передать данные в `WorkManager` `Worker` и получить результат обратно? Какие типы данных поддерживаются и какие есть ограничения?

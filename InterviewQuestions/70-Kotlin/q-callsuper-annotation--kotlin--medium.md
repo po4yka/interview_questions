@@ -30,18 +30,12 @@ tags:
 anki_cards:
 - slug: kotlin-197-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - annotations
+  anki_id: 1768326289581
+  synced_at: '2026-01-23T17:03:51.367297'
 - slug: kotlin-197-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - annotations
+  anki_id: 1768326289605
+  synced_at: '2026-01-23T17:03:51.369544'
 ---
 # Вопрос (RU)
 > Что такое аннотация `@CallSuper` и когда её следует использовать?

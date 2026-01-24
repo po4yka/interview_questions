@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-extension-functions-advanced--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296532
+  synced_at: '2026-01-23T17:03:51.724018'
 - slug: q-kotlin-extension-functions-advanced--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296556
+  synced_at: '2026-01-23T17:03:51.724858'
 ---
 # Question (EN)
 

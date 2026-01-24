@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-data-class-purpose--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296482
+  synced_at: '2026-01-23T17:03:51.721099'
 - slug: q-data-class-purpose--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296507
+  synced_at: '2026-01-23T17:03:51.721926'
 ---
 # Question (EN)
 > What is a data class in Kotlin and what is it used for?

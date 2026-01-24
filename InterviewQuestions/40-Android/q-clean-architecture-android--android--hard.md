@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-047-0-en
   language: en
   anki_id: 1768365658775
-  synced_at: '2026-01-14T09:17:53.411164'
+  synced_at: '2026-01-23T16:45:06.016146'
 - slug: android-047-0-ru
   language: ru
   anki_id: 1768365658800
-  synced_at: '2026-01-14T09:17:53.413293'
+  synced_at: '2026-01-23T16:45:06.017659'
 ---
 # Вопрос (RU)
 > Как реализовать Clean Architecture в Android?

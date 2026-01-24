@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-cancellation-cooperation--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282255
+  synced_at: '2026-01-23T17:03:50.706306'
 - slug: q-coroutine-cancellation-cooperation--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282280
+  synced_at: '2026-01-23T17:03:50.708602'
 ---
 ## Answer (EN)
 

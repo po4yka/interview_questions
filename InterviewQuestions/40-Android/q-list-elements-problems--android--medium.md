@@ -1,69 +1,50 @@
 ---
 id: android-100
 anki_cards:
-  - slug: android-100-0-en
-    front: "What are the four main categories of RecyclerView list problems?"
-    back: |
-      **1. OOM (Memory):**
-      - Large images without scaling
-      - Solution: Glide/Coil + RecyclerView recycling
-
-      **2. Lagging scroll:**
-      - Heavy work in `onBindViewHolder`
-      - Solution: Pre-process in ViewModel
-
-      **3. Data inconsistency:**
-      - Wrong `notify*` calls
-      - Solution: `ListAdapter` + `DiffUtil`
-
-      **4. Concurrency:**
-      - Multi-threaded updates
-      - Solution: LiveData/Flow on main thread
-
-      **Key:** Use `bindingAdapterPosition` for safe clicks.
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-100-0-ru
-    front: "Какие четыре основные категории проблем RecyclerView?"
-    back: |
-      **1. OOM (память):**
-      - Большие изображения без масштабирования
-      - Решение: Glide/Coil + переиспользование RecyclerView
-
-      **2. Тормоза прокрутки:**
-      - Тяжелая работа в `onBindViewHolder`
-      - Решение: предобработка в ViewModel
-
-      **3. Несогласованность данных:**
-      - Неправильные `notify*` вызовы
-      - Решение: `ListAdapter` + `DiffUtil`
-
-      **4. Многопоточность:**
-      - Обновления из разных потоков
-      - Решение: LiveData/Flow на main thread
-
-      **Ключ:** Используйте `bindingAdapterPosition` для безопасных кликов.
-    tags:
-      - android_views
-      - difficulty::medium
-title: "List Elements Problems / Проблемы элементов списка"
-aliases: ["List Elements Problems", "RecyclerView Issues", "Проблемы RecyclerView", "Проблемы элементов списка"]
+- slug: android-100-0-en
+  language: en
+  anki_id: 1768414153745
+  synced_at: '2026-01-23T16:45:06.280101'
+- slug: android-100-0-ru
+  language: ru
+  anki_id: 1768414153769
+  synced_at: '2026-01-23T16:45:06.280833'
+title: List Elements Problems / Проблемы элементов списка
+aliases:
+- List Elements Problems
+- RecyclerView Issues
+- Проблемы RecyclerView
+- Проблемы элементов списка
 topic: android
-subtopics: [performance-memory, performance-rendering, ui-views]
+subtopics:
+- performance-memory
+- performance-rendering
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-11
-tags: [android/performance-memory, android/performance-rendering, android/ui-views, concurrency, difficulty/medium, diffutil, memory, recyclerview]
+tags:
+- android/performance-memory
+- android/performance-rendering
+- android/ui-views
+- concurrency
+- difficulty/medium
+- diffutil
+- memory
+- recyclerview
 moc: moc-android
-related: [c-android, q-android-app-components--android--easy, q-android-lint-tool--android--medium]
+related:
+- c-android
+- q-android-app-components--android--easy
+- q-android-lint-tool--android--medium
 sources: []
-
----\
+---
 # Вопрос (RU)
 
 > Какие могут быть проблемы с элементами списка в Android и как их решать?

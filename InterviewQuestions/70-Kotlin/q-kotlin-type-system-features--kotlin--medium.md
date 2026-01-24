@@ -32,20 +32,12 @@ tags:
 anki_cards:
 - slug: kotlin-141-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - null-safety
-  - type-system
+  anki_id: 1768326279254
+  synced_at: '2026-01-23T17:03:50.438446'
 - slug: kotlin-141-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - null-safety
-  - type-system
+  anki_id: 1768326279280
+  synced_at: '2026-01-23T17:03:50.440373'
 ---
 # Вопрос (RU)
 > Какие особенности системы типов в Kotlin ты знаешь?

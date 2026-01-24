@@ -35,16 +35,12 @@ tags:
 anki_cards:
 - slug: q-testing-coroutine-cancellation--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293831
+  synced_at: '2026-01-23T17:03:51.613402'
 - slug: q-testing-coroutine-cancellation--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293856
+  synced_at: '2026-01-23T17:03:51.614252'
 ---
 # Вопрос (RU)
 > Как тестировать сценарии отмены корутин? Покрыть тестирование кооперативной отмены, timeout, ensureActive, CancellationException и очистки ресурсов с NonCancellable.

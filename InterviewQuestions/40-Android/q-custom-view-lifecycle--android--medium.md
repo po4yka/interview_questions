@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-479-0-en
   language: en
   anki_id: 1768366343375
-  synced_at: '2026-01-14T09:17:53.311652'
+  synced_at: '2026-01-23T16:45:05.842103'
 - slug: android-479-0-ru
   language: ru
   anki_id: 1768366343401
-  synced_at: '2026-01-14T09:17:53.316079'
+  synced_at: '2026-01-23T16:45:05.843381'
 ---
 # Вопрос (RU)
 > Каков жизненный цикл Custom `View` в Android? Какие методы вызываются при создании, отрисовке и удалении `View`?

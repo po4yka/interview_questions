@@ -37,16 +37,12 @@ related:
 anki_cards:
 - slug: q-compose-side-effects-coroutines--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284706
+  synced_at: '2026-01-23T17:03:50.935377'
 - slug: q-compose-side-effects-coroutines--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284730
+  synced_at: '2026-01-23T17:03:50.937549'
 ---
 # Вопрос (RU)
 > Что такое side effects в Jetpack Compose и как с ними интегрируются корутины? Объясните `LaunchedEffect`, `rememberCoroutineScope`, `DisposableEffect`, `produceState` и другие обработчики побочных эффектов. Когда какой использовать? Приведите production-примеры загрузки данных, анимаций, обработки событий и коллекции `Flow` с корректным управлением жизненным циклом и стратегиями тестирования.

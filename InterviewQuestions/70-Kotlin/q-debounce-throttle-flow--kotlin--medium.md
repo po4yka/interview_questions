@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-debounce-throttle-flow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293531
+  synced_at: '2026-01-23T17:03:51.602974'
 - slug: q-debounce-throttle-flow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293556
+  synced_at: '2026-01-23T17:03:51.604025'
 ---
 # Question (EN)
 > What is the difference between `debounce` and `throttle` in Kotlin `Flow`? When to use each?

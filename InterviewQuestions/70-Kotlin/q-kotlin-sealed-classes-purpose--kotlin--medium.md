@@ -129,16 +129,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-sealed-classes-purpose--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295181
+  synced_at: '2026-01-23T17:03:51.667442'
 - slug: q-kotlin-sealed-classes-purpose--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295206
+  synced_at: '2026-01-23T17:03:51.668277'
 ---
 # Что Такое Sealed Классы И Зачем Они Нужны?
 

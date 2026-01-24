@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-context-detailed--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293931
+  synced_at: '2026-01-23T17:03:51.617750'
 - slug: q-coroutine-context-detailed--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293957
+  synced_at: '2026-01-23T17:03:51.618565'
 ---
 # Question (EN)
 > What is CoroutineContext in Kotlin? How does it work and what are its key elements?

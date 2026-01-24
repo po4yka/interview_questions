@@ -31,20 +31,12 @@ tags:
 anki_cards:
 - slug: kotlin-198-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - type-system
+  anki_id: 1768326289630
+  synced_at: '2026-01-23T17:03:51.371441'
 - slug: kotlin-198-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - type-system
+  anki_id: 1768326289655
+  synced_at: '2026-01-23T17:03:51.373843'
 ---
 # Вопрос (RU)
 

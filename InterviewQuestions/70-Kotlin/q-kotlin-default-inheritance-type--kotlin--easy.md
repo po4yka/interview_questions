@@ -27,16 +27,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-default-inheritance-type--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288732
+  synced_at: '2026-01-23T17:03:51.299217'
 - slug: q-kotlin-default-inheritance-type--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288756
+  synced_at: '2026-01-23T17:03:51.301222'
 ---
 # Вопрос (RU)
 > Какой тип наследования по умолчанию используется для классов в Kotlin?

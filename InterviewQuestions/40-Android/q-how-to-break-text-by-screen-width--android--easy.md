@@ -1,62 +1,42 @@
 ---
 id: android-131
-title: "How To Break Text By Screen Width / Как разбить текст по ширине экрана"
-aliases: ["How To Break Text By Screen Width", "Как разбить текст по ширине экрана"]
+title: How To Break Text By Screen Width / Как разбить текст по ширине экрана
+aliases:
+- How To Break Text By Screen Width
+- Как разбить текст по ширине экрана
 topic: android
-subtopics: [ui-graphics, ui-views]
+subtopics:
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, c-android-graphics, c-canvas-drawing]
+related:
+- c-custom-views
+- c-android-graphics
+- c-canvas-drawing
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/ui-graphics, android/ui-views, difficulty/easy]
+tags:
+- android
+- android/ui-graphics
+- android/ui-views
+- difficulty/easy
 anki_cards:
-  - slug: android-131-0-en
-    front: "How to break text by screen width in custom Canvas drawing?"
-    back: |
-      Use `Paint.breakText()` for low-level text measurement:
-
-      ```kotlin
-      val paint = Paint().apply { textSize = 48f }
-      val maxWidth = 500f
-
-      val charsFit = paint.breakText(text, true, maxWidth, null)
-      val fittingText = text.substring(0, charsFit)
-      ```
-
-      **Note:** This breaks by character count that fits width.
-      For word-aware breaking, additionally find last space.
-
-      **For regular UI:** Use TextView/Compose - they handle wrapping automatically.
-    tags:
-      - android_views
-      - difficulty::easy
-  - slug: android-131-0-ru
-    front: "Как разбить текст по ширине экрана при кастомном рисовании на Canvas?"
-    back: |
-      Используйте `Paint.breakText()` для низкоуровневого измерения текста:
-
-      ```kotlin
-      val paint = Paint().apply { textSize = 48f }
-      val maxWidth = 500f
-
-      val charsFit = paint.breakText(text, true, maxWidth, null)
-      val fittingText = text.substring(0, charsFit)
-      ```
-
-      **Примечание:** Разбивает по количеству символов, помещающихся в ширину.
-      Для переноса по словам дополнительно ищите последний пробел.
-
-      **Для обычного UI:** Используйте TextView/Compose - они сами обрабатывают перенос.
-    tags:
-      - android_views
-      - difficulty::easy
-
+- slug: android-131-0-en
+  language: en
+  anki_id: 1768378630516
+  synced_at: '2026-01-23T16:45:05.323956'
+- slug: android-131-0-ru
+  language: ru
+  anki_id: 1768378630541
+  synced_at: '2026-01-23T16:45:05.326112'
 ---
 # Вопрос (RU)
 

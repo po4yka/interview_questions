@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-exception-handler--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284957
+  synced_at: '2026-01-23T17:03:50.959120'
 - slug: q-coroutine-exception-handler--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284980
+  synced_at: '2026-01-23T17:03:50.961262'
 ---
 # Question (EN)
 > What is CoroutineExceptionHandler, where can it be installed, and how does it work with different coroutine builders (launch vs async)?

@@ -35,19 +35,19 @@ anki_cards:
 - slug: net-004-0-en
   language: en
   anki_id: 1768460896737
-  synced_at: '2026-01-15T11:08:17.101815'
+  synced_at: '2026-01-23T15:20:42.982878'
 - slug: net-004-0-ru
   language: ru
   anki_id: 1768460896761
-  synced_at: '2026-01-15T11:08:17.104350'
+  synced_at: '2026-01-23T15:20:42.984156'
 - slug: net-004-1-en
   language: en
   anki_id: 1768460896786
-  synced_at: '2026-01-15T11:08:17.106859'
+  synced_at: '2026-01-23T15:20:42.985602'
 - slug: net-004-1-ru
   language: ru
   anki_id: 1768460896812
-  synced_at: '2026-01-15T11:08:17.109068'
+  synced_at: '2026-01-23T15:20:42.987187'
 ---
 # Вопрос (RU)
 

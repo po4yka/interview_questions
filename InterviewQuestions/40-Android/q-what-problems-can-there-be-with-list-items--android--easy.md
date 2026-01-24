@@ -1,62 +1,47 @@
----\
+---
 id: android-079
 title: List Items Problems / Проблемы с элементами списка
-aliases: [List Items Problems, Проблемы с элементами списка]
+aliases:
+- List Items Problems
+- Проблемы с элементами списка
 topic: android
-subtopics: [performance-memory, ui-views]
+subtopics:
+- performance-memory
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-performance, c-recyclerview, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-list-elements-problems--android--medium, q-what-to-put-in-state-for-initial-list--android--easy]
+related:
+- c-performance
+- c-recyclerview
+- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+- q-list-elements-problems--android--medium
+- q-what-to-put-in-state-for-initial-list--android--easy
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/performance-memory, android/ui-views, difficulty/easy, listview, memory, performance, recyclerview]
+tags:
+- android/performance-memory
+- android/ui-views
+- difficulty/easy
+- listview
+- memory
+- performance
+- recyclerview
 anki_cards:
-  - slug: android-079-0-en
-    front: "What common problems occur with list items in Android?"
-    back: |
-      **1. OOM** - too many images, no view recycling
-      **Solution:** RecyclerView + Glide/Coil with size limits
-
-      **2. Slow scrolling** - heavy onBindViewHolder, deep layouts
-      **Solution:** Keep binding light, flatten hierarchies
-
-      **3. Data inconsistency** - wrong data after scroll
-      **Solution:** DiffUtil/ListAdapter, bind all fields
-
-      **4. Concurrency** - UI crashes from background updates
-      **Solution:** Update adapter on main thread via LiveData/Flow
-
-      **5. Click issues** - listeners not working or leaking
-      **Solution:** Pass lambda to adapter, handle in ViewHolder
-    tags:
-      - android_layouts
-      - difficulty::easy
-  - slug: android-079-0-ru
-    front: "Какие типичные проблемы возникают с элементами списка в Android?"
-    back: |
-      **1. OOM** - много изображений, нет переиспользования view
-      **Решение:** RecyclerView + Glide/Coil с ограничением размера
-
-      **2. Медленный скролл** - тяжёлый onBindViewHolder, глубокие layout
-      **Решение:** Легкий binding, плоские иерархии
-
-      **3. Несогласованность данных** - неправильные данные после скролла
-      **Решение:** DiffUtil/ListAdapter, биндить все поля
-
-      **4. Многопоточность** - краши UI от фоновых обновлений
-      **Решение:** Обновлять адаптер на main через LiveData/Flow
-
-      **5. Проблемы с кликами** - листенеры не работают или текут
-      **Решение:** Передавать лямбду в адаптер, обрабатывать в ViewHolder
-    tags:
-      - android_layouts
-      - difficulty::easy
-
----\
+- slug: android-079-0-en
+  language: en
+  anki_id: 1768381951938
+  synced_at: '2026-01-23T16:45:05.594497'
+- slug: android-079-0-ru
+  language: ru
+  anki_id: 1768381951961
+  synced_at: '2026-01-23T16:45:05.596392'
+---
 # Вопрос (RU)
 > Проблемы с элементами списка
 

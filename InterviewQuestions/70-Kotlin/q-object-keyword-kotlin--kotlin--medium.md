@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-object-keyword-kotlin--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283855
+  synced_at: '2026-01-23T17:03:50.820097'
 - slug: q-object-keyword-kotlin--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283880
+  synced_at: '2026-01-23T17:03:50.822360'
 ---
 # Question (EN)
 > Tell about the `object` keyword in Kotlin. What are its use cases and characteristics?

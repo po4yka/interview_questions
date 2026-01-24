@@ -35,22 +35,12 @@ tags:
 anki_cards:
 - slug: kotlin-031-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - inner-class
-  - nested-class
+  anki_id: 1768326294080
+  synced_at: '2026-01-23T17:03:51.622698'
 - slug: kotlin-031-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - inner-class
-  - nested-class
+  anki_id: 1768326294106
+  synced_at: '2026-01-23T17:03:51.623500'
 ---
 # Вопрос (RU)
 > В чем разница между вложенным (nested) и внутренним (inner) классом в Kotlin?

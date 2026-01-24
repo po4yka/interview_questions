@@ -39,11 +39,11 @@ anki_cards:
 - slug: android-452-0-en
   language: en
   anki_id: 1768366752177
-  synced_at: '2026-01-14T09:17:53.366326'
+  synced_at: '2026-01-23T16:45:05.939568'
 - slug: android-452-0-ru
   language: ru
   anki_id: 1768366752200
-  synced_at: '2026-01-14T09:17:53.368872'
+  synced_at: '2026-01-23T16:45:05.941790'
 sources:
 - https://developer.android.com/training/data-storage/room
 ---

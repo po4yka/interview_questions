@@ -1,60 +1,51 @@
----\
+---
 id: android-415
 title: Privacy Sandbox FLEDGE / Privacy Sandbox FLEDGE (Protected Audience API)
-aliases: [FLEDGE, On-Device Ad Auctions, Privacy Sandbox FLEDGE, Protected Audience API]
+aliases:
+- FLEDGE
+- On-Device Ad Auctions
+- Privacy Sandbox FLEDGE
+- Protected Audience API
 topic: android
-subtopics: [privacy-sdks]
+subtopics:
+- privacy-sdks
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-permissions, q-http-protocols-comparison--android--medium, q-privacy-sandbox-attribution--android--medium, q-privacy-sandbox-sdk-runtime--android--hard, q-privacy-sandbox-topics-api--android--medium, q-retrofit-modify-all-requests--android--hard]
+related:
+- c-permissions
+- q-http-protocols-comparison--android--medium
+- q-privacy-sandbox-attribution--android--medium
+- q-privacy-sandbox-sdk-runtime--android--hard
+- q-privacy-sandbox-topics-api--android--medium
+- q-retrofit-modify-all-requests--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [advertising, android/privacy-sdks, difficulty/hard, fledge, privacy, privacy-sandbox, protected-audience, remarketing]
+tags:
+- advertising
+- android/privacy-sdks
+- difficulty/hard
+- fledge
+- privacy
+- privacy-sandbox
+- protected-audience
+- remarketing
 anki_cards:
-  - slug: android-415-0-en
-    front: "What is FLEDGE (Protected Audience API) in Privacy Sandbox?"
-    back: |
-      **FLEDGE** - remarketing without cross-site tracking or third-party cookies.
-
-      **Key components:**
-      - **Custom Audiences** - user segments stored on-device
-      - **On-Device Auction** - ad selection happens locally
-      - **JS Bidding/Scoring** - isolated sandbox execution
-
-      **Flow:**
-      1. `joinCustomAudience()` - add user to audience
-      2. `selectAds()` - publisher requests ad
-      3. On-device auction runs buyer/seller scripts
-      4. Highest score wins
-      5. Impression reported via aggregated API
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-415-0-ru
-    front: "Что такое FLEDGE (Protected Audience API) в Privacy Sandbox?"
-    back: |
-      **FLEDGE** - ремаркетинг без cross-site трекинга и third-party cookies.
-
-      **Ключевые компоненты:**
-      - **Custom Audiences** - сегменты пользователей на устройстве
-      - **On-Device Auction** - выбор рекламы локально
-      - **JS Bidding/Scoring** - изолированное выполнение в песочнице
-
-      **Процесс:**
-      1. `joinCustomAudience()` - добавление в аудиторию
-      2. `selectAds()` - издатель запрашивает рекламу
-      3. On-device аукцион запускает buyer/seller скрипты
-      4. Побеждает наивысший score
-      5. Impression через агрегированный API
-    tags:
-      - android_general
-      - difficulty::hard
----\
+- slug: android-415-0-en
+  language: en
+  anki_id: 1768418268577
+  synced_at: '2026-01-23T16:45:06.366815'
+- slug: android-415-0-ru
+  language: ru
+  anki_id: 1768418268602
+  synced_at: '2026-01-23T16:45:06.367676'
+---
 # Вопрос (RU)
 
 > Что такое FLEDGE (Protected Audience API) в Privacy Sandbox? Как он обеспечивает remarketing без third-party cookies? Как реализовать on-device аукционы рекламы и каковы технические вызовы?

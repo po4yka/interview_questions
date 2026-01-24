@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-lazy-initialization--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292530
+  synced_at: '2026-01-23T17:03:51.559660'
 - slug: q-lazy-initialization--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292556
+  synced_at: '2026-01-23T17:03:51.560846'
 ---
 ## Дополнительные Вопросы (RU)
 

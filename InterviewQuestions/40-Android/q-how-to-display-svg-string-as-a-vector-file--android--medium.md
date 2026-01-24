@@ -1,75 +1,47 @@
----\
+---
 id: android-172
-title: "How To Display SVG String As A Vector File / Как отобразить SVG строку как векторный файл"
-aliases: ["Display SVG String", "Отображение SVG строки"]
+title: How To Display SVG String As A Vector File / Как отобразить SVG строку как
+  векторный файл
+aliases:
+- Display SVG String
+- Отображение SVG строки
 topic: android
-subtopics: [ui-compose, ui-graphics, ui-views]
+subtopics:
+- ui-compose
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, c-jetpack-compose, c-viewmodel]
+related:
+- c-custom-views
+- c-jetpack-compose
+- c-viewmodel
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, ui]
+tags:
+- android
+- android/ui-compose
+- android/ui-graphics
+- android/ui-views
+- difficulty/medium
+- ui
 anki_cards:
-  - slug: android-172-0-en
-    front: "How to display an SVG string as a vector image in Android?"
-    back: |
-      Android has **no native runtime SVG support**. Use third-party libraries:
-
-      **1. AndroidSVG** (simple cases):
-      ```kotlin
-      val svg = SVG.getFromString(svgString)
-      val drawable = PictureDrawable(svg.renderToPicture())
-      imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-      imageView.setImageDrawable(drawable)
-      ```
-
-      **2. Coil + SvgDecoder** (modern, with caching):
-      ```kotlin
-      ImageRequest.Builder(context)
-          .data(svgString.toByteArray())
-          .target(imageView)
-          .build()
-      ```
-
-      **Key points**: Always handle parse errors, cache parsed SVG objects, preserve aspect ratio.
-    tags:
-      - android_views
-      - android_compose
-      - difficulty::medium
-  - slug: android-172-0-ru
-    front: "Как отобразить SVG-строку как векторное изображение в Android?"
-    back: |
-      Android **не поддерживает SVG нативно** во время выполнения. Используйте сторонние библиотеки:
-
-      **1. AndroidSVG** (простые случаи):
-      ```kotlin
-      val svg = SVG.getFromString(svgString)
-      val drawable = PictureDrawable(svg.renderToPicture())
-      imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-      imageView.setImageDrawable(drawable)
-      ```
-
-      **2. Coil + SvgDecoder** (современный подход с кешированием):
-      ```kotlin
-      ImageRequest.Builder(context)
-          .data(svgString.toByteArray())
-          .target(imageView)
-          .build()
-      ```
-
-      **Ключевые моменты**: обрабатывайте ошибки парсинга, кешируйте SVG-объекты, сохраняйте пропорции.
-    tags:
-      - android_views
-      - android_compose
-      - difficulty::medium
-
----\
+- slug: android-172-0-en
+  language: en
+  anki_id: 1768379205096
+  synced_at: '2026-01-23T16:45:05.545393'
+- slug: android-172-0-ru
+  language: ru
+  anki_id: 1768379205120
+  synced_at: '2026-01-23T16:45:05.546625'
+---
 # Вопрос (RU)
 
 > Как отобразить SVG-строку в виде векторного изображения в Android?

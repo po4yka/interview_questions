@@ -1,54 +1,46 @@
----\
+---
 id: android-085
 title: RecyclerView ViewTypes Delegation / Делегирование ViewTypes в RecyclerView
-aliases: [RecyclerView ViewTypes Delegation, Делегирование ViewTypes в RecyclerView]
+aliases:
+- RecyclerView ViewTypes Delegation
+- Делегирование ViewTypes в RecyclerView
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy, q-recyclerview-explained--android--medium, q-recyclerview-itemdecoration-advanced--android--medium]
+related:
+- c-android
+- q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+- q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+- q-recyclerview-explained--android--medium
+- q-recyclerview-itemdecoration-advanced--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags: [adapter, android/ui-views, design-patterns, difficulty/medium, view-types]
+tags:
+- adapter
+- android/ui-views
+- design-patterns
+- difficulty/medium
+- view-types
 sources:
-  - "https://developer.android.com/guide/topics/ui/layout/recyclerview"
+- https://developer.android.com/guide/topics/ui/layout/recyclerview
 anki_cards:
-  - slug: android-085-0-en
-    front: "How to handle multiple view types in RecyclerView?"
-    back: |
-      **Override three methods:**
-      - `getItemViewType(position)` - return type constant based on data
-      - `onCreateViewHolder(parent, viewType)` - inflate layout per type
-      - `onBindViewHolder(holder, position)` - bind to correct ViewHolder
-
-      **Best practices:**
-      - Use sealed classes for type safety
-      - Adapter Delegation pattern for cleaner code
-      - Stable viewType mapping to avoid recycling bugs
-    tags:
-      - android_layouts
-      - difficulty::medium
-  - slug: android-085-0-ru
-    front: "Как обрабатывать множественные типы view в RecyclerView?"
-    back: |
-      **Переопределить три метода:**
-      - `getItemViewType(position)` - вернуть константу типа по данным
-      - `onCreateViewHolder(parent, viewType)` - создать layout по типу
-      - `onBindViewHolder(holder, position)` - биндить в нужный ViewHolder
-
-      **Лучшие практики:**
-      - Sealed classes для типобезопасности
-      - Паттерн Adapter Delegation для чистого кода
-      - Стабильный маппинг viewType для избежания багов ресайклинга
-    tags:
-      - android_layouts
-      - difficulty::medium
-
----\
+- slug: android-085-0-en
+  language: en
+  anki_id: 1768382135468
+  synced_at: '2026-01-23T16:45:05.959786'
+- slug: android-085-0-ru
+  language: ru
+  anki_id: 1768382135489
+  synced_at: '2026-01-23T16:45:05.961480'
+---
 # Вопрос (RU)
 > Как обрабатывать множественные типы view в `RecyclerView`?
 

@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-440-0-en
   language: en
   anki_id: 1768366746882
-  synced_at: '2026-01-14T12:07:32.176134'
+  synced_at: '2026-01-23T16:45:05.240832'
 - slug: android-440-0-ru
   language: ru
   anki_id: 1768366746931
-  synced_at: '2026-01-14T12:07:32.183785'
+  synced_at: '2026-01-23T16:45:05.242935'
 sources:
 - https://developer.android.com/guide/background/processing-data/sync
 ---

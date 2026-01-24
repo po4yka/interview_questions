@@ -1,51 +1,47 @@
----\
+---
 id: android-274
-title: "How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink / Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink"
-aliases: ["How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink", "Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink"]
+title: How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink
+  / Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink
+aliases:
+- How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink
+- Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink
 topic: android
-subtopics: [activity, intents-deeplinks, ui-navigation]
+subtopics:
+- activity
+- intents-deeplinks
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
+related:
+- c-activity-lifecycle
+- q-activity-navigation-how-it-works--android--medium
+- q-compose-navigation-advanced--android--medium
+- q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-15
-tags: [android, android/activity, android/intents-deeplinks, android/ui-navigation, difficulty/medium]
+tags:
+- android
+- android/activity
+- android/intents-deeplinks
+- android/ui-navigation
+- difficulty/medium
 anki_cards:
-  - slug: android-274-0-en
-    front: "How to prevent Activity from opening multiple times due to deeplink?"
-    back: |
-      **Solutions:**
-      1. **singleTop launch mode** - if Activity at top, calls `onNewIntent()` instead of new instance
-      2. **Intent flags** - `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP`
-      3. **Trampoline Activity** - intermediate Activity routes deeplinks
-      4. **Navigation Component** - automatic back stack management
-
-      **Best practice:** Use `singleTop` + implement `onNewIntent()` + call `setIntent(intent)`
-    tags:
-      - android_activities
-      - android_intents
-      - difficulty::medium
-  - slug: android-274-0-ru
-    front: "Как предотвратить многократное открытие Activity из-за deeplink?"
-    back: |
-      **Решения:**
-      1. **singleTop launch mode** - если Activity на вершине, вызывает `onNewIntent()` вместо нового экземпляра
-      2. **Intent flags** - `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP`
-      3. **Trampoline Activity** - промежуточная Activity маршрутизирует deeplinks
-      4. **Navigation Component** - автоматическое управление back stack
-
-      **Best practice:** Используйте `singleTop` + реализуйте `onNewIntent()` + вызовите `setIntent(intent)`
-    tags:
-      - android_activities
-      - android_intents
-      - difficulty::medium
-
----\
+- slug: android-274-0-en
+  language: en
+  anki_id: 1768380644779
+  synced_at: '2026-01-23T16:45:05.982111'
+- slug: android-274-0-ru
+  language: ru
+  anki_id: 1768380644804
+  synced_at: '2026-01-23T16:45:05.983447'
+---
 # Вопрос (RU)
 
 > Как обработать ситуацию, когда `Activity` может открыться несколько раз из-за deeplink?

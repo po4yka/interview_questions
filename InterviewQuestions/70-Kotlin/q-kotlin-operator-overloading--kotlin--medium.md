@@ -33,22 +33,12 @@ tags:
 anki_cards:
 - slug: kotlin-004-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - conventions
-  - language-features
-  - operators
+  anki_id: 1768326281804
+  synced_at: '2026-01-23T17:03:50.663962'
 - slug: kotlin-004-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - conventions
-  - language-features
-  - operators
+  anki_id: 1768326281829
+  synced_at: '2026-01-23T17:03:50.665729'
 ---
 # Вопрос (RU)
 > Что вы знаете о перегрузке операторов в Kotlin?

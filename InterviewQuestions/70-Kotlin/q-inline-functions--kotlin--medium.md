@@ -28,20 +28,12 @@ tags:
 anki_cards:
 - slug: kotlin-207-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
-  - inline-functions
+  anki_id: 1768326291231
+  synced_at: '2026-01-23T17:03:51.497834'
 - slug: kotlin-207-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
-  - inline-functions
+  anki_id: 1768326291255
+  synced_at: '2026-01-23T17:03:51.499562'
 ---
 # Вопрос (RU)
 > Что такое inline функции в Kotlin и зачем они нужны?

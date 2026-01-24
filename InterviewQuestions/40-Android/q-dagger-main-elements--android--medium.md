@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-449-0-en
   language: en
   anki_id: 1768366556876
-  synced_at: '2026-01-14T09:17:53.280975'
+  synced_at: '2026-01-23T16:45:05.811871'
 - slug: android-449-0-ru
   language: ru
   anki_id: 1768366556899
-  synced_at: '2026-01-14T09:17:53.282874'
+  synced_at: '2026-01-23T16:45:05.813560'
 sources: []
 ---
 # Вопрос (RU)

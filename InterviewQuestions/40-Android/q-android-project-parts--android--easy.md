@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-216-0-en
   language: en
   anki_id: 1768363501996
-  synced_at: '2026-01-14T09:17:53.259903'
+  synced_at: '2026-01-23T16:45:05.739766'
 - slug: android-216-0-ru
   language: ru
   anki_id: 1768363502021
-  synced_at: '2026-01-14T09:17:53.261860'
+  synced_at: '2026-01-23T16:45:05.741177'
 ---
 # Вопрос (RU)
 > Из каких основных частей состоит Android проект?

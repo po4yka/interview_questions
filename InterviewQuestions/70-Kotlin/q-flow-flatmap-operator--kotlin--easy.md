@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-flatmap-operator--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290581
+  synced_at: '2026-01-23T17:03:51.455141'
 - slug: q-flow-flatmap-operator--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290606
+  synced_at: '2026-01-23T17:03:51.458125'
 ---
 # Question (EN)
 > In Kotlin `Flow`, what should you use if you need to transform one data stream into another data stream?

@@ -2,18 +2,13 @@
 anki_cards:
 - slug: q-dispatchers-unconfined--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295632
+  synced_at: '2026-01-23T17:03:51.683593'
 - slug: q-dispatchers-unconfined--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295656
+  synced_at: '2026-01-23T17:03:51.684405'
 ---
-
 ---
 ---
 ---\

@@ -41,11 +41,11 @@ anki_cards:
 - slug: android-072-0-en
   language: en
   anki_id: 1768365654608
-  synced_at: '2026-01-14T08:59:19.159506'
+  synced_at: '2026-01-23T16:45:05.244584'
 - slug: android-072-0-ru
   language: ru
   anki_id: 1768365654655
-  synced_at: '2026-01-14T08:59:19.161650'
+  synced_at: '2026-01-23T16:45:05.246663'
 ---
 # Вопрос (RU)
 > Из каких более важных компонентов состоит Compose?

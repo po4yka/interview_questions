@@ -1,69 +1,51 @@
 ---
 id: android-116
 anki_cards:
-  - slug: android-116-0-en
-    front: "How do you upload large files reliably in Android?"
-    back: |
-      **Use WorkManager + Retrofit:**
-
-      **Key components:**
-      - `CoroutineWorker` with `setForeground()` for long uploads
-      - Constraints: `NetworkType.CONNECTED` or `UNMETERED`
-      - Exponential backoff for retries
-
-      **For files >50MB - chunked upload:**
-      ```kotlin
-      val contentRange = "bytes $start-$end/$total"
-      api.uploadChunk(fileId, contentRange, chunk)
-      ```
-
-      **Best practices:**
-      - Track progress via `ProgressRequestBody`
-      - WiFi-only for very large files
-      - Resumable uploads with server support
-    tags:
-      - android_workmanager
-      - difficulty::medium
-  - slug: android-116-0-ru
-    front: "Как надежно загружать большие файлы в Android?"
-    back: |
-      **Используйте WorkManager + Retrofit:**
-
-      **Ключевые компоненты:**
-      - `CoroutineWorker` с `setForeground()` для долгих загрузок
-      - Constraints: `NetworkType.CONNECTED` или `UNMETERED`
-      - Exponential backoff для повторов
-
-      **Для файлов >50MB - chunked upload:**
-      ```kotlin
-      val contentRange = "bytes $start-$end/$total"
-      api.uploadChunk(fileId, contentRange, chunk)
-      ```
-
-      **Лучшие практики:**
-      - Отслеживание прогресса через `ProgressRequestBody`
-      - Только WiFi для очень больших файлов
-      - Возобновляемые загрузки с поддержкой сервера
-    tags:
-      - android_workmanager
-      - difficulty::medium
+- slug: android-116-0-en
+  language: en
+  anki_id: 1768414126515
+  synced_at: '2026-01-23T16:45:05.258982'
+- slug: android-116-0-ru
+  language: ru
+  anki_id: 1768414126541
+  synced_at: '2026-01-23T16:45:05.260429'
 title: Large File Upload / Загрузка больших файлов
-aliases: [Large File Upload, Загрузка больших файлов]
+aliases:
+- Large File Upload
+- Загрузка больших файлов
 topic: android
-subtopics: [background-execution, files-media, networking-http]
+subtopics:
+- background-execution
+- files-media
+- networking-http
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-background-tasks, c-retrofit, q-api-file-upload-server--android--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium, q-large-file-upload-app--android--hard, q-viewmodel-vs-onsavedinstancestate--android--medium]
+related:
+- c-background-tasks
+- c-retrofit
+- q-api-file-upload-server--android--medium
+- q-how-to-display-svg-string-as-a-vector-file--android--medium
+- q-large-file-upload-app--android--hard
+- q-viewmodel-vs-onsavedinstancestate--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, file-upload, multipart, retrofit, workmanager]
-
----\
+tags:
+- android/background-execution
+- android/files-media
+- android/networking-http
+- difficulty/medium
+- file-upload
+- multipart
+- retrofit
+- workmanager
+---
 # Вопрос (RU)
 
 > Как загрузить большой файл на сервер в Android?

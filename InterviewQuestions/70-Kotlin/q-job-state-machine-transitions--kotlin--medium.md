@@ -2,18 +2,53 @@
 anki_cards:
 - slug: q-job-state-machine-transitions--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287755
+  synced_at: '2026-01-23T17:03:51.214576'
 - slug: q-job-state-machine-transitions--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287780
+  synced_at: '2026-01-23T17:03:51.215818'
+- slug: q-job-state-machine-atomic-job-states-overview-0-en
+  language: en
+  anki_id: 1769172811131
+  synced_at: '2026-01-23T17:03:51.217752'
+- slug: q-job-state-machine-atomic-job-states-overview-0-ru
+  language: ru
+  anki_id: 1769172811156
+  synced_at: '2026-01-23T17:03:51.219159'
+- slug: q-job-state-machine-atomic-job-properties-behavior-1-en
+  language: en
+  anki_id: 1769172811180
+  synced_at: '2026-01-23T17:03:51.220829'
+- slug: q-job-state-machine-atomic-job-properties-behavior-1-ru
+  language: ru
+  anki_id: 1769172811207
+  synced_at: '2026-01-23T17:03:51.222730'
+- slug: q-job-state-machine-atomic-join-behavior-2-en
+  language: en
+  anki_id: 1769172811231
+  synced_at: '2026-01-23T17:03:51.224439'
+- slug: q-job-state-machine-atomic-join-behavior-2-ru
+  language: ru
+  anki_id: 1769172811256
+  synced_at: '2026-01-23T17:03:51.226513'
+- slug: q-job-state-machine-atomic-cancel-behavior-3-en
+  language: en
+  anki_id: 1769172811281
+  synced_at: '2026-01-23T17:03:51.228510'
+- slug: q-job-state-machine-atomic-cancel-behavior-3-ru
+  language: ru
+  anki_id: 1769172811307
+  synced_at: '2026-01-23T17:03:51.230553'
+- slug: q-job-state-machine-atomic-parent-child-propagation-4-en
+  language: en
+  anki_id: 1769172811331
+  synced_at: '2026-01-23T17:03:51.232542'
+- slug: q-job-state-machine-atomic-parent-child-propagation-4-ru
+  language: ru
+  anki_id: 1769172811356
+  synced_at: '2026-01-23T17:03:51.234504'
 ---
-
 ---
 ---
 ---\

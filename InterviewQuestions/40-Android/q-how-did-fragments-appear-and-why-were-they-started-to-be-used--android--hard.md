@@ -28,11 +28,11 @@ anki_cards:
 - slug: android-397-0-en
   language: en
   anki_id: 1768367870729
-  synced_at: '2026-01-14T12:07:32.232578'
+  synced_at: '2026-01-23T16:45:06.328783'
 - slug: android-397-0-ru
   language: ru
   anki_id: 1768367870755
-  synced_at: '2026-01-14T12:07:32.244482'
+  synced_at: '2026-01-23T16:45:06.329688'
 tags:
 - android/fragment
 - difficulty/hard

@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-360-0-en
   language: en
   anki_id: 1768363502547
-  synced_at: '2026-01-14T09:17:53.629742'
+  synced_at: '2026-01-23T16:45:06.229332'
 - slug: android-360-0-ru
   language: ru
   anki_id: 1768363502572
-  synced_at: '2026-01-14T09:17:53.631890'
+  synced_at: '2026-01-23T16:45:06.230151'
 ---
 # Вопрос (RU)
 > Что такое AndroidManifest.xml и зачем он нужен?

@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-455-0-en
   language: en
   anki_id: 1768366753727
-  synced_at: '2026-01-14T09:17:53.452873'
+  synced_at: '2026-01-23T16:45:06.075222'
 - slug: android-455-0-ru
   language: ru
   anki_id: 1768366753751
-  synced_at: '2026-01-14T09:17:53.455227'
+  synced_at: '2026-01-23T16:45:06.076430'
 sources:
 - https://developer.android.com/topic/libraries/architecture/datastore
 ---

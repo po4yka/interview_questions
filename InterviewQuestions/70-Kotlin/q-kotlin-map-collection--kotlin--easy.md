@@ -29,20 +29,12 @@ related:
 anki_cards:
 - slug: lang-008-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - types
+  anki_id: 1768326286155
+  synced_at: '2026-01-23T17:03:51.081282'
 - slug: lang-008-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - types
+  anki_id: 1768326286181
+  synced_at: '2026-01-23T17:03:51.086878'
 ---
 # Вопрос (RU)
 > Расскажи про коллекцию `Map`

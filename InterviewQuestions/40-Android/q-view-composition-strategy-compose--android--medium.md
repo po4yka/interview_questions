@@ -1,65 +1,46 @@
----\
+---
 id: android-014
-title: "ViewCompositionStrategy in Compose / ViewCompositionStrategy в Compose"
-aliases: ["ViewCompositionStrategy in Compose", "ViewCompositionStrategy в Compose"]
+title: ViewCompositionStrategy in Compose / ViewCompositionStrategy в Compose
+aliases:
+- ViewCompositionStrategy in Compose
+- ViewCompositionStrategy в Compose
 topic: android
-subtopics: [ui-compose]
+subtopics:
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-compose-ui-basics, q-compose-performance-optimization--android--hard, q-custom-view-lifecycle--android--medium]
+related:
+- c-android
+- c-compose-ui-basics
+- q-compose-performance-optimization--android--hard
+- q-custom-view-lifecycle--android--medium
 created: 2025-10-05
 updated: 2025-11-10
-tags: [android/lifecycle, android/ui-compose, difficulty/medium, interop, lifecycle, viewcompositionstrategy]
-sources: ["https://developer.android.com/jetpack/compose/interop/view-composition-strategy"]
+tags:
+- android/lifecycle
+- android/ui-compose
+- difficulty/medium
+- interop
+- lifecycle
+- viewcompositionstrategy
+sources:
+- https://developer.android.com/jetpack/compose/interop/view-composition-strategy
 anki_cards:
-  - slug: android-014-0-en
-    front: "What is ViewCompositionStrategy in Compose and when to use each?"
-    back: |
-      **ViewCompositionStrategy** - controls when Composition is disposed for ComposeView.
-
-      **Three strategies**:
-      1. **DisposeOnDetachedFromWindowOrReleasedFromPool** (default) - for RecyclerView, most cases
-      2. **DisposeOnLifecycleDestroyed** - bind to Fragment's viewLifecycleOwner
-      3. **DisposeOnViewTreeLifecycleDestroyed** - use ViewTree lifecycle
-
-      ```kotlin
-      composeView.setViewCompositionStrategy(
-          DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
-      )
-      ```
-
-      **Use in Fragments** to prevent memory leaks when ComposeView stored as field.
-    tags:
-      - android_compose
-      - android_lifecycle
-      - difficulty::medium
-  - slug: android-014-0-ru
-    front: "Что такое ViewCompositionStrategy в Compose и когда какую использовать?"
-    back: |
-      **ViewCompositionStrategy** - управляет когда освобождается Composition для ComposeView.
-
-      **Три стратегии**:
-      1. **DisposeOnDetachedFromWindowOrReleasedFromPool** (по умолчанию) - для RecyclerView, большинства случаев
-      2. **DisposeOnLifecycleDestroyed** - привязка к viewLifecycleOwner Fragment
-      3. **DisposeOnViewTreeLifecycleDestroyed** - использовать lifecycle из ViewTree
-
-      ```kotlin
-      composeView.setViewCompositionStrategy(
-          DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
-      )
-      ```
-
-      **Используйте во Fragment** для предотвращения утечек памяти когда ComposeView хранится в поле.
-    tags:
-      - android_compose
-      - android_lifecycle
-      - difficulty::medium
-
----\
+- slug: android-014-0-en
+  language: en
+  anki_id: 1768379597900
+  synced_at: '2026-01-23T16:45:06.409495'
+- slug: android-014-0-ru
+  language: ru
+  anki_id: 1768379597923
+  synced_at: '2026-01-23T16:45:06.410336'
+---
 # Вопрос (RU)
 > Что такое ViewCompositionStrategy и когда её использовать?
 

@@ -125,16 +125,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-extensions--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1769170294021
+  synced_at: '2026-01-23T17:03:50.445964'
 - slug: q-kotlin-extensions--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1769170294046
+  synced_at: '2026-01-23T17:03:50.448121'
 ---
 # Вопрос (RU)
 > Что такое Extensions?

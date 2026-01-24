@@ -30,16 +30,12 @@ tags:
 anki_cards:
 - slug: q-flow-operators-map-filter--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281455
+  synced_at: '2026-01-23T17:03:50.635261'
 - slug: q-flow-operators-map-filter--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281481
+  synced_at: '2026-01-23T17:03:50.636858'
 ---
 # Вопрос (RU)
 > Как использовать операторы `Flow` `map`, `filter`, `transform`? Объясните цепочки операторов и практические паттерны.

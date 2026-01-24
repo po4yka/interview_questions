@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-reference-types-criteria--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288331
+  synced_at: '2026-01-23T17:03:51.272884'
 - slug: q-reference-types-criteria--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288356
+  synced_at: '2026-01-23T17:03:51.274642'
 ---
 # Question (EN)
 > What criteria should reference types meet?

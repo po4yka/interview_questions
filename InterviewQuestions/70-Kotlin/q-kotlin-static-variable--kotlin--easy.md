@@ -33,16 +33,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-static-variable--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289280
+  synced_at: '2026-01-23T17:03:51.342411'
 - slug: q-kotlin-static-variable--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289305
+  synced_at: '2026-01-23T17:03:51.343707'
 ---
 # Вопрос (RU)
 > Как сделать статическую переменную?

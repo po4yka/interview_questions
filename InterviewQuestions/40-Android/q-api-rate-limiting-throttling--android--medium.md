@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-385-0-en
   language: en
   anki_id: 1768364268773
-  synced_at: '2026-01-14T09:17:53.724130'
+  synced_at: '2026-01-23T16:45:06.305096'
 - slug: android-385-0-ru
   language: ru
   anki_id: 1768364268796
-  synced_at: '2026-01-14T09:17:53.726554'
+  synced_at: '2026-01-23T16:45:06.305823'
 ---
 # Вопрос (RU)
 > Как реализовать rate limiting и throttling для API запросов в Android?

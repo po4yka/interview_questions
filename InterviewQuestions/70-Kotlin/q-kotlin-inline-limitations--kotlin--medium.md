@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-inline-limitations--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288180
+  synced_at: '2026-01-23T17:03:51.262587'
 - slug: q-kotlin-inline-limitations--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288204
+  synced_at: '2026-01-23T17:03:51.264548'
 ---
 # Question (EN)
 > Are there cases when inline cannot be used?

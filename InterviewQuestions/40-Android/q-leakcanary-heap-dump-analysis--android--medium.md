@@ -1,48 +1,42 @@
 ---
 id: android-089
-title: "LeakCanary Heap Dump Analysis / Анализ дампа памяти в LeakCanary"
-aliases: ["LeakCanary Heap Dump Analysis", "Анализ дампа памяти в LeakCanary"]
+title: LeakCanary Heap Dump Analysis / Анализ дампа памяти в LeakCanary
+aliases:
+- LeakCanary Heap Dump Analysis
+- Анализ дампа памяти в LeakCanary
 topic: android
-subtopics: [performance-memory]
+subtopics:
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-11
-tags: [android/performance-memory, difficulty/medium, heap-dump, leakcanary, memory-analysis, shark]
+tags:
+- android/performance-memory
+- difficulty/medium
+- heap-dump
+- leakcanary
+- memory-analysis
+- shark
 moc: moc-android
-related: [c-android-profiling, q-leakcanary-detection-mechanism--android--medium]
+related:
+- c-android-profiling
+- q-leakcanary-detection-mechanism--android--medium
 sources: []
 anki_cards:
-  - slug: android-089-0-en
-    front: "How to detect a memory leak in a heap dump using LeakCanary?"
-    back: |
-      **LeakCanary + Shark process:**
-      1. Wrap watched objects in `KeyedWeakReference`
-      2. After GC cycles, if object still retained - dump heap
-      3. Shark builds object graph from GC roots
-      4. Find retention chain to leaked object
-
-      **Leak = object should be unreachable but is strongly reachable from GC root.**
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-089-0-ru
-    front: "Как обнаружить утечку памяти в heap dump с помощью LeakCanary?"
-    back: |
-      **Процесс LeakCanary + Shark:**
-      1. Оборачиваем объекты в `KeyedWeakReference`
-      2. После циклов GC, если объект удерживается - снимаем heap dump
-      3. Shark строит граф объектов от GC roots
-      4. Находим цепочку удержания до утёкшего объекта
-
-      **Утечка = объект должен быть недостижим, но сильно достижим от GC root.**
-    tags:
-      - android_general
-      - difficulty::medium
-
+- slug: android-089-0-en
+  language: en
+  anki_id: 1768382308614
+  synced_at: '2026-01-23T16:45:06.078419'
+- slug: android-089-0-ru
+  language: ru
+  anki_id: 1768382308639
+  synced_at: '2026-01-23T16:45:06.079624'
 ---
 # Вопрос (RU)
 

@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-244-0-en
   language: en
   anki_id: 1768367157507
-  synced_at: '2026-01-14T09:17:53.318703'
+  synced_at: '2026-01-23T16:45:05.850302'
 - slug: android-244-0-ru
   language: ru
   anki_id: 1768367157529
-  synced_at: '2026-01-14T09:17:53.322221'
+  synced_at: '2026-01-23T16:45:05.851815'
 tags:
 - android/activity
 - android/fragment

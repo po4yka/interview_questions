@@ -34,22 +34,12 @@ tags:
 anki_cards:
 - slug: kotlin-005-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functional-programming
-  - higher-order-functions
-  - inline-functions
+  anki_id: 1768326282155
+  synced_at: '2026-01-23T17:03:50.695648'
 - slug: kotlin-005-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functional-programming
-  - higher-order-functions
-  - inline-functions
+  anki_id: 1768326282180
+  synced_at: '2026-01-23T17:03:50.697538'
 ---
 # Вопрос (RU)
 > Что такое функции высшего порядка в Kotlin?

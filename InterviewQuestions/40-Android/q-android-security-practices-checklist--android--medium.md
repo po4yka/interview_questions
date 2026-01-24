@@ -41,11 +41,11 @@ anki_cards:
 - slug: android-002-0-en
   language: en
   anki_id: 1768363949681
-  synced_at: '2026-01-14T09:17:53.123157'
+  synced_at: '2026-01-23T16:45:05.516329'
 - slug: android-002-0-ru
   language: ru
   anki_id: 1768363949725
-  synced_at: '2026-01-14T09:17:53.125286'
+  synced_at: '2026-01-23T16:45:05.517751'
 ---
 # Вопрос (RU)
 > Какой минимальный чек-лист безопасности Android приложения для production?

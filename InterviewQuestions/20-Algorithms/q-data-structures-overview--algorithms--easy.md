@@ -32,19 +32,19 @@ anki_cards:
 - slug: algo-001-0-en
   language: en
   anki_id: 1768457299227
-  synced_at: '2026-01-15T10:08:19.418394'
+  synced_at: '2026-01-23T15:48:41.181958'
 - slug: algo-001-0-ru
   language: ru
   anki_id: 1768457299253
-  synced_at: '2026-01-15T10:08:19.420542'
+  synced_at: '2026-01-23T15:48:41.183650'
 - slug: algo-001-1-en
   language: en
   anki_id: 1768457299277
-  synced_at: '2026-01-15T10:08:19.422964'
+  synced_at: '2026-01-23T15:48:41.184801'
 - slug: algo-001-1-ru
   language: ru
   anki_id: 1768457299303
-  synced_at: '2026-01-15T10:08:19.425261'
+  synced_at: '2026-01-23T15:48:41.185825'
 ---
 # Вопрос (RU)
 > Расскажи про какие структуры данных знаешь

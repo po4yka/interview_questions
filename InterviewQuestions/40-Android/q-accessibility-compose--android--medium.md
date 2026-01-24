@@ -41,11 +41,11 @@ anki_cards:
 - slug: android-050-0-en
   language: en
   anki_id: 1768363603273
-  synced_at: '2026-01-14T09:17:53.708334'
+  synced_at: '2026-01-23T16:45:06.299540'
 - slug: android-050-0-ru
   language: ru
   anki_id: 1768363603298
-  synced_at: '2026-01-14T09:17:53.710825'
+  synced_at: '2026-01-23T16:45:06.300447'
 ---
 # Вопрос (RU)
 > Как обеспечить доступность в Jetpack Compose для людей с ограниченными возможностями?

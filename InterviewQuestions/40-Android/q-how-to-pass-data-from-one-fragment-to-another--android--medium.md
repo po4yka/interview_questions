@@ -1,63 +1,48 @@
----\
+---
 id: android-300
-title: How To Pass Data From One Fragment To Another / Как передавать данные из одного фрагмента в другой
-aliases: [Fragment Communication, Pass Data Between Fragments]
+title: How To Pass Data From One Fragment To Another / Как передавать данные из одного
+  фрагмента в другой
+aliases:
+- Fragment Communication
+- Pass Data Between Fragments
 topic: android
-subtopics: [architecture-mvvm, fragment, lifecycle]
+subtopics:
+- architecture-mvvm
+- fragment
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-fragments, q-fragment-basics--android--easy, q-fragment-vs-activity-lifecycle--android--medium, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium, q-save-data-outside-fragment--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
+related:
+- c-fragments
+- q-fragment-basics--android--easy
+- q-fragment-vs-activity-lifecycle--android--medium
+- q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium
+- q-save-data-outside-fragment--android--medium
+- q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/medium]
+tags:
+- android/architecture-mvvm
+- android/fragment
+- android/lifecycle
+- difficulty/medium
 sources: []
 anki_cards:
-  - slug: android-300-0-en
-    front: "How to pass data between Fragments in Android?"
-    back: |
-      **Approaches:**
-      1. **Shared ViewModel** (recommended) - `activityViewModels()`
-      2. **Bundle arguments** - at creation time
-      3. **FragmentResult API** - one-time results
-      4. Activity intermediary (not recommended)
-
-      ```kotlin
-      // Shared ViewModel
-      val vm: SharedViewModel by activityViewModels()
-      vm.setData("value")
-      ```
-
-      **Rule:** Fragments should NOT communicate directly
-    tags:
-      - android_fragments
-      - android_viewmodel
-      - difficulty::medium
-  - slug: android-300-0-ru
-    front: "Как передать данные между Fragment в Android?"
-    back: |
-      **Подходы:**
-      1. **Shared ViewModel** (рекомендуется) - `activityViewModels()`
-      2. **Bundle arguments** - при создании
-      3. **FragmentResult API** - одноразовые результаты
-      4. Activity-посредник (не рекомендуется)
-
-      ```kotlin
-      // Shared ViewModel
-      val vm: SharedViewModel by activityViewModels()
-      vm.setData("value")
-      ```
-
-      **Правило:** Фрагменты НЕ должны общаться напрямую
-    tags:
-      - android_fragments
-      - android_viewmodel
-      - difficulty::medium
-
----\
+- slug: android-300-0-en
+  language: en
+  anki_id: 1768380829882
+  synced_at: '2026-01-23T16:45:06.064709'
+- slug: android-300-0-ru
+  language: ru
+  anki_id: 1768380829906
+  synced_at: '2026-01-23T16:45:06.066048'
+---
 # Вопрос (RU)
 > Как передавать данные из одного фрагмента в другой?
 

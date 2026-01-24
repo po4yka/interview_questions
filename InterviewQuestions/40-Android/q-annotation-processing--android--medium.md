@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-067-0-en
   language: en
   anki_id: 1768364268474
-  synced_at: '2026-01-14T09:17:53.671110'
+  synced_at: '2026-01-23T16:45:06.268313'
 - slug: android-067-0-ru
   language: ru
   anki_id: 1768364268497
-  synced_at: '2026-01-14T09:17:53.673593'
+  synced_at: '2026-01-23T16:45:06.269091'
 ---
 # Вопрос (RU)
 > Что такое обработка аннотаций в Android и чем отличаются kapt и KSP?

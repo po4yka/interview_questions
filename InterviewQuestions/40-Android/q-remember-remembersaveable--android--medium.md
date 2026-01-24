@@ -1,70 +1,49 @@
 ---
 id: android-029
 title: remember vs rememberSaveable in Compose / remember vs rememberSaveable в Compose
-aliases: [remember vs rememberSaveable in Compose, remember vs rememberSaveable в Compose]
+aliases:
+- remember vs rememberSaveable in Compose
+- remember vs rememberSaveable в Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
+language_tags:
+- en
+- ru
+source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-recomposition, q-compose-core-components--android--medium, q-compose-remember-derived-state--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-transaction-too-large-exception--android--medium]
+related:
+- c-compose-recomposition
+- c-compose-state
+- c-recomposition
+- q-compose-core-components--android--medium
+- q-compose-remember-derived-state--android--medium
+- q-how-animations-work-in-recyclerview--android--medium
+- q-remember-vs-remembersaveable-compose--android--medium
+- q-transaction-too-large-exception--android--medium
 created: 2025-10-06
 updated: 2025-11-11
-tags: [android/ui-compose, android/ui-state, difficulty/medium, en, ru]
+tags:
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
+- en
+- ru
 anki_cards:
-  - slug: android-029-0-en
-    front: "What is the difference between remember and rememberSaveable in Compose?"
-    back: |
-      **remember** - survives recomposition only
-      ```kotlin
-      var count by remember { mutableStateOf(0) }
-      // Lost on: config change, process death
-      ```
-
-      **rememberSaveable** - survives config changes + process death
-      ```kotlin
-      var count by rememberSaveable { mutableStateOf(0) }
-      // Uses Bundle via SavedStateRegistry
-      ```
-
-      **Use rememberSaveable for:**
-      - User input (text fields)
-      - Scroll position
-      - UI state that should survive rotation
-
-      **Limitation:** Only `Bundle`-compatible types or custom `Saver`.
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-029-0-ru
-    front: "В чём разница между remember и rememberSaveable в Compose?"
-    back: |
-      **remember** - переживает только рекомпозицию
-      ```kotlin
-      var count by remember { mutableStateOf(0) }
-      // Теряется при: config change, process death
-      ```
-
-      **rememberSaveable** - переживает config changes + process death
-      ```kotlin
-      var count by rememberSaveable { mutableStateOf(0) }
-      // Использует Bundle через SavedStateRegistry
-      ```
-
-      **Использовать rememberSaveable для:**
-      - Пользовательский ввод (текстовые поля)
-      - Позиция скролла
-      - UI state, который должен пережить поворот
-
-      **Ограничение:** Только `Bundle`-совместимые типы или кастомный `Saver`.
-    tags:
-      - android_compose
-      - difficulty::medium
+- slug: android-029-0-en
+  language: en
+  anki_id: 1768418262402
+  synced_at: '2026-01-23T16:45:06.244175'
+- slug: android-029-0-ru
+  language: ru
+  anki_id: 1768418262426
+  synced_at: '2026-01-23T16:45:06.244967'
 ---
 # Вопрос (RU)
 > В чем разница между `remember` и `rememberSaveable` в Jetpack Compose?

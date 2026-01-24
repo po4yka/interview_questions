@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-builders-basics--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287605
+  synced_at: '2026-01-23T17:03:51.201214'
 - slug: q-coroutine-builders-basics--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287631
+  synced_at: '2026-01-23T17:03:51.203171'
 ---
 # Question (EN)
 > Kotlin Coroutines basic topic 140029 (builders `launch`, `async`, `runBlocking`)

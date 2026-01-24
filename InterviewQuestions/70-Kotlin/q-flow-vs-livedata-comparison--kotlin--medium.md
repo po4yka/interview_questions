@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-vs-livedata-comparison--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279604
+  synced_at: '2026-01-23T17:03:50.471826'
 - slug: q-flow-vs-livedata-comparison--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279630
+  synced_at: '2026-01-23T17:03:50.474356'
 ---
 ## Answer (EN)
 

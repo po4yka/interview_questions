@@ -1,61 +1,41 @@
----\
+---
 id: android-217
-title: "Why Was The Lifecycle Library Created / Зачем создали библиотеку Lifecycle"
-aliases: ["Why Was The Lifecycle Library Created", "Зачем создали библиотеку Lifecycle"]
+title: Why Was The Lifecycle Library Created / Зачем создали библиотеку Lifecycle
+aliases:
+- Why Was The Lifecycle Library Created
+- Зачем создали библиотеку Lifecycle
 topic: android
-subtopics: [lifecycle]
+subtopics:
+- lifecycle
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, q-service-lifecycle-binding--android--hard, q-what-is-viewmodel--android--medium]
+related:
+- c-lifecycle
+- q-service-lifecycle-binding--android--hard
+- q-what-is-viewmodel--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/lifecycle, difficulty/hard, memory-leaks]
+tags:
+- android/lifecycle
+- difficulty/hard
+- memory-leaks
 anki_cards:
-  - slug: android-217-0-en
-    front: "Why was the Android Lifecycle library created?"
-    back: |
-      **Solved 5 common problems:**
-
-      1. **Memory leaks** - Components staying alive after Activity destruction
-      2. **Crashes** - Updating UI after Activity destroyed
-      3. **Boilerplate** - Manual forwarding of lifecycle events
-      4. **Tight coupling** - Activity managing all dependent components
-      5. **Testing difficulty** - Hard to test lifecycle-dependent logic
-
-      **Solution:** `LifecycleObserver` + `LifecycleOwner`
-      - Components manage themselves based on lifecycle events
-      - `lifecycle.addObserver(observer)` - declarative registration
-      - LiveData/ViewModel built on this foundation
-    tags:
-      - android_lifecycle
-      - android_architecture
-      - difficulty::hard
-  - slug: android-217-0-ru
-    front: "Почему была создана библиотека Lifecycle в Android?"
-    back: |
-      **Решила 5 типичных проблем:**
-
-      1. **Утечки памяти** - Компоненты оставались после уничтожения Activity
-      2. **Крэши** - Обновление UI после уничтожения Activity
-      3. **Boilerplate** - Ручная маршрутизация событий жизненного цикла
-      4. **Сильная связанность** - Activity управляет всеми зависимостями
-      5. **Сложность тестирования** - Трудно тестировать lifecycle-логику
-
-      **Решение:** `LifecycleObserver` + `LifecycleOwner`
-      - Компоненты управляют собой на основе событий lifecycle
-      - `lifecycle.addObserver(observer)` - декларативная регистрация
-      - LiveData/ViewModel построены на этом фундаменте
-    tags:
-      - android_lifecycle
-      - android_architecture
-      - difficulty::hard
-
----\
+- slug: android-217-0-en
+  language: en
+  anki_id: 1768399453991
+  synced_at: '2026-01-23T16:45:05.746058'
+- slug: android-217-0-ru
+  language: ru
+  anki_id: 1768399454015
+  synced_at: '2026-01-23T16:45:05.747527'
+---
 # Вопрос (RU)
 
 > Почему была создана библиотека `Lifecycle`?

@@ -30,22 +30,12 @@ tags:
 anki_cards:
 - slug: kotlin-154-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
-  - delegation
-  - flow
+  anki_id: 1768326281755
+  synced_at: '2026-01-23T17:03:50.659728'
 - slug: kotlin-154-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
-  - delegation
-  - flow
+  anki_id: 1768326281780
+  synced_at: '2026-01-23T17:03:50.661733'
 ---
 # Вопрос (RU)
 > Когда нельзя или нежелательно использовать inline-функции в Kotlin, и какие ограничения при этом действуют?

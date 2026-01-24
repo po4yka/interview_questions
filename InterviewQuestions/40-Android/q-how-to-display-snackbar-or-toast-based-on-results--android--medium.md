@@ -1,67 +1,49 @@
----\
+---
 id: android-426
-title: "How To Display Snackbar Or Toast Based On Results / Как отобразить Snackbar или Toast в зависимости от результатов"
-aliases: ["How To Display Snackbar Or Toast", "Как отобразить Snackbar или Toast"]
+title: How To Display Snackbar Or Toast Based On Results / Как отобразить Snackbar
+  или Toast в зависимости от результатов
+aliases:
+- How To Display Snackbar Or Toast
+- Как отобразить Snackbar или Toast
 topic: android
-subtopics: [architecture-mvvm, ui-compose, ui-views]
+subtopics:
+- architecture-mvvm
+- ui-compose
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-architectural-patterns--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-navigation-methods-in-kotlin--android--medium]
+related:
+- q-android-architectural-patterns--android--medium
+- q-how-animations-work-in-recyclerview--android--medium
+- q-navigation-methods-in-kotlin--android--medium
 sources: []
 created: 2024-10-15
 updated: 2024-10-15
-tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-views, difficulty/medium, notifications, snackbar, toast]
+tags:
+- android
+- android/architecture-mvvm
+- android/ui-compose
+- android/ui-views
+- difficulty/medium
+- notifications
+- snackbar
+- toast
 anki_cards:
-  - slug: android-426-0-en
-    front: "What is the difference between Toast and Snackbar in Android?"
-    back: |
-      **Toast**: Simple temporary notification
-      - No user interaction
-      - Disappears automatically
-      - Requires only `Context`
-
-      **Snackbar**: Advanced notification
-      - Can contain action button (Undo, Retry)
-      - Dismissed by swipe or action
-      - Anchored to a `View`
-      - Appears at screen bottom
-
-      **Best practices**:
-      - Use `SharedFlow` (no replay) for one-off events
-      - Collect in `repeatOnLifecycle`
-      - Snackbar for actions, Toast for simple info
-    tags:
-      - android_views
-      - android_compose
-      - difficulty::medium
-  - slug: android-426-0-ru
-    front: "В чём разница между Toast и Snackbar в Android?"
-    back: |
-      **Toast**: Простое временное уведомление
-      - Без взаимодействия с пользователем
-      - Исчезает автоматически
-      - Требует только `Context`
-
-      **Snackbar**: Продвинутое уведомление
-      - Может содержать кнопку действия (Отмена, Повтор)
-      - Закрывается свайпом или действием
-      - Привязан к `View`
-      - Появляется внизу экрана
-
-      **Best practices**:
-      - Используйте `SharedFlow` (без replay) для одноразовых событий
-      - Собирайте в `repeatOnLifecycle`
-      - Snackbar для действий, Toast для простой информации
-    tags:
-      - android_views
-      - android_compose
-      - difficulty::medium
-
----\
+- slug: android-426-0-en
+  language: en
+  anki_id: 1768379220849
+  synced_at: '2026-01-23T16:45:06.395874'
+- slug: android-426-0-ru
+  language: ru
+  anki_id: 1768379220871
+  synced_at: '2026-01-23T16:45:06.397856'
+---
 # Вопрос (RU)
 
 > Как правильно отображать Toast и Snackbar в зависимости от результатов операций в Android-приложении?

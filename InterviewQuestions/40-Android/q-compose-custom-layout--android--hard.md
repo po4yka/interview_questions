@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-054-0-en
   language: en
   anki_id: 1768365662475
-  synced_at: '2026-01-14T09:17:53.862368'
+  synced_at: '2026-01-23T16:45:06.407628'
 - slug: android-054-0-ru
   language: ru
   anki_id: 1768365662501
-  synced_at: '2026-01-14T09:17:53.865094'
+  synced_at: '2026-01-23T16:45:06.408543'
 ---
 # Вопрос (RU)
 > Как создать кастомный layout в Compose? Объясните механизм measurement и placement.

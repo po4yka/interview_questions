@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-237-0-en
   language: en
   anki_id: 1768365307675
-  synced_at: '2026-01-14T09:17:53.299588'
+  synced_at: '2026-01-23T16:45:05.825580'
 - slug: android-237-0-ru
   language: ru
   anki_id: 1768365307700
-  synced_at: '2026-01-14T09:17:53.302200'
+  synced_at: '2026-01-23T16:45:05.827806'
 ---
 # Вопрос (RU)
 > Как организовать автоматизированное тестирование Android-приложения в CI/CD пайплайне?

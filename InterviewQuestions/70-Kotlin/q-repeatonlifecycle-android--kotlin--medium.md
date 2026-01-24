@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-repeatonlifecycle-android--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291531
+  synced_at: '2026-01-23T17:03:51.513999'
 - slug: q-repeatonlifecycle-android--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291555
+  synced_at: '2026-01-23T17:03:51.515109'
 ---
 ## Ответ (RU)
 

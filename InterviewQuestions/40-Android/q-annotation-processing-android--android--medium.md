@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-024-0-en
   language: en
   anki_id: 1768364268023
-  synced_at: '2026-01-14T09:17:53.436260'
+  synced_at: '2026-01-23T16:45:06.040665'
 - slug: android-024-0-ru
   language: ru
   anki_id: 1768364268048
-  synced_at: '2026-01-14T09:17:53.438813'
+  synced_at: '2026-01-23T16:45:06.041697'
 ---
 # Вопрос (RU)
 > Что такое обработка аннотаций в Android и зачем она нужна?

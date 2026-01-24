@@ -1,81 +1,43 @@
----\
+---
 id: android-148
-title: "Room Relations and Embedded / Отношения и Embedded в Room"
-aliases: ["Room Relations and Embedded", "Отношения и Embedded в Room"]
-
-# Classification
+title: Room Relations and Embedded / Отношения и Embedded в Room
+aliases:
+- Room Relations and Embedded
+- Отношения и Embedded в Room
 topic: android
-subtopics: [architecture-clean, room]
+subtopics:
+- architecture-clean
+- room
 question_kind: theory
 difficulty: medium
-
-# Language
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
-
-# Workflow
 status: draft
 moc: moc-android
-related: [c-database-design, c-room-database]
-
-# Timestamps
+related:
+- c-database-design
+- c-room-database
 created: 2025-10-15
 updated: 2025-11-10
-
-# Tags
-tags: [android/architecture-clean, android/room, difficulty/medium, embedded, relations]
+tags:
+- android/architecture-clean
+- android/room
+- difficulty/medium
+- embedded
+- relations
 anki_cards:
-  - slug: android-148-0-en
-    front: "What is the difference between @Embedded and @Relation in Room?"
-    back: |
-      **@Embedded** - flattens object fields into single table:
-      ```kotlin
-      @Embedded val address: Address  // Creates street, city columns
-      ```
-      Use prefix to avoid conflicts: `@Embedded(prefix = "home_")`
-
-      **@Relation** - models relationships between separate entities:
-      ```kotlin
-      @Relation(parentColumn = "userId", entityColumn = "authorId")
-      val posts: List<Post>
-      ```
-
-      | Aspect | @Embedded | @Relation |
-      |--------|-----------|-----------|
-      | Tables | Single | Multiple |
-      | Use case | Address, Coords | One-to-many, Many-to-many |
-
-      Many-to-many uses `Junction(EnrollmentTable::class)`.
-    tags:
-      - android_room
-      - difficulty::medium
-  - slug: android-148-0-ru
-    front: "В чём разница между @Embedded и @Relation в Room?"
-    back: |
-      **@Embedded** - встраивает поля объекта в одну таблицу:
-      ```kotlin
-      @Embedded val address: Address  // Создаёт колонки street, city
-      ```
-      Используйте prefix для избежания конфликтов: `@Embedded(prefix = "home_")`
-
-      **@Relation** - моделирует связи между отдельными сущностями:
-      ```kotlin
-      @Relation(parentColumn = "userId", entityColumn = "authorId")
-      val posts: List<Post>
-      ```
-
-      | Аспект | @Embedded | @Relation |
-      |--------|-----------|-----------|
-      | Таблицы | Одна | Несколько |
-      | Использование | Address, Coords | One-to-many, Many-to-many |
-
-      Many-to-many использует `Junction(EnrollmentTable::class)`.
-    tags:
-      - android_room
-      - difficulty::medium
-
----\
+- slug: android-148-0-en
+  language: en
+  anki_id: 1768396545600
+  synced_at: '2026-01-23T16:45:05.400249'
+- slug: android-148-0-ru
+  language: ru
+  anki_id: 1768396545625
+  synced_at: '2026-01-23T16:45:05.401916'
+---
 # Вопрос (RU)
 
 > Как реализовать связи между сущностями в `Room` `Database`? Объясни использование `@Relation` для отношений один-ко-многим и многие-ко-многим, а также `@Embedded` для встраивания объектов в одну таблицу.

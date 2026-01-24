@@ -41,16 +41,12 @@ contributors: []
 anki_cards:
 - slug: q-sharedflow-replay-buffer-config--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282606
+  synced_at: '2026-01-23T17:03:50.729388'
 - slug: q-sharedflow-replay-buffer-config--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282630
+  synced_at: '2026-01-23T17:03:50.731102'
 ---
 # Вопрос (RU)
 > Как настроить replay cache и buffer в `SharedFlow`? Объясните параметры `replay`, `extraBufferCapacity` и `onBufferOverflow`, их взаимодействие и реальные сценарии использования с учётом производительности.

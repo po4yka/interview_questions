@@ -31,20 +31,12 @@ tags:
 anki_cards:
 - slug: lang-059-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - generics
-  - type-system
+  anki_id: 1768326281657
+  synced_at: '2026-01-23T17:03:50.651119'
 - slug: lang-059-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - generics
-  - type-system
+  anki_id: 1768326281681
+  synced_at: '2026-01-23T17:03:50.652868'
 ---
 # Вопрос (RU)
 > Какой синтаксис используется для объявления обобщенной функции в Kotlin?

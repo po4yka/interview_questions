@@ -37,22 +37,12 @@ tags:
 anki_cards:
 - slug: kotlin-088-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - constructors
-  - init-block
-  - initialization
+  anki_id: 1768326284355
+  synced_at: '2026-01-23T17:03:50.888661'
 - slug: kotlin-088-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - constructors
-  - init-block
-  - initialization
+  anki_id: 1768326284380
+  synced_at: '2026-01-23T17:03:50.890484'
 ---
 # Вопрос (RU)
 > Что такое конструкторы в Kotlin? Объясните первичные конструкторы, вторичные конструкторы и блоки init.

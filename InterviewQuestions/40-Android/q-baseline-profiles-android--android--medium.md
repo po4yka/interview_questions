@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-310-0-en
   language: en
   anki_id: 1768364697049
-  synced_at: '2026-01-14T09:17:53.476796'
+  synced_at: '2026-01-23T16:45:06.104543'
 - slug: android-310-0-ru
   language: ru
   anki_id: 1768364697074
-  synced_at: '2026-01-14T09:17:53.479331'
+  synced_at: '2026-01-23T16:45:06.105520'
 ---
 # Вопрос (RU)
 > Что такое Baseline Profiles в Android и как они работают?

@@ -128,16 +128,12 @@ tags:
 anki_cards:
 - slug: q-detect-unused-object--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289530
+  synced_at: '2026-01-23T17:03:51.364301'
 - slug: q-detect-unused-object--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289555
+  synced_at: '2026-01-23T17:03:51.365800'
 ---
 # Вопрос (RU)
 > Как по объекту понять что он не используется?

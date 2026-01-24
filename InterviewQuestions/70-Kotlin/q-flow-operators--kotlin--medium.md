@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-operators--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287655
+  synced_at: '2026-01-23T17:03:51.208291'
 - slug: q-flow-operators--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287681
+  synced_at: '2026-01-23T17:03:51.210595'
 ---
 # Question (EN)
 > What are `Flow` operators in Kotlin? Explain categories: transformation (`map`, `flatMap`), filtering (`filter`, `distinctUntilChanged`), combining (`zip`, `combine`), and collection (`collect`, `toList`). Provide practical examples.

@@ -31,11 +31,11 @@ anki_cards:
 - slug: android-039-0-en
   language: en
   anki_id: 1768363501896
-  synced_at: '2026-01-14T09:17:53.118497'
+  synced_at: '2026-01-23T16:45:05.506961'
 - slug: android-039-0-ru
   language: ru
   anki_id: 1768363501921
-  synced_at: '2026-01-14T09:17:53.121005'
+  synced_at: '2026-01-23T16:45:05.508382'
 sources: []
 ---
 # Вопрос (RU)

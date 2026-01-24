@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-mutex-synchronized-coroutines--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283005
+  synced_at: '2026-01-23T17:03:50.765346'
 - slug: q-mutex-synchronized-coroutines--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283030
+  synced_at: '2026-01-23T17:03:50.767132'
 ---
 # Question (EN)
 > What is the difference between `Mutex` and `synchronized` in Kotlin coroutines, and when should you use each?

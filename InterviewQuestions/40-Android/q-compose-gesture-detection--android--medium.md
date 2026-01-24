@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-038-0-en
   language: en
   anki_id: 1768365655725
-  synced_at: '2026-01-14T09:17:53.091233'
+  synced_at: '2026-01-23T16:45:05.443769'
 - slug: android-038-0-ru
   language: ru
   anki_id: 1768365655748
-  synced_at: '2026-01-14T09:17:53.093353'
+  synced_at: '2026-01-23T16:45:05.446290'
 ---
 # Вопрос (RU)
 > Как обрабатывать жесты в Jetpack Compose?

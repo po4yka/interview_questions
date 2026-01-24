@@ -1,47 +1,46 @@
 ---
-id: android-717
-anki_cards:
-  - slug: android-318-0-en
-    front: "What is screenshot testing and how does it differ from snapshot testing in Android?"
-    back: |
-      **Screenshot testing** captures full-screen images and compares them pixel-by-pixel.
-      **Snapshot testing** captures component-level images for isolated comparison.
-
-      Key tools:
-      - **Paparazzi**: JVM-based, no emulator needed, generates HTML reports
-      - **Shot**: Emulator-based, Espresso-compatible, better for real device rendering
-
-      Both detect visual regressions by comparing against golden images stored in version control.
-    tags: ["android_testing", "difficulty::medium"]
-  - slug: android-318-0-ru
-    front: "Что такое скриншот-тестирование и чем оно отличается от снапшот-тестирования в Android?"
-    back: |
-      **Скриншот-тестирование** захватывает изображения всего экрана и сравнивает их попиксельно.
-      **Снапшот-тестирование** захватывает изображения отдельных компонентов для изолированного сравнения.
-
-      Основные инструменты:
-      - **Paparazzi**: на базе JVM, без эмулятора, генерирует HTML-отчёты
-      - **Shot**: на базе эмулятора, совместим с Espresso, лучше для рендеринга на реальных устройствах
-
-      Оба обнаруживают визуальные регрессии путём сравнения с эталонными изображениями в системе контроля версий.
-    tags: ["android_testing", "difficulty::medium"]
 id: android-318
+anki_cards:
+- slug: android-318-0-en
+  language: en
+  anki_id: 1768447071283
+  synced_at: '2026-01-23T16:45:06.122566'
+- slug: android-318-0-ru
+  language: ru
+  anki_id: 1768447071307
+  synced_at: '2026-01-23T16:45:06.123445'
+- slug: android-717-0-en
+  language: en
+- slug: android-717-0-ru
+  language: ru
 title: Screenshot and Snapshot Testing / Screenshot и Snapshot тестирование
-aliases: [Screenshot and Snapshot Testing, Screenshot и Snapshot тестирование]
+aliases:
+- Screenshot and Snapshot Testing
+- Screenshot и Snapshot тестирование
 topic: android
-subtopics: [testing-screenshot]
+subtopics:
+- testing-screenshot
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-testing, q-accessibility-testing--android--medium, q-android-testing-strategies--android--medium, q-integration-testing-strategies--android--medium, q-testing-compose-ui--android--medium, q-testing-viewmodels-turbine--android--medium]
+related:
+- c-android-testing
+- q-accessibility-testing--android--medium
+- q-android-testing-strategies--android--medium
+- q-integration-testing-strategies--android--medium
+- q-testing-compose-ui--android--medium
+- q-testing-viewmodels-turbine--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/testing-screenshot, difficulty/medium]
-
----\
+tags:
+- android/testing-screenshot
+- difficulty/medium
+---
 # Вопрос (RU)
 
 > Реализуйте screenshot тестирование с помощью Paparazzi или Shot. Как обрабатывать разные размеры экранов и темы?

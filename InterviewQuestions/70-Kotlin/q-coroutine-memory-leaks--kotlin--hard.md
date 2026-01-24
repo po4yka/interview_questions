@@ -32,18 +32,12 @@ tags:
 anki_cards:
 - slug: q-coroutine-memory-leaks--kotlin--hard-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
+  anki_id: 1768326284906
+  synced_at: '2026-01-23T17:03:50.955042'
 - slug: q-coroutine-memory-leaks--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
+  anki_id: 1768326284930
+  synced_at: '2026-01-23T17:03:50.957439'
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140024

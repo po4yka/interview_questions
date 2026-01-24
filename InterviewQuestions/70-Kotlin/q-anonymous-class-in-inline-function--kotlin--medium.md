@@ -40,22 +40,12 @@ tags:
 anki_cards:
 - slug: kotlin-047-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - anonymous-classes
-  - inline
-  - lambdas
+  anki_id: 1768326293780
+  synced_at: '2026-01-23T17:03:51.611713'
 - slug: kotlin-047-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - anonymous-classes
-  - inline
-  - lambdas
+  anki_id: 1768326293806
+  synced_at: '2026-01-23T17:03:51.612464'
 ---
 # Вопрос (RU)
 > Можно ли создать анонимный класс внутри inline функции в Kotlin?

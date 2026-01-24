@@ -30,11 +30,11 @@ anki_cards:
 - slug: android-622-0-en
   language: en
   anki_id: 1768363502197
-  synced_at: '2026-01-14T09:17:53.325217'
+  synced_at: '2026-01-23T16:45:05.854866'
 - slug: android-622-0-ru
   language: ru
   anki_id: 1768363502222
-  synced_at: '2026-01-14T09:17:53.327327'
+  synced_at: '2026-01-23T16:45:05.856247'
 sources:
 - https://developer.android.com/training/cars/apps
 - https://developer.android.com/training/cars/apps/media

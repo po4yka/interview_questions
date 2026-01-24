@@ -1,71 +1,51 @@
 ---
 id: android-358
 anki_cards:
-  - slug: android-358-0-en
-    front: "What are the four main Android application components?"
-    back: |
-      **1. Activity** - UI screen
-      - Single screen with user interaction
-      - Example: login, profile screens
-
-      **2. Service** - background operations
-      - Long-running tasks without UI
-      - Example: music playback, sync
-
-      **3. BroadcastReceiver** - system events
-      - Listens to system/app broadcasts
-      - Example: network change, low battery
-
-      **4. ContentProvider** - data sharing
-      - Centralized data storage
-      - Controlled access from other apps
-      - Example: Contacts, MediaStore
-
-      All declared in `AndroidManifest.xml` (except dynamic receivers).
-    tags:
-      - android_general
-      - difficulty::easy
-  - slug: android-358-0-ru
-    front: "Какие четыре основных компонента Android-приложения?"
-    back: |
-      **1. Activity** - экран UI
-      - Один экран с пользовательским взаимодействием
-      - Пример: экран входа, профиля
-
-      **2. Service** - фоновые операции
-      - Длительные задачи без UI
-      - Пример: воспроизведение музыки, синхронизация
-
-      **3. BroadcastReceiver** - системные события
-      - Слушает системные/app broadcasts
-      - Пример: изменение сети, низкий заряд
-
-      **4. ContentProvider** - обмен данными
-      - Централизованное хранилище данных
-      - Контролируемый доступ из других приложений
-      - Пример: Contacts, MediaStore
-
-      Все объявляются в `AndroidManifest.xml` (кроме динамических receivers).
-    tags:
-      - android_general
-      - difficulty::easy
+- slug: android-358-0-en
+  language: en
+  anki_id: 1768414151417
+  synced_at: '2026-01-23T16:45:06.219989'
+- slug: android-358-0-ru
+  language: ru
+  anki_id: 1768414151441
+  synced_at: '2026-01-23T16:45:06.220841'
 title: Main Android Components / Основные компоненты Android
-aliases: [Main Android Components, Основные компоненты Android]
+aliases:
+- Main Android Components
+- Основные компоненты Android
 topic: android
-subtopics: [activity, content-provider, service]
+subtopics:
+- activity
+- content-provider
+- service
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, c-android-components, c-content-provider, q-android-components-besides-activity--android--easy, q-how-does-activity-lifecycle-work--android--medium, q-main-thread-android--android--medium, q-what-unifies-android-components--android--easy, q-what-unites-the-main-components-of-an-android-application--android--medium]
+related:
+- c-activity
+- c-android-components
+- c-content-provider
+- q-android-components-besides-activity--android--easy
+- q-how-does-activity-lifecycle-work--android--medium
+- q-main-thread-android--android--medium
+- q-what-unifies-android-components--android--easy
+- q-what-unites-the-main-components-of-an-android-application--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/activity, android/content-provider, android/service, components, difficulty/easy]
-
----\
+tags:
+- android
+- android/activity
+- android/content-provider
+- android/service
+- components
+- difficulty/easy
+---
 # Вопрос (RU)
 
 > Какие основные компоненты Android-приложения?

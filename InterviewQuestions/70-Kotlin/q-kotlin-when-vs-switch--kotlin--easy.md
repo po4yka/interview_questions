@@ -34,20 +34,12 @@ tags:
 anki_cards:
 - slug: kotlin-186-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - control-flow
-  - syntax
+  anki_id: 1768326287856
+  synced_at: '2026-01-23T17:03:51.239897'
 - slug: kotlin-186-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - control-flow
-  - syntax
+  anki_id: 1768326287880
+  synced_at: '2026-01-23T17:03:51.242555'
 ---
 # Вопрос (RU)
 > Какой оператор используется вместо switch в Kotlin?

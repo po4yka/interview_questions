@@ -1,74 +1,49 @@
----\
+---
 id: android-070
 title: Repository Pattern in Android / Паттерн Repository в Android
-aliases: [Repository Pattern in Android, Паттерн Repository в Android]
+aliases:
+- Repository Pattern in Android
+- Паттерн Repository в Android
 topic: android
-subtopics: [architecture-clean, architecture-mvvm]
+subtopics:
+- architecture-clean
+- architecture-mvvm
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Created for vault completeness
 status: draft
 moc: moc-android
-related: [c-clean-architecture, c-mvvm, c-viewmodel, q-clean-architecture-android--android--hard, q-factory-pattern-android--android--medium, q-repository-multiple-sources--android--medium, q-usecase-pattern-android--android--medium]
+related:
+- c-clean-architecture
+- c-mvvm
+- c-viewmodel
+- q-clean-architecture-android--android--hard
+- q-factory-pattern-android--android--medium
+- q-repository-multiple-sources--android--medium
+- q-usecase-pattern-android--android--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [android/architecture-clean, android/architecture-mvvm, difficulty/medium, en, ru]
+tags:
+- android/architecture-clean
+- android/architecture-mvvm
+- difficulty/medium
+- en
+- ru
 anki_cards:
-  - slug: android-070-0-en
-    front: "What is the Repository pattern in Android and its key principles?"
-    back: |
-      **Repository** abstracts data sources (API, DB, cache) behind clean API.
-
-      **Key principles:**
-      1. **Single source of truth** - usually database
-      2. **ViewModel calls Repository**, not data sources directly
-      3. `Flow` for reactive data, `suspend` for one-shot
-
-      ```kotlin
-      class UserRepository(val api: UserApi, val dao: UserDao) {
-          fun getUser(id: String): Flow<User> = flow {
-              dao.getUser(id)?.let { emit(it) }
-              val fresh = api.getUser(id)
-              dao.insertUser(fresh)
-              emit(fresh)
-          }
-      }
-      ```
-
-      **Benefits:** Testability, caching, separation of concerns
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-070-0-ru
-    front: "Что такое паттерн Repository в Android и его ключевые принципы?"
-    back: |
-      **Repository** абстрагирует источники данных (API, БД, кэш) за чистым API.
-
-      **Ключевые принципы:**
-      1. **Единый источник истины** - обычно база данных
-      2. **ViewModel вызывает Repository**, не источники напрямую
-      3. `Flow` для реактивных данных, `suspend` для разовых
-
-      ```kotlin
-      class UserRepository(val api: UserApi, val dao: UserDao) {
-          fun getUser(id: String): Flow<User> = flow {
-              dao.getUser(id)?.let { emit(it) }
-              val fresh = api.getUser(id)
-              dao.insertUser(fresh)
-              emit(fresh)
-          }
-      }
-      ```
-
-      **Преимущества:** Тестируемость, кэширование, разделение ответственности
-    tags:
-      - android_architecture
-      - difficulty::medium
-
----\
+- slug: android-070-0-en
+  language: en
+  anki_id: 1768380479453
+  synced_at: '2026-01-23T16:45:06.421178'
+- slug: android-070-0-ru
+  language: ru
+  anki_id: 1768380479477
+  synced_at: '2026-01-23T16:45:06.422030'
+---
 # Вопрос (RU)
 > Что такое паттерн Repository в Android? Как он абстрагирует источники данных, предоставляет единый источник истины и работает с ViewModels?
 

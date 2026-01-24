@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-resource-cleanup--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291780
+  synced_at: '2026-01-23T17:03:51.525425'
 - slug: q-coroutine-resource-cleanup--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291806
+  synced_at: '2026-01-23T17:03:51.526279'
 ---
 # Question (EN)
 > How do you ensure proper resource cleanup when a coroutine is cancelled?

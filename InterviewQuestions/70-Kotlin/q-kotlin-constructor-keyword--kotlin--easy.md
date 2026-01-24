@@ -28,16 +28,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-constructor-keyword--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280755
+  synced_at: '2026-01-23T17:03:50.585078'
 - slug: q-kotlin-constructor-keyword--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280782
+  synced_at: '2026-01-23T17:03:50.587172'
 ---
 # Вопрос (RU)
 > Какое ключевое слово используется в Kotlin при объявлении параметров конструктора и когда необходимо явно указывать `constructor`?

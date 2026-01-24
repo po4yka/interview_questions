@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-074-0-en
   language: en
   anki_id: 1768364987310
-  synced_at: '2026-01-14T09:13:16.058491'
+  synced_at: '2026-01-23T16:45:05.302544'
 - slug: android-074-0-ru
   language: ru
   anki_id: 1768364987362
-  synced_at: '2026-01-14T09:13:16.060564'
+  synced_at: '2026-01-23T16:45:05.304220'
 ---
 # Вопрос (RU)
 > Какие существуют стратегии реализации кэша в Android?

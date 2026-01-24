@@ -34,22 +34,12 @@ tags:
 anki_cards:
 - slug: kotlin-034-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - componentN
-  - data-classes
-  - destructuring
+  anki_id: 1768326294981
+  synced_at: '2026-01-23T17:03:51.658650'
 - slug: kotlin-034-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - componentN
-  - data-classes
-  - destructuring
+  anki_id: 1768326295007
+  synced_at: '2026-01-23T17:03:51.659475'
 ---
 # Вопрос (RU)
 > Что такое деструктурирующие объявления в Kotlin?

@@ -1,64 +1,43 @@
 ---
 id: android-017
-title: "How to reduce APK size? / Как уменьшить размер APK?"
-aliases: ["How to reduce APK size", "Как уменьшить размер APK"]
+title: How to reduce APK size? / Как уменьшить размер APK?
+aliases:
+- How to reduce APK size
+- Как уменьшить размер APK
 topic: android
-subtopics: [app-bundle, gradle, performance-memory]
+subtopics:
+- app-bundle
+- gradle
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-sources: ["https://github.com/amitshekhariitbhu/android-interview-questions"]
+language_tags:
+- en
+- ru
+sources:
+- https://github.com/amitshekhariitbhu/android-interview-questions
 status: draft
 moc: moc-android
-related: [c-app-bundle, q-macrobenchmark-startup--android--medium]
+related:
+- c-app-bundle
+- q-macrobenchmark-startup--android--medium
 created: 2024-10-06
 updated: 2025-11-10
-tags: [android/app-bundle, android/gradle, android/performance-memory, difficulty/medium]
+tags:
+- android/app-bundle
+- android/gradle
+- android/performance-memory
+- difficulty/medium
 anki_cards:
-  - slug: android-017-0-en
-    front: "What are the main techniques to reduce Android APK size?"
-    back: |
-      **5 key techniques**:
-
-      1. **R8/ProGuard** - minifyEnabled, shrinkResources (~20-40%)
-      2. **Android App Bundle** - device-specific APKs (~15-35%)
-      3. **Resource optimization** - WebP, VectorDrawable, resConfigs
-      4. **ABI filters** - only arm64-v8a, armeabi-v7a (~30-50%)
-      5. **Selective dependencies** - use specific modules, not bundles
-
-      ```gradle
-      minifyEnabled true
-      shrinkResources true
-      ndk { abiFilters 'arm64-v8a', 'armeabi-v7a' }
-      ```
-
-      **Combined reduction**: up to 40-70%
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-017-0-ru
-    front: "Какие основные техники уменьшения размера APK в Android?"
-    back: |
-      **5 ключевых техник**:
-
-      1. **R8/ProGuard** - minifyEnabled, shrinkResources (~20-40%)
-      2. **Android App Bundle** - APK для конкретных устройств (~15-35%)
-      3. **Оптимизация ресурсов** - WebP, VectorDrawable, resConfigs
-      4. **ABI фильтры** - только arm64-v8a, armeabi-v7a (~30-50%)
-      5. **Выборочные зависимости** - конкретные модули вместо бандлов
-
-      ```gradle
-      minifyEnabled true
-      shrinkResources true
-      ndk { abiFilters 'arm64-v8a', 'armeabi-v7a' }
-      ```
-
-      **Комбинированное уменьшение**: до 40-70%
-    tags:
-      - android_general
-      - difficulty::medium
-
+- slug: android-017-0-en
+  language: en
+  anki_id: 1768379578422
+  synced_at: '2026-01-23T16:45:05.250844'
+- slug: android-017-0-ru
+  language: ru
+  anki_id: 1768379578448
+  synced_at: '2026-01-23T16:45:05.252645'
 ---
 # Вопрос (RU)
 

@@ -7,16 +7,12 @@ aliases:
 anki_cards:
 - slug: kotlin-066-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280156
+  synced_at: '2026-01-23T17:03:50.522471'
 - slug: kotlin-066-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280182
+  synced_at: '2026-01-23T17:03:50.525230'
 ---
 # Classification
 topic: kotlin

@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-646-0-en
   language: en
   anki_id: 1768363328771
-  synced_at: '2026-01-14T09:17:53.788207'
+  synced_at: '2026-01-23T16:45:06.340058'
 - slug: android-646-0-ru
   language: ru
   anki_id: 1768363328796
-  synced_at: '2026-01-14T09:17:53.790888'
+  synced_at: '2026-01-23T16:45:06.340841'
 sources:
 - url: https://developer.android.com/develop/ui/views/sharing/send
   note: ShareSheet user experience

@@ -31,16 +31,12 @@ tags:
 anki_cards:
 - slug: q-coroutinescope-vs-supervisorscope--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295381
+  synced_at: '2026-01-23T17:03:51.674179'
 - slug: q-coroutinescope-vs-supervisorscope--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295405
+  synced_at: '2026-01-23T17:03:51.675026'
 ---
 # Вопрос (RU)
 > В чём разница между `coroutineScope` и `supervisorScope` в корутинах Kotlin?

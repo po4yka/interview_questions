@@ -26,18 +26,12 @@ tags:
 anki_cards:
 - slug: lang-086-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - references
+  anki_id: 1768326281156
+  synced_at: '2026-01-23T17:03:50.612897'
 - slug: lang-086-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - references
+  anki_id: 1768326281181
+  synced_at: '2026-01-23T17:03:50.616284'
 ---
 # Вопрос (RU)
 > Как система понимает, что WeakReference можно очистить?

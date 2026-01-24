@@ -1,58 +1,51 @@
----\
+---
 id: android-266
-title: "Large File Upload App / Загрузка больших файлов в приложении"
-aliases: [File Upload Android, Large File Upload, WorkManager Upload, Загрузка больших файлов]
+title: Large File Upload App / Загрузка больших файлов в приложении
+aliases:
+- File Upload Android
+- Large File Upload
+- WorkManager Upload
+- Загрузка больших файлов
 topic: android
-subtopics: [background-execution, coroutines, networking-http]
+subtopics:
+- background-execution
+- coroutines
+- networking-http
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-coroutines, q-android-testing-strategies--android--medium]
+related:
+- c-android
+- c-coroutines
+- q-android-testing-strategies--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/background-execution, android/coroutines, android/networking-http, background-processing, difficulty/hard, file-upload, foreground-service, networking, retrofit, workmanager]
+tags:
+- android/background-execution
+- android/coroutines
+- android/networking-http
+- background-processing
+- difficulty/hard
+- file-upload
+- foreground-service
+- networking
+- retrofit
+- workmanager
 anki_cards:
-  - slug: android-266-0-en
-    front: "How do you implement large file uploads on Android?"
-    back: |
-      **Architecture:**
-      1. **WorkManager** + ForegroundInfo for background upload
-      2. **Retrofit/OkHttp** with ProgressRequestBody
-      3. **Chunked upload** for very large files (>100MB)
-
-      **Key points:**
-      - Use constraints (network, battery)
-      - Exponential backoff for retry
-      - Show progress notification
-      - Clean temp files after upload
-
-      Never load entire file into memory.
-    tags:
-      - android_services
-      - difficulty::hard
-  - slug: android-266-0-ru
-    front: "Как реализовать загрузку больших файлов на Android?"
-    back: |
-      **Архитектура:**
-      1. **WorkManager** + ForegroundInfo для фоновой загрузки
-      2. **Retrofit/OkHttp** с ProgressRequestBody
-      3. **Chunked upload** для очень больших файлов (>100MB)
-
-      **Ключевые моменты:**
-      - Использовать constraints (сеть, батарея)
-      - Exponential backoff для retry
-      - Показывать уведомление о прогрессе
-      - Очищать временные файлы после загрузки
-
-      Никогда не загружать весь файл в память.
-    tags:
-      - android_services
-      - difficulty::hard
-
----\
+- slug: android-266-0-en
+  language: en
+  anki_id: 1768397122280
+  synced_at: '2026-01-23T16:45:05.936313'
+- slug: android-266-0-ru
+  language: ru
+  anki_id: 1768397122304
+  synced_at: '2026-01-23T16:45:05.937941'
+---
 # Вопрос (RU)
 
 > Как бы вы реализовали приложение, которое может загружать большие файлы на сервер?

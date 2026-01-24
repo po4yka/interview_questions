@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-viewmodel-coroutines-lifecycle--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292081
+  synced_at: '2026-01-23T17:03:51.538811'
 - slug: q-viewmodel-coroutines-lifecycle--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292106
+  synced_at: '2026-01-23T17:03:51.539630'
 ---
 ## Ответ (RU)
 

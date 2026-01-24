@@ -40,27 +40,27 @@ anki_cards:
 - slug: algo-004-0-en
   language: en
   anki_id: 1768457298477
-  synced_at: '2026-01-15T10:08:19.340724'
+  synced_at: '2026-01-23T15:48:41.100645'
 - slug: algo-004-0-ru
   language: ru
   anki_id: 1768457298503
-  synced_at: '2026-01-15T10:08:19.343514'
+  synced_at: '2026-01-23T15:48:41.102084'
 - slug: algo-004-1-en
   language: en
   anki_id: 1768457298528
-  synced_at: '2026-01-15T10:08:19.347687'
+  synced_at: '2026-01-23T15:48:41.103754'
 - slug: algo-004-1-ru
   language: ru
   anki_id: 1768457298553
-  synced_at: '2026-01-15T10:08:19.350364'
+  synced_at: '2026-01-23T15:48:41.105244'
 - slug: algo-004-2-en
   language: en
   anki_id: 1768457298578
-  synced_at: '2026-01-15T10:08:19.352874'
+  synced_at: '2026-01-23T15:48:41.106367'
 - slug: algo-004-2-ru
   language: ru
   anki_id: 1768457298604
-  synced_at: '2026-01-15T10:08:19.355356'
+  synced_at: '2026-01-23T15:48:41.107817'
 ---
 # Вопрос (RU)
 > Как работают алгоритмы Дейкстры, MST (Краскал, Прим), Флойда-Уоршелла и Беллмана-Форда?

@@ -2,18 +2,45 @@
 anki_cards:
 - slug: q-workmanager-coroutine-worker--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284457
+  synced_at: '2026-01-23T17:03:50.897684'
 - slug: q-workmanager-coroutine-worker--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284480
+  synced_at: '2026-01-23T17:03:50.899816'
+- slug: q-workmanager-coroutine-worker-atomic-coroutineworker-basics-0-en
+  language: en
+  anki_id: 1769172798580
+  synced_at: '2026-01-23T17:03:50.902044'
+- slug: q-workmanager-coroutine-worker-atomic-coroutineworker-basics-0-ru
+  language: ru
+  anki_id: 1769172798606
+  synced_at: '2026-01-23T17:03:50.903561'
+- slug: q-workmanager-coroutine-worker-atomic-worker-types-comparison-1-en
+  language: en
+  anki_id: 1769172798631
+  synced_at: '2026-01-23T17:03:50.905368'
+- slug: q-workmanager-coroutine-worker-atomic-worker-types-comparison-1-ru
+  language: ru
+  anki_id: 1769172798657
+  synced_at: '2026-01-23T17:03:50.906999'
+- slug: q-workmanager-coroutine-worker-atomic-workmanager-vs-coroutines-2-en
+  language: en
+  anki_id: 1769172798681
+  synced_at: '2026-01-23T17:03:50.909062'
+- slug: q-workmanager-coroutine-worker-atomic-workmanager-vs-coroutines-2-ru
+  language: ru
+  anki_id: 1769172798706
+  synced_at: '2026-01-23T17:03:50.910962'
+- slug: q-workmanager-coroutine-worker-atomic-progress-updates-3-en
+  language: en
+  anki_id: 1769172798732
+  synced_at: '2026-01-23T17:03:50.913085'
+- slug: q-workmanager-coroutine-worker-atomic-progress-updates-3-ru
+  language: ru
+  anki_id: 1769172798756
+  synced_at: '2026-01-23T17:03:50.914794'
 ---
-
 ---
 ---
 ---\

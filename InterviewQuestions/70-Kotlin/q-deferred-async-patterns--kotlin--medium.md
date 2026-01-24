@@ -39,16 +39,20 @@ related:
 anki_cards:
 - slug: q-deferred-async-patterns--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279805
+  synced_at: '2026-01-23T17:03:50.493586'
 - slug: q-deferred-async-patterns--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279831
+  synced_at: '2026-01-23T17:03:50.495757'
+- slug: kotlin-063-0-en
+  language: en
+  anki_id: 1769172781330
+  synced_at: '2026-01-23T17:03:50.498469'
+- slug: kotlin-063-0-ru
+  language: ru
+  anki_id: 1769172781356
+  synced_at: '2026-01-23T17:03:50.499961'
 ---
 # Вопрос (RU)
 

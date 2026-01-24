@@ -35,16 +35,12 @@ tags:
 anki_cards:
 - slug: q-cold-vs-hot-flows--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295781
+  synced_at: '2026-01-23T17:03:51.688616'
 - slug: q-cold-vs-hot-flows--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295805
+  synced_at: '2026-01-23T17:03:51.689564'
 ---
 # Вопрос (RU)
 > Объясните холодные и горячие потоки. Как `shareIn` и `stateIn` конвертируют холодные в горячие? Как правильно настроить параметры `replay` и `started`?

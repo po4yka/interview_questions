@@ -9,11 +9,11 @@ anki_cards:
 - slug: kotlin245-0-en
   language: en
   anki_id: 1768327344586
-  synced_at: '2026-01-13T22:02:24.637269'
+  synced_at: '2026-01-23T17:03:51.406516'
 - slug: kotlin245-1-ru
   language: ru
   anki_id: 1768327344635
-  synced_at: '2026-01-13T22:02:24.640287'
+  synced_at: '2026-01-23T17:03:51.408519'
 topic: kotlin
 difficulty: medium
 original_language: en

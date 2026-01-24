@@ -29,22 +29,12 @@ tags:
 anki_cards:
 - slug: lang-067-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - iterators
-  - ordering
+  anki_id: 1768326286005
+  synced_at: '2026-01-23T17:03:51.043721'
 - slug: lang-067-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - iterators
-  - ordering
+  anki_id: 1768326286030
+  synced_at: '2026-01-23T17:03:51.045503'
 ---
 # Вопрос (RU)
 > После перебирания данных итератором, гарантируется ли очередность получения этих данных?

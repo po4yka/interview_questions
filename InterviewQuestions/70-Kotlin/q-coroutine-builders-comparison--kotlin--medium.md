@@ -36,20 +36,12 @@ related:
 anki_cards:
 - slug: q-coroutine-builders-comparison--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - builders
-  - coroutines
+  anki_id: 1768326287005
+  synced_at: '2026-01-23T17:03:51.154506'
 - slug: q-coroutine-builders-comparison--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - builders
-  - coroutines
+  anki_id: 1768326287030
+  synced_at: '2026-01-23T17:03:51.156254'
 ---
 # Вопрос (RU)
 

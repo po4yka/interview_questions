@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-retrofit-coroutines-best-practices--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286955
+  synced_at: '2026-01-23T17:03:51.151158'
 - slug: q-retrofit-coroutines-best-practices--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286979
+  synced_at: '2026-01-23T17:03:51.153095'
 ---
 # Retrofit with Coroutines: Best Practices
 

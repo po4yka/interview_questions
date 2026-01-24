@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-instant-search-flow-operators--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326278957
+  synced_at: '2026-01-23T16:54:03.284604'
 - slug: q-instant-search-flow-operators--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326278981
+  synced_at: '2026-01-23T16:54:03.286129'
 ---
 # Question (EN)
 > How do you implement instant/real-time search functionality using Kotlin `Flow` operators?

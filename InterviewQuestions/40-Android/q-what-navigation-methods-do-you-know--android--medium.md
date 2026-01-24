@@ -1,51 +1,47 @@
----\
+---
 id: android-150
 title: What Navigation Methods Do You Know / Какие методы навигации вы знаете
-aliases: [What Navigation Methods Do You Know, Какие методы навигации вы знаете]
+aliases:
+- What Navigation Methods Do You Know
+- Какие методы навигации вы знаете
 topic: android
-subtopics: [ui-navigation]
+subtopics:
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-navigation, c-fragments, q-activity-navigation-how-it-works--android--medium, q-how-navigation-is-implemented-in-android--android--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-navigation-methods-in-kotlin--android--medium, q-what-do-you-know-about-modifiers--android--medium, q-what-navigation-methods-exist-in-kotlin--android--medium]
+related:
+- c-compose-navigation
+- c-fragments
+- q-activity-navigation-how-it-works--android--medium
+- q-how-navigation-is-implemented-in-android--android--medium
+- q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
+- q-navigation-methods-in-kotlin--android--medium
+- q-what-do-you-know-about-modifiers--android--medium
+- q-what-navigation-methods-exist-in-kotlin--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/ui-navigation, difficulty/medium, navigation]
+tags:
+- android
+- android/ui-navigation
+- difficulty/medium
+- navigation
 anki_cards:
-  - slug: android-150-0-en
-    front: "What are the main navigation methods in Android?"
-    back: |
-      **5 approaches:**
-      1. **Activity Navigation (Intent)** - traditional, heavy overhead
-      2. **FragmentManager** - manual back stack management
-      3. **Navigation Component** - graph-based, Safe Args, recommended
-      4. **Compose Navigation** - declarative NavHost
-      5. **Deep Links/App Links** - URL-based from external sources
-
-      **Best practice:** Single-Activity + Navigation Component or Compose Navigation
-    tags:
-      - android_navigation
-      - difficulty::medium
-  - slug: android-150-0-ru
-    front: "Какие основные методы навигации существуют в Android?"
-    back: |
-      **5 подходов:**
-      1. **Activity Navigation (Intent)** - традиционный, тяжёлый overhead
-      2. **FragmentManager** - ручное управление back stack
-      3. **Navigation Component** - граф, Safe Args, рекомендуемый
-      4. **Compose Navigation** - декларативный NavHost
-      5. **Deep Links/App Links** - URL из внешних источников
-
-      **Best practice:** Single-Activity + Navigation Component или Compose Navigation
-    tags:
-      - android_navigation
-      - difficulty::medium
-
----\
+- slug: android-150-0-en
+  language: en
+  anki_id: 1769172240735
+  synced_at: '2026-01-23T16:45:05.403574'
+- slug: android-150-0-ru
+  language: ru
+  anki_id: 1769172240758
+  synced_at: '2026-01-23T16:45:05.405961'
+---
 # Вопрос (RU)
 
 > Какие способы навигации вы знаете в Android?

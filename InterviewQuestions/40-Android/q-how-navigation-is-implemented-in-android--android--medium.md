@@ -1,57 +1,53 @@
----\
+---
 id: android-282
 title: How Navigation Is Implemented In Android / Как реализована навигация в Android
-aliases: [How Navigation Is Implemented In Android, Navigation Implementation, Как реализована навигация в Android, Реализация навигации]
+aliases:
+- How Navigation Is Implemented In Android
+- Navigation Implementation
+- Как реализована навигация в Android
+- Реализация навигации
 topic: android
-subtopics: [activity, fragment, ui-navigation]
+subtopics:
+- activity
+- fragment
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, c-compose-navigation, q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-how-is-navigation-implemented--android--medium, q-navigation-methods-in-android--android--medium, q-what-navigation-methods-do-you-know--android--medium, q-what-navigation-methods-exist-in-kotlin--android--medium]
+related:
+- c-activity
+- c-compose-navigation
+- q-activity-navigation-how-it-works--android--medium
+- q-compose-navigation-advanced--android--medium
+- q-how-is-navigation-implemented--android--medium
+- q-navigation-methods-in-android--android--medium
+- q-what-navigation-methods-do-you-know--android--medium
+- q-what-navigation-methods-exist-in-kotlin--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation, ui]
+tags:
+- android/activity
+- android/fragment
+- android/ui-navigation
+- difficulty/medium
+- navigation
+- ui
 anki_cards:
-  - slug: android-282-0-en
-    front: "What are the two levels of navigation in Android?"
-    back: |
-      **1. System navigation:**
-      - Gestures (Android 10+): swipe from bottom/edges
-      - Legacy: Back, Home, Recent buttons
-
-      **2. In-app navigation:**
-      - **Activity:** `startActivity(intent)`, task flags
-      - **Fragment:** `FragmentManager.beginTransaction()`
-      - **Navigation Component:** `NavController`, nav graph, Safe Args
-      - **Compose:** `NavHost`, `composable()` routes
-
-      **Best practice:** Use Navigation Component for consistent back stack handling
-    tags:
-      - android_navigation
-      - difficulty::medium
-  - slug: android-282-0-ru
-    front: "Какие два уровня навигации существуют в Android?"
-    back: |
-      **1. Системная навигация:**
-      - Жесты (Android 10+): свайп снизу/от краев
-      - Legacy: кнопки Назад, Домой, Недавние
-
-      **2. Навигация в приложении:**
-      - **Activity:** `startActivity(intent)`, флаги задач
-      - **Fragment:** `FragmentManager.beginTransaction()`
-      - **Navigation Component:** `NavController`, граф навигации, Safe Args
-      - **Compose:** `NavHost`, маршруты `composable()`
-
-      **Best practice:** Используйте Navigation Component для согласованного управления back stack
-    tags:
-      - android_navigation
-      - difficulty::medium
-
----\
+- slug: android-282-0-en
+  language: en
+  anki_id: 1768378372994
+  synced_at: '2026-01-23T16:45:06.010664'
+- slug: android-282-0-ru
+  language: ru
+  anki_id: 1768378373016
+  synced_at: '2026-01-23T16:45:06.011926'
+---
 # Вопрос (RU)
 
 > Каким образом осуществляется навигация в Android?

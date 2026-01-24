@@ -1,55 +1,43 @@
----\
+---
 id: android-187
 title: Activity / Компонент Activity
-aliases: [Activity, Компонент Activity]
+aliases:
+- Activity
+- Компонент Activity
 topic: android
-subtopics: [activity]
+subtopics:
+- activity
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-android-components, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-single-activity-pros-cons--android--medium, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-each-android-component-represents--android--easy, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
+related:
+- c-activity-lifecycle
+- c-android-components
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-single-activity-pros-cons--android--medium
+- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+- q-what-each-android-component-represents--android--easy
+- q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, difficulty/medium]
+tags:
+- android/activity
+- difficulty/medium
 anki_cards:
-  - slug: android-187-0-en
-    front: "What is an Activity in Android?"
-    back: |
-      **Core Android component** representing a single screen or entry point.
-
-      **Purposes:**
-      1. Display UI via `setContentView()`
-      2. Handle user input
-      3. Manage lifecycle (onCreate, onStart, onResume, onPause, onStop, onDestroy)
-      4. Navigate between screens via Intent
-      5. Interact with other components (Service, BroadcastReceiver)
-
-      **Use Activity for:** Distinct screens, deep links, launcher entry points.
-      **Use Fragment for:** Sub-sections within Activity.
-    tags:
-      - android_activities
-      - difficulty::medium
-  - slug: android-187-0-ru
-    front: "Что такое Activity в Android?"
-    back: |
-      **Основной компонент Android**, представляющий один экран или точку входа.
-
-      **Назначения:**
-      1. Отображать UI через `setContentView()`
-      2. Обрабатывать ввод пользователя
-      3. Управлять lifecycle (onCreate, onStart, onResume, onPause, onStop, onDestroy)
-      4. Навигация между экранами через Intent
-      5. Взаимодействовать с другими компонентами (Service, BroadcastReceiver)
-
-      **Использовать Activity для:** Отдельных экранов, deep links, точек входа launcher.
-      **Использовать Fragment для:** Подсекций внутри Activity.
-    tags:
-      - android_activities
-      - difficulty::medium
----\
+- slug: android-187-0-en
+  language: en
+  anki_id: 1768398630534
+  synced_at: '2026-01-23T16:45:05.608682'
+- slug: android-187-0-ru
+  language: ru
+  anki_id: 1768398630559
+  synced_at: '2026-01-23T16:45:05.610219'
+---
 # Вопрос (RU)
 > Компонент `Activity`
 

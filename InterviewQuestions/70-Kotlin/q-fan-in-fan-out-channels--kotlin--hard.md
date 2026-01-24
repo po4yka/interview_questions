@@ -28,22 +28,12 @@ tags:
 anki_cards:
 - slug: kotlin-181-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
-  - flow
-  - structured-concurrency
+  anki_id: 1768326286356
+  synced_at: '2026-01-23T17:03:51.109718'
 - slug: kotlin-181-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
-  - flow
-  - structured-concurrency
+  anki_id: 1768326286381
+  synced_at: '2026-01-23T17:03:51.112096'
 ---
 # Вопрос (RU)
 > Что такое паттерны fan-out и fan-in в Kotlin Coroutines с каналами? Как реализовать распределение работы (fan-out) и агрегацию результатов (fan-in)? Приведите production-примеры параллельной обработки изображений, распределенных очередей задач и агрегации логов.

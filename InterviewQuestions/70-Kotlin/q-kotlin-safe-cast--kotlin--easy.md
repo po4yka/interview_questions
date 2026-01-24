@@ -33,20 +33,12 @@ tags:
 anki_cards:
 - slug: lang-075-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - null-safety
-  - type-system
+  anki_id: 1768326294382
+  synced_at: '2026-01-23T17:03:51.636439'
 - slug: lang-075-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - null-safety
-  - type-system
+  anki_id: 1768326294407
+  synced_at: '2026-01-23T17:03:51.637287'
 ---
 # Вопрос (RU)
 > Как в Kotlin привести переменную типа `Any` к типу `String` безопасно, чтобы избежать исключения?

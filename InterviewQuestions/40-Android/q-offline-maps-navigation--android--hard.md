@@ -1,53 +1,47 @@
 ---
 id: android-485
 anki_cards:
-  - slug: android-485-0-en
-    front: "What are key components for designing offline maps and navigation?"
-    back: |
-      **Architecture:**
-      - **Vector tiles** with LRU cache (2-4GB limit)
-      - **Local routing graph** for offline Dijkstra/A*
-      - **Fused location** with Kalman filter + road snapping
-
-      **Requirements:**
-      - Reroute <1.5s without network
-      - Battery <2%/hr during navigation
-      - WorkManager for region downloads
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-485-0-ru
-    front: "Какие ключевые компоненты для проектирования офлайн карт и навигации?"
-    back: |
-      **Архитектура:**
-      - **Векторные тайлы** с LRU кешем (лимит 2-4GB)
-      - **Локальный граф маршрутизации** для офлайн Dijkstra/A*
-      - **Fused location** с фильтром Калмана + привязка к дорогам
-
-      **Требования:**
-      - Reroute <1.5с без сети
-      - Батарея <2%/ч при навигации
-      - WorkManager для загрузки регионов
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-485-0-en
+  language: en
+  anki_id: 1768399952965
+  synced_at: '2026-01-23T16:45:06.092060'
+- slug: android-485-0-ru
+  language: ru
+  anki_id: 1768399952991
+  synced_at: '2026-01-23T16:45:06.093187'
 title: Design Offline Maps & Navigation / Проектирование офлайн карт и навигации
-aliases: [Design Offline Maps & Navigation, Проектирование офлайн карт и навигации]
+aliases:
+- Design Offline Maps & Navigation
+- Проектирование офлайн карт и навигации
 topic: android
-subtopics: [files-media, location, service]
+subtopics:
+- files-media
+- location
+- service
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-background-tasks, q-design-instagram-stories--android--hard, q-design-uber-app--android--hard, q-how-dialog-differs-from-other-navigation--android--medium, q-what-navigation-methods-do-you-know--android--medium]
+related:
+- c-background-tasks
+- q-design-instagram-stories--android--hard
+- q-design-uber-app--android--hard
+- q-how-dialog-differs-from-other-navigation--android--medium
+- q-what-navigation-methods-do-you-know--android--medium
 sources: []
 created: 2025-10-29
 updated: 2025-11-10
-tags: [android/files-media, android/location, android/service, difficulty/hard, topic/android]
-
----\
+tags:
+- android/files-media
+- android/location
+- android/service
+- difficulty/hard
+- topic/android
+---
 # Вопрос (RU)
 
 > Как спроектировать офлайн карты и пошаговую навигацию для Android?

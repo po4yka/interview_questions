@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-debugging-coroutines-techniques--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280604
+  synced_at: '2026-01-23T17:03:50.571696'
 - slug: q-debugging-coroutines-techniques--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280630
+  synced_at: '2026-01-23T17:03:50.573747'
 ---
 # Question (EN)
 > What tools and techniques are available for debugging Kotlin coroutines? How do you identify deadlocks, leaks, and performance issues?

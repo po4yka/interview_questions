@@ -1,65 +1,46 @@
----\
+---
 id: android-296
 title: MVVM vs MVP Differences / Различия MVVM и MVP
-aliases: [MVVM vs MVP, Различия MVVM и MVP]
+aliases:
+- MVVM vs MVP
+- Различия MVVM и MVP
 topic: android
-subtopics: [architecture-mvvm, lifecycle]
+subtopics:
+- architecture-mvvm
+- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-clean-architecture, c-lifecycle, q-clean-architecture-android--android--hard, q-mvp-pattern--android--medium, q-mvvm-pattern--android--medium, q-viewgroup-vs-view-differences--android--easy]
+related:
+- c-clean-architecture
+- c-lifecycle
+- q-clean-architecture-android--android--hard
+- q-mvp-pattern--android--medium
+- q-mvvm-pattern--android--medium
+- q-viewgroup-vs-view-differences--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/lifecycle, architecture-patterns, difficulty/medium]
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- architecture-patterns
+- difficulty/medium
 anki_cards:
-  - slug: android-296-0-en
-    front: "What is the difference between MVVM and MVP in Android?"
-    back: |
-      **MVP:** Presenter holds View reference, explicit bidirectional binding
-      ```kotlin
-      presenter.loadUsers() -> view.showUsers(data)
-      ```
-
-      **MVVM:** ViewModel exposes observable data, no View reference
-      ```kotlin
-      viewModel.users.collect { adapter.submitList(it) }
-      ```
-
-      | Aspect | MVP | MVVM |
-      |--------|-----|------|
-      | Config changes | Manual handling | ViewModel survives |
-      | Leak risk | Higher | Lower |
-      | Testing | Mock View | No View needed |
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-296-0-ru
-    front: "В чём разница между MVVM и MVP в Android?"
-    back: |
-      **MVP:** Presenter держит ссылку на View, явная двусторонняя связь
-      ```kotlin
-      presenter.loadUsers() -> view.showUsers(data)
-      ```
-
-      **MVVM:** ViewModel выставляет observable данные, нет ссылки на View
-      ```kotlin
-      viewModel.users.collect { adapter.submitList(it) }
-      ```
-
-      | Аспект | MVP | MVVM |
-      |--------|-----|------|
-      | Config changes | Ручная обработка | ViewModel переживает |
-      | Риск утечек | Выше | Ниже |
-      | Тестирование | Mock View | View не нужен |
-    tags:
-      - android_architecture
-      - difficulty::medium
-
----\
+- slug: android-296-0-en
+  language: en
+  anki_id: 1768397740355
+  synced_at: '2026-01-23T16:45:06.055231'
+- slug: android-296-0-ru
+  language: ru
+  anki_id: 1768397740380
+  synced_at: '2026-01-23T16:45:06.056175'
+---
 # Вопрос (RU)
 
 > Чем MVVM отличается от MVP?

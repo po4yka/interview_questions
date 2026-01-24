@@ -19,11 +19,11 @@ anki_cards:
 - slug: android-471-0-en
   language: en
   anki_id: 1768367871881
-  synced_at: '2026-01-14T09:17:53.826514'
+  synced_at: '2026-01-23T16:45:06.373261'
 - slug: android-471-0-ru
   language: ru
   anki_id: 1768367871906
-  synced_at: '2026-01-14T09:17:53.829895'
+  synced_at: '2026-01-23T16:45:06.374068'
 status: draft
 related:
 - c-accessibility

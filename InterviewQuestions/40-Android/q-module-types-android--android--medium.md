@@ -1,63 +1,49 @@
 ---
 id: android-112
 anki_cards:
-  - slug: android-112-0-en
-    front: "What are the main architectural module types in Android projects?"
-    back: |
-      **5 module types:**
-
-      1. **Data** - repositories, data sources, models (`internal` visibility)
-      2. **Feature** - UI + ViewModel per screen/flow
-      3. **App** - entry point, navigation, DI, manifest
-      4. **Common/Core** - shared code (UI, network, analytics)
-      5. **Test** - fakes, test utilities, rules
-
-      **Dependencies:**
-      ```
-      app -> feature -> data -> core
-      ```
-
-      **Key:** Feature depends on Data/Core, never reverse.
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-112-0-ru
-    front: "Какие основные архитектурные типы модулей в Android проектах?"
-    back: |
-      **5 типов модулей:**
-
-      1. **Data** - репозитории, источники данных, модели (`internal` видимость)
-      2. **Feature** - UI + ViewModel для экрана/флоу
-      3. **App** - точка входа, навигация, DI, манифест
-      4. **Common/Core** - общий код (UI, сеть, аналитика)
-      5. **Test** - фейки, тестовые утилиты, правила
-
-      **Зависимости:**
-      ```
-      app -> feature -> data -> core
-      ```
-
-      **Ключ:** Feature зависит от Data/Core, никогда наоборот.
-    tags:
-      - android_architecture
-      - difficulty::medium
-title: "Module Types Android / Типы модулей Android"
-aliases: [Android Module Types, Module Types, Типы модулей, Типы модулей Android]
+- slug: android-112-0-en
+  language: en
+  anki_id: 1768416450051
+  synced_at: '2026-01-23T16:45:06.430260'
+- slug: android-112-0-ru
+  language: ru
+  anki_id: 1768416450072
+  synced_at: '2026-01-23T16:45:06.431095'
+title: Module Types Android / Типы модулей Android
+aliases:
+- Android Module Types
+- Module Types
+- Типы модулей
+- Типы модулей Android
 topic: android
-subtopics: [architecture-modularization, build-variants, gradle]
+subtopics:
+- architecture-modularization
+- build-variants
+- gradle
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/architecture-modularization, android/build-variants, android/gradle, architecture, difficulty/medium, modularization, modules]
+tags:
+- android/architecture-modularization
+- android/build-variants
+- android/gradle
+- architecture
+- difficulty/medium
+- modularization
+- modules
 moc: moc-android
-related: [c-gradle, c-modularization]
-sources: ["https://developer.android.com/topic/modularization/patterns"]
-
----\
+related:
+- c-gradle
+- c-modularization
+sources:
+- https://developer.android.com/topic/modularization/patterns
+---
 # Вопрос (RU)
 
 > Какие типы модулей существуют в Android?

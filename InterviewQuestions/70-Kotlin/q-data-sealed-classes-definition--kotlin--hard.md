@@ -124,16 +124,12 @@ tags:
 anki_cards:
 - slug: q-data-sealed-classes-definition--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292181
+  synced_at: '2026-01-23T17:03:51.542281'
 - slug: q-data-sealed-classes-definition--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292206
+  synced_at: '2026-01-23T17:03:51.543155'
 ---
 # Вопрос (RU)
 > Что такое Data Class и Sealed Classes в Kotlin? Объясните их характеристики, применения и приведите подробные примеры.

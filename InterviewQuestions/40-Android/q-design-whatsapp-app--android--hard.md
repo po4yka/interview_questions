@@ -40,11 +40,11 @@ anki_cards:
 - slug: android-468-0-en
   language: en
   anki_id: 1768366961531
-  synced_at: '2026-01-14T09:17:53.748530'
+  synced_at: '2026-01-23T16:45:06.316932'
 - slug: android-468-0-ru
   language: ru
   anki_id: 1768366961556
-  synced_at: '2026-01-14T09:17:53.750881'
+  synced_at: '2026-01-23T16:45:06.317808'
 sources:
 - https://signal.org/docs/specifications/doubleratchet/
 ---

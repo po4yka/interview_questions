@@ -37,16 +37,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-collections--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284405
+  synced_at: '2026-01-23T17:03:50.892974'
 - slug: q-kotlin-collections--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284430
+  synced_at: '2026-01-23T17:03:50.895171'
 ---
 # Вопрос (RU)
 > Что вы знаете о коллекциях в Kotlin?

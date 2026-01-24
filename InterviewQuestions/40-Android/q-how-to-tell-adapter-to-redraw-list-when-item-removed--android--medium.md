@@ -1,66 +1,47 @@
----\
+---
 id: android-374
 title: How To Tell Adapter To Redraw List When Item Removed / Как сказать адаптеру
   перерисовать список когда элемент удален
-aliases: [How To Tell Adapter To Redraw List, Как сказать адаптеру перерисовать список]
+aliases:
+- How To Tell Adapter To Redraw List
+- Как сказать адаптеру перерисовать список
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-recyclerview-sethasfixedsize--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-problems-can-there-be-with-list-items--android--easy]
+related:
+- c-custom-views
+- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+- q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium
+- q-recyclerview-sethasfixedsize--android--easy
+- q-what-is-known-about-methods-that-redraw-view--android--medium
+- q-what-problems-can-there-be-with-list-items--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [adapter, android/ui-views, difficulty/medium, diffutil, recyclerview]
+tags:
+- adapter
+- android/ui-views
+- difficulty/medium
+- diffutil
+- recyclerview
 anki_cards:
-  - slug: android-374-0-en
-    front: "Why use ListAdapter with DiffUtil instead of manual notify calls?"
-    back: |
-      **ListAdapter + DiffUtil benefits:**
-      - Automatic change detection
-      - Smooth item animations
-      - Background diff calculation
-      - Less boilerplate code
-
-      ```kotlin
-      class MyAdapter : ListAdapter<Item, VH>(ItemDiffCallback()) {
-          fun updateList(newList: List<Item>) {
-              submitList(newList)  // Handles everything
-          }
-      }
-      ```
-
-      No need to call `notifyItemRemoved/Changed/Inserted` manually
-    tags:
-      - android_layouts
-      - difficulty::medium
-  - slug: android-374-0-ru
-    front: "Почему использовать ListAdapter с DiffUtil вместо ручных notify вызовов?"
-    back: |
-      **ListAdapter + DiffUtil преимущества:**
-      - Автоматическое определение изменений
-      - Плавные анимации элементов
-      - Вычисление diff в фоне
-      - Меньше шаблонного кода
-
-      ```kotlin
-      class MyAdapter : ListAdapter<Item, VH>(ItemDiffCallback()) {
-          fun updateList(newList: List<Item>) {
-              submitList(newList)  // Всё делает сам
-          }
-      }
-      ```
-
-      Не нужно вручную вызывать `notifyItemRemoved/Changed/Inserted`
-    tags:
-      - android_layouts
-      - difficulty::medium
-
----\
+- slug: android-374-0-en
+  language: en
+  anki_id: 1768381285384
+  synced_at: '2026-01-23T16:45:06.269946'
+- slug: android-374-0-ru
+  language: ru
+  anki_id: 1768381285406
+  synced_at: '2026-01-23T16:45:06.270875'
+---
 # Вопрос (RU)
 
 > Как правильно сообщить адаптеру `RecyclerView` о том, что элемент был удален из списка?

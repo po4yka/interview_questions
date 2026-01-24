@@ -1,63 +1,50 @@
----\
+---
 id: android-366
-title: "How To Pass Data From One Activity To Another / Как передать данные из одной Activity в другую"
-aliases: [Intent Extras, Parcelable Android, Pass Data Between Activities, Передача данных между Activity]
+title: How To Pass Data From One Activity To Another / Как передать данные из одной
+  Activity в другую
+aliases:
+- Intent Extras
+- Parcelable Android
+- Pass Data Between Activities
+- Передача данных между Activity
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, q-activity-lifecycle-methods--android--medium, q-android-components-besides-activity--android--easy, q-how-is-navigation-implemented--android--medium]
+related:
+- c-activity
+- q-activity-lifecycle-methods--android--medium
+- q-android-components-besides-activity--android--easy
+- q-how-is-navigation-implemented--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [activity, android, android/activity, android/ui-navigation, difficulty/medium, intent, navigation]
+tags:
+- activity
+- android
+- android/activity
+- android/ui-navigation
+- difficulty/medium
+- intent
+- navigation
 sources: []
 anki_cards:
-  - slug: android-366-0-en
-    front: "How to pass data from one Activity to another in Android?"
-    back: |
-      **Methods:**
-      1. **Intent Extras** - primitives, strings
-      2. **Parcelable** - complex objects (`@Parcelize`)
-      3. **Bundle** - grouped data
-      4. **ActivityResult API** - bidirectional
-
-      ```kotlin
-      val intent = Intent(this, SecondActivity::class.java)
-      intent.putExtra("user", user) // Parcelable
-      startActivity(intent)
-      ```
-
-      **Limits:** ~500KB payload (Binder ~1MB), use constants for keys
-    tags:
-      - android_activities
-      - android_intents
-      - difficulty::medium
-  - slug: android-366-0-ru
-    front: "Как передать данные из одной Activity в другую в Android?"
-    back: |
-      **Способы:**
-      1. **Intent Extras** - примитивы, строки
-      2. **Parcelable** - сложные объекты (`@Parcelize`)
-      3. **Bundle** - группировка данных
-      4. **ActivityResult API** - двусторонний обмен
-
-      ```kotlin
-      val intent = Intent(this, SecondActivity::class.java)
-      intent.putExtra("user", user) // Parcelable
-      startActivity(intent)
-      ```
-
-      **Ограничения:** ~500KB payload (Binder ~1MB), константы для ключей
-    tags:
-      - android_activities
-      - android_intents
-      - difficulty::medium
-
----\
+- slug: android-366-0-en
+  language: en
+  anki_id: 1768380834256
+  synced_at: '2026-01-23T16:45:06.247521'
+- slug: android-366-0-ru
+  language: ru
+  anki_id: 1768380834281
+  synced_at: '2026-01-23T16:45:06.248394'
+---
 # Вопрос (RU)
 
 > Как передать данные из одной `Activity` в другую?

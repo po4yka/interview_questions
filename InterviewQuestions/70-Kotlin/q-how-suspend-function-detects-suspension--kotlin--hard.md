@@ -32,16 +32,12 @@ tags:
 anki_cards:
 - slug: q-how-suspend-function-detects-suspension--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288280
+  synced_at: '2026-01-23T17:03:51.269801'
 - slug: q-how-suspend-function-detects-suspension--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288305
+  synced_at: '2026-01-23T17:03:51.271049'
 ---
 # Вопрос (RU)
 > Как suspend функция определяет приостановку?

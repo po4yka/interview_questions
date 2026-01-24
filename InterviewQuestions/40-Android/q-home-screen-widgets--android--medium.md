@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-193-0-en
   language: en
   anki_id: 1768367584058
-  synced_at: '2026-01-14T09:17:53.189905'
+  synced_at: '2026-01-23T16:45:05.629067'
 - slug: android-193-0-ru
   language: ru
   anki_id: 1768367584080
-  synced_at: '2026-01-14T09:17:53.193538'
+  synced_at: '2026-01-23T16:45:05.630245'
 ---
 # Вопрос (RU)
 > Виджеты домашнего экрана

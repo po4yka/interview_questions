@@ -39,11 +39,11 @@ anki_cards:
 - slug: android-088-0-en
   language: en
   anki_id: 1768365308727
-  synced_at: '2026-01-14T09:17:53.432244'
+  synced_at: '2026-01-23T16:45:06.024366'
 - slug: android-088-0-ru
   language: ru
   anki_id: 1768365308748
-  synced_at: '2026-01-14T09:17:53.434201'
+  synced_at: '2026-01-23T16:45:06.025487'
 ---
 # Вопрос (RU)
 > Как оптимизировать отрисовку `Canvas` для достижения 60 FPS?

@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-rxjava-to-coroutines-migration--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288107
+  synced_at: '2026-01-23T17:03:51.258681'
 - slug: q-rxjava-to-coroutines-migration--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288156
+  synced_at: '2026-01-23T17:03:51.260679'
 ---
 # Миграция С RxJava На Kotlin Корутины
 

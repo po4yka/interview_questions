@@ -34,20 +34,12 @@ tags:
 anki_cards:
 - slug: lang-074-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - inheritance
-  - type-system
+  anki_id: 1768326286455
+  synced_at: '2026-01-23T17:03:51.116431'
 - slug: lang-074-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - inheritance
-  - type-system
+  anki_id: 1768326286480
+  synced_at: '2026-01-23T17:03:51.118209'
 ---
 # Вопрос (RU)
 > Какой модификатор в Kotlin делает класс нерасширяемым?

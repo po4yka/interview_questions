@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-057-0-en
   language: en
   anki_id: 1768367152453
-  synced_at: '2026-01-14T09:09:33.468166'
+  synced_at: '2026-01-23T16:45:05.256508'
 - slug: android-057-0-ru
   language: ru
   anki_id: 1768367152480
-  synced_at: '2026-01-14T09:09:33.470401'
+  synced_at: '2026-01-23T16:45:05.257770'
 sources:
 - https://developer.android.com/guide/components/foreground-services
 ---

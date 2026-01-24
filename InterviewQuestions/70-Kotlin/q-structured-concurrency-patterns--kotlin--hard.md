@@ -37,16 +37,12 @@ tags:
 anki_cards:
 - slug: q-structured-concurrency-patterns--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289730
+  synced_at: '2026-01-23T17:03:51.378758'
 - slug: q-structured-concurrency-patterns--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289756
+  synced_at: '2026-01-23T17:03:51.380398'
 ---
 # Вопрос (RU)
 > Что такое структурированная конкурентность? Объясните различия coroutineScope и supervisorScope, отношения родитель-потомок, распространение отмены и продвинутые паттерны, включая withContext и координацию async/await.

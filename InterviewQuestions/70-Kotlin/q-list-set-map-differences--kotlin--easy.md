@@ -32,18 +32,12 @@ tags:
 anki_cards:
 - slug: kotlin-175-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
+  anki_id: 1768326285405
+  synced_at: '2026-01-23T17:03:50.995679'
 - slug: kotlin-175-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
+  anki_id: 1768326285432
+  synced_at: '2026-01-23T17:03:50.997727'
 ---
 # Вопрос (RU)
 > Расскажите отличия между `List`, `Set` и `Map`. Когда использовать каждый из них?

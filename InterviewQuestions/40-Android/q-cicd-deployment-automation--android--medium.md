@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-355-0-en
   language: en
   anki_id: 1768365309672
-  synced_at: '2026-01-14T09:17:53.588887'
+  synced_at: '2026-01-23T16:45:06.212560'
 - slug: android-355-0-ru
   language: ru
   anki_id: 1768365309696
-  synced_at: '2026-01-14T09:17:53.591690'
+  synced_at: '2026-01-23T16:45:06.213372'
 ---
 # Вопрос (RU)
 > Как автоматизировать деплой Android-приложения через CI/CD?

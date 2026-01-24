@@ -10,11 +10,11 @@ anki_cards:
 - slug: kotlin148-0-en
   language: en
   anki_id: 1768327346737
-  synced_at: '2026-01-13T22:02:26.787530'
+  synced_at: '2026-01-23T17:03:50.558512'
 - slug: kotlin148-1-ru
   language: ru
   anki_id: 1768327346785
-  synced_at: '2026-01-13T22:02:26.790514'
+  synced_at: '2026-01-23T17:03:50.562401'
 topic: kotlin
 subtopics:
 - c-coroutines

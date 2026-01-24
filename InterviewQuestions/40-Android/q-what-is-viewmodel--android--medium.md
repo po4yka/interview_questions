@@ -1,55 +1,52 @@
----\
+---
 id: android-197
 title: What Is Viewmodel / Что такое ViewModel
-aliases: [What Is ViewModel, Что такое ViewModel]
+aliases:
+- What Is ViewModel
+- Что такое ViewModel
 topic: android
-subtopics: [architecture-mvvm, lifecycle, ui-state]
+subtopics:
+- architecture-mvvm
+- lifecycle
+- ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-mvvm, q-mvvm-pattern--android--medium, q-testing-viewmodels-turbine--android--medium, q-viewmodel-pattern--android--easy, q-viewmodel-vs-onsavedinstancestate--android--medium, q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]
+related:
+- c-lifecycle
+- c-mvvm
+- q-mvvm-pattern--android--medium
+- q-testing-viewmodels-turbine--android--medium
+- q-viewmodel-pattern--android--easy
+- q-viewmodel-vs-onsavedinstancestate--android--medium
+- q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, architecture, difficulty/medium, mvvm, state-management, viewmodel]
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- android/ui-state
+- architecture
+- difficulty/medium
+- mvvm
+- state-management
+- viewmodel
 anki_cards:
-  - slug: android-197-0-en
-    front: "What is ViewModel in Android?"
-    back: |
-      **Architecture Component** that holds UI-related state and logic, scoped to Activity/Fragment.
-
-      **Key benefits:**
-      - Survives configuration changes (rotation)
-      - Does NOT survive process death (use SavedStateHandle)
-      - `viewModelScope` auto-cancels coroutines in onCleared()
-
-      **Usage:** `by viewModels<MyViewModel>()` in Activity/Fragment
-
-      **Rule:** Never hold View/Activity/Context references in ViewModel (memory leak)
-    tags:
-      - android_viewmodel
-      - difficulty::medium
-  - slug: android-197-0-ru
-    front: "Что такое ViewModel в Android?"
-    back: |
-      **Компонент архитектуры**, который хранит UI-состояние и логику, привязан к Activity/Fragment.
-
-      **Ключевые преимущества:**
-      - Переживает изменения конфигурации (поворот)
-      - НЕ переживает смерть процесса (используйте SavedStateHandle)
-      - `viewModelScope` авто-отменяет корутины в onCleared()
-
-      **Использование:** `by viewModels<MyViewModel>()` в Activity/Fragment
-
-      **Правило:** Никогда не хранить ссылки на View/Activity/Context во ViewModel (утечка памяти)
-    tags:
-      - android_viewmodel
-      - difficulty::medium
-
----\
+- slug: android-197-0-en
+  language: en
+  anki_id: 1768398851711
+  synced_at: '2026-01-23T16:45:05.644157'
+- slug: android-197-0-ru
+  language: ru
+  anki_id: 1768398851735
+  synced_at: '2026-01-23T16:45:05.645544'
+---
 # Вопрос (RU)
 
 > Что такое `ViewModel` в Android?

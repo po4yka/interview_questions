@@ -1,58 +1,49 @@
----\
+---
 id: android-392
 title: Как сказать адаптеру перерисовать список если элемент был удален / How To Tell
   Adapter To Redraw List If Element Was Deleted
-aliases: [How to tell adapter to redraw list, RecyclerView adapter update, Как сказать адаптеру перерисовать список, Обновление адаптера RecyclerView]
+aliases:
+- How to tell adapter to redraw list
+- RecyclerView adapter update
+- Как сказать адаптеру перерисовать список
+- Обновление адаптера RecyclerView
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-recyclerview, q-dagger-build-time-optimization--android--medium, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium, q-recyclerview-sethasfixedsize--android--easy]
+related:
+- c-recyclerview
+- q-dagger-build-time-optimization--android--medium
+- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+- q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium
+- q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium
+- q-recyclerview-sethasfixedsize--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [adapter, android, android/ui-views, difficulty/medium, recyclerview]
+tags:
+- adapter
+- android
+- android/ui-views
+- difficulty/medium
+- recyclerview
 anki_cards:
-  - slug: android-392-0-en
-    front: "What are the notify methods for RecyclerView adapter updates?"
-    back: |
-      **Specific methods (preferred):**
-      - `notifyItemRemoved(pos)` - deletion
-      - `notifyItemInserted(pos)` - insertion
-      - `notifyItemChanged(pos)` - update
-      - `notifyItemMoved(from, to)` - move
-
-      **Batch:**
-      - `notifyItemRangeChanged/Inserted/Removed(start, count)`
-
-      **Last resort:**
-      - `notifyDataSetChanged()` - full redraw, no animation
-    tags:
-      - android_layouts
-      - difficulty::medium
-  - slug: android-392-0-ru
-    front: "Какие notify-методы для обновления адаптера RecyclerView?"
-    back: |
-      **Специфичные методы (предпочтительно):**
-      - `notifyItemRemoved(pos)` - удаление
-      - `notifyItemInserted(pos)` - вставка
-      - `notifyItemChanged(pos)` - обновление
-      - `notifyItemMoved(from, to)` - перемещение
-
-      **Пакетные:**
-      - `notifyItemRangeChanged/Inserted/Removed(start, count)`
-
-      **В крайнем случае:**
-      - `notifyDataSetChanged()` - полная перерисовка, нет анимации
-    tags:
-      - android_layouts
-      - difficulty::medium
-
----\
+- slug: android-392-0-en
+  language: en
+  anki_id: 1768381287510
+  synced_at: '2026-01-23T16:45:06.322000'
+- slug: android-392-0-ru
+  language: ru
+  anki_id: 1768381287532
+  synced_at: '2026-01-23T16:45:06.322812'
+---
 # Вопрос (RU)
 
 > Как правильно уведомить адаптер `RecyclerView` о том, что элемент был удален из списка?

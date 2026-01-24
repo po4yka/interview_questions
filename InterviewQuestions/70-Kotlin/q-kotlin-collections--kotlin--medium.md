@@ -41,16 +41,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-collections--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287204
+  synced_at: '2026-01-23T17:03:51.169624'
 - slug: q-kotlin-collections--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287230
+  synced_at: '2026-01-23T17:03:51.174798'
 ---
 # Вопрос (RU)
 > Что такое коллекции в Kotlin? Объясните `List`, `Set`, `Map`, их изменяемые варианты, операторы коллекций и разницу между Collections и Sequences.

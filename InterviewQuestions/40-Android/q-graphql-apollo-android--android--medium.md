@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-167-0-en
   language: en
   anki_id: 1768367360982
-  synced_at: '2026-01-14T09:17:53.127522'
+  synced_at: '2026-01-23T16:45:05.523649'
 - slug: android-167-0-ru
   language: ru
   anki_id: 1768367361007
-  synced_at: '2026-01-14T09:17:53.130110'
+  synced_at: '2026-01-23T16:45:05.525597'
 ---
 # Вопрос (RU)
 > GraphQL с Apollo Android

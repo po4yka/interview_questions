@@ -32,11 +32,11 @@ anki_cards:
 - slug: android-124-0-en
   language: en
   anki_id: 1768367580805
-  synced_at: '2026-01-14T09:17:53.015254'
+  synced_at: '2026-01-23T16:45:05.298345'
 - slug: android-124-0-ru
   language: ru
   anki_id: 1768367580830
-  synced_at: '2026-01-14T09:17:53.017826'
+  synced_at: '2026-01-23T16:45:05.300745'
 tags:
 - android
 - android/lifecycle

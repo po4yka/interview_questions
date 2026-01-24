@@ -1,61 +1,48 @@
 ---
 id: android-019
-title: How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок в Android?
-aliases: [Voice Video Call Android, WebRTC Android, Голосовой видеозвонок Android]
+title: How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок
+  в Android?
+aliases:
+- Voice Video Call Android
+- WebRTC Android
+- Голосовой видеозвонок Android
 topic: android
-subtopics: [media, networking-http, websockets]
+subtopics:
+- media
+- networking-http
+- websockets
 question_kind: coding
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources:
-  - "https://github.com/amitshekhariitbhu/android-interview-questions"
+- https://github.com/amitshekhariitbhu/android-interview-questions
 status: draft
 moc: moc-android
-related: [q-android-lint-tool--android--medium, q-http-protocols-comparison--android--medium, q-main-thread-android--android--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-parsing-optimization-android--android--medium]
+related:
+- q-android-lint-tool--android--medium
+- q-http-protocols-comparison--android--medium
+- q-main-thread-android--android--medium
+- q-parallel-network-calls-coroutines--kotlin--medium
+- q-parsing-optimization-android--android--medium
 created: 2025-10-06
 updated: 2025-10-31
-tags: [android/media, android/networking-http, android/websockets, difficulty/hard]
+tags:
+- android/media
+- android/networking-http
+- android/websockets
+- difficulty/hard
 anki_cards:
-  - slug: android-019-0-en
-    front: "What are the key components for implementing voice/video calls in Android?"
-    back: |
-      **Use WebRTC** for P2P audio/video:
-
-      **Components**:
-      - **PeerConnection** - manages P2P and media tracks
-      - **MediaTracks** - audio/video capture
-      - **ICE/STUN/TURN** - NAT traversal
-      - **Signaling Server** - exchanges SDP/ICE (WebSocket)
-
-      **Critical requirements**:
-      - TURN server for strict NAT (production)
-      - Foreground Service + notification
-      - Audio focus management
-      - CAMERA + RECORD_AUDIO permissions
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-019-0-ru
-    front: "Какие ключевые компоненты для реализации голосовых/видеозвонков в Android?"
-    back: |
-      **Используйте WebRTC** для P2P аудио/видео:
-
-      **Компоненты**:
-      - **PeerConnection** - управляет P2P и медиа-треками
-      - **MediaTracks** - захват аудио/видео
-      - **ICE/STUN/TURN** - обход NAT
-      - **Signaling Server** - обмен SDP/ICE (WebSocket)
-
-      **Критические требования**:
-      - TURN сервер для строгих NAT (продакшен)
-      - Foreground Service + уведомление
-      - Управление audio focus
-      - Разрешения CAMERA + RECORD_AUDIO
-    tags:
-      - android_general
-      - difficulty::hard
-
+- slug: android-019-0-en
+  language: en
+  anki_id: 1768379768048
+  synced_at: '2026-01-23T16:45:05.656831'
+- slug: android-019-0-ru
+  language: ru
+  anki_id: 1768379768073
+  synced_at: '2026-01-23T16:45:05.658031'
 ---
 # Вопрос (RU)
 > Как бы вы реализовали функции голосовых и видеозвонков в Android приложении?

@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-117-0-en
   language: en
   anki_id: 1768365304957
-  synced_at: '2026-01-14T09:09:33.472804'
+  synced_at: '2026-01-23T16:45:05.261621'
 - slug: android-117-0-ru
   language: ru
   anki_id: 1768365305006
-  synced_at: '2026-01-14T09:09:33.475505'
+  synced_at: '2026-01-23T16:45:05.262830'
 ---
 # Вопрос (RU)
 > Как оптимизировать отрисовку в `Canvas` для достижения 60 FPS в кастомных `View`?

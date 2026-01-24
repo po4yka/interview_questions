@@ -1,78 +1,48 @@
----\
+---
 id: android-242
 anki_cards:
-  - slug: android-242-0-en
-    front: "How do you integrate Room with Paging 3 for offline-first architecture?"
-    back: |
-      **Basic PagingSource** - Room auto-generates from DAO:
-      ```kotlin
-      @Query("SELECT * FROM users ORDER BY createdAt DESC")
-      fun getUsersPaged(): PagingSource<Int, User>
-      ```
-
-      **RemoteMediator** for offline-first:
-      - Fetches from network, caches in Room
-      - Use Remote Keys table for pagination state
-      - Wrap operations in `database.withTransaction`
-
-      **Setup:**
-      ```kotlin
-      Pager(
-          config = PagingConfig(pageSize = 20),
-          remoteMediator = UserRemoteMediator(...),
-          pagingSourceFactory = { userDao.getUsersPaged() }
-      ).flow.cachedIn(viewModelScope)
-      ```
-
-      **Key:** PagingSource auto-invalidates on DB changes.
-    tags:
-      - android_room
-      - android_architecture
-      - difficulty::medium
-  - slug: android-242-0-ru
-    front: "Как интегрировать Room с Paging 3 для offline-first архитектуры?"
-    back: |
-      **Базовый PagingSource** - Room генерирует автоматически:
-      ```kotlin
-      @Query("SELECT * FROM users ORDER BY createdAt DESC")
-      fun getUsersPaged(): PagingSource<Int, User>
-      ```
-
-      **RemoteMediator** для offline-first:
-      - Загружает из сети, кэширует в Room
-      - Используйте таблицу Remote Keys для состояния пагинации
-      - Оборачивайте операции в `database.withTransaction`
-
-      **Настройка:**
-      ```kotlin
-      Pager(
-          config = PagingConfig(pageSize = 20),
-          remoteMediator = UserRemoteMediator(...),
-          pagingSourceFactory = { userDao.getUsersPaged() }
-      ).flow.cachedIn(viewModelScope)
-      ```
-
-      **Ключевое:** PagingSource автоматически инвалидируется при изменении БД.
-    tags:
-      - android_room
-      - android_architecture
-      - difficulty::medium
-title: "Room Paging3 Integration / Интеграция Room с Paging3"
-aliases: ["Room Paging3 Integration", "Интеграция Room с Paging3"]
+- slug: android-242-0-en
+  language: en
+  anki_id: 1768420255454
+  synced_at: '2026-01-23T16:45:05.844546'
+- slug: android-242-0-ru
+  language: ru
+  anki_id: 1768420255483
+  synced_at: '2026-01-23T16:45:05.846103'
+title: Room Paging3 Integration / Интеграция Room с Paging3
+aliases:
+- Room Paging3 Integration
+- Интеграция Room с Paging3
 topic: android
-subtopics: [architecture-mvvm, room, ui-compose]
+subtopics:
+- architecture-mvvm
+- room
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-room, q-room-library-definition--android--easy, q-room-transactions-dao--android--medium]
+related:
+- c-room
+- q-room-library-definition--android--easy
+- q-room-transactions-dao--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/room, android/ui-compose, database, difficulty/medium, offline-first, pagination, paging3]
----\
+tags:
+- android/architecture-mvvm
+- android/room
+- android/ui-compose
+- database
+- difficulty/medium
+- offline-first
+- pagination
+- paging3
+---
 # Вопрос (RU)
 
 > Как интегрировать `Room` с Paging 3? Реализуйте источник данных из `Room` и обработку RemoteMediator для офлайн-first архитектуры с сетью и базой данных.

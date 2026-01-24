@@ -28,11 +28,11 @@ anki_cards:
 - slug: android-467-0-en
   language: en
   anki_id: 1768366347179
-  synced_at: '2026-01-14T09:17:53.703026'
+  synced_at: '2026-01-23T16:45:06.291658'
 - slug: android-467-0-ru
   language: ru
   anki_id: 1768366347198
-  synced_at: '2026-01-14T09:17:53.705947'
+  synced_at: '2026-01-23T16:45:06.292471'
 created: 2025-10-20
 updated: 2025-10-30
 tags:

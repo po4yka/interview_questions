@@ -1,69 +1,55 @@
----\
+---
 id: android-314
-title: How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием вперед
-aliases: [RecyclerView Cache Ahead, RecyclerView Prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
+title: How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием
+  вперед
+aliases:
+- RecyclerView Cache Ahead
+- RecyclerView Prefetching
+- Кеширование RecyclerView
+- Предзагрузка RecyclerView
 topic: android
-subtopics: [cache-offline, performance-rendering, ui-views]
+subtopics:
+- cache-offline
+- performance-rendering
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-database-design, c-performance, q-cache-implementation-strategies--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium, q-recyclerview-async-list-differ--android--medium, q-recyclerview-sethasfixedsize--android--easy]
+related:
+- c-database-design
+- c-performance
+- q-cache-implementation-strategies--android--medium
+- q-how-animations-work-in-recyclerview--android--medium
+- q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+- q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium
+- q-recyclerview-async-list-differ--android--medium
+- q-recyclerview-sethasfixedsize--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/cache-offline, android/performance-rendering, android/ui-views, difficulty/medium, optimization, prefetching, recyclerview]
+tags:
+- android/cache-offline
+- android/performance-rendering
+- android/ui-views
+- difficulty/medium
+- optimization
+- prefetching
+- recyclerview
 anki_cards:
-  - slug: android-314-0-en
-    front: "How to configure RecyclerView prefetching and caching?"
-    back: |
-      **Prefetching (enabled by default):**
-      ```kotlin
-      layoutManager.isItemPrefetchEnabled = true
-      layoutManager.initialPrefetchItemCount = 4
-      ```
-
-      **View cache:**
-      ```kotlin
-      recyclerView.setItemViewCacheSize(20) // default 2
-      ```
-
-      **RecycledViewPool (shared across RVs):**
-      ```kotlin
-      val pool = RecycledViewPool()
-      recyclerView.setRecycledViewPool(pool)
-      pool.setMaxRecycledViews(TYPE, 10)
-      ```
-    tags:
-      - android_layouts
-      - difficulty::medium
-  - slug: android-314-0-ru
-    front: "Как настроить предзагрузку и кэширование в RecyclerView?"
-    back: |
-      **Prefetching (включён по умолчанию):**
-      ```kotlin
-      layoutManager.isItemPrefetchEnabled = true
-      layoutManager.initialPrefetchItemCount = 4
-      ```
-
-      **View cache:**
-      ```kotlin
-      recyclerView.setItemViewCacheSize(20) // по умолчанию 2
-      ```
-
-      **RecycledViewPool (общий между RV):**
-      ```kotlin
-      val pool = RecycledViewPool()
-      recyclerView.setRecycledViewPool(pool)
-      pool.setMaxRecycledViews(TYPE, 10)
-      ```
-    tags:
-      - android_layouts
-      - difficulty::medium
-
----\
+- slug: android-314-0-en
+  language: en
+  anki_id: 1768381281360
+  synced_at: '2026-01-23T16:45:06.114623'
+- slug: android-314-0-ru
+  language: ru
+  anki_id: 1768381281382
+  synced_at: '2026-01-23T16:45:06.115594'
+---
 # Вопрос (RU)
 
 > Как настроить `RecyclerView` для кеширования и предзагрузки элементов (cache/prefetch ahead)?

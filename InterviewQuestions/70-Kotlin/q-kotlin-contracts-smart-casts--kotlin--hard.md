@@ -30,22 +30,12 @@ tags:
 anki_cards:
 - slug: kotlin-227-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
-  - flow
-  - type-system
+  anki_id: 1768326296331
+  synced_at: '2026-01-23T17:03:51.716213'
 - slug: kotlin-227-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
-  - flow
-  - type-system
+  anki_id: 1768326296357
+  synced_at: '2026-01-23T17:03:51.717098'
 ---
 # Вопрос (RU)
 > Что такое контракты Kotlin? Как они обеспечивают умные приведения типов (smart casts)? Реализуйте пользовательский контракт для функции валидации.

@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-470-0-en
   language: en
   anki_id: 1768366758279
-  synced_at: '2026-01-14T09:17:53.816187'
+  synced_at: '2026-01-23T16:45:06.357092'
 - slug: android-470-0-ru
   language: ru
   anki_id: 1768366758302
-  synced_at: '2026-01-14T09:17:53.818421'
+  synced_at: '2026-01-23T16:45:06.357818'
 sources:
 - https://developer.android.com/topic/security/data
 ---

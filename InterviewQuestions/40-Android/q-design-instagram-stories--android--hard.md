@@ -21,11 +21,11 @@ anki_cards:
 - slug: android-441-0-en
   language: en
   anki_id: 1768366951130
-  synced_at: '2026-01-14T09:13:16.048894'
+  synced_at: '2026-01-23T16:45:05.295394'
 - slug: android-441-0-ru
   language: ru
   anki_id: 1768366951155
-  synced_at: '2026-01-14T09:13:16.051166'
+  synced_at: '2026-01-23T16:45:05.297071'
 status: draft
 moc: moc-android
 related:

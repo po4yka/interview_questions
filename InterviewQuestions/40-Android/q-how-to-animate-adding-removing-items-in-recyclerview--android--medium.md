@@ -1,64 +1,45 @@
----\
+---
 id: android-419
-title: How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление и удаление элементов в RecyclerView
-aliases: [How To Animate Adding Removing Items In RecyclerView, Как анимировать добавление и удаление элементов в RecyclerView]
+title: How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление
+  и удаление элементов в RecyclerView
+aliases:
+- How To Animate Adding Removing Items In RecyclerView
+- Как анимировать добавление и удаление элементов в RecyclerView
 topic: android
-subtopics: [ui-animation]
+subtopics:
+- ui-animation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, q-bundle-data-types--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy, q-stack-heap-memory-multiple-threads--android--medium, q-what-problems-can-there-be-with-list-items--android--easy]
+related:
+- c-custom-views
+- q-bundle-data-types--android--medium
+- q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+- q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+- q-stack-heap-memory-multiple-threads--android--medium
+- q-what-problems-can-there-be-with-list-items--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
+tags:
+- android/ui-animation
+- animations
+- difficulty/medium
+- recyclerview
 anki_cards:
-  - slug: android-419-0-en
-    front: "How to animate item additions/removals in RecyclerView?"
-    back: |
-      **Use ItemAnimator + fine-grained notifications:**
-
-      1. **DefaultItemAnimator** (built-in) animates automatically if you use:
-         - `notifyItemInserted(pos)`
-         - `notifyItemRemoved(pos)`
-         - NOT `notifyDataSetChanged()`
-
-      2. **DiffUtil / ListAdapter** - computes differences and dispatches proper `notifyItem*` calls
-
-      ```kotlin
-      recyclerView.itemAnimator = DefaultItemAnimator()
-      adapter.submitList(newList) // ListAdapter
-      ```
-
-      For custom animations: extend `SimpleItemAnimator`
-    tags:
-      - android_layouts
-      - difficulty::medium
-  - slug: android-419-0-ru
-    front: "Как анимировать добавление/удаление элементов в RecyclerView?"
-    back: |
-      **Используйте ItemAnimator + точечные уведомления:**
-
-      1. **DefaultItemAnimator** (встроенный) анимирует автоматически если использовать:
-         - `notifyItemInserted(pos)`
-         - `notifyItemRemoved(pos)`
-         - НЕ `notifyDataSetChanged()`
-
-      2. **DiffUtil / ListAdapter** - вычисляет различия и вызывает нужные `notifyItem*`
-
-      ```kotlin
-      recyclerView.itemAnimator = DefaultItemAnimator()
-      adapter.submitList(newList) // ListAdapter
-      ```
-
-      Для кастомных анимаций: наследуйте `SimpleItemAnimator`
-    tags:
-      - android_layouts
-      - difficulty::medium
-
----\
+- slug: android-419-0-en
+  language: en
+  anki_id: 1768378646595
+  synced_at: '2026-01-23T16:45:06.381929'
+- slug: android-419-0-ru
+  language: ru
+  anki_id: 1768378646616
+  synced_at: '2026-01-23T16:45:06.382632'
+---
 # Вопрос (RU)
 > Как анимировать добавление и удаление элементов в `RecyclerView`
 

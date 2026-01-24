@@ -1,57 +1,43 @@
----\
+---
 id: android-145
-title: What Is A View And What Is Responsible For Its Visual Part / Что такое View и что отвечает за её визуальную часть
-aliases: [What Is A View And What Is Responsible For Its Visual Part, Что такое View и что отвечает за её визуальную часть]
+title: What Is A View And What Is Responsible For Its Visual Part / Что такое View
+  и что отвечает за её визуальную часть
+aliases:
+- What Is A View And What Is Responsible For Its Visual Part
+- Что такое View и что отвечает за её визуальную часть
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-custom-view-attributes--android--medium, q-view-binding--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium]
+related:
+- c-android-components
+- q-custom-view-attributes--android--medium
+- q-view-binding--android--medium
+- q-what-is-known-about-methods-that-redraw-view--android--medium
+- q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/medium]
+tags:
+- android/ui-views
+- difficulty/medium
 anki_cards:
-  - slug: android-145-0-en
-    front: "What is a View in Android and what controls its visual appearance?"
-    back: |
-      **View** - base UI building block participating in measure -> layout -> draw pipeline.
-
-      **Visual appearance controlled by:**
-      1. **View properties** - background, padding, alpha, rotation, elevation
-      2. **LayoutParams** - size/position rules from parent ViewGroup
-      3. **XML layouts** - declarative attribute definitions
-      4. **Styles/Themes** - reusable attribute sets
-      5. **Programmatic changes** - runtime modifications
-      6. **Canvas API** - custom drawing in `onDraw()`
-
-      **Key methods:** `onMeasure()`, `onLayout()`, `onDraw(Canvas)`
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-145-0-ru
-    front: "Что такое View в Android и что управляет её визуальным отображением?"
-    back: |
-      **View** - базовый элемент UI, участвующий в пайплайне measure -> layout -> draw.
-
-      **Визуальным отображением управляют:**
-      1. **Свойства View** - background, padding, alpha, rotation, elevation
-      2. **LayoutParams** - правила размера/позиции от родителя ViewGroup
-      3. **XML layouts** - декларативные определения атрибутов
-      4. **Стили/Темы** - переиспользуемые наборы атрибутов
-      5. **Программные изменения** - модификации в runtime
-      6. **Canvas API** - кастомная отрисовка в `onDraw()`
-
-      **Ключевые методы:** `onMeasure()`, `onLayout()`, `onDraw(Canvas)`
-    tags:
-      - android_views
-      - difficulty::medium
-
----\
+- slug: android-145-0-en
+  language: en
+  anki_id: 1768396545299
+  synced_at: '2026-01-23T16:45:05.380123'
+- slug: android-145-0-ru
+  language: ru
+  anki_id: 1768396545325
+  synced_at: '2026-01-23T16:45:05.382015'
+---
 # Вопрос (RU)
 
 > Что такое `View` и что отвечает за её визуальную часть?

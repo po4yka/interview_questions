@@ -32,20 +32,12 @@ tags:
 anki_cards:
 - slug: q-coroutine-exception-handling--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
-  - error-handling
+  anki_id: 1768326287455
+  synced_at: '2026-01-23T17:03:51.190924'
 - slug: q-coroutine-exception-handling--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
-  - error-handling
+  anki_id: 1768326287481
+  synced_at: '2026-01-23T17:03:51.192720'
 ---
 # Вопрос (RU)
 > Как работает обработка исключений в Kotlin корутинах? В чем разница между coroutineScope и supervisorScope?

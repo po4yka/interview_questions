@@ -39,16 +39,12 @@ tags:
 anki_cards:
 - slug: q-statein-sharein-flow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285957
+  synced_at: '2026-01-23T17:03:51.040694'
 - slug: q-statein-sharein-flow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285982
+  synced_at: '2026-01-23T17:03:51.042218'
 ---
 # Вопрос (RU)
 > Что такое операторы `stateIn` и `shareIn` в Kotlin `Flow`? Когда использовать каждый?

@@ -40,11 +40,11 @@ anki_cards:
 - slug: android-034-0-en
   language: en
   anki_id: 1768367373232
-  synced_at: '2026-01-14T09:17:53.885616'
+  synced_at: '2026-01-23T16:45:06.424997'
 - slug: android-034-0-ru
   language: ru
   anki_id: 1768367373256
-  synced_at: '2026-01-14T09:17:53.888224'
+  synced_at: '2026-01-23T16:45:06.425878'
 ---
 # Вопрос (RU)
 > Как работают библиотеки загрузки изображений вроде Glide/Fresco внутри?

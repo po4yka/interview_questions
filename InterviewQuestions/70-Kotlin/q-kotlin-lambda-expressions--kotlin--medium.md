@@ -35,16 +35,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-lambda-expressions--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282857
+  synced_at: '2026-01-23T17:03:50.751769'
 - slug: q-kotlin-lambda-expressions--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282880
+  synced_at: '2026-01-23T17:03:50.753900'
 ---
 # Вопрос (RU)
 > Что такое лямбда-выражения в Kotlin и как они работают?

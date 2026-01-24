@@ -1,51 +1,46 @@
----\
+---
 id: android-109
 title: Spannable Text Styling / Стилизация текста Spannable
-aliases: [Spannable Text Styling, Стилизация текста Spannable]
+aliases:
+- Spannable Text Styling
+- Стилизация текста Spannable
 topic: android
-subtopics: [ui-views, ui-widgets]
+subtopics:
+- ui-views
+- ui-widgets
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-11
 sources: []
-tags: [android/ui-views, android/ui-widgets, difficulty/medium, spannable, text-styling]
+tags:
+- android/ui-views
+- android/ui-widgets
+- difficulty/medium
+- spannable
+- text-styling
 moc: moc-android
-related: [c-android-components, q-accessibility-text-scaling--android--medium, q-custom-view-attributes--android--medium, q-how-to-break-text-by-screen-width--android--easy, q-how-to-organize-work-with-text-and-images-in-a-delegate--android--easy]
+related:
+- c-android-components
+- q-accessibility-text-scaling--android--medium
+- q-custom-view-attributes--android--medium
+- q-how-to-break-text-by-screen-width--android--easy
+- q-how-to-organize-work-with-text-and-images-in-a-delegate--android--easy
 anki_cards:
-  - slug: android-109-0-en
-    front: "What is Spannable and what are the main classes for text styling?"
-    back: |
-      **Spannable** - interface to attach markup objects (spans) to text at runtime.
-
-      **Classes:**
-      - `SpannedString` - immutable text + immutable markup
-      - `SpannableString` - immutable text + mutable markup
-      - `SpannableStringBuilder` - mutable text + mutable markup
-
-      **Key spans:** ForegroundColorSpan, StyleSpan, ClickableSpan
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-109-0-ru
-    front: "Что такое Spannable и какие основные классы для стилизации текста?"
-    back: |
-      **Spannable** - интерфейс для прикрепления объектов разметки (spans) к тексту во время выполнения.
-
-      **Классы:**
-      - `SpannedString` - неизменяемый текст + неизменяемая разметка
-      - `SpannableString` - неизменяемый текст + изменяемая разметка
-      - `SpannableStringBuilder` - изменяемый текст + изменяемая разметка
-
-      **Ключевые spans:** ForegroundColorSpan, StyleSpan, ClickableSpan
-    tags:
-      - android_views
-      - difficulty::medium
-
----\
+- slug: android-109-0-en
+  language: en
+  anki_id: 1768395803646
+  synced_at: '2026-01-23T16:45:06.385122'
+- slug: android-109-0-ru
+  language: ru
+  anki_id: 1768395803671
+  synced_at: '2026-01-23T16:45:06.385888'
+---
 # Вопрос (RU)
 
 > Что такое Spannable и как его использовать для стилизации текста?

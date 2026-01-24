@@ -1,67 +1,44 @@
 ---
 id: android-082
 title: State for Initial List / Состояние для начального списка
-aliases: [State for Initial List, Состояние для начального списка]
+aliases:
+- State for Initial List
+- Состояние для начального списка
 topic: android
-subtopics: [architecture-mvvm, ui-state]
+subtopics:
+- architecture-mvvm
+- ui-state
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, c-jetpack-compose, q-android-architectural-patterns--android--medium, q-can-state-loss-be-related-to-a-fragment--android--medium, q-sealed-classes-state-management--android--medium, q-what-problems-can-there-be-with-list-items--android--easy]
+related:
+- c-android-components
+- c-jetpack-compose
+- q-android-architectural-patterns--android--medium
+- q-can-state-loss-be-related-to-a-fragment--android--medium
+- q-sealed-classes-state-management--android--medium
+- q-what-problems-can-there-be-with-list-items--android--easy
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/ui-state, difficulty/easy, ui-state]
+tags:
+- android/architecture-mvvm
+- android/ui-state
+- difficulty/easy
+- ui-state
 anki_cards:
-  - slug: android-082-0-en
-    front: "What should you put in state for an initial list in Android?"
-    back: |
-      **Two approaches:**
-
-      **1. Empty list** (async loading):
-      ```kotlin
-      _items.value = emptyList() // Then load
-      ```
-      Problem: Can't distinguish loading from empty result.
-
-      **2. Sealed class with Loading state** (recommended):
-      ```kotlin
-      sealed class UiState<T> {
-          object Loading : UiState<Nothing>()
-          data class Success<T>(val data: T) : UiState<T>()
-          data class Error(val e: Throwable) : UiState<Nothing>()
-      }
-      _uiState.value = UiState.Loading
-      ```
-    tags:
-      - android_architecture
-      - difficulty::easy
-  - slug: android-082-0-ru
-    front: "Что использовать в качестве начального состояния списка в Android?"
-    back: |
-      **Два подхода:**
-
-      **1. Пустой список** (асинхронная загрузка):
-      ```kotlin
-      _items.value = emptyList() // Затем загрузка
-      ```
-      Проблема: Нельзя отличить загрузку от пустого результата.
-
-      **2. Sealed class с Loading** (рекомендуется):
-      ```kotlin
-      sealed class UiState<T> {
-          object Loading : UiState<Nothing>()
-          data class Success<T>(val data: T) : UiState<T>()
-          data class Error(val e: Throwable) : UiState<Nothing>()
-      }
-      _uiState.value = UiState.Loading
-      ```
-    tags:
-      - android_architecture
-      - difficulty::easy
-
+- slug: android-082-0-en
+  language: en
+  anki_id: 1768382130461
+  synced_at: '2026-01-23T16:45:05.676432'
+- slug: android-082-0-ru
+  language: ru
+  anki_id: 1768382130486
+  synced_at: '2026-01-23T16:45:05.678265'
 ---
 # Вопрос (RU)
 > Состояние для начального списка

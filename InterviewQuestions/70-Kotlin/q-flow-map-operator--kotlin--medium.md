@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-map-operator--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284655
+  synced_at: '2026-01-23T17:03:50.930455'
 - slug: q-flow-map-operator--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284680
+  synced_at: '2026-01-23T17:03:50.932981'
 ---
 # Question (EN)
 > What to use to transform data from one type to another within a single data stream?

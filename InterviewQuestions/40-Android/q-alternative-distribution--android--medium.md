@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-406-0-en
   language: en
   anki_id: 1768363328871
-  synced_at: '2026-01-14T09:17:53.806739'
+  synced_at: '2026-01-23T16:45:06.353483'
 - slug: android-406-0-ru
   language: ru
   anki_id: 1768363328895
-  synced_at: '2026-01-14T09:17:53.808963'
+  synced_at: '2026-01-23T16:45:06.354323'
 ---
 # Вопрос (RU)
 > Что такое альтернативное распространение Android-приложений и какие платформы существуют помимо Google Play?

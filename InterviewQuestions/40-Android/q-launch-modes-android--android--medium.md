@@ -1,59 +1,49 @@
 ---
 id: android-010
 title: Android Activity Launch Modes / Режимы запуска Activity в Android
-aliases: [Android Activity Launch Modes, Режимы запуска Activity в Android]
+aliases:
+- Android Activity Launch Modes
+- Режимы запуска Activity в Android
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
-related: [c-activity, c-compose-navigation, q-android-components-besides-activity--android--easy, q-android-lint-tool--android--medium, q-kapt-vs-ksp--android--medium, q-parsing-optimization-android--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium]
+related:
+- c-activity
+- c-compose-navigation
+- q-android-components-besides-activity--android--easy
+- q-android-lint-tool--android--medium
+- q-kapt-vs-ksp--android--medium
+- q-parsing-optimization-android--android--medium
+- q-viewmodel-vs-onsavedinstancestate--android--medium
+- q-which-event-is-triggered-when-user-presses-screen--android--medium
 created: 2025-10-05
 updated: 2025-11-11
-tags: [android/activity, android/ui-navigation, difficulty/medium, en, ru]
+tags:
+- android/activity
+- android/ui-navigation
+- difficulty/medium
+- en
+- ru
 anki_cards:
-  - slug: android-010-0-en
-    front: "What are the four Activity launch modes in Android?"
-    back: |
-      **Four launch modes** (`android:launchMode`):
-
-      1. **standard** (default) - new instance every time, multiple allowed
-      2. **singleTop** - reuse if at top of stack via `onNewIntent()`
-      3. **singleTask** - one instance as task root, clears activities above
-      4. **singleInstance** - alone in its task, no other activities allowed
-
-      ```xml
-      <activity android:launchMode="singleTask" />
-      ```
-
-      Also controllable via Intent flags: `FLAG_ACTIVITY_NEW_TASK`, `FLAG_ACTIVITY_CLEAR_TOP`
-    tags:
-      - android_activities
-      - difficulty::medium
-  - slug: android-010-0-ru
-    front: "Какие четыре режима запуска Activity существуют в Android?"
-    back: |
-      **Четыре режима запуска** (`android:launchMode`):
-
-      1. **standard** (по умолчанию) - новый экземпляр каждый раз, допускается несколько
-      2. **singleTop** - переиспользовать если на вершине стека через `onNewIntent()`
-      3. **singleTask** - один экземпляр как корень задачи, очищает Activity выше
-      4. **singleInstance** - один в своей задаче, другие Activity не допускаются
-
-      ```xml
-      <activity android:launchMode="singleTask" />
-      ```
-
-      Также управляется через флаги Intent: `FLAG_ACTIVITY_NEW_TASK`, `FLAG_ACTIVITY_CLEAR_TOP`
-    tags:
-      - android_activities
-      - difficulty::medium
-
+- slug: android-010-0-en
+  language: en
+  anki_id: 1768379419599
+  synced_at: '2026-01-23T16:45:06.263727'
+- slug: android-010-0-ru
+  language: ru
+  anki_id: 1768379419622
+  synced_at: '2026-01-23T16:45:06.264501'
 ---
 # Вопрос (RU)
 > Какие режимы запуска (launch modes) вы знаете?

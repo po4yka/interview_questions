@@ -2,18 +2,13 @@
 anki_cards:
 - slug: q-expect-actual-kotlin--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296081
+  synced_at: '2026-01-23T17:03:51.707884'
 - slug: q-expect-actual-kotlin--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296105
+  synced_at: '2026-01-23T17:03:51.708717'
 ---
-
 ---
 ---
 ---\

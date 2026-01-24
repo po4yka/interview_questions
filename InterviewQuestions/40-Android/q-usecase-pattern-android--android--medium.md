@@ -1,64 +1,45 @@
 ---
 id: android-025
 title: UseCase Pattern in Android / Паттерн UseCase в Android
-aliases: [UseCase Pattern in Android, Паттерн UseCase в Android]
+aliases:
+- UseCase Pattern in Android
+- Паттерн UseCase в Android
 topic: android
-subtopics: [architecture-clean, architecture-mvvm, di-hilt]
+subtopics:
+- architecture-clean
+- architecture-mvvm
+- di-hilt
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-clean-architecture, q-android-architectural-patterns--android--medium, q-android-lint-tool--android--medium, q-factory-pattern-android--android--medium, q-repository-pattern--android--medium]
+related:
+- c-clean-architecture
+- q-android-architectural-patterns--android--medium
+- q-android-lint-tool--android--medium
+- q-factory-pattern-android--android--medium
+- q-repository-pattern--android--medium
 created: 2025-10-06
 updated: 2025-11-10
-tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, difficulty/medium]
+tags:
+- android/architecture-clean
+- android/architecture-mvvm
+- android/di-hilt
+- difficulty/medium
 anki_cards:
-  - slug: android-025-0-en
-    front: "What is the UseCase pattern in Android and when to use it?"
-    back: |
-      **UseCase** (Interactor) = domain layer component encapsulating one business operation.
-
-      **When to use**:
-      - Complex business logic (validation, transformations)
-      - Multiple repositories/data sources
-      - Reusable logic across ViewModels
-      - Need isolation and testability
-
-      ```kotlin
-      class GetUserUseCase(private val repo: UserRepository) {
-          suspend operator fun invoke(id: String) = repo.getUser(id)
-      }
-      ```
-
-      **Avoid**: mechanical proxies without real logic.
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-025-0-ru
-    front: "Что такое паттерн UseCase в Android и когда его использовать?"
-    back: |
-      **UseCase** (Interactor) = компонент domain-слоя, инкапсулирующий одну бизнес-операцию.
-
-      **Когда использовать**:
-      - Сложная бизнес-логика (валидация, трансформации)
-      - Несколько репозиториев/источников данных
-      - Переиспользуемая логика между ViewModel
-      - Нужна изоляция и тестируемость
-
-      ```kotlin
-      class GetUserUseCase(private val repo: UserRepository) {
-          suspend operator fun invoke(id: String) = repo.getUser(id)
-      }
-      ```
-
-      **Избегать**: механических прокси без реальной логики.
-    tags:
-      - android_architecture
-      - difficulty::medium
-
+- slug: android-025-0-en
+  language: en
+  anki_id: 1768379773551
+  synced_at: '2026-01-23T16:45:06.059700'
+- slug: android-025-0-ru
+  language: ru
+  anki_id: 1768379773573
+  synced_at: '2026-01-23T16:45:06.060980'
 ---
 # Вопрос (RU)
 > Что такое паттерн UseCase в Android? Когда и как его реализовать?

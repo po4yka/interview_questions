@@ -7,11 +7,11 @@ anki_cards:
 - slug: kotlin097-0-en
   language: en
   anki_id: 1768327256861
-  synced_at: '2026-01-13T22:00:56.885276'
+  synced_at: '2026-01-23T17:03:51.088774'
 - slug: kotlin097-1-ru
   language: ru
   anki_id: 1768327256883
-  synced_at: '2026-01-13T22:00:56.887453'
+  synced_at: '2026-01-23T17:03:51.093559'
 aliases:
 - Channel Buffer Strategies
 - Стратегии буферизации каналов

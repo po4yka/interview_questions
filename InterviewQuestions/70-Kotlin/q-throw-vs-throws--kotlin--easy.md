@@ -127,16 +127,12 @@ tags:
 anki_cards:
 - slug: q-throw-vs-throws--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285357
+  synced_at: '2026-01-23T17:03:50.986597'
 - slug: q-throw-vs-throws--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285382
+  synced_at: '2026-01-23T17:03:50.988047'
 ---
 # Throw Vs Throws / Throw Против Throws
 

@@ -31,18 +31,12 @@ tags:
 anki_cards:
 - slug: kotlin-028-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - type-system
+  anki_id: 1768326291881
+  synced_at: '2026-01-23T17:03:51.531126'
 - slug: kotlin-028-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - type-system
+  anki_id: 1768326291907
+  synced_at: '2026-01-23T17:03:51.532146'
 ---
 # Вопрос (RU)
 > Что вы знаете о типах Any, Nothing, Unit в Kotlin?

@@ -32,18 +32,12 @@ related:
 anki_cards:
 - slug: kotlin-079-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - jetpack-compose
+  anki_id: 1768326282356
+  synced_at: '2026-01-23T17:03:50.714846'
 - slug: kotlin-079-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - jetpack-compose
+  anki_id: 1768326282380
+  synced_at: '2026-01-23T17:03:50.716399'
 ---
 # Вопрос (RU)
 > Как создавать адаптивные layouts в Compose? Что такое window size классы? Как обрабатывать телефоны, планшеты и складные устройства?

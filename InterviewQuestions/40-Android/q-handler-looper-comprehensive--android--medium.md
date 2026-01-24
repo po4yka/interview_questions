@@ -32,11 +32,11 @@ anki_cards:
 - slug: android-198-0-en
   language: en
   anki_id: 1768367584206
-  synced_at: '2026-01-14T09:17:53.205964'
+  synced_at: '2026-01-23T16:45:05.647577'
 - slug: android-198-0-ru
   language: ru
   anki_id: 1768367584230
-  synced_at: '2026-01-14T09:17:53.208692'
+  synced_at: '2026-01-23T16:45:05.649432'
 ---
 # Вопрос (RU)
 > `Handler` и `Looper` подробно

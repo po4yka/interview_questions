@@ -1,57 +1,51 @@
 ---
 id: android-004
 title: Ways to Reduce Android App Size / Способы уменьшения размера Android приложения
-aliases: [Ways to Reduce Android App Size, Способы уменьшения размера Android приложения]
+aliases:
+- Ways to Reduce Android App Size
+- Способы уменьшения размера Android приложения
 topic: android
-subtopics: [app-bundle, build-variants, performance-memory]
+subtopics:
+- app-bundle
+- build-variants
+- performance-memory
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/Kirchhoff-Android-Interview-Questions"
+language_tags:
+- en
+- ru
+source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
-related: [c-app-bundle, c-gradle, c-memory-management, q-app-size-optimization--android--medium, q-app-start-types-android--android--medium, q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium, q-memory-leak-vs-oom-android--android--medium, q-reduce-apk-size-techniques--android--medium]
+related:
+- c-app-bundle
+- c-gradle
+- c-memory-management
+- q-app-size-optimization--android--medium
+- q-app-start-types-android--android--medium
+- q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium
+- q-memory-leak-vs-oom-android--android--medium
+- q-reduce-apk-size-techniques--android--medium
 created: 2025-10-05
 updated: 2025-11-11
-tags: [android/app-bundle, android/build-variants, android/performance-memory, difficulty/medium, en, ru]
+tags:
+- android/app-bundle
+- android/build-variants
+- android/performance-memory
+- difficulty/medium
+- en
+- ru
 anki_cards:
-  - slug: android-004-0-en
-    front: "What are the main ways to reduce Android app size?"
-    back: |
-      **4 main strategies**:
-
-      1. **Use Android App Bundle (AAB)** - Google Play generates optimized APKs per device
-      2. **Reduce resources** - remove unused, use WebP, vector drawables, `shrinkResources`
-      3. **Reduce code** - enable R8/ProGuard, avoid enums, strip debug symbols
-      4. **Limit translations** - use `resConfigs("en", "fr")` to keep only needed languages
-
-      ```kotlin
-      isMinifyEnabled = true
-      isShrinkResources = true
-      ```
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-004-0-ru
-    front: "Какие основные способы уменьшения размера Android-приложения?"
-    back: |
-      **4 основных стратегии**:
-
-      1. **Использовать Android App Bundle (AAB)** - Google Play генерирует оптимизированные APK под устройство
-      2. **Уменьшить ресурсы** - удалить неиспользуемые, использовать WebP, vector drawable, `shrinkResources`
-      3. **Уменьшить код** - включить R8/ProGuard, избегать enum, убрать debug-символы
-      4. **Ограничить переводы** - использовать `resConfigs("en", "fr")` для нужных языков
-
-      ```kotlin
-      isMinifyEnabled = true
-      isShrinkResources = true
-      ```
-    tags:
-      - android_general
-      - difficulty::medium
-
+- slug: android-004-0-en
+  language: en
+  anki_id: 1768379410273
+  synced_at: '2026-01-23T16:45:05.685340'
+- slug: android-004-0-ru
+  language: ru
+  anki_id: 1768379410297
+  synced_at: '2026-01-23T16:45:05.687562'
 ---
 # Вопрос (RU)
 > Какие способы уменьшения размера приложения вы знаете?

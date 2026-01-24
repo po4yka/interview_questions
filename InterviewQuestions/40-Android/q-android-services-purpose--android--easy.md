@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-433-0-en
   language: en
   anki_id: 1768363952026
-  synced_at: '2026-01-14T09:17:53.872847'
+  synced_at: '2026-01-23T16:45:06.414050'
 - slug: android-433-0-ru
   language: ru
   anki_id: 1768363952046
-  synced_at: '2026-01-14T09:17:53.874927'
+  synced_at: '2026-01-23T16:45:06.416737'
 ---
 # Вопрос (RU)
 > Для чего используются `Service`-компоненты в Android и когда они необходимы?

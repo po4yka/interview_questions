@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-451-0-en
   language: en
   anki_id: 1768366557626
-  synced_at: '2026-01-14T09:17:53.341772'
+  synced_at: '2026-01-23T16:45:05.880347'
 - slug: android-451-0-ru
   language: ru
   anki_id: 1768366557651
-  synced_at: '2026-01-14T09:17:53.344240'
+  synced_at: '2026-01-23T16:45:05.881680'
 sources:
 - https://dagger.dev/hilt/components.html
 ---

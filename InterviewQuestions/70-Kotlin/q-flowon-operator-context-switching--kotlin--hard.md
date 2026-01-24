@@ -45,16 +45,12 @@ tags:
 anki_cards:
 - slug: q-flowon-operator-context-switching--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293230
+  synced_at: '2026-01-23T17:03:51.588043'
 - slug: q-flowon-operator-context-switching--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293255
+  synced_at: '2026-01-23T17:03:51.591344'
 ---
 # Вопрос (RU)
 > Что делает оператор `flowOn` в `Flow` в Kotlin? Чем он отличается от `withContext`? Объясните сохранение контекста, поведение буферизации, использование нескольких `flowOn` в цепочке и влияние на производительность с реальными примерами.

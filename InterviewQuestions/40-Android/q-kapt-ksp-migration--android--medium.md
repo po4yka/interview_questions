@@ -1,66 +1,49 @@
----\
+---
 id: android-056
 title: KAPT to KSP Migration Guide / Руководство по миграции с KAPT на KSP
-aliases: [KAPT to KSP Migration Guide, Руководство по миграции с KAPT на KSP]
+aliases:
+- KAPT to KSP Migration Guide
+- Руководство по миграции с KAPT на KSP
 topic: android
-subtopics: [performance-startup]
+subtopics:
+- performance-startup
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: Original
 source_note: Annotation processing migration best practices
 status: draft
 moc: moc-android
-related: [c-android, c-android-profiler, q-annotation-processing-android--android--medium, q-background-tasks-decision-guide--android--medium, q-kapt-vs-ksp--android--medium, q-workmanager-decision-guide--android--medium]
+related:
+- c-android
+- c-android-profiler
+- q-annotation-processing-android--android--medium
+- q-background-tasks-decision-guide--android--medium
+- q-kapt-vs-ksp--android--medium
+- q-workmanager-decision-guide--android--medium
 created: 2025-10-11
 updated: 2025-11-11
-tags: [android/performance-startup, annotation-processing, difficulty/medium, en, kapt, ksp, ru]
+tags:
+- android/performance-startup
+- annotation-processing
+- difficulty/medium
+- en
+- kapt
+- ksp
+- ru
 anki_cards:
-  - slug: android-056-0-en
-    front: "How to migrate from kapt to KSP?"
-    back: |
-      **Migration steps**:
-      1. Add KSP plugin: `id("com.google.devtools.ksp")`
-      2. Replace `kapt(...)` with `ksp(...)` for supported libs
-      3. Remove `kotlin-kapt` plugin when fully migrated
-
-      **Supported libraries**: Room, Moshi, Hilt 2.44+, Dagger 2.48+
-
-      ```kotlin
-      // Before
-      kapt("androidx.room:room-compiler:2.6.1")
-      // After
-      ksp("androidx.room:room-compiler:2.6.1")
-      ```
-
-      **Build time improvement**: typically 1.5-2x faster
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-056-0-ru
-    front: "Как мигрировать с kapt на KSP?"
-    back: |
-      **Шаги миграции**:
-      1. Добавить KSP плагин: `id("com.google.devtools.ksp")`
-      2. Заменить `kapt(...)` на `ksp(...)` для поддерживаемых библиотек
-      3. Убрать плагин `kotlin-kapt` после полной миграции
-
-      **Поддерживаемые библиотеки**: Room, Moshi, Hilt 2.44+, Dagger 2.48+
-
-      ```kotlin
-      // До
-      kapt("androidx.room:room-compiler:2.6.1")
-      // После
-      ksp("androidx.room:room-compiler:2.6.1")
-      ```
-
-      **Улучшение сборки**: обычно в 1.5-2x быстрее
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-056-0-en
+  language: en
+  anki_id: 1768380223553
+  synced_at: '2026-01-23T16:45:06.436685'
+- slug: android-056-0-ru
+  language: ru
+  anki_id: 1768380223575
+  synced_at: '2026-01-23T16:45:06.437573'
+---
 # Вопрос (RU)
 > Подробно сравните KAPT и KSP для обработки аннотаций. Мигрируйте зависимости библиотек с KAPT на KSP. Измерьте и задокументируйте улучшения времени сборки.
 

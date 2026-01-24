@@ -1,87 +1,45 @@
 ---
 id: android-159
 anki_cards:
-  - slug: android-159-0-en
-    front: "How to handle one-time events (toast, navigation) in MVI?"
-    back: |
-      **Problem:** Events in State re-trigger on rotation.
-
-      **Solution - SharedFlow:**
-      ```kotlin
-      private val _events = MutableSharedFlow<UiEvent>(replay = 0)
-      val events = _events.asSharedFlow()
-
-      // Emit
-      _events.emit(UiEvent.ShowToast("Success"))
-      ```
-
-      **In Compose:**
-      ```kotlin
-      LaunchedEffect(viewModel) {
-          viewModel.events.collect { event -> ... }
-      }
-      ```
-
-      **In Views:**
-      ```kotlin
-      repeatOnLifecycle(STARTED) {
-          viewModel.events.collect { ... }
-      }
-      ```
-
-      **Key:** State = persistent data, Events = one-time actions.
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-159-0-ru
-    front: "Как обрабатывать одноразовые события (toast, навигация) в MVI?"
-    back: |
-      **Проблема:** События в State повторяются при повороте.
-
-      **Решение - SharedFlow:**
-      ```kotlin
-      private val _events = MutableSharedFlow<UiEvent>(replay = 0)
-      val events = _events.asSharedFlow()
-
-      // Эмит
-      _events.emit(UiEvent.ShowToast("Success"))
-      ```
-
-      **В Compose:**
-      ```kotlin
-      LaunchedEffect(viewModel) {
-          viewModel.events.collect { event -> ... }
-      }
-      ```
-
-      **Во Views:**
-      ```kotlin
-      repeatOnLifecycle(STARTED) {
-          viewModel.events.collect { ... }
-      }
-      ```
-
-      **Ключ:** State = постоянные данные, Events = одноразовые действия.
-    tags:
-      - android_architecture
-      - difficulty::medium
-title: "MVI One-Time Events / Одноразовые события в MVI"
-aliases: ["MVI One-Time Events", "One-time events in MVI", "SharedFlow для событий", "Одноразовые события в MVI"]
+- slug: android-159-0-en
+  language: en
+  anki_id: 1768416418921
+  synced_at: '2026-01-23T16:45:05.471136'
+- slug: android-159-0-ru
+  language: ru
+  anki_id: 1768416418946
+  synced_at: '2026-01-23T16:45:05.472601'
+title: MVI One-Time Events / Одноразовые события в MVI
+aliases:
+- MVI One-Time Events
+- One-time events in MVI
+- SharedFlow для событий
+- Одноразовые события в MVI
 topic: android
-subtopics: [architecture-mvi]
+subtopics:
+- architecture-mvi
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-viewmodel, q-mvi-architecture--android--hard]
+related:
+- c-lifecycle
+- c-viewmodel
+- q-mvi-architecture--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-mvi, architecture, difficulty/medium, events, mvi]
-
----\
+tags:
+- android/architecture-mvi
+- architecture
+- difficulty/medium
+- events
+- mvi
+---
 # Вопрос (RU)
 
 > Как обработать одноразовые события (one-time events) в MVI архитектуре?

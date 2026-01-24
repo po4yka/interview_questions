@@ -1,57 +1,48 @@
----\
+---
 id: android-153
 title: ProGuard/R8 Rules / Правила ProGuard и R8
-aliases: [ProGuard/R8 Rules, Правила ProGuard и R8]
+aliases:
+- ProGuard/R8 Rules
+- Правила ProGuard и R8
 topic: android
-subtopics: [build-variants, obfuscation, static-analysis]
+subtopics:
+- build-variants
+- obfuscation
+- static-analysis
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-gradle, q-android-security-practices-checklist--android--medium, q-database-encryption-android--android--medium, q-encrypted-file-storage--android--medium]
+related:
+- c-gradle
+- q-android-security-practices-checklist--android--medium
+- q-database-encryption-android--android--medium
+- q-encrypted-file-storage--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/build-variants, android/obfuscation, android/static-analysis, difficulty/medium, proguard, r8, security]
+tags:
+- android/build-variants
+- android/obfuscation
+- android/static-analysis
+- difficulty/medium
+- proguard
+- r8
+- security
 anki_cards:
-  - slug: android-153-0-en
-    front: "What are the key ProGuard/R8 rules for Android libraries?"
-    back: |
-      **R8 does:** Shrinking, optimization, obfuscation
-
-      **Key rules:**
-      - `-keepattributes SourceFile,LineNumberTable` (crash reports)
-      - `-keep @androidx.annotation.Keep class * { *; }` (reflection)
-      - `-keepclasseswithmembernames class * { native <methods>; }` (JNI)
-      - `-keep public class com.example.library.** { public protected *; }` (public API)
-
-      **Best practices:**
-      - Minimize keep rules, use @Keep annotation
-      - Test release builds, upload mapping.txt
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-153-0-ru
-    front: "Какие ключевые правила ProGuard/R8 для Android библиотек?"
-    back: |
-      **R8 выполняет:** Shrinking, оптимизация, обфускация
-
-      **Ключевые правила:**
-      - `-keepattributes SourceFile,LineNumberTable` (crash reports)
-      - `-keep @androidx.annotation.Keep class * { *; }` (рефлексия)
-      - `-keepclasseswithmembernames class * { native <methods>; }` (JNI)
-      - `-keep public class com.example.library.** { public protected *; }` (public API)
-
-      **Best practices:**
-      - Минимизировать keep правила, использовать @Keep
-      - Тестировать release сборки, загружать mapping.txt
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-153-0-en
+  language: en
+  anki_id: 1768398221060
+  synced_at: '2026-01-23T16:45:05.436603'
+- slug: android-153-0-ru
+  language: ru
+  anki_id: 1768398221084
+  synced_at: '2026-01-23T16:45:05.438179'
+---
 # Вопрос (RU)
 
 > Напишите комплексный набор правил ProGuard/R8 для Android библиотеки. Обработайте рефлексию, сериализацию, нативные методы и публичный API. Оптимизируйте для production, сохраняя функциональность.

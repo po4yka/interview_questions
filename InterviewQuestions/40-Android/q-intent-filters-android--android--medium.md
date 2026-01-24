@@ -1,62 +1,46 @@
 ---
 id: android-178
 title: Intent Filters / Intent Фильтры
-aliases: [Intent Filters, Intent Фильтры, Фильтры намерений]
+aliases:
+- Intent Filters
+- Intent Фильтры
+- Фильтры намерений
 topic: android
-subtopics: [activity, intents-deeplinks]
+subtopics:
+- activity
+- intents-deeplinks
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, c-intent, q-dagger-build-time-optimization--android--medium, q-what-are-intents-for--android--medium, q-what-is-intent--android--easy]
+related:
+- c-activity
+- c-intent
+- q-dagger-build-time-optimization--android--medium
+- q-what-are-intents-for--android--medium
+- q-what-is-intent--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/intents-deeplinks, deep-linking, difficulty/medium, intent-filter]
+tags:
+- android/activity
+- android/intents-deeplinks
+- deep-linking
+- difficulty/medium
+- intent-filter
 sources: []
 anki_cards:
-  - slug: android-178-0-en
-    front: "What are Intent Filters in Android and how do they work?"
-    back: |
-      **Intent Filter** declares which implicit intents a component can handle.
-
-      **Three matching criteria:**
-      1. **action** - `ACTION_VIEW`, `ACTION_SEND`, etc.
-      2. **data** - URI scheme, host, MIME type
-      3. **category** - `DEFAULT`, `BROWSABLE`, `LAUNCHER`
-
-      ```xml
-      <intent-filter>
-          <action android:name="android.intent.action.VIEW"/>
-          <category android:name="android.intent.category.DEFAULT"/>
-          <data android:scheme="https" android:host="example.com"/>
-      </intent-filter>
-      ```
-    tags:
-      - android_intents
-      - difficulty::medium
-  - slug: android-178-0-ru
-    front: "Что такое Intent Filters в Android и как они работают?"
-    back: |
-      **Intent Filter** объявляет, какие неявные интенты может обрабатывать компонент.
-
-      **Три критерия соответствия:**
-      1. **action** - `ACTION_VIEW`, `ACTION_SEND` и др.
-      2. **data** - URI схема, хост, MIME тип
-      3. **category** - `DEFAULT`, `BROWSABLE`, `LAUNCHER`
-
-      ```xml
-      <intent-filter>
-          <action android:name="android.intent.action.VIEW"/>
-          <category android:name="android.intent.category.DEFAULT"/>
-          <data android:scheme="https" android:host="example.com"/>
-      </intent-filter>
-      ```
-    tags:
-      - android_intents
-      - difficulty::medium
-
+- slug: android-178-0-en
+  language: en
+  anki_id: 1768381795915
+  synced_at: '2026-01-23T16:45:05.567536'
+- slug: android-178-0-ru
+  language: ru
+  anki_id: 1768381795935
+  synced_at: '2026-01-23T16:45:05.569001'
 ---
 # Вопрос (RU)
 

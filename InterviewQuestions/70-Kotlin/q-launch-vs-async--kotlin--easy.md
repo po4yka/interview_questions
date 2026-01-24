@@ -33,16 +33,12 @@ tags:
 anki_cards:
 - slug: q-launch-vs-async--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296280
+  synced_at: '2026-01-23T17:03:51.714496'
 - slug: q-launch-vs-async--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296306
+  synced_at: '2026-01-23T17:03:51.715406'
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140027

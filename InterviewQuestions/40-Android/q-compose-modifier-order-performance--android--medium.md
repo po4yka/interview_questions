@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-317-0-en
   language: en
   anki_id: 1768365659526
-  synced_at: '2026-01-14T09:17:53.500074'
+  synced_at: '2026-01-23T16:45:06.120875'
 - slug: android-317-0-ru
   language: ru
   anki_id: 1768365659550
-  synced_at: '2026-01-14T09:17:53.502480'
+  synced_at: '2026-01-23T16:45:06.121698'
 ---
 # Вопрос (RU)
 > Как порядок модификаторов влияет на производительность в Jetpack Compose?

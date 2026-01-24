@@ -30,18 +30,12 @@ tags:
 anki_cards:
 - slug: kotlin-140-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
+  anki_id: 1768326279154
+  synced_at: '2026-01-23T17:03:50.420339'
 - slug: kotlin-140-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
+  anki_id: 1768326279179
+  synced_at: '2026-01-23T17:03:50.422568'
 ---
 # Вопрос (RU)
 

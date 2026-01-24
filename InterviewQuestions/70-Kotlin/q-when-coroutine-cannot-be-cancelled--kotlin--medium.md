@@ -127,16 +127,12 @@ tags:
 anki_cards:
 - slug: q-when-coroutine-cannot-be-cancelled--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280204
+  synced_at: '2026-01-23T17:03:50.527393'
 - slug: q-when-coroutine-cannot-be-cancelled--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280230
+  synced_at: '2026-01-23T17:03:50.529567'
 ---
 # Вопрос (RU)
 > Когда корутина не может быть отменена?

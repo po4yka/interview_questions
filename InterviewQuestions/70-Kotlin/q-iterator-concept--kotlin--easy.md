@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-iterator-concept--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279054
+  synced_at: '2026-01-23T16:54:03.291605'
 - slug: q-iterator-concept--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279080
+  synced_at: '2026-01-23T16:54:03.293193'
 ---
 ## Дополнительные Вопросы (RU)
 

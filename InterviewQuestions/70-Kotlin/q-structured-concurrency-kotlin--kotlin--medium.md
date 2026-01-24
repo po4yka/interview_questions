@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-structured-concurrency-kotlin--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287305
+  synced_at: '2026-01-23T17:03:51.181041'
 - slug: q-structured-concurrency-kotlin--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287331
+  synced_at: '2026-01-23T17:03:51.182743'
 ---
 # Question (EN)
 > What is structured concurrency and why is it important in Android coroutine usage?

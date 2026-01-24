@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-006-0-en
   language: en
   anki_id: 1768364696152
-  synced_at: '2026-01-14T09:17:53.330496'
+  synced_at: '2026-01-23T16:45:05.872021'
 - slug: android-006-0-ru
   language: ru
   anki_id: 1768364696173
-  synced_at: '2026-01-14T09:17:53.333368'
+  synced_at: '2026-01-23T16:45:05.873428'
 ---
 # Вопрос (RU)
 > Как выбрать правильный способ выполнения фоновых задач в Android?

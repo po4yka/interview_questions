@@ -1,64 +1,47 @@
----\
+---
 id: android-027
-title: What is setHasFixedSize(true) in RecyclerView? / Что такое setHasFixedSize(true) в RecyclerView?
-aliases: [setHasFixedSize in RecyclerView, setHasFixedSize в RecyclerView]
+title: What is setHasFixedSize(true) in RecyclerView? / Что такое setHasFixedSize(true)
+  в RecyclerView?
+aliases:
+- setHasFixedSize in RecyclerView
+- setHasFixedSize в RecyclerView
 topic: android
-subtopics: [performance-memory, ui-views]
+subtopics:
+- performance-memory
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-memory-management, q-handler-looper-main-thread--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy, q-recyclerview-itemdecoration-advanced--android--medium, q-what-events-are-activity-methods-tied-to--android--medium]
+related:
+- c-memory-management
+- q-handler-looper-main-thread--android--medium
+- q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+- q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+- q-recyclerview-itemdecoration-advanced--android--medium
+- q-what-events-are-activity-methods-tied-to--android--medium
 created: 2025-10-06
 updated: 2025-11-10
 sources:
-  - "https://github.com/amitshekhariitbhu/android-interview-questions"
-tags: [android/performance-memory, android/ui-views, difficulty/easy]
+- https://github.com/amitshekhariitbhu/android-interview-questions
+tags:
+- android/performance-memory
+- android/ui-views
+- difficulty/easy
 anki_cards:
-  - slug: android-027-0-en
-    front: "What does setHasFixedSize(true) do in RecyclerView?"
-    back: |
-      Optimization hint: tells RecyclerView its **container size won't change** when data changes.
-
-      **When to use**:
-      - `match_parent` or fixed dimensions
-      - Size controlled by parent, not content
-
-      **Avoid with**:
-      - `wrap_content` (size depends on items)
-
-      ```kotlin
-      recyclerView.setHasFixedSize(true) // Skip container remeasure
-      ```
-
-      **Key**: About container size stability, not item count.
-    tags:
-      - android_views
-      - difficulty::easy
-  - slug: android-027-0-ru
-    front: "Что делает setHasFixedSize(true) в RecyclerView?"
-    back: |
-      Подсказка для оптимизации: сообщает RecyclerView, что **размер контейнера не изменится** при изменении данных.
-
-      **Когда использовать**:
-      - `match_parent` или фиксированные размеры
-      - Размер контролируется родителем, не содержимым
-
-      **Избегать с**:
-      - `wrap_content` (размер зависит от элементов)
-
-      ```kotlin
-      recyclerView.setHasFixedSize(true) // Пропустить пересчёт контейнера
-      ```
-
-      **Ключевое**: о стабильности размера контейнера, не количества элементов.
-    tags:
-      - android_views
-      - difficulty::easy
-
----\
+- slug: android-027-0-en
+  language: en
+  anki_id: 1768379971402
+  synced_at: '2026-01-23T16:45:06.124370'
+- slug: android-027-0-ru
+  language: ru
+  anki_id: 1768379971424
+  synced_at: '2026-01-23T16:45:06.125294'
+---
 # Вопрос (RU)
 
 > Что такое setHasFixedSize(true) в `RecyclerView`?

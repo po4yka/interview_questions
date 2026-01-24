@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-flow-basics--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295829
+  synced_at: '2026-01-23T17:03:51.692254'
 - slug: q-kotlin-flow-basics--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295855
+  synced_at: '2026-01-23T17:03:51.693126'
 ---
 # Question (EN)
 > What do you know about `Flow` in Kotlin?

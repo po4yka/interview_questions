@@ -1,61 +1,42 @@
----\
+---
 id: android-283
-title: "Network Operations Android / Сетевые операции в Android"
-aliases: ["Network Operations Android", "Сетевые операции в Android"]
+title: Network Operations Android / Сетевые операции в Android
+aliases:
+- Network Operations Android
+- Сетевые операции в Android
 topic: android
-subtopics: [networking-http]
+subtopics:
+- networking-http
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-android-app-components--android--easy, q-what-does-the-lifecycle-library-do--android--medium]
+related:
+- c-android-components
+- q-android-app-components--android--easy
+- q-what-does-the-lifecycle-library-do--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/networking-http, difficulty/medium, http, networking]
+tags:
+- android/networking-http
+- difficulty/medium
+- http
+- networking
 anki_cards:
-  - slug: android-283-0-en
-    front: "What tools are used for network operations in Android?"
-    back: |
-      **Main Tools:**
-      - **Retrofit** - type-safe REST client with coroutines
-      - **OkHttp** - HTTP client (connection pooling, interceptors, HTTP/2)
-      - **Ktor Client** - Kotlin Multiplatform async client
-      - **Volley** - Google's library for small requests
-
-      **Critical Rules:**
-      - Never block main thread (use `Dispatchers.IO`)
-      - Add `INTERNET` permission in manifest
-      - HTTPS required by default on Android 9+
-      - Handle `HttpException` and `IOException`
-
-      **Recommendation:** Retrofit + OkHttp + Coroutines
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-283-0-ru
-    front: "Какие инструменты используются для сетевых операций в Android?"
-    back: |
-      **Основные инструменты:**
-      - **Retrofit** - type-safe REST клиент с корутинами
-      - **OkHttp** - HTTP клиент (пул соединений, интерсепторы, HTTP/2)
-      - **Ktor Client** - Kotlin Multiplatform async клиент
-      - **Volley** - библиотека Google для мелких запросов
-
-      **Критические правила:**
-      - Никогда не блокировать main thread (использовать `Dispatchers.IO`)
-      - Добавить разрешение `INTERNET` в манифест
-      - HTTPS обязателен по умолчанию на Android 9+
-      - Обрабатывать `HttpException` и `IOException`
-
-      **Рекомендация:** Retrofit + OkHttp + Coroutines
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-283-0-en
+  language: en
+  anki_id: 1768398016656
+  synced_at: '2026-01-23T16:45:06.013221'
+- slug: android-283-0-ru
+  language: ru
+  anki_id: 1768398016681
+  synced_at: '2026-01-23T16:45:06.014787'
+---
 # Вопрос (RU)
 
 > Какие инструменты используются для сетевых операций в Android?

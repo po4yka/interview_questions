@@ -1,55 +1,46 @@
----\
+---
 id: android-140
-title: "What Can Be Done Through Composer / Что можно сделать через Composer"
-aliases: ["Composer in Jetpack Compose", "Composer в Jetpack Compose"]
+title: What Can Be Done Through Composer / Что можно сделать через Composer
+aliases:
+- Composer in Jetpack Compose
+- Composer в Jetpack Compose
 topic: android
-subtopics: [architecture-mvvm, performance-rendering, ui-compose]
+subtopics:
+- architecture-mvvm
+- performance-rendering
+- ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-compose-stability-skippability--android--hard, q-how-does-jetpackcompose-work--android--medium]
+related:
+- c-jetpack-compose
+- q-compose-stability-skippability--android--hard
+- q-how-does-jetpackcompose-work--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/architecture-mvvm, android/performance-rendering, android/ui-compose, difficulty/medium, recomposition]
+tags:
+- android
+- android/architecture-mvvm
+- android/performance-rendering
+- android/ui-compose
+- difficulty/medium
+- recomposition
 anki_cards:
-  - slug: android-140-0-en
-    front: "What is the Composer in Jetpack Compose and what does it manage?"
-    back: |
-      **Composer** - internal Compose runtime component for composition tree and dependency tracking.
-
-      **Manages automatically:**
-      - **State tracking** - links State/MutableState to dependent composables
-      - **Recomposition** - re-evaluates only changed dependencies
-      - **Slot table** - preserves values via `remember` across recompositions
-      - **CompositionLocal** - propagates contextual values
-      - **Side effects** - coordinates LaunchedEffect, DisposableEffect lifecycle
-
-      Developers interact indirectly via @Composable, remember, State APIs.
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-140-0-ru
-    front: "Что такое Composer в Jetpack Compose и чем он управляет?"
-    back: |
-      **Composer** - внутренний компонент runtime Compose для дерева композиции и отслеживания зависимостей.
-
-      **Управляет автоматически:**
-      - **Отслеживание состояния** - связывает State/MutableState с зависимыми composable
-      - **Рекомпозиция** - переоценивает только изменённые зависимости
-      - **Slot table** - сохраняет значения через `remember` между рекомпозициями
-      - **CompositionLocal** - передаёт контекстные значения
-      - **Side effects** - координирует жизненный цикл LaunchedEffect, DisposableEffect
-
-      Разработчики взаимодействуют косвенно через @Composable, remember, State API.
-    tags:
-      - android_compose
-      - difficulty::medium
-
----\
+- slug: android-140-0-en
+  language: en
+  anki_id: 1768396544725
+  synced_at: '2026-01-23T16:45:05.342240'
+- slug: android-140-0-ru
+  language: ru
+  anki_id: 1768396544750
+  synced_at: '2026-01-23T16:45:05.344500'
+---
 # Вопрос (RU)
 
 > Что можно делать через Composer в Jetpack Compose? За что он отвечает и как правильно им пользоваться?

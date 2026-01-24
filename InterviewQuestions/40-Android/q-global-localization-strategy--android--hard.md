@@ -28,11 +28,11 @@ anki_cards:
 - slug: android-641-0-en
   language: en
   anki_id: 1768367861083
-  synced_at: '2026-01-14T09:17:53.240782'
+  synced_at: '2026-01-23T16:45:05.699592'
 - slug: android-641-0-ru
   language: ru
   anki_id: 1768367861103
-  synced_at: '2026-01-14T09:17:53.244200'
+  synced_at: '2026-01-23T16:45:05.700960'
 tags:
 - android/i18n-l10n
 - difficulty/hard

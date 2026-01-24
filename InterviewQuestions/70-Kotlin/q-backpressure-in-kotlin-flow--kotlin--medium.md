@@ -38,22 +38,12 @@ tags:
 anki_cards:
 - slug: q-backpressure-in-kotlin-flow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - backpressure
-  - buffer
-  - conflate
+  anki_id: 1768326282055
+  synced_at: '2026-01-23T17:03:50.688139'
 - slug: q-backpressure-in-kotlin-flow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - backpressure
-  - buffer
-  - conflate
+  anki_id: 1768326282080
+  synced_at: '2026-01-23T17:03:50.690168'
 ---
 # Вопрос (RU)
 > Что такое Back Pressure в Kotlin `Flow`? Какие стратегии существуют для его обработки?

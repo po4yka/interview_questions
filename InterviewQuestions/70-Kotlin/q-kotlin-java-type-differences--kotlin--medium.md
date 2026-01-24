@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-java-type-differences--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287055
+  synced_at: '2026-01-23T17:03:51.157648'
 - slug: q-kotlin-java-type-differences--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287080
+  synced_at: '2026-01-23T17:03:51.159150'
 ---
 # Question (EN)
 > How do Kotlin types differ from Java types?

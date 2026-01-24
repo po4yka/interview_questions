@@ -38,27 +38,27 @@ anki_cards:
 - slug: algo-002-0-en
   language: en
   anki_id: 1768457298229
-  synced_at: '2026-01-15T10:08:19.311068'
+  synced_at: '2026-01-23T15:48:41.081811'
 - slug: algo-002-0-ru
   language: ru
   anki_id: 1768457298254
-  synced_at: '2026-01-15T10:08:19.316028'
+  synced_at: '2026-01-23T15:48:41.083442'
 - slug: algo-002-1-en
   language: en
   anki_id: 1768457298279
-  synced_at: '2026-01-15T10:08:19.318547'
+  synced_at: '2026-01-23T15:48:41.084750'
 - slug: algo-002-1-ru
   language: ru
   anki_id: 1768457298304
-  synced_at: '2026-01-15T10:08:19.321333'
+  synced_at: '2026-01-23T15:48:41.086048'
 - slug: algo-002-2-en
   language: en
   anki_id: 1768457298327
-  synced_at: '2026-01-15T10:08:19.324062'
+  synced_at: '2026-01-23T15:48:41.088825'
 - slug: algo-002-2-ru
   language: ru
   anki_id: 1768457298352
-  synced_at: '2026-01-15T10:08:19.326938'
+  synced_at: '2026-01-23T15:48:41.089999'
 ---
 # Вопрос (RU)
 > Как работают BFS и DFS? Когда следует использовать каждый? Каковы распространённые задачи и паттерны с графами?

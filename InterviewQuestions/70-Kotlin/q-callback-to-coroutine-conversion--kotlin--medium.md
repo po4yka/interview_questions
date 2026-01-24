@@ -36,18 +36,12 @@ tags:
 anki_cards:
 - slug: q-callback-to-coroutine-conversion--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
+  anki_id: 1768326295031
+  synced_at: '2026-01-23T17:03:51.660273'
 - slug: q-callback-to-coroutine-conversion--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
+  anki_id: 1768326295057
+  synced_at: '2026-01-23T17:03:51.661256'
 ---
 # Вопрос (RU)
 > Как конвертировать callback-based API в корутины в Kotlin?

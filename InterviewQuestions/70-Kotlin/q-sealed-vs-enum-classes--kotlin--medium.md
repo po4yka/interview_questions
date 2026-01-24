@@ -129,16 +129,12 @@ tags:
 anki_cards:
 - slug: q-sealed-vs-enum-classes--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283056
+  synced_at: '2026-01-23T17:03:50.768941'
 - slug: q-sealed-vs-enum-classes--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283080
+  synced_at: '2026-01-23T17:03:50.770994'
 ---
 # Вопрос (RU)
 > Каковы отличия sealed и enum классов в Kotlin?

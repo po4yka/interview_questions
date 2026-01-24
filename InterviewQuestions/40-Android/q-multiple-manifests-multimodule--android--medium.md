@@ -1,63 +1,51 @@
 ---
 id: android-265
 anki_cards:
-  - slug: android-265-0-en
-    front: "Why do multi-module Android projects have multiple AndroidManifest files?"
-    back: |
-      **Reasons:**
-      1. **Modular independence** - each module declares its own components/permissions
-      2. **Component encapsulation** - Activities/Services scoped to module
-      3. **Automatic merging** - Gradle combines all into final manifest
-
-      **Priority:** app > feature modules > libraries
-
-      **Conflict resolution:**
-      ```xml
-      tools:replace="android:screenOrientation"
-      tools:node="remove"
-      ```
-
-      **Key:** Use `${applicationId}` for authorities, check Merged Manifest tab.
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-265-0-ru
-    front: "Зачем в мультимодульных Android проектах несколько AndroidManifest файлов?"
-    back: |
-      **Причины:**
-      1. **Модульная независимость** - модуль объявляет свои компоненты/permissions
-      2. **Инкапсуляция компонентов** - Activity/Service привязаны к модулю
-      3. **Автослияние** - Gradle объединяет в итоговый манифест
-
-      **Приоритет:** app > feature modules > libraries
-
-      **Разрешение конфликтов:**
-      ```xml
-      tools:replace="android:screenOrientation"
-      tools:node="remove"
-      ```
-
-      **Ключ:** Используйте `${applicationId}` для authorities, проверяйте Merged Manifest.
-    tags:
-      - android_architecture
-      - difficulty::medium
-title: "Multiple Manifests Multimodule / Множественные манифесты в мультимодульных проектах"
-aliases: ["Android Manifest Merging", "Multiple Manifests Multimodule", "Множественные манифесты в мультимодульных проектах", "Слияние манифестов Android"]
+- slug: android-265-0-en
+  language: en
+  anki_id: 1768416431375
+  synced_at: '2026-01-23T16:45:05.932744'
+- slug: android-265-0-ru
+  language: ru
+  anki_id: 1768416431398
+  synced_at: '2026-01-23T16:45:05.934439'
+title: Multiple Manifests Multimodule / Множественные манифесты в мультимодульных
+  проектах
+aliases:
+- Android Manifest Merging
+- Multiple Manifests Multimodule
+- Множественные манифесты в мультимодульных проектах
+- Слияние манифестов Android
 topic: android
-subtopics: [architecture-modularization, dependency-management, gradle]
+subtopics:
+- architecture-modularization
+- dependency-management
+- gradle
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-gradle, q-android-manifest-file--android--easy, q-android-modularization--android--medium]
+related:
+- c-gradle
+- q-android-manifest-file--android--easy
+- q-android-modularization--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-modularization, android/dependency-management, android/gradle, difficulty/medium, manifest-merging, modularization]
-sources: ["https://developer.android.com/build/manage-manifests", "https://developer.android.com/studio/build/manifest-merge"]
-
----\
+tags:
+- android/architecture-modularization
+- android/dependency-management
+- android/gradle
+- difficulty/medium
+- manifest-merging
+- modularization
+sources:
+- https://developer.android.com/build/manage-manifests
+- https://developer.android.com/studio/build/manifest-merge
+---
 # Вопрос (RU)
 
 > Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?

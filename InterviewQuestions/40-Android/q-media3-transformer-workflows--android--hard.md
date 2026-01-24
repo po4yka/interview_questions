@@ -1,81 +1,47 @@
 ---
 id: android-634
 anki_cards:
-  - slug: android-634-0-en
-    front: "How do you build a video editing pipeline with Media3 Transformer?"
-    back: |
-      **Composition structure:**
-      ```kotlin
-      val item = EditedMediaItem.Builder(MediaItem.fromUri(uri))
-          .setEffects(Effects(videoEffects, audioEffects))
-          .setClippingConfiguration(...)
-          .build()
-      val composition = Composition.Builder(item1)
-          .addEditedMediaItem(item2)
-          .build()
-      ```
-
-      **Transformer setup:**
-      ```kotlin
-      TransformationRequest.Builder()
-          .setVideoMimeType(MimeTypes.VIDEO_H265)
-          .setEnableFallback(true)
-          .build()
-      transformer.start(composition, outputPath)
-      ```
-
-      **Key:** Use ForegroundService for long exports, track via Listener.
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-634-0-ru
-    front: "Как построить pipeline редактирования видео с Media3 Transformer?"
-    back: |
-      **Структура Composition:**
-      ```kotlin
-      val item = EditedMediaItem.Builder(MediaItem.fromUri(uri))
-          .setEffects(Effects(videoEffects, audioEffects))
-          .setClippingConfiguration(...)
-          .build()
-      val composition = Composition.Builder(item1)
-          .addEditedMediaItem(item2)
-          .build()
-      ```
-
-      **Настройка Transformer:**
-      ```kotlin
-      TransformationRequest.Builder()
-          .setVideoMimeType(MimeTypes.VIDEO_H265)
-          .setEnableFallback(true)
-          .build()
-      transformer.start(composition, outputPath)
-      ```
-
-      **Ключ:** Используйте ForegroundService для долгих экспортов, отслеживайте через Listener.
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-634-0-en
+  language: en
+  anki_id: 1768414368696
+  synced_at: '2026-01-23T16:45:05.832237'
+- slug: android-634-0-ru
+  language: ru
+  anki_id: 1768414368718
+  synced_at: '2026-01-23T16:45:05.833576'
 title: Media3 Transformer Workflows / Пайплайны Media3 Transformer
-aliases: [Media3 Transformer Workflows, Пайплайны Media3 Transformer]
+aliases:
+- Media3 Transformer Workflows
+- Пайплайны Media3 Transformer
 topic: android
-subtopics: [files-media, media]
+subtopics:
+- files-media
+- media
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-media3-migration-strategy--android--hard]
+related:
+- c-android
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-media3-migration-strategy--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/files-media, android/media, difficulty/hard]
+tags:
+- android/files-media
+- android/media
+- difficulty/hard
 sources:
-  - url: "https://developer.android.com/guide/topics/media/media3/transformer"
-    note: "Media3 Transformer guide"
-  - url: "https://medium.com/androiddevelopers/media3-transformer-deep-dive"
-    note: "Transformer deep dive"
-
----\
+- url: https://developer.android.com/guide/topics/media/media3/transformer
+  note: Media3 Transformer guide
+- url: https://medium.com/androiddevelopers/media3-transformer-deep-dive
+  note: Transformer deep dive
+---
 # Вопрос (RU)
 > Как построить pipeline для редактирования видео на Media3 Transformer: комбинировать клипы, применять эффекты, контролировать кодеки/битрейт, выполнять экспорт в фоне и обрабатывать ошибки?
 

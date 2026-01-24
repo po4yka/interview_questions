@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-hot-vs-cold-flows--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288430
+  synced_at: '2026-01-23T17:03:51.279341'
 - slug: q-hot-vs-cold-flows--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288456
+  synced_at: '2026-01-23T17:03:51.281750'
 ---
 # Question (EN)
 > What is the difference between Hot and Cold Flows?

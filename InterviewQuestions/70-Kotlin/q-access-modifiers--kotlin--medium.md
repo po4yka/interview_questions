@@ -34,22 +34,12 @@ tags:
 anki_cards:
 - slug: kotlin-045-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - access-modifiers
-  - encapsulation
-  - visibility
+  anki_id: 1768326293431
+  synced_at: '2026-01-23T17:03:51.599178'
 - slug: kotlin-045-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - access-modifiers
-  - encapsulation
-  - visibility
+  anki_id: 1768326293455
+  synced_at: '2026-01-23T17:03:51.600028'
 ---
 # Вопрос (RU)
 > Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?

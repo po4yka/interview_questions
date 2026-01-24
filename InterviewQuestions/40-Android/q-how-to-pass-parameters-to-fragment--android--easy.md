@@ -1,61 +1,45 @@
----\
+---
 id: android-375
-title: "How To Pass Parameters To Fragment / Как передать параметры во Fragment"
-aliases: ["Fragment arguments", "Fragment Bundle", "How To Pass Parameters To Fragment", "Как передать параметры во Fragment"]
+title: How To Pass Parameters To Fragment / Как передать параметры во Fragment
+aliases:
+- Fragment arguments
+- Fragment Bundle
+- How To Pass Parameters To Fragment
+- Как передать параметры во Fragment
 topic: android
-subtopics: [fragment]
+subtopics:
+- fragment
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-fragment-basics--android--easy, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium]
+related:
+- c-android-components
+- q-fragment-basics--android--easy
+- q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
+- q-how-to-pass-data-from-one-fragment-to-another--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/fragment, difficulty/medium, fragment]
+tags:
+- android
+- android/fragment
+- difficulty/medium
+- fragment
 anki_cards:
-  - slug: android-375-0-en
-    front: "What is the correct way to pass parameters to a Fragment?"
-    back: |
-      **Use Bundle + newInstance factory method:**
-
-      ```kotlin
-      fun newInstance(userId: Long) = UserFragment().apply {
-          arguments = Bundle().apply {
-              putLong("USER_ID", userId)
-          }
-      }
-      ```
-
-      **Extract in onCreate:** `requireArguments().getLong("USER_ID")`
-
-      **Wrong:** constructor params, setters - data lost on rotation
-    tags:
-      - android_fragments
-      - difficulty::easy
-  - slug: android-375-0-ru
-    front: "Как правильно передать параметры во Fragment?"
-    back: |
-      **Используйте Bundle + фабричный метод newInstance:**
-
-      ```kotlin
-      fun newInstance(userId: Long) = UserFragment().apply {
-          arguments = Bundle().apply {
-              putLong("USER_ID", userId)
-          }
-      }
-      ```
-
-      **Извлекать в onCreate:** `requireArguments().getLong("USER_ID")`
-
-      **Неправильно:** конструктор, сеттеры - данные теряются при повороте
-    tags:
-      - android_fragments
-      - difficulty::easy
-
----\
+- slug: android-375-0-en
+  language: en
+  anki_id: 1768380835006
+  synced_at: '2026-01-23T16:45:06.278376'
+- slug: android-375-0-ru
+  language: ru
+  anki_id: 1768380835031
+  synced_at: '2026-01-23T16:45:06.279148'
+---
 # Вопрос (RU)
 
 > Как передать параметры во фрагмент?

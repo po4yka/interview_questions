@@ -1,66 +1,46 @@
 ---
 id: android-058
-title: "Sealed Classes for State Management / Sealed классы для управления состоянием"
-aliases: ["Sealed Classes for State Management", "Sealed классы для управления состоянием"]
+title: Sealed Classes for State Management / Sealed классы для управления состоянием
+aliases:
+- Sealed Classes for State Management
+- Sealed классы для управления состоянием
 topic: android
-subtopics: [architecture-mvi, ui-state]
+subtopics:
+- architecture-mvi
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-mvvm-pattern, q-mvi-architecture--android--hard, q-state-hoisting-compose--android--medium, q-stateflow-flow-sharedflow-livedata--android--medium]
+related:
+- c-mvvm-pattern
+- q-mvi-architecture--android--hard
+- q-state-hoisting-compose--android--medium
+- q-stateflow-flow-sharedflow-livedata--android--medium
 created: 2025-10-12
 updated: 2025-11-10
-tags: [android/architecture-mvi, android/ui-state, difficulty/medium, mvi, sealed-classes, state-management]
-sources: ["https://kotlinlang.org/docs/sealed-classes.html"]
+tags:
+- android/architecture-mvi
+- android/ui-state
+- difficulty/medium
+- mvi
+- sealed-classes
+- state-management
+sources:
+- https://kotlinlang.org/docs/sealed-classes.html
 anki_cards:
-  - slug: android-058-0-en
-    front: "How to use sealed classes for UI state management in Android?"
-    back: |
-      Sealed classes model **exhaustive state hierarchies**:
-
-      ```kotlin
-      sealed class UiState<out T> {
-          object Loading : UiState<Nothing>()
-          data class Success<T>(val data: T) : UiState<T>()
-          data class Error(val message: String) : UiState<Nothing>()
-      }
-      ```
-
-      **Benefits**:
-      - Compiler enforces handling all states (`when` exhaustive)
-      - Type-safe, no invalid state combinations
-      - Clear state transitions
-
-      Use with `StateFlow` in ViewModel for reactive UI updates.
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-058-0-ru
-    front: "Как использовать sealed классы для управления UI состоянием в Android?"
-    back: |
-      Sealed классы моделируют **исчерпывающую иерархию состояний**:
-
-      ```kotlin
-      sealed class UiState<out T> {
-          object Loading : UiState<Nothing>()
-          data class Success<T>(val data: T) : UiState<T>()
-          data class Error(val message: String) : UiState<Nothing>()
-      }
-      ```
-
-      **Преимущества**:
-      - Компилятор требует обработки всех состояний (`when` исчерпывающий)
-      - Типобезопасно, нет невалидных комбинаций
-      - Чёткие переходы между состояниями
-
-      Используйте со `StateFlow` в ViewModel для реактивных обновлений UI.
-    tags:
-      - android_architecture
-      - difficulty::medium
-
+- slug: android-058-0-en
+  language: en
+  anki_id: 1768380203774
+  synced_at: '2026-01-23T16:45:05.388324'
+- slug: android-058-0-ru
+  language: ru
+  anki_id: 1768380203798
+  synced_at: '2026-01-23T16:45:05.390719'
 ---
 # Вопрос (RU)
 > Как использовать sealed классы для управления состоянием в Android приложениях?

@@ -32,11 +32,11 @@ anki_cards:
 - slug: android-476-0-en
   language: en
   anki_id: 1768366340306
-  synced_at: '2026-01-14T09:17:53.061275'
+  synced_at: '2026-01-23T16:45:05.418425'
 - slug: android-476-0-ru
   language: ru
   anki_id: 1768366340344
-  synced_at: '2026-01-14T09:17:53.064695'
+  synced_at: '2026-01-23T16:45:05.420537'
 ---
 # Вопрос (RU)
 > Как работают кастомные атрибуты в Custom `View` и как их правильно объявлять и считывать?

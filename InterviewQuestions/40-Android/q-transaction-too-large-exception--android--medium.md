@@ -1,52 +1,48 @@
 ---
 id: android-168
-title: "TransactionTooLargeException / Исключение TransactionTooLargeException"
-aliases: ["TransactionTooLargeException", "Исключение TransactionTooLargeException"]
+title: TransactionTooLargeException / Исключение TransactionTooLargeException
+aliases:
+- TransactionTooLargeException
+- Исключение TransactionTooLargeException
 topic: android
-subtopics: [intents-deeplinks, lifecycle, performance-memory]
+subtopics:
+- intents-deeplinks
+- lifecycle
+- performance-memory
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-intent--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
+related:
+- c-android
+- q-viewmodel-vs-onsavedinstancestate--android--medium
+- q-what-is-intent--android--easy
+- q-why-user-data-may-disappear-on-screen-rotation--android--hard
 created: 2024-10-15
 updated: 2025-11-11
 sources: []
-tags: [android/intents-deeplinks, android/lifecycle, android/performance-memory, binder, difficulty/medium, exceptions, intent, savedinstancestate]
+tags:
+- android/intents-deeplinks
+- android/lifecycle
+- android/performance-memory
+- binder
+- difficulty/medium
+- exceptions
+- intent
+- savedinstancestate
 anki_cards:
-  - slug: android-168-0-en
-    front: "What is TransactionTooLargeException and how to avoid it?"
-    back: |
-      **Cause:** Binder transaction exceeds ~1MB limit (Intent/Bundle/onSaveInstanceState)
-
-      **Solutions:**
-      1. Pass ID instead of object: `intent.putExtra("user_id", id)`
-      2. Use file storage for large data (bitmaps)
-      3. Share data via ViewModel between fragments
-      4. Minimize onSaveInstanceState (only critical compact state)
-
-      **Key:** Binder has ~1MB limit per transaction, shared pool between transactions
-    tags:
-      - android_lifecycle
-      - difficulty::medium
-  - slug: android-168-0-ru
-    front: "Что такое TransactionTooLargeException и как его избежать?"
-    back: |
-      **Причина:** Binder транзакция превышает лимит ~1MB (Intent/Bundle/onSaveInstanceState)
-
-      **Решения:**
-      1. Передавать ID вместо объекта: `intent.putExtra("user_id", id)`
-      2. Использовать файловое хранилище для больших данных (bitmaps)
-      3. Делить данные через ViewModel между фрагментами
-      4. Минимизировать onSaveInstanceState (только критичное компактное состояние)
-
-      **Ключевое:** Binder имеет лимит ~1MB на транзакцию, общий пул между транзакциями
-    tags:
-      - android_lifecycle
-      - difficulty::medium
-
+- slug: android-168-0-en
+  language: en
+  anki_id: 1768398223035
+  synced_at: '2026-01-23T16:45:05.527623'
+- slug: android-168-0-ru
+  language: ru
+  anki_id: 1768398223057
+  synced_at: '2026-01-23T16:45:05.529599'
 ---
 # Вопрос (RU)
 

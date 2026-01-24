@@ -1,67 +1,48 @@
----\
+---
 id: android-328
-title: "Real Time Updates Android / Обновления в реальном времени Android"
-aliases: ["Real Time Updates Android", "Обновления в реальном времени Android"]
+title: Real Time Updates Android / Обновления в реальном времени Android
+aliases:
+- Real Time Updates Android
+- Обновления в реальном времени Android
 topic: android
-subtopics: [networking-http, websockets]
+subtopics:
+- networking-http
+- websockets
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-flow, q-websocket-implementation--android--medium]
+related:
+- c-flow
+- q-websocket-implementation--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/networking-http, android/websockets, difficulty/medium, fcm, firebase, networking, real-time, sse, websockets]
+tags:
+- android
+- android/networking-http
+- android/websockets
+- difficulty/medium
+- fcm
+- firebase
+- networking
+- real-time
+- sse
+- websockets
 anki_cards:
-  - slug: android-328-0-en
-    front: "What are the main technologies for real-time updates in Android?"
-    back: |
-      **1. WebSockets** - full-duplex bidirectional
-      - OkHttp WebSocket API
-      - Best for: chat, collaborative editing
-
-      **2. Server-Sent Events (SSE)** - server->client only
-      - Simple HTTP, auto-reconnect
-      - Best for: live feeds, notifications
-
-      **3. Firebase Realtime Database / Firestore**
-      - Real-time listeners, offline support
-      - Best for: sync across devices
-
-      **4. FCM** - push notifications
-      - Best for: low-frequency alerts
-
-      **Best practice:** lifecycle-aware scope, reconnection strategy, battery optimization.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-328-0-ru
-    front: "Какие основные технологии для real-time обновлений в Android?"
-    back: |
-      **1. WebSockets** - полнодуплексная двунаправленная связь
-      - OkHttp WebSocket API
-      - Лучше для: чат, совместное редактирование
-
-      **2. Server-Sent Events (SSE)** - только сервер->клиент
-      - Простой HTTP, автопереподключение
-      - Лучше для: live feeds, уведомления
-
-      **3. Firebase Realtime Database / Firestore**
-      - Real-time listeners, offline поддержка
-      - Лучше для: синхронизация между устройствами
-
-      **4. FCM** - push уведомления
-      - Лучше для: редкие alerts
-
-      **Best practice:** lifecycle-aware scope, стратегия reconnect, оптимизация батареи.
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-328-0-en
+  language: en
+  anki_id: 1768418258027
+  synced_at: '2026-01-23T16:45:06.147248'
+- slug: android-328-0-ru
+  language: ru
+  anki_id: 1768418258052
+  synced_at: '2026-01-23T16:45:06.148138'
+---
 # Вопрос (RU)
 
 > Как реализовать обновления в реальном времени в Android-приложении? Какие технологии доступны и каковы best practices?

@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-object-companion-object--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282905
+  synced_at: '2026-01-23T17:03:50.756106'
 - slug: q-object-companion-object--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282930
+  synced_at: '2026-01-23T17:03:50.757873'
 ---
 # Question (EN)
 > What is `object` / `companion object` in Kotlin? Explain their characteristics, differences, and advanced use cases.

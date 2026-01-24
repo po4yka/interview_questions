@@ -1,73 +1,53 @@
----\
+---
 id: android-203
 title: Koin Scope Management / Управление Scope В Koin
-aliases: [Koin Scope Management, Koin Scopes, Жизненный цикл Koin, Управление Scope В Koin]
+aliases:
+- Koin Scope Management
+- Koin Scopes
+- Жизненный цикл Koin
+- Управление Scope В Koin
 topic: android
-subtopics: [architecture-mvvm, di-koin, lifecycle]
+subtopics:
+- architecture-mvvm
+- di-koin
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-how-to-display-snackbar-or-toast-based-on-results--android--medium, q-koin-fundamentals--android--medium, q-koin-vs-dagger-philosophy--android--hard, q-sealed-classes-state-management--android--medium, q-stable-classes-compose--android--hard, q-what-methods-redraw-views--android--medium]
+related:
+- c-dependency-injection
+- q-how-to-display-snackbar-or-toast-based-on-results--android--medium
+- q-koin-fundamentals--android--medium
+- q-koin-vs-dagger-philosophy--android--hard
+- q-sealed-classes-state-management--android--medium
+- q-stable-classes-compose--android--hard
+- q-what-methods-redraw-views--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-mvvm, android/di-koin, android/lifecycle, dependency-injection, difficulty/medium, koin, scopes]
+tags:
+- android/architecture-mvvm
+- android/di-koin
+- android/lifecycle
+- dependency-injection
+- difficulty/medium
+- koin
+- scopes
 anki_cards:
-  - slug: android-203-0-en
-    front: "How do you manage scopes in Koin?"
-    back: |
-      **Scope types:**
-      - `single` - application-wide singleton
-      - `scoped` - lives within a Scope instance
-      - `factory` - new instance each time
-
-      **Usage pattern:**
-      ```kotlin
-      scope<MyActivity> {
-          scoped { MyPresenter(get()) }
-      }
-
-      // Activity
-      val activityScope = getKoin().createScope(
-          "id", scopeQualifier<MyActivity>()
-      )
-      activityScope.close() // in onDestroy
-      ```
-
-      Must explicitly `close()` scopes to avoid leaks.
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-203-0-ru
-    front: "Как управлять scope в Koin?"
-    back: |
-      **Типы scope:**
-      - `single` - синглтон на всё приложение
-      - `scoped` - живёт в рамках Scope
-      - `factory` - новый экземпляр каждый раз
-
-      **Паттерн использования:**
-      ```kotlin
-      scope<MyActivity> {
-          scoped { MyPresenter(get()) }
-      }
-
-      // Activity
-      val activityScope = getKoin().createScope(
-          "id", scopeQualifier<MyActivity>()
-      )
-      activityScope.close() // в onDestroy
-      ```
-
-      Обязательно вызывать `close()` для избежания утечек.
-    tags:
-      - android_architecture
-      - difficulty::medium
-
----\
+- slug: android-203-0-en
+  language: en
+  anki_id: 1768397117455
+  synced_at: '2026-01-23T16:45:05.679746'
+- slug: android-203-0-ru
+  language: ru
+  anki_id: 1768397117481
+  synced_at: '2026-01-23T16:45:05.681090'
+---
 # Вопрос (RU)
 
 > Как управлять scope в `Koin`? Реализуйте зависимости с ограниченным временем жизни для `Activity` и `Fragment` с правильной обработкой жизненного цикла.

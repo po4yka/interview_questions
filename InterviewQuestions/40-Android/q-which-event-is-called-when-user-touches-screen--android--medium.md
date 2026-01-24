@@ -1,53 +1,49 @@
----\
+---
 id: android-155
-title: Which Event Is Called When User Touches Screen / Какое событие вызывается когда пользователь касается экрана
-aliases: [Touch Events, События касания]
+title: Which Event Is Called When User Touches Screen / Какое событие вызывается когда
+  пользователь касается экрана
+aliases:
+- Touch Events
+- События касания
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics:
+- ui-compose
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-which-event-is-triggered-when-user-presses-screen--android--medium, q-which-event-on-screen-press--android--easy, q-why-might-user-data-disappear-during-screen-rotation--android--hard]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-how-to-create-chat-lists-from-a-ui-perspective--android--hard
+- q-how-to-create-dynamic-screens-at-runtime--android--hard
+- q-which-event-is-triggered-when-user-presses-screen--android--medium
+- q-which-event-on-screen-press--android--easy
+- q-why-might-user-data-disappear-during-screen-rotation--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/ui-compose, android/ui-views, difficulty/medium, touch-events, ui]
+tags:
+- android/ui-compose
+- android/ui-views
+- difficulty/medium
+- touch-events
+- ui
 anki_cards:
-  - slug: android-155-0-en
-    front: "What event is called when user touches the screen in Android?"
-    back: |
-      **Touch event chain:**
-      1. `dispatchTouchEvent()` - distribution
-      2. `onInterceptTouchEvent()` - ViewGroup interception
-      3. `onTouchEvent()` - handling (ACTION_DOWN, MOVE, UP)
-      4. `performClick()` / `onClick()` - if click recognized
-
-      **Key:** Return `true` from onTouchEvent(ACTION_DOWN) to consume gesture.
-
-      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-155-0-ru
-    front: "Какое событие вызывается при касании экрана в Android?"
-    back: |
-      **Цепочка событий касания:**
-      1. `dispatchTouchEvent()` - распределение
-      2. `onInterceptTouchEvent()` - перехват ViewGroup
-      3. `onTouchEvent()` - обработка (ACTION_DOWN, MOVE, UP)
-      4. `performClick()` / `onClick()` - если распознан клик
-
-      **Ключевое:** Вернуть `true` из onTouchEvent(ACTION_DOWN) для потребления жеста.
-
-      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
-    tags:
-      - android_views
-      - difficulty::medium
-
----\
+- slug: android-155-0-en
+  language: en
+  anki_id: 1768398221510
+  synced_at: '2026-01-23T16:45:05.453834'
+- slug: android-155-0-ru
+  language: ru
+  anki_id: 1768398221532
+  synced_at: '2026-01-23T16:45:05.455757'
+---
 # Вопрос (RU)
 
 > Какое событие вызывается, когда пользователь касается экрана?

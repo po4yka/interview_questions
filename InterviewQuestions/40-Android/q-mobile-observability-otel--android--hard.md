@@ -1,74 +1,50 @@
 ---
 id: android-627
 anki_cards:
-  - slug: android-627-0-en
-    front: "How to implement observability on Android with OpenTelemetry?"
-    back: |
-      **Three signals:** Logs, Metrics, Traces via OpenTelemetry SDK.
-
-      **Setup:**
-      ```kotlin
-      OpenTelemetrySdk.builder()
-          .setMeterProvider(meterProvider)
-          .setTracerProvider(tracerProvider)
-          .setLoggerProvider(loggerProvider)
-          .buildAndRegisterGlobal()
-      ```
-
-      **Export:** OTLP (gRPC/HTTP) with batching, offline buffer (DataStore/SQLite).
-
-      **Optimization:**
-      - Sampling (`TraceIdRatioBasedSampler(0.05)`)
-      - WorkManager with `Constraints`
-      - Privacy filters, no PII
-
-      **Key:** Battery-aware export, opt-in/opt-out, correlation via trace/span IDs.
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-627-0-ru
-    front: "Как реализовать наблюдаемость на Android с OpenTelemetry?"
-    back: |
-      **Три сигнала:** Логи, Метрики, Трейсы через OpenTelemetry SDK.
-
-      **Настройка:**
-      ```kotlin
-      OpenTelemetrySdk.builder()
-          .setMeterProvider(meterProvider)
-          .setTracerProvider(tracerProvider)
-          .setLoggerProvider(loggerProvider)
-          .buildAndRegisterGlobal()
-      ```
-
-      **Экспорт:** OTLP (gRPC/HTTP) с batching, офлайн-буфер (DataStore/SQLite).
-
-      **Оптимизация:**
-      - Sampling (`TraceIdRatioBasedSampler(0.05)`)
-      - WorkManager с `Constraints`
-      - Фильтры приватности, без PII
-
-      **Ключ:** Battery-aware экспорт, opt-in/opt-out, корреляция через trace/span ID.
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-627-0-en
+  language: en
+  anki_id: 1768414561946
+  synced_at: '2026-01-23T16:45:06.286723'
+- slug: android-627-0-ru
+  language: ru
+  anki_id: 1768414561969
+  synced_at: '2026-01-23T16:45:06.287451'
 title: Mobile Observability with OpenTelemetry / Наблюдаемость на Android с OpenTelemetry
-aliases: [Mobile Observability with OpenTelemetry, Наблюдаемость на Android с OpenTelemetry]
+aliases:
+- Mobile Observability with OpenTelemetry
+- Наблюдаемость на Android с OpenTelemetry
 topic: android
-subtopics: [logging-tracing, monitoring-slo, performance-battery]
+subtopics:
+- logging-tracing
+- monitoring-slo
+- performance-battery
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, moc-android, q-android-lint-tool--android--medium, q-android-performance-measurement-tools--android--medium, q-main-thread-android--android--medium, q-parsing-optimization-android--android--medium]
+related:
+- c-android
+- moc-android
+- q-android-lint-tool--android--medium
+- q-android-performance-measurement-tools--android--medium
+- q-main-thread-android--android--medium
+- q-parsing-optimization-android--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/logging-tracing, android/monitoring-slo, android/performance-battery, difficulty/hard, opentelemetry]
+tags:
+- android/logging-tracing
+- android/monitoring-slo
+- android/performance-battery
+- difficulty/hard
+- opentelemetry
 sources:
-  - "https://developer.android.com/topic/performance/monitoring"
-  - "https://opentelemetry.io/docs/instrumentation/android/"
----\
+- https://developer.android.com/topic/performance/monitoring
+- https://opentelemetry.io/docs/instrumentation/android/
+---
 # Вопрос (RU)
 > Как построить наблюдаемость в Android-приложении с OpenTelemetry: структурированные логи, метрики, трассировки, фоновая отправка данных и ограничения батареи/приватности?
 

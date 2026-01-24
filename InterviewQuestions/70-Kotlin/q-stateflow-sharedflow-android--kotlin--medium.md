@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-stateflow-sharedflow-android--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284005
+  synced_at: '2026-01-23T17:03:50.832895'
 - slug: q-stateflow-sharedflow-android--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284030
+  synced_at: '2026-01-23T17:03:50.834290'
 ---
 # Question (EN)
 > How to use `StateFlow` and `SharedFlow` in Android? Explain the difference, replay cache, when to use each, and patterns for `ViewModel`s.

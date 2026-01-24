@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-461-0-en
   language: en
   anki_id: 1768366754879
-  synced_at: '2026-01-14T09:17:53.571132'
+  synced_at: '2026-01-23T16:45:06.186924'
 - slug: android-461-0-ru
   language: ru
   anki_id: 1768366754899
-  synced_at: '2026-01-14T09:17:53.574476'
+  synced_at: '2026-01-23T16:45:06.187732'
 sources:
 - https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
 ---

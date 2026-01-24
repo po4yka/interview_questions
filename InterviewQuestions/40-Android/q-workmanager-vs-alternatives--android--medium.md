@@ -1,59 +1,39 @@
----\
+---
 id: android-059
-title: "WorkManager vs Alternatives / WorkManager против альтернатив"
-aliases: ["WorkManager vs Alternatives", "WorkManager против альтернатив"]
+title: WorkManager vs Alternatives / WorkManager против альтернатив
+aliases:
+- WorkManager vs Alternatives
+- WorkManager против альтернатив
 topic: android
-subtopics: [background-execution]
+subtopics:
+- background-execution
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-background-tasks, c-workmanager]
+related:
+- c-background-tasks
+- c-workmanager
 created: 2025-10-12
 updated: 2025-11-10
-tags: [android/background-execution, difficulty/medium]
+tags:
+- android/background-execution
+- difficulty/medium
 sources: []
 anki_cards:
-  - slug: android-059-0-en
-    front: "When to use WorkManager vs AlarmManager vs Foreground Service?"
-    back: |
-      | API | Use Case |
-      |-----|----------|
-      | **WorkManager** | Deferrable, guaranteed background work (default choice) |
-      | **Foreground Service** | User-initiated, long-running (music, downloads) |
-      | **AlarmManager** | Exact time alarms (reminders, clocks) |
-      | **Coroutines** | Short-lived, app-scope work |
-
-      **Decision flow**:
-      1. Must run at exact time? -> AlarmManager
-      2. User-visible, long-running? -> Foreground Service
-      3. Deferrable, guaranteed? -> **WorkManager**
-      4. Short, app lifecycle? -> Coroutines
-    tags:
-      - android_workmanager
-      - difficulty::medium
-  - slug: android-059-0-ru
-    front: "Когда использовать WorkManager vs AlarmManager vs Foreground Service?"
-    back: |
-      | API | Применение |
-      |-----|------------|
-      | **WorkManager** | Отложенная, гарантированная фоновая работа (по умолчанию) |
-      | **Foreground Service** | Пользовательская, долгая (музыка, загрузки) |
-      | **AlarmManager** | Точное время (напоминания, будильники) |
-      | **Coroutines** | Короткая работа, жизненный цикл приложения |
-
-      **Алгоритм выбора**:
-      1. Точное время? -> AlarmManager
-      2. Видимая пользователю, долгая? -> Foreground Service
-      3. Отложенная, гарантированная? -> **WorkManager**
-      4. Короткая, в рамках приложения? -> Coroutines
-    tags:
-      - android_workmanager
-      - difficulty::medium
-
----\
+- slug: android-059-0-en
+  language: en
+  anki_id: 1768380208227
+  synced_at: '2026-01-23T16:45:05.725856'
+- slug: android-059-0-ru
+  language: ru
+  anki_id: 1768380208250
+  synced_at: '2026-01-23T16:45:05.728486'
+---
 # Вопрос (RU)
 > Когда использовать `WorkManager` vs AlarmManager vs JobScheduler vs Foreground `Service`?
 

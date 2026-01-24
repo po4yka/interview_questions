@@ -34,22 +34,12 @@ tags:
 anki_cards:
 - slug: kotlin-025-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - interfaces
-  - lambdas
+  anki_id: 1768326291481
+  synced_at: '2026-01-23T17:03:51.511551'
 - slug: kotlin-025-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - interfaces
-  - lambdas
+  anki_id: 1768326291505
+  synced_at: '2026-01-23T17:03:51.513025'
 ---
 # Вопрос (RU)
 > Что вы знаете о функциональных (SAM) интерфейсах в Kotlin?

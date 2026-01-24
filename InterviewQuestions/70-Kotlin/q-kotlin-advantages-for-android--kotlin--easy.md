@@ -27,20 +27,12 @@ tags:
 anki_cards:
 - slug: kotlin-225-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - extensions
-  - null-safety
+  anki_id: 1768326295582
+  synced_at: '2026-01-23T17:03:51.680677'
 - slug: kotlin-225-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - extensions
-  - null-safety
+  anki_id: 1768326295607
+  synced_at: '2026-01-23T17:03:51.681534'
 ---
 # Вопрос (RU)
 > В чём преимущества Kotlin для разработки под Android?

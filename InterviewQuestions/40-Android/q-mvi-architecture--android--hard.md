@@ -1,66 +1,47 @@
 ---
 id: android-326
 anki_cards:
-  - slug: android-326-0-en
-    front: "What is MVI architecture and how does it differ from MVVM?"
-    back: |
-      **MVI = Model-View-Intent** with unidirectional data flow:
-      ```
-      Intent -> ViewModel -> State -> View -> Intent
-      ```
-
-      **Key components:**
-      - **Intent** - user actions (sealed class)
-      - **Model** - single immutable state (data class)
-      - **Reducer** - pure function: `(State, Intent) -> State`
-
-      **vs MVVM:**
-      - Single state vs multiple LiveData/StateFlow
-      - Intent-based vs direct method calls
-      - Higher predictability, more boilerplate
-
-      **Side effects:** Use `Channel`/`SharedFlow` (replay=0), not State.
-    tags:
-      - android_architecture
-      - difficulty::hard
-  - slug: android-326-0-ru
-    front: "Что такое MVI архитектура и чем она отличается от MVVM?"
-    back: |
-      **MVI = Model-View-Intent** с однонаправленным потоком данных:
-      ```
-      Intent -> ViewModel -> State -> View -> Intent
-      ```
-
-      **Ключевые компоненты:**
-      - **Intent** - действия пользователя (sealed class)
-      - **Model** - единое иммутабельное состояние (data class)
-      - **Reducer** - чистая функция: `(State, Intent) -> State`
-
-      **vs MVVM:**
-      - Единый State vs несколько LiveData/StateFlow
-      - Через Intent vs прямые вызовы методов
-      - Выше предсказуемость, больше boilerplate
-
-      **Side effects:** Через `Channel`/`SharedFlow` (replay=0), не в State.
-    tags:
-      - android_architecture
-      - difficulty::hard
-title: "MVI Architecture / Архитектура MVI"
-aliases: [Model-View-Intent, MVI, MVI паттерн, Архитектура MVI]
+- slug: android-326-0-en
+  language: en
+  anki_id: 1768416436976
+  synced_at: '2026-01-23T16:45:06.145572'
+- slug: android-326-0-ru
+  language: ru
+  anki_id: 1768416436996
+  synced_at: '2026-01-23T16:45:06.146455'
+title: MVI Architecture / Архитектура MVI
+aliases:
+- Model-View-Intent
+- MVI
+- MVI паттерн
+- Архитектура MVI
 topic: android
-subtopics: [architecture-mvi, coroutines, ui-state]
+subtopics:
+- architecture-mvi
+- coroutines
+- ui-state
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-android-ui-composition]
+related:
+- c-android
+- c-android-ui-composition
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvi, android/coroutines, android/ui-state, architecture, difficulty/hard, state-management, unidirectional-data-flow]
-
----\
+tags:
+- android/architecture-mvi
+- android/coroutines
+- android/ui-state
+- architecture
+- difficulty/hard
+- state-management
+- unidirectional-data-flow
+---
 # Вопрос (RU)
 > Объясните архитектурный паттерн MVI (Model-`View`-`Intent`). В чем его ключевые отличия от MVVM?
 

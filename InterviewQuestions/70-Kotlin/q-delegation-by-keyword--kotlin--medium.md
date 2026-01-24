@@ -36,20 +36,12 @@ sources:
 anki_cards:
 - slug: kotlin-237-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - delegation
-  - kotlin-features
+  anki_id: 1768326282555
+  synced_at: '2026-01-23T17:03:50.726634'
 - slug: kotlin-237-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - delegation
-  - kotlin-features
+  anki_id: 1768326282579
+  synced_at: '2026-01-23T17:03:50.727869'
 ---
 # Вопрос (RU)
 > Что такое делегирование класса с ключевым словом `by` в Kotlin?

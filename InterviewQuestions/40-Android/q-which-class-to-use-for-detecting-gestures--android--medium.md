@@ -1,55 +1,50 @@
----\
+---
 id: android-196
-title: Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения жестов
-aliases: [Which Class To Use For Detecting Gestures, Какой класс использовать для обнаружения жестов]
+title: Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения
+  жестов
+aliases:
+- Which Class To Use For Detecting Gestures
+- Какой класс использовать для обнаружения жестов
 topic: android
-subtopics: [ui-state, ui-views]
+subtopics:
+- ui-state
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-compose-state, c-viewmodel, q-dagger-field-injection--android--medium, q-how-to-write-recyclerview-cache-ahead--android--medium, q-what-are-services-for--android--easy, q-what-is-layout-types-and-when-to-use--android--easy, q-which-class-can-be-used-to-detect-different-gestures--android--easy, q-which-class-to-catch-gestures--android--easy]
+related:
+- c-compose-state
+- c-viewmodel
+- q-dagger-field-injection--android--medium
+- q-how-to-write-recyclerview-cache-ahead--android--medium
+- q-what-are-services-for--android--easy
+- q-what-is-layout-types-and-when-to-use--android--easy
+- q-which-class-can-be-used-to-detect-different-gestures--android--easy
+- q-which-class-to-catch-gestures--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events]
+tags:
+- android/ui-state
+- android/ui-views
+- difficulty/medium
+- gestures
+- touch-events
 anki_cards:
-  - slug: android-196-0-en
-    front: "Which class detects gestures in Android?"
-    back: |
-      **GestureDetector** - for tap, double tap, long press, scroll, fling.
-
-      **Usage:**
-      1. Create `GestureDetector` with `SimpleOnGestureListener`
-      2. Override `onDown()` to return `true` (required!)
-      3. Call `gestureDetector.onTouchEvent(event)` in `onTouchEvent()`
-
-      **ScaleGestureDetector** - for pinch-zoom gestures.
-
-      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-196-0-ru
-    front: "Какой класс используется для распознавания жестов в Android?"
-    back: |
-      **GestureDetector** - для tap, double tap, long press, scroll, fling.
-
-      **Использование:**
-      1. Создать `GestureDetector` с `SimpleOnGestureListener`
-      2. Переопределить `onDown()` чтобы вернуть `true` (обязательно!)
-      3. Вызвать `gestureDetector.onTouchEvent(event)` в `onTouchEvent()`
-
-      **ScaleGestureDetector** - для pinch-zoom жестов.
-
-      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
-    tags:
-      - android_views
-      - difficulty::medium
-
----\
+- slug: android-196-0-en
+  language: en
+  anki_id: 1768398631388
+  synced_at: '2026-01-23T16:45:05.641328'
+- slug: android-196-0-ru
+  language: ru
+  anki_id: 1769172251982
+  synced_at: '2026-01-23T16:45:05.642667'
+---
 # Вопрос (RU)
 
 > Какой класс можно использовать для обнаружения жестов в Android?

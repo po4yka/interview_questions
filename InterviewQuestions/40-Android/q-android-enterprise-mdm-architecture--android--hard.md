@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-624-0-en
   language: en
   anki_id: 1768363603323
-  synced_at: '2026-01-14T09:17:53.753400'
+  synced_at: '2026-01-23T16:45:06.320346'
 - slug: android-624-0-ru
   language: ru
   anki_id: 1768363603347
-  synced_at: '2026-01-14T09:17:53.756238'
+  synced_at: '2026-01-23T16:45:06.321140'
 sources:
 - https://developer.android.com/work/managed-configurations
 - https://developer.android.com/work/overview

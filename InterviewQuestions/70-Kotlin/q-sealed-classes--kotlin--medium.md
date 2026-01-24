@@ -31,22 +31,12 @@ subtopics:
 anki_cards:
 - slug: kotlin-136-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - enums
-  - sealed-classes
-  - when-expression
+  anki_id: 1768326280005
+  synced_at: '2026-01-23T17:03:50.512020'
 - slug: kotlin-136-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - enums
-  - sealed-classes
-  - when-expression
+  anki_id: 1768326280031
+  synced_at: '2026-01-23T17:03:50.513656'
 ---
 # Вопрос (RU)
 > В чем особенность sealed классов в Kotlin?

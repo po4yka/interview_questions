@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-386-0-en
   language: en
   anki_id: 1768367370835
-  synced_at: '2026-01-14T09:17:53.729050'
+  synced_at: '2026-01-23T16:45:06.306618'
 - slug: android-386-0-ru
   language: ru
   anki_id: 1768367370857
-  synced_at: '2026-01-14T09:17:53.731930'
+  synced_at: '2026-01-23T16:45:06.307387'
 tags:
 - android/fragment
 - android/lifecycle

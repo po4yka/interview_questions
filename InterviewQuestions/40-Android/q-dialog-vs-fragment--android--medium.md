@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-357-0-en
   language: en
   anki_id: 1768366959485
-  synced_at: '2026-01-14T09:17:53.600074'
+  synced_at: '2026-01-23T16:45:06.218318'
 - slug: android-357-0-ru
   language: ru
   anki_id: 1768366959505
-  synced_at: '2026-01-14T09:17:53.603175'
+  synced_at: '2026-01-23T16:45:06.219214'
 sources:
 - https://developer.android.com/develop/ui/views/components/dialogs
 - https://developer.android.com/guide/fragments

@@ -1,53 +1,49 @@
----\
+---
 id: android-132
 title: Main Thread Android / Главный поток Android
-aliases: [Main Thread Android, UI Thread, Главный поток Android, Поток UI]
+aliases:
+- Main Thread Android
+- UI Thread
+- Главный поток Android
+- Поток UI
 topic: android
-subtopics: [lifecycle, threads-sync]
+subtopics:
+- lifecycle
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, c-lifecycle, q-handler-looper-main-thread--android--medium, q-how-does-the-main-thread-work--android--medium, q-room-code-generation-timing--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
+related:
+- c-coroutines
+- c-lifecycle
+- q-handler-looper-main-thread--android--medium
+- q-how-does-the-main-thread-work--android--medium
+- q-room-code-generation-timing--android--medium
+- q-what-is-the-main-application-execution-thread--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/lifecycle, android/threads-sync, difficulty/medium, threading, ui-thread]
+tags:
+- android/lifecycle
+- android/threads-sync
+- difficulty/medium
+- threading
+- ui-thread
 anki_cards:
-  - slug: android-132-0-en
-    front: "What is the main thread in Android and what are its key characteristics?"
-    back: |
-      **Main Thread (UI Thread)** - handles all UI operations.
-
-      **Key characteristics:**
-      - Created by framework at app start
-      - All UI updates must happen here
-      - Uses Looper + MessageQueue event loop
-      - Blocking > 5sec causes ANR
-
-      **Avoid:** Network, DB, heavy computation on main thread.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-132-0-ru
-    front: "Что такое главный поток в Android и каковы его ключевые характеристики?"
-    back: |
-      **Main Thread (UI Thread)** - обрабатывает все UI операции.
-
-      **Ключевые характеристики:**
-      - Создаётся фреймворком при запуске приложения
-      - Все UI обновления должны происходить здесь
-      - Использует event loop Looper + MessageQueue
-      - Блокировка > 5сек вызывает ANR
-
-      **Избегать:** Сеть, БД, тяжёлые вычисления на главном потоке.
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-132-0-en
+  language: en
+  anki_id: 1768396093547
+  synced_at: '2026-01-23T16:45:05.327725'
+- slug: android-132-0-ru
+  language: ru
+  anki_id: 1768396093572
+  synced_at: '2026-01-23T16:45:05.329156'
+---
 # Вопрос (RU)
 
 > Какой основной поток выполнения в Android-приложении?

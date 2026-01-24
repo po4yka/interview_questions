@@ -1,73 +1,45 @@
----\
+---
 id: android-138
 title: How To Choose Layout For Fragment / Как выбрать layout для Fragment
-aliases: [How To Choose Layout For Fragment, Как выбрать layout для Fragment]
+aliases:
+- How To Choose Layout For Fragment
+- Как выбрать layout для Fragment
 topic: android
-subtopics: [fragment, ui-views]
+subtopics:
+- fragment
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-fragments, q-fragment-basics--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-save-data-outside-fragment--android--medium, q-what-is-layout-types-and-when-to-use--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
+related:
+- c-fragments
+- q-fragment-basics--android--easy
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-save-data-outside-fragment--android--medium
+- q-what-is-layout-types-and-when-to-use--android--easy
+- q-why-user-data-may-disappear-on-screen-rotation--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/fragment, android/ui-views, difficulty/easy]
+tags:
+- android/fragment
+- android/ui-views
+- difficulty/easy
 anki_cards:
-  - slug: android-138-0-en
-    front: "How do you choose and set a layout for a Fragment?"
-    back: |
-      **In onCreateView() using LayoutInflater:**
-
-      ```kotlin
-      override fun onCreateView(
-          inflater: LayoutInflater,
-          container: ViewGroup?,
-          savedInstanceState: Bundle?
-      ): View {
-          return inflater.inflate(
-              R.layout.fragment_example,
-              container,
-              false  // attachToRoot = false!
-          )
-      }
-      ```
-
-      **Key:** `attachToRoot = false` - FragmentManager handles attachment.
-
-      **Alternative:** Pass layout to Fragment constructor: `Fragment(R.layout.my_fragment)`
-    tags:
-      - android_fragments
-      - difficulty::easy
-  - slug: android-138-0-ru
-    front: "Как выбрать и задать layout для Fragment?"
-    back: |
-      **В onCreateView() используя LayoutInflater:**
-
-      ```kotlin
-      override fun onCreateView(
-          inflater: LayoutInflater,
-          container: ViewGroup?,
-          savedInstanceState: Bundle?
-      ): View {
-          return inflater.inflate(
-              R.layout.fragment_example,
-              container,
-              false  // attachToRoot = false!
-          )
-      }
-      ```
-
-      **Ключевое:** `attachToRoot = false` - FragmentManager сам прикрепляет.
-
-      **Альтернатива:** Передать layout в конструктор: `Fragment(R.layout.my_fragment)`
-    tags:
-      - android_fragments
-      - difficulty::easy
-
----\
+- slug: android-138-0-en
+  language: en
+  anki_id: 1768378882671
+  synced_at: '2026-01-23T16:45:05.335099'
+- slug: android-138-0-ru
+  language: ru
+  anki_id: 1768378882694
+  synced_at: '2026-01-23T16:45:05.337264'
+---
 # Вопрос (RU)
 
 > Каким образом ты выбираешь layout для `Fragment`?

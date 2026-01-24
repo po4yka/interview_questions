@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-operators-deep-dive--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287555
+  synced_at: '2026-01-23T17:03:51.197735'
 - slug: q-flow-operators-deep-dive--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287580
+  synced_at: '2026-01-23T17:03:51.199624'
 ---
 # Question (EN)
 > Implement custom `Flow` operators. Explain `flatMapConcat` vs `flatMapMerge` vs `flatMapLatest` with practical examples and performance characteristics.

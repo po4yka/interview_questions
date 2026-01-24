@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-121-0-en
   language: en
   anki_id: 1768363328405
-  synced_at: '2026-01-14T09:09:33.482105'
+  synced_at: '2026-01-23T16:45:05.277638'
 - slug: android-121-0-ru
   language: ru
   anki_id: 1768363328458
-  synced_at: '2026-01-14T09:09:33.485995'
+  synced_at: '2026-01-23T16:45:05.278968'
 ---
 # Вопрос (RU)
 > Что такое Android Lint, его основные возможности и методы настройки для проекта?

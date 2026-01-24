@@ -2,18 +2,13 @@
 anki_cards:
 - slug: q-kotlin-map-flatmap--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294331
+  synced_at: '2026-01-23T17:03:51.634799'
 - slug: q-kotlin-map-flatmap--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294357
+  synced_at: '2026-01-23T17:03:51.635666'
 ---
-
 ---
 ---
 ---\

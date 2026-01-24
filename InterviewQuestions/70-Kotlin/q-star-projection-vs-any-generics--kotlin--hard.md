@@ -35,22 +35,12 @@ tags:
 anki_cards:
 - slug: kotlin-027-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - star-projection
-  - type-safety
+  anki_id: 1768326291831
+  synced_at: '2026-01-23T17:03:51.527249'
 - slug: kotlin-027-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - star-projection
-  - type-safety
+  anki_id: 1768326291857
+  synced_at: '2026-01-23T17:03:51.528149'
 ---
 # Вопрос (RU)
 > В чем разница между `*` (звездная проекция) и `Any` в обобщениях Kotlin?

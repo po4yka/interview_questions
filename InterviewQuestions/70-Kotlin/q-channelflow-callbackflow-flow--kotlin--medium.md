@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-channelflow-callbackflow-flow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279456
+  synced_at: '2026-01-23T17:03:50.458160'
 - slug: q-channelflow-callbackflow-flow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279479
+  synced_at: '2026-01-23T17:03:50.460759'
 ---
 # Question (EN)
 > What's the difference between `flow{}`, `channelFlow{}`, and `callbackFlow{}`? When should you use each builder?

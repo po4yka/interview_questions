@@ -27,20 +27,12 @@ tags:
 anki_cards:
 - slug: kotlin-187-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - null-safety
-  - type-system
+  anki_id: 1768326288056
+  synced_at: '2026-01-23T17:03:51.254549'
 - slug: kotlin-187-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - null-safety
-  - type-system
+  anki_id: 1768326288082
+  synced_at: '2026-01-23T17:03:51.256633'
 ---
 # Вопрос (RU)
 > Как применяются расширения (Extensions) в Java? Поддерживает ли Java extension-функции как в Kotlin?

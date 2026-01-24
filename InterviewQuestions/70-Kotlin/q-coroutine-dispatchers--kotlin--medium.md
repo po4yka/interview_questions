@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-dispatchers--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286105
+  synced_at: '2026-01-23T17:03:51.057792'
 - slug: q-coroutine-dispatchers--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286130
+  synced_at: '2026-01-23T17:03:51.059284'
 ---
 # Question (EN)
 > What are coroutine dispatchers in Kotlin? Explain Main, IO, Default, and Unconfined dispatchers and when to use each.

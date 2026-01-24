@@ -26,18 +26,12 @@ tags:
 anki_cards:
 - slug: lang-007-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
+  anki_id: 1768326286656
+  synced_at: '2026-01-23T17:03:51.130704'
 - slug: lang-007-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
+  anki_id: 1768326286681
+  synced_at: '2026-01-23T17:03:51.132841'
 ---
 # Вопрос (RU)
 > Какая функция Kotlin используется для объединения двух коллекций?

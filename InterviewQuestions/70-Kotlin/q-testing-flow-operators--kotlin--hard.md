@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-testing-flow-operators--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283106
+  synced_at: '2026-01-23T17:03:50.773304'
 - slug: q-testing-flow-operators--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283130
+  synced_at: '2026-01-23T17:03:50.775387'
 ---
 # Question (EN)
 > How to test `Flow` operators and transformations like `flatMap`, `debounce`, `retry`, and `combine`? Cover virtual time testing, Turbine usage, and complex `Flow` chain testing strategies.

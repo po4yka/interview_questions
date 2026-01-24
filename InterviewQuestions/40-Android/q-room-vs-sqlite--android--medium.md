@@ -1,68 +1,42 @@
----\
+---
 id: android-270
 anki_cards:
-  - slug: android-270-0-en
-    front: "What are the main differences between Room and raw SQLite?"
-    back: |
-      **SQLite:**
-      - Low-level, manual SQL strings
-      - No compile-time validation
-      - Manual cursor handling, ContentValues
-      - No reactive streams
-
-      **Room:**
-      - High-level ORM-like abstraction
-      - SQL validated at compile time
-      - Type-safe annotations (@Entity, @Dao, @Query)
-      - Built-in Flow/LiveData support
-      - Structured migrations
-
-      **Room still uses SQLite internally** but provides:
-      - Less boilerplate
-      - Better safety
-      - Easier testing (in-memory DB)
-    tags:
-      - android_room
-      - difficulty::medium
-  - slug: android-270-0-ru
-    front: "Каковы основные различия между Room и сырым SQLite?"
-    back: |
-      **SQLite:**
-      - Низкоуровневый, ручные SQL-строки
-      - Нет проверки при компиляции
-      - Ручная обработка Cursor, ContentValues
-      - Нет реактивных потоков
-
-      **Room:**
-      - Высокоуровневая ORM-подобная абстракция
-      - SQL валидируется при компиляции
-      - Типобезопасные аннотации (@Entity, @Dao, @Query)
-      - Встроенная поддержка Flow/LiveData
-      - Структурированные миграции
-
-      **Room внутри использует SQLite**, но предоставляет:
-      - Меньше шаблонного кода
-      - Лучшую безопасность
-      - Простое тестирование (in-memory DB)
-    tags:
-      - android_room
-      - difficulty::medium
+- slug: android-270-0-en
+  language: en
+  anki_id: 1768420259048
+  synced_at: '2026-01-23T16:45:05.952105'
+- slug: android-270-0-ru
+  language: ru
+  anki_id: 1768420259097
+  synced_at: '2026-01-23T16:45:05.954217'
 title: Room vs SQLite / Room против SQLite
-aliases: [Room vs SQLite, Room против SQLite]
+aliases:
+- Room vs SQLite
+- Room против SQLite
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-room, q-android-runtime-art--android--medium, q-room-code-generation-timing--android--medium, q-room-relations-embedded--android--medium, q-room-transactions-dao--android--medium, q-room-type-converters-advanced--android--medium]
+related:
+- c-room
+- q-android-runtime-art--android--medium
+- q-room-code-generation-timing--android--medium
+- q-room-relations-embedded--android--medium
+- q-room-transactions-dao--android--medium
+- q-room-type-converters-advanced--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/room, difficulty/medium]
-
----\
+tags:
+- android/room
+- difficulty/medium
+---
 # Вопрос (RU)
 > `Room` против `SQLite`
 

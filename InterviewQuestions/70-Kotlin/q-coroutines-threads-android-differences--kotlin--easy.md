@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutines-threads-android-differences--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294180
+  synced_at: '2026-01-23T17:03:51.626108'
 - slug: q-coroutines-threads-android-differences--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294206
+  synced_at: '2026-01-23T17:03:51.626947'
 ---
 # Question (EN)
 > What are the key differences between coroutines and threads in Android development?

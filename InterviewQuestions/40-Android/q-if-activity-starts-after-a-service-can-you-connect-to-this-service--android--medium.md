@@ -1,61 +1,53 @@
----\
+---
 id: android-177
-title: If Activity Starts After A Service Can You Connect To This Service / Можно ли подключиться к Service если Activity запустилась после него
-aliases: [If Activity Starts After A Service Can You Connect To This Service, Можно ли подключиться к Service если Activity запустилась после него]
+title: If Activity Starts After A Service Can You Connect To This Service / Можно
+  ли подключиться к Service если Activity запустилась после него
+aliases:
+- If Activity Starts After A Service Can You Connect To This Service
+- Можно ли подключиться к Service если Activity запустилась после него
 topic: android
-subtopics: [intents-deeplinks, lifecycle, service]
+subtopics:
+- intents-deeplinks
+- lifecycle
+- service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-intent, c-lifecycle, q-android-components-besides-activity--android--easy, q-design-whatsapp-app--android--hard, q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-service-component--android--medium, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- c-intent
+- c-lifecycle
+- q-android-components-besides-activity--android--easy
+- q-design-whatsapp-app--android--hard
+- q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium
+- q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
+- q-service-component--android--medium
+- q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/intents-deeplinks, android/lifecycle, android/service, binding, difficulty/medium, ipc, service]
+tags:
+- android/intents-deeplinks
+- android/lifecycle
+- android/service
+- binding
+- difficulty/medium
+- ipc
+- service
 sources: []
 anki_cards:
-  - slug: android-177-0-en
-    front: "Can an Activity connect to a Service that was started before it?"
-    back: |
-      **Yes**, Activity can bind to an already running Service.
-
-      **Requirements:**
-      - Service implements `onBind()` returning `IBinder`
-      - Activity calls `bindService()` with `ServiceConnection`
-
-      ```kotlin
-      bindService(intent, connection, BIND_AUTO_CREATE)
-      ```
-
-      **BIND_AUTO_CREATE** creates Service if not running yet.
-
-      Order doesn't matter: bind works as long as Service is alive.
-    tags:
-      - android_services
-      - difficulty::medium
-  - slug: android-177-0-ru
-    front: "Может ли Activity подключиться к Service, который запустился раньше?"
-    back: |
-      **Да**, Activity может привязаться к уже запущенному Service.
-
-      **Требования:**
-      - Service реализует `onBind()`, возвращающий `IBinder`
-      - Activity вызывает `bindService()` с `ServiceConnection`
-
-      ```kotlin
-      bindService(intent, connection, BIND_AUTO_CREATE)
-      ```
-
-      **BIND_AUTO_CREATE** создаст Service, если не запущен.
-
-      Порядок не важен: bind работает пока Service жив.
-    tags:
-      - android_services
-      - difficulty::medium
-
----\
+- slug: android-177-0-en
+  language: en
+  anki_id: 1768381516160
+  synced_at: '2026-01-23T16:45:05.563997'
+- slug: android-177-0-ru
+  language: ru
+  anki_id: 1768381516182
+  synced_at: '2026-01-23T16:45:05.565801'
+---
 # Вопрос (RU)
 
 > Можно ли подключиться к `Service`, если `Activity` запустилась после него?

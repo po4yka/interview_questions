@@ -128,16 +128,12 @@ tags:
 anki_cards:
 - slug: q-interface-vs-abstract-class--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287155
+  synced_at: '2026-01-23T17:03:51.164152'
 - slug: q-interface-vs-abstract-class--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287181
+  synced_at: '2026-01-23T17:03:51.166221'
 ---
 # Вопрос (RU)
 > Что такое interface и чем он отличается от абстрактного класса?

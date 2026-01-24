@@ -127,16 +127,12 @@ tags:
 anki_cards:
 - slug: q-suspend-function-suspension-mechanism--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292680
+  synced_at: '2026-01-23T17:03:51.565922'
 - slug: q-suspend-function-suspension-mechanism--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292706
+  synced_at: '2026-01-23T17:03:51.567031'
 ---
 # Вопрос (RU)
 > Как работает механизм приостановки в suspend-функциях?

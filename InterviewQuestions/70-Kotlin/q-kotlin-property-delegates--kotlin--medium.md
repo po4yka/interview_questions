@@ -31,20 +31,12 @@ tags:
 anki_cards:
 - slug: lang-045-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - delegation
-  - type-system
+  anki_id: 1768326288481
+  synced_at: '2026-01-23T17:03:51.283191'
 - slug: lang-045-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - delegation
-  - type-system
+  anki_id: 1768326288506
+  synced_at: '2026-01-23T17:03:51.284611'
 ---
 # Вопрос (RU)
 > В чем особенность делегатов свойств?

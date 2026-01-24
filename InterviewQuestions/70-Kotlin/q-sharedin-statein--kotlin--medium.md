@@ -33,16 +33,12 @@ tags:
 anki_cards:
 - slug: q-sharedin-statein--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285755
+  synced_at: '2026-01-23T17:03:51.024300'
 - slug: q-sharedin-statein--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285781
+  synced_at: '2026-01-23T17:03:51.026326'
 ---
 # Вопрос (RU)
 > Объясните назначение и различия операторов `shareIn` и `stateIn` в `Flow` корутинах Kotlin.

@@ -1,73 +1,40 @@
----\
+---
 id: android-427
 anki_cards:
-  - slug: android-427-0-en
-    front: "When should you use FTS instead of LIKE in Room?"
-    back: |
-      **Use FTS (Full-Text Search) when:**
-      - Large tables (10K+ rows) - FTS is much faster
-      - Need relevance ranking (bm25 in FTS5)
-      - Prefix search or boolean operators required
-
-      **Use LIKE when:**
-      - Small tables (hundreds of rows)
-      - Simple single-field search
-
-      **FTS5 features:**
-      - `bm25()` for relevance ranking
-      - `highlight()` and `snippet()` for UI
-      - Prefix search with `query*`
-
-      ```kotlin
-      @Fts5(contentEntity = Article::class)
-      @Entity(tableName = "articles_fts")
-      data class ArticleFts(val title: String, val content: String)
-      ```
-    tags:
-      - android_room
-      - difficulty::hard
-  - slug: android-427-0-ru
-    front: "Когда использовать FTS вместо LIKE в Room?"
-    back: |
-      **Используйте FTS (полнотекстовый поиск) когда:**
-      - Большие таблицы (10K+ записей) - FTS значительно быстрее
-      - Нужно ранжирование по релевантности (bm25 в FTS5)
-      - Требуется префиксный поиск или булевы операторы
-
-      **Используйте LIKE когда:**
-      - Маленькие таблицы (сотни записей)
-      - Простой поиск по одному полю
-
-      **Возможности FTS5:**
-      - `bm25()` для ранжирования
-      - `highlight()` и `snippet()` для UI
-      - Префиксный поиск через `query*`
-
-      ```kotlin
-      @Fts5(contentEntity = Article::class)
-      @Entity(tableName = "articles_fts")
-      data class ArticleFts(val title: String, val content: String)
-      ```
-    tags:
-      - android_room
-      - difficulty::hard
-title: "Room Full-Text Search (FTS) / Полнотекстовый поиск FTS в Room"
-aliases: ["Room Full-Text Search", "Полнотекстовый поиск FTS в Room"]
+- slug: android-427-0-en
+  language: en
+  anki_id: 1768420280247
+  synced_at: '2026-01-23T16:45:06.398633'
+- slug: android-427-0-ru
+  language: ru
+  anki_id: 1768420280298
+  synced_at: '2026-01-23T16:45:06.400658'
+title: Room Full-Text Search (FTS) / Полнотекстовый поиск FTS в Room
+aliases:
+- Room Full-Text Search
+- Полнотекстовый поиск FTS в Room
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-basics, c-database-performance, q-android-storage-types--android--medium]
+related:
+- c-android-basics
+- c-database-performance
+- q-android-storage-types--android--medium
 created: 2025-10-15
 updated: 2025-10-15
 sources: []
-tags: [android/room, difficulty/hard]
-
----\
+tags:
+- android/room
+- difficulty/hard
+---
 # Вопрос (RU)
 
 > Реализуйте полнотекстовый поиск в `Room` с использованием FTS4/FTS5. Оптимизируйте производительность поиска для больших наборов данных. Когда использовать FTS вместо LIKE? Как синхронизировать FTS таблицы с основными таблицами?

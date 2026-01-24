@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-480-0-en
   language: en
   anki_id: 1768366344429
-  synced_at: '2026-01-14T09:17:53.407569'
+  synced_at: '2026-01-23T16:45:05.994475'
 - slug: android-480-0-ru
   language: ru
   anki_id: 1768366344448
-  synced_at: '2026-01-14T09:17:53.409336'
+  synced_at: '2026-01-23T16:45:05.996569'
 ---
 # Вопрос (RU)
 > Как реализовать сохранение состояния в Custom `View` при configuration changes?

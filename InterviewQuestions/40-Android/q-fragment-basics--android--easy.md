@@ -23,11 +23,11 @@ anki_cards:
 - slug: android-009-0-en
   language: en
   anki_id: 1768367160654
-  synced_at: '2026-01-14T09:17:53.494286'
+  synced_at: '2026-01-23T16:45:06.112481'
 - slug: android-009-0-ru
   language: ru
   anki_id: 1768367160681
-  synced_at: '2026-01-14T09:17:53.497542'
+  synced_at: '2026-01-23T16:45:06.113576'
 tags:
 - android/fragment
 - android/ui-navigation

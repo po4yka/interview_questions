@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-cold-flow-fundamentals--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284504
+  synced_at: '2026-01-23T17:03:50.920578'
 - slug: q-flow-cold-flow-fundamentals--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284530
+  synced_at: '2026-01-23T17:03:50.922452'
 ---
 ## Дополнительные Вопросы (RU)
 

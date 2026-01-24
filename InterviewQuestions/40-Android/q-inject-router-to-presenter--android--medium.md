@@ -1,68 +1,48 @@
----\
+---
 id: android-215
-title: "Inject Router To Presenter / Инъекция Router в Presenter"
-aliases: ["Inject Router To Presenter", "Router DI", "Инъекция Router в Presenter", "Инъекция роутера"]
+title: Inject Router To Presenter / Инъекция Router в Presenter
+aliases:
+- Inject Router To Presenter
+- Router DI
+- Инъекция Router в Presenter
+- Инъекция роутера
 topic: android
-subtopics: [architecture-mvvm, di-hilt, ui-navigation]
+subtopics:
+- architecture-mvvm
+- di-hilt
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-play-feature-delivery--android--medium, q-state-hoisting-compose--android--medium]
+related:
+- c-dependency-injection
+- q-play-feature-delivery--android--medium
+- q-state-hoisting-compose--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/di-hilt, android/ui-navigation, dependency-injection, difficulty/medium, navigation, router]
+tags:
+- android/architecture-mvvm
+- android/di-hilt
+- android/ui-navigation
+- dependency-injection
+- difficulty/medium
+- navigation
+- router
 anki_cards:
-  - slug: android-215-0-en
-    front: "How to inject a Router into a Presenter in Android?"
-    back: |
-      **Use DI frameworks** with Router interface:
-
-      ```kotlin
-      interface Router {
-          fun navigateToDetails(id: String)
-          fun navigateBack()
-      }
-
-      class MainPresenter @Inject constructor(
-          private val router: Router  // Abstraction, not NavController
-      )
-      ```
-
-      **DI options:**
-      - **Hilt** - official, minimal boilerplate
-      - **Dagger 2** - compile-time, more control
-      - **Koin** - runtime, Kotlin DSL
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-215-0-ru
-    front: "Как инжектировать Router в Presenter в Android?"
-    back: |
-      **Использовать DI фреймворки** с интерфейсом Router:
-
-      ```kotlin
-      interface Router {
-          fun navigateToDetails(id: String)
-          fun navigateBack()
-      }
-
-      class MainPresenter @Inject constructor(
-          private val router: Router  // Абстракция, не NavController
-      )
-      ```
-
-      **Варианты DI:**
-      - **Hilt** - официальный, минимум boilerplate
-      - **Dagger 2** - compile-time, больше контроля
-      - **Koin** - runtime, Kotlin DSL
-    tags:
-      - android_architecture
-      - difficulty::medium
-
----\
+- slug: android-215-0-en
+  language: en
+  anki_id: 1768381518361
+  synced_at: '2026-01-23T16:45:05.722097'
+- slug: android-215-0-ru
+  language: ru
+  anki_id: 1768381518384
+  synced_at: '2026-01-23T16:45:05.723679'
+---
 # Вопрос (RU)
 
 > Что использовать для того, чтобы роутер инжектился напрямую в презентер?

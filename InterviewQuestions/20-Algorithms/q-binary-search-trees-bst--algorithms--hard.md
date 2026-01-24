@@ -40,27 +40,27 @@ anki_cards:
 - slug: algo-007-0-en
   language: en
   anki_id: 1768457298827
-  synced_at: '2026-01-15T10:08:19.380986'
+  synced_at: '2026-01-23T15:48:41.144079'
 - slug: algo-007-0-ru
   language: ru
   anki_id: 1768457298852
-  synced_at: '2026-01-15T10:08:19.383314'
+  synced_at: '2026-01-23T15:48:41.147098'
 - slug: algo-007-1-en
   language: en
   anki_id: 1768457298878
-  synced_at: '2026-01-15T10:08:19.385488'
+  synced_at: '2026-01-23T15:48:41.150566'
 - slug: algo-007-1-ru
   language: ru
   anki_id: 1768457298904
-  synced_at: '2026-01-15T10:08:19.387651'
+  synced_at: '2026-01-23T15:48:41.152249'
 - slug: algo-007-2-en
   language: en
   anki_id: 1768457298927
-  synced_at: '2026-01-15T10:08:19.390117'
+  synced_at: '2026-01-23T15:48:41.155540'
 - slug: algo-007-2-ru
   language: ru
   anki_id: 1768457298953
-  synced_at: '2026-01-15T10:08:19.392258'
+  synced_at: '2026-01-23T15:48:41.157010'
 ---
 # Вопрос (RU)
 > Как работают BST? Каковы основные операции? Как AVL деревья поддерживают баланс?

@@ -2,16 +2,52 @@
 anki_cards:
 - slug: q-structured-concurrency-violations--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284155
+  synced_at: '2026-01-23T17:03:50.852713'
 - slug: q-structured-concurrency-violations--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284180
+  synced_at: '2026-01-23T17:03:50.855038'
+- slug: q-structured-concurrency-violations-atomic-structured-concurrency-definition-0-en
+  language: en
+  anki_id: 1769172797181
+  synced_at: '2026-01-23T17:03:50.857776'
+- slug: q-structured-concurrency-violations-atomic-structured-concurrency-definition-0-ru
+  language: ru
+  anki_id: 1769172797206
+  synced_at: '2026-01-23T17:03:50.859742'
+- slug: q-structured-concurrency-violations-atomic-globalscope-violation-1-en
+  language: en
+  anki_id: 1769172797231
+  synced_at: '2026-01-23T17:03:50.861748'
+- slug: q-structured-concurrency-violations-atomic-globalscope-violation-1-ru
+  language: ru
+  anki_id: 1769172797256
+  synced_at: '2026-01-23T17:03:50.863021'
+- slug: q-structured-concurrency-violations-atomic-unmanaged-job-violation-2-en
+  language: en
+  anki_id: 1769172797280
+  synced_at: '2026-01-23T17:03:50.864340'
+- slug: q-structured-concurrency-violations-atomic-unmanaged-job-violation-2-ru
+  language: ru
+  anki_id: 1769172797306
+  synced_at: '2026-01-23T17:03:50.866540'
+- slug: q-structured-concurrency-violations-atomic-automatic-cancellation-benefit-3-en
+  language: en
+  anki_id: 1769172797331
+  synced_at: '2026-01-23T17:03:50.868444'
+- slug: q-structured-concurrency-violations-atomic-automatic-cancellation-benefit-3-ru
+  language: ru
+  anki_id: 1769172797356
+  synced_at: '2026-01-23T17:03:50.870146'
+- slug: q-structured-concurrency-violations-atomic-escape-hatches-4-en
+  language: en
+  anki_id: 1769172797380
+  synced_at: '2026-01-23T17:03:50.871947'
+- slug: q-structured-concurrency-violations-atomic-escape-hatches-4-ru
+  language: ru
+  anki_id: 1769172797406
+  synced_at: '2026-01-23T17:03:50.873723'
 ---
 ## Answer (EN)
 

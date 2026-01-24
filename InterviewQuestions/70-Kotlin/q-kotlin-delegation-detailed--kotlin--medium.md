@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-delegation-detailed--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292430
+  synced_at: '2026-01-23T17:03:51.555901'
 - slug: q-kotlin-delegation-detailed--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292455
+  synced_at: '2026-01-23T17:03:51.556863'
 ---
 # Question (EN)
 > Explain the delegation pattern in Kotlin in detail. What are class delegation and property delegation?

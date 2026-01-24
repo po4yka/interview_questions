@@ -1,77 +1,43 @@
----\
+---
 id: android-344
-title: "Navigation Methods In Kotlin / Методы навигации в Kotlin"
-aliases: [Android Navigation, Navigation Methods, Методы навигации]
+title: Navigation Methods In Kotlin / Методы навигации в Kotlin
+aliases:
+- Android Navigation
+- Navigation Methods
+- Методы навигации
 topic: android
-subtopics: [architecture-mvvm, ui-navigation]
+subtopics:
+- architecture-mvvm
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-activity-navigation-how-it-works--android--medium]
+related:
+- c-android-components
+- q-activity-navigation-how-it-works--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-mvvm, android/ui-navigation, difficulty/medium, navigation]
+tags:
+- android/architecture-mvvm
+- android/ui-navigation
+- difficulty/medium
+- navigation
 anki_cards:
-  - slug: android-344-0-en
-    front: "What are the 3 main navigation approaches in Android Kotlin apps?"
-    back: |
-      **1. Navigation Component (Recommended)**
-      ```kotlin
-      val action = HomeFragmentDirections.actionHomeToDetail(itemId = 123)
-      findNavController().navigate(action)
-      ```
-      Type-safe with SafeArgs, deep link support, automatic backstack.
-
-      **2. Intent (Activity navigation)**
-      ```kotlin
-      val intent = Intent(this, DetailActivity::class.java)
-      intent.putExtra("ITEM_ID", 123)
-      startActivity(intent)
-      ```
-
-      **3. FragmentTransaction (Manual)**
-      ```kotlin
-      supportFragmentManager.beginTransaction()
-          .replace(R.id.container, DetailFragment())
-          .addToBackStack(null)
-          .commit()
-      ```
-    tags:
-      - android_navigation
-      - difficulty::medium
-  - slug: android-344-0-ru
-    front: "Какие 3 основных подхода к навигации в Android Kotlin приложениях?"
-    back: |
-      **1. Navigation Component (Рекомендуемый)**
-      ```kotlin
-      val action = HomeFragmentDirections.actionHomeToDetail(itemId = 123)
-      findNavController().navigate(action)
-      ```
-      Type-safe с SafeArgs, поддержка deep link, автоматический backstack.
-
-      **2. Intent (навигация Activity)**
-      ```kotlin
-      val intent = Intent(this, DetailActivity::class.java)
-      intent.putExtra("ITEM_ID", 123)
-      startActivity(intent)
-      ```
-
-      **3. FragmentTransaction (Ручной)**
-      ```kotlin
-      supportFragmentManager.beginTransaction()
-          .replace(R.id.container, DetailFragment())
-          .addToBackStack(null)
-          .commit()
-      ```
-    tags:
-      - android_navigation
-      - difficulty::medium
-
----\
+- slug: android-344-0-en
+  language: en
+  anki_id: 1768398021459
+  synced_at: '2026-01-23T16:45:06.183948'
+- slug: android-344-0-ru
+  language: ru
+  anki_id: 1768398021483
+  synced_at: '2026-01-23T16:45:06.184732'
+---
 # Вопрос (RU)
 
 > Какие есть способы навигации в Android-приложениях на Kotlin?

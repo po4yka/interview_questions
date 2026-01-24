@@ -1,64 +1,46 @@
 ---
 id: android-398
-title: "ML Kit Text Recognition / Распознавание текста ML Kit"
-aliases: ["ML Kit Text Recognition", "MLKit OCR", "OCR Android", "Распознавание текста ML Kit"]
+title: ML Kit Text Recognition / Распознавание текста ML Kit
+aliases:
+- ML Kit Text Recognition
+- MLKit OCR
+- OCR Android
+- Распознавание текста ML Kit
 topic: android
-subtopics: [camera, media]
+subtopics:
+- camera
+- media
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, q-android-async-primitives--android--easy]
+related:
+- c-coroutines
+- q-android-async-primitives--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/camera, android/media, difficulty/medium, image-processing, mlkit, ocr, text-recognition]
+tags:
+- android/camera
+- android/media
+- difficulty/medium
+- image-processing
+- mlkit
+- ocr
+- text-recognition
 anki_cards:
-  - slug: android-398-0-en
-    front: "How do you implement text recognition (OCR) with ML Kit?"
-    back: |
-      ```kotlin
-      val recognizer = TextRecognition.getClient(
-          TextRecognizerOptions.DEFAULT_OPTIONS
-      )
-      recognizer.process(inputImage)
-          .addOnSuccessListener { text -> /* use text.text */ }
-      ```
-
-      **Best practices:**
-      - Throttle camera frames (1 fps)
-      - Preprocess: resize to ~1920, grayscale
-      - Close recognizer when done
-      - Latin bundled, other scripts downloaded
-
-      On-device: fast, offline, private.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-398-0-ru
-    front: "Как реализовать распознавание текста (OCR) с ML Kit?"
-    back: |
-      ```kotlin
-      val recognizer = TextRecognition.getClient(
-          TextRecognizerOptions.DEFAULT_OPTIONS
-      )
-      recognizer.process(inputImage)
-          .addOnSuccessListener { text -> /* use text.text */ }
-      ```
-
-      **Best practices:**
-      - Троттлинг кадров камеры (1 fps)
-      - Предобработка: resize до ~1920, grayscale
-      - Закрывать recognizer по завершении
-      - Latin встроен, другие скрипты загружаются
-
-      On-device: быстро, офлайн, приватно.
-    tags:
-      - android_general
-      - difficulty::medium
-
+- slug: android-398-0-en
+  language: en
+  anki_id: 1768397432688
+  synced_at: '2026-01-23T16:45:06.332061'
+- slug: android-398-0-ru
+  language: ru
+  anki_id: 1768397432708
+  synced_at: '2026-01-23T16:45:06.332871'
 ---
 # Вопрос (RU)
 

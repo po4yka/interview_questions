@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-015-0-en
   language: en
   anki_id: 1768363328920
-  synced_at: '2026-01-14T09:17:53.890573'
+  synced_at: '2026-01-23T16:45:06.428562'
 - slug: android-015-0-ru
   language: ru
   anki_id: 1768363328946
-  synced_at: '2026-01-14T09:17:53.892606'
+  synced_at: '2026-01-23T16:45:06.429391'
 ---
 # Вопрос (RU)
 > Что такое Android App `Bundle` (AAB)?

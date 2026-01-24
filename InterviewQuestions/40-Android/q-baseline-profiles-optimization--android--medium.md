@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-037-0-en
   language: en
   anki_id: 1768364987700
-  synced_at: '2026-01-14T09:17:53.057441'
+  synced_at: '2026-01-23T16:45:05.415669'
 - slug: android-037-0-ru
   language: ru
   anki_id: 1768364987723
-  synced_at: '2026-01-14T09:17:53.059115'
+  synced_at: '2026-01-23T16:45:05.417105'
 ---
 # Вопрос (RU)
 > Как оптимизировать Android-приложение с помощью Baseline Profiles?

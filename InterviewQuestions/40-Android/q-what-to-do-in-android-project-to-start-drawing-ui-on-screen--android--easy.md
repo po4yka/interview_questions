@@ -1,65 +1,45 @@
----\
+---
 id: android-170
-title: "What To Do In Android Project To Start Drawing UI On Screen / Что делать в Android проекте чтобы начать рисовать UI на экране"
-aliases: ["What To Do In Android Project To Start Drawing UI On Screen", "Что делать в Android проекте чтобы начать рисовать UI на экране"]
+title: What To Do In Android Project To Start Drawing UI On Screen / Что делать в
+  Android проекте чтобы начать рисовать UI на экране
+aliases:
+- What To Do In Android Project To Start Drawing UI On Screen
+- Что делать в Android проекте чтобы начать рисовать UI на экране
 topic: android
-subtopics: [activity, ui-compose, ui-views]
+subtopics:
+- activity
+- ui-compose
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-how-to-pass-parameters-to-fragment--android--easy]
+related:
+- c-jetpack-compose
+- q-how-to-pass-parameters-to-fragment--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/activity, android/ui-compose, android/ui-views, difficulty/easy]
+tags:
+- android
+- android/activity
+- android/ui-compose
+- android/ui-views
+- difficulty/easy
 anki_cards:
-  - slug: android-170-0-en
-    front: "What do you need to display UI on screen in Android?"
-    back: |
-      **3 Steps:**
-      1. Create an Activity
-      2. Set content view: `setContentView(R.layout.activity_main)` or `setContent { }`
-      3. Register Activity in AndroidManifest.xml with MAIN + LAUNCHER intent-filter
-
-      **Key:** `android:exported="true"` required for LAUNCHER activities (API 31+).
-
-      ```kotlin
-      class MainActivity : ComponentActivity() {
-          override fun onCreate(savedInstanceState: Bundle?) {
-              super.onCreate(savedInstanceState)
-              setContent { Text("Hello!") }
-          }
-      }
-      ```
-    tags:
-      - android_activities
-      - difficulty::easy
-  - slug: android-170-0-ru
-    front: "Что нужно для отображения UI на экране в Android?"
-    back: |
-      **3 шага:**
-      1. Создать Activity
-      2. Установить content view: `setContentView(R.layout.activity_main)` или `setContent { }`
-      3. Зарегистрировать Activity в AndroidManifest.xml с MAIN + LAUNCHER intent-filter
-
-      **Ключевое:** `android:exported="true"` обязателен для LAUNCHER activities (API 31+).
-
-      ```kotlin
-      class MainActivity : ComponentActivity() {
-          override fun onCreate(savedInstanceState: Bundle?) {
-              super.onCreate(savedInstanceState)
-              setContent { Text("Hello!") }
-          }
-      }
-      ```
-    tags:
-      - android_activities
-      - difficulty::easy
-
----\
+- slug: android-170-0-en
+  language: en
+  anki_id: 1768398426958
+  synced_at: '2026-01-23T16:45:05.538658'
+- slug: android-170-0-ru
+  language: ru
+  anki_id: 1768398426983
+  synced_at: '2026-01-23T16:45:05.540502'
+---
 # Вопрос (RU)
 > Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
 

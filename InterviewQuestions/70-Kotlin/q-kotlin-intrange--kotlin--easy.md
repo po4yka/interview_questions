@@ -126,16 +126,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-intrange--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289882
+  synced_at: '2026-01-23T17:03:51.390470'
 - slug: q-kotlin-intrange--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289906
+  synced_at: '2026-01-23T17:03:51.392656'
 ---
 # Вопрос (RU)
 > Что такое `IntRange`?

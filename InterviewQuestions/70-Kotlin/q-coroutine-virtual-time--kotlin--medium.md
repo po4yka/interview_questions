@@ -36,16 +36,12 @@ tags:
 anki_cards:
 - slug: q-coroutine-virtual-time--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281406
+  synced_at: '2026-01-23T17:03:50.632191'
 - slug: q-coroutine-virtual-time--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281430
+  synced_at: '2026-01-23T17:03:50.633767'
 ---
 # Вопрос (RU)
 > Как работает виртуальное время в тестировании корутин? Объясните advanceTimeBy, runCurrent, advanceUntilIdle, currentTime, тестирование delay и как TestDispatcher контролирует время выполнения.

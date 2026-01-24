@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-192-0-en
   language: en
   anki_id: 1768364695498
-  synced_at: '2026-01-14T09:17:53.182842'
+  synced_at: '2026-01-23T16:45:05.626018'
 - slug: android-192-0-ru
   language: ru
   anki_id: 1768364695523
-  synced_at: '2026-01-14T09:17:53.186679'
+  synced_at: '2026-01-23T16:45:05.627677'
 ---
 # Вопрос (RU)
 > Как оптимизировать время запуска Android-приложения?

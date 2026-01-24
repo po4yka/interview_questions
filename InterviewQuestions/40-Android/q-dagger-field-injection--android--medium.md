@@ -30,11 +30,11 @@ anki_cards:
 - slug: android-469-0-en
   language: en
   anki_id: 1768366562829
-  synced_at: '2026-01-14T09:17:53.783669'
+  synced_at: '2026-01-23T16:45:06.338523'
 - slug: android-469-0-ru
   language: ru
   anki_id: 1768366562851
-  synced_at: '2026-01-14T09:17:53.785661'
+  synced_at: '2026-01-23T16:45:06.339328'
 created: 2025-10-20
 updated: 2025-10-30
 tags:

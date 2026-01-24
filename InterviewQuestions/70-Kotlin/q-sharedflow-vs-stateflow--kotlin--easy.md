@@ -31,16 +31,12 @@ tags:
 anki_cards:
 - slug: q-sharedflow-vs-stateflow--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288007
+  synced_at: '2026-01-23T17:03:51.250964'
 - slug: q-sharedflow-vs-stateflow--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288032
+  synced_at: '2026-01-23T17:03:51.252808'
 ---
 # Вопрос (RU)
 > Какие различия между `SharedFlow` и `StateFlow`?

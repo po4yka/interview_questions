@@ -1,22 +1,41 @@
----\
+---
 id: android-233
-title: "View Lifecycle in Android / View lifecycle in Android"
-aliases: ["View lifecycle in Android", "View Lifecycle"]
+title: View Lifecycle in Android / View lifecycle in Android
+aliases:
+- View lifecycle in Android
+- View Lifecycle
 topic: android
-subtopics: [lifecycle, ui-views]
+subtopics:
+- lifecycle
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-fragment-lifecycle]
+related:
+- c-activity-lifecycle
+- c-fragment-lifecycle
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/lifecycle, android/ui-views, difficulty/medium]
-
----\
+tags:
+- android/lifecycle
+- android/ui-views
+- difficulty/medium
+anki_cards:
+- slug: android-233-0-en
+  language: en
+  anki_id: 1769172260357
+  synced_at: '2026-01-23T16:45:05.815148'
+- slug: android-233-0-ru
+  language: ru
+  anki_id: 1769172260382
+  synced_at: '2026-01-23T16:45:05.816663'
+---
 # Вопрос (RU)
 
 > Что нужно знать о жизненном цикле `View` в Android?

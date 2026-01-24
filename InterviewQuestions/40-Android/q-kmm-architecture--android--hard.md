@@ -1,71 +1,47 @@
----\
+---
 id: android-435
-title: "KMM Architecture / Архитектура KMM"
-aliases: ["KMM Architecture", "Kotlin Multiplatform Mobile", "Архитектура KMM"]
+title: KMM Architecture / Архитектура KMM
+aliases:
+- KMM Architecture
+- Kotlin Multiplatform Mobile
+- Архитектура KMM
 topic: android
-subtopics: [architecture-clean, kmp]
+subtopics:
+- architecture-clean
+- kmp
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-clean-architecture-android--android--hard, q-mvi-architecture--android--hard]
+related:
+- c-android
+- q-clean-architecture-android--android--hard
+- q-mvi-architecture--android--hard
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [android, android/architecture-clean, android/kmp, difficulty/hard, kmm, kotlin, multiplatform]
+tags:
+- android
+- android/architecture-clean
+- android/kmp
+- difficulty/hard
+- kmm
+- kotlin
+- multiplatform
 anki_cards:
-  - slug: android-435-0-en
-    front: "What is the KMM architecture and how do you share code between Android and iOS?"
-    back: |
-      **Structure:**
-      - `commonMain` - business logic, networking, data layer
-      - `androidMain` - Android-specific (Context, drivers)
-      - `iosMain` - iOS-specific (UIKit, Foundation)
-
-      **expect/actual mechanism:**
-      ```kotlin
-      // commonMain
-      expect fun generateUUID(): String
-
-      // androidMain
-      actual fun generateUUID() = UUID.randomUUID().toString()
-
-      // iosMain
-      actual fun generateUUID() = NSUUID().UUIDString()
-      ```
-
-      Keep UI platform-specific. Achieve ~60-80% code reuse.
-    tags:
-      - android_architecture
-      - difficulty::hard
-  - slug: android-435-0-ru
-    front: "Что такое архитектура KMM и как делиться кодом между Android и iOS?"
-    back: |
-      **Структура:**
-      - `commonMain` - бизнес-логика, сеть, data layer
-      - `androidMain` - Android-специфичное (Context, drivers)
-      - `iosMain` - iOS-специфичное (UIKit, Foundation)
-
-      **Механизм expect/actual:**
-      ```kotlin
-      // commonMain
-      expect fun generateUUID(): String
-
-      // androidMain
-      actual fun generateUUID() = UUID.randomUUID().toString()
-
-      // iosMain
-      actual fun generateUUID() = NSUUID().UUIDString()
-      ```
-
-      UI остаётся платформенным. Достигается ~60-80% переиспользования кода.
-    tags:
-      - android_architecture
-      - difficulty::hard
-
----\
+- slug: android-435-0-en
+  language: en
+  anki_id: 1768396765054
+  synced_at: '2026-01-23T16:45:06.419428'
+- slug: android-435-0-ru
+  language: ru
+  anki_id: 1768396765077
+  synced_at: '2026-01-23T16:45:06.420371'
+---
 # Вопрос (RU)
 
 > Объясните архитектуру Kotlin Multiplatform Mobile (KMM) и структуру проекта. Как организовать shared код между Android и iOS? Что такое expect/actual механизмы? Как обрабатывать platform-specific реализации максимизируя переиспользование кода?

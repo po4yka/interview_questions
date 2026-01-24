@@ -1,55 +1,41 @@
----\
+---
 id: android-031
-title: "commit() vs apply() in SharedPreferences / commit() против apply() в SharedPreferences"
-aliases: ["commit() vs apply() in SharedPreferences", "commit() против apply() в SharedPreferences"]
+title: commit() vs apply() in SharedPreferences / commit() против apply() в SharedPreferences
+aliases:
+- commit() vs apply() in SharedPreferences
+- commit() против apply() в SharedPreferences
 topic: android
-subtopics: [datastore]
+subtopics:
+- datastore
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-android-storage-options, q-android-storage-types--android--medium]
+related:
+- c-android-storage-options
+- q-android-storage-types--android--medium
 created: 2025-10-06
 updated: 2025-11-10
-tags: [android/datastore, difficulty/easy, performance, sharedpreferences]
+tags:
+- android/datastore
+- difficulty/easy
+- performance
+- sharedpreferences
 anki_cards:
-  - slug: android-031-0-en
-    front: "What is the difference between commit() and apply() in SharedPreferences?"
-    back: |
-      | | `commit()` | `apply()` |
-      |-|-----------|----------|
-      | Return | Boolean (success) | void |
-      | Execution | Sync (blocks thread) | Async disk write |
-      | Use case | Need result/guarantee | Fire-and-forget |
-
-      **Default to apply()** - most cases don't need sync guarantee.
-      **Use commit()** only on background thread when result matters.
-
-      **Modern**: Prefer DataStore for new code.
-    tags:
-      - android_storage
-      - difficulty::easy
-  - slug: android-031-0-ru
-    front: "В чём разница между commit() и apply() в SharedPreferences?"
-    back: |
-      | | `commit()` | `apply()` |
-      |-|-----------|----------|
-      | Возврат | Boolean (успех) | void |
-      | Выполнение | Синхронно (блокирует) | Асинхронная запись |
-      | Применение | Нужен результат | Fire-and-forget |
-
-      **По умолчанию apply()** - в большинстве случаев не нужна гарантия.
-      **Используйте commit()** только на фоновом потоке когда важен результат.
-
-      **Современно**: предпочитайте DataStore для нового кода.
-    tags:
-      - android_storage
-      - difficulty::easy
-
----\
+- slug: android-031-0-en
+  language: en
+  anki_id: 1768379975601
+  synced_at: '2026-01-23T16:45:06.294913'
+- slug: android-031-0-ru
+  language: ru
+  anki_id: 1768379975623
+  synced_at: '2026-01-23T16:45:06.296815'
+---
 # Вопрос (RU)
 > В чем разница между методами `commit()` и `apply()` в `SharedPreferences`?
 

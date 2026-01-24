@@ -26,16 +26,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-delegation-by-restriction--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283605
+  synced_at: '2026-01-23T17:03:50.804206'
 - slug: q-kotlin-delegation-by-restriction--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283631
+  synced_at: '2026-01-23T17:03:50.805634'
 ---
 # Вопрос (RU)
 > Можно ли после `by` вызвать функцию или конструктор?

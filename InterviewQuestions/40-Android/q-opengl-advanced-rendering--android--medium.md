@@ -1,50 +1,47 @@
 ---
 id: android-383
 anki_cards:
-  - slug: android-383-0-en
-    front: "What are the key components for OpenGL ES rendering in Android?"
-    back: |
-      **Core components:**
-      - **GLSurfaceView + Renderer** - manages OpenGL context
-      - **ShaderProgram** - vertex + fragment shaders
-      - **VAO/VBO/EBO** - vertex data management
-      - **Texture** - with mipmaps and filtering
-      - **FBO** - render-to-texture for post-processing
-
-      **Best practices:** Cache shaders, use VAOs, generate mipmaps, minimize state changes.
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-383-0-ru
-    front: "Какие ключевые компоненты для OpenGL ES рендеринга в Android?"
-    back: |
-      **Основные компоненты:**
-      - **GLSurfaceView + Renderer** - управляет OpenGL контекстом
-      - **ShaderProgram** - вершинный + фрагментный шейдеры
-      - **VAO/VBO/EBO** - управление вершинными данными
-      - **Texture** - с mipmaps и фильтрацией
-      - **FBO** - render-to-texture для пост-обработки
-
-      **Лучшие практики:** Кешировать шейдеры, использовать VAO, генерировать mipmaps, минимизировать смену состояний.
-    tags:
-      - android_views
-      - difficulty::medium
-title: "OpenGL Advanced Rendering / Продвинутый рендеринг OpenGL"
-aliases: ["OpenGL Advanced Rendering", "Продвинутый рендеринг OpenGL"]
+- slug: android-383-0-en
+  language: en
+  anki_id: 1768400160296
+  synced_at: '2026-01-23T16:45:06.293259'
+- slug: android-383-0-ru
+  language: ru
+  anki_id: 1768400160321
+  synced_at: '2026-01-23T16:45:06.294135'
+title: OpenGL Advanced Rendering / Продвинутый рендеринг OpenGL
+aliases:
+- OpenGL Advanced Rendering
+- Продвинутый рендеринг OpenGL
 topic: android
-subtopics: [performance-rendering, profiling, ui-graphics]
+subtopics:
+- performance-rendering
+- profiling
+- ui-graphics
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-surfaces, q-custom-view-animation--android--medium]
+related:
+- c-android-surfaces
+- q-custom-view-animation--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [3d-graphics, android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, opengl-es, rendering, shaders]
----\
+tags:
+- 3d-graphics
+- android/performance-rendering
+- android/profiling
+- android/ui-graphics
+- difficulty/medium
+- opengl-es
+- rendering
+- shaders
+---
 # Вопрос (RU)
 
 > Как реализовать продвинутые техники рендеринга с использованием OpenGL ES в Android? Каковы лучшие практики для управления текстурами, framebuffer objects и пользовательских шейдеров?

@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-143-0-en
   language: en
   anki_id: 1768363501798
-  synced_at: '2026-01-14T09:17:53.053778'
+  synced_at: '2026-01-23T16:45:05.367581'
 - slug: android-143-0-ru
   language: ru
   anki_id: 1768363501839
-  synced_at: '2026-01-14T09:17:53.055641'
+  synced_at: '2026-01-23T16:45:05.369842'
 ---
 # Вопрос (RU)
 > Какие примитивы асинхронности предоставляет Android?

@@ -1,69 +1,45 @@
----\
+---
 id: android-176
-title: "Which Class Can Be Used To Detect Different Gestures / Какой класс можно использовать для обнаружения разных жестов"
-aliases: ["Which Class Can Be Used To Detect Different Gestures", "Какой класс можно использовать для обнаружения разных жестов"]
+title: Which Class Can Be Used To Detect Different Gestures / Какой класс можно использовать
+  для обнаружения разных жестов
+aliases:
+- Which Class Can Be Used To Detect Different Gestures
+- Какой класс можно использовать для обнаружения разных жестов
 topic: android
-subtopics: [ui-views, ui-widgets]
+subtopics:
+- ui-views
+- ui-widgets
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, q-fragments-vs-activity--android--medium, q-which-class-to-catch-gestures--android--easy]
+related:
+- c-custom-views
+- q-fragments-vs-activity--android--medium
+- q-which-class-to-catch-gestures--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, gestures]
+tags:
+- android
+- android/ui-views
+- android/ui-widgets
+- difficulty/easy
+- gestures
 anki_cards:
-  - slug: android-176-0-en
-    front: "Which class is used to detect gestures in Android?"
-    back: |
-      **GestureDetector** - for tap, double tap, long press, fling, scroll.
-      **ScaleGestureDetector** - for pinch-zoom.
-
-      ```kotlin
-      val gestureDetector = GestureDetector(context,
-          object : GestureDetector.SimpleOnGestureListener() {
-              override fun onDown(e: MotionEvent) = true
-              override fun onDoubleTap(e: MotionEvent) = true
-              override fun onFling(...) = true
-          })
-
-      view.setOnTouchListener { _, event ->
-          gestureDetector.onTouchEvent(event)
-      }
-      ```
-
-      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
-    tags:
-      - android_views
-      - difficulty::easy
-  - slug: android-176-0-ru
-    front: "Какой класс используется для распознавания жестов в Android?"
-    back: |
-      **GestureDetector** - для tap, double tap, long press, fling, scroll.
-      **ScaleGestureDetector** - для pinch-zoom.
-
-      ```kotlin
-      val gestureDetector = GestureDetector(context,
-          object : GestureDetector.SimpleOnGestureListener() {
-              override fun onDown(e: MotionEvent) = true
-              override fun onDoubleTap(e: MotionEvent) = true
-              override fun onFling(...) = true
-          })
-
-      view.setOnTouchListener { _, event ->
-          gestureDetector.onTouchEvent(event)
-      }
-      ```
-
-      **Compose:** `Modifier.pointerInput { detectTapGestures(...) }`
-    tags:
-      - android_views
-      - difficulty::easy
-
----\
+- slug: android-176-0-en
+  language: en
+  anki_id: 1768398427410
+  synced_at: '2026-01-23T16:45:05.559807'
+- slug: android-176-0-ru
+  language: ru
+  anki_id: 1768398427433
+  synced_at: '2026-01-23T16:45:05.561887'
+---
 # Вопрос (RU)
 
 > Какой класс можно использовать чтобы ловить разные жесты?

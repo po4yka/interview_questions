@@ -30,16 +30,12 @@ tags:
 anki_cards:
 - slug: q-launch-vs-async-error-handling--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284606
+  synced_at: '2026-01-23T17:03:50.927343'
 - slug: q-launch-vs-async-error-handling--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284629
+  synced_at: '2026-01-23T17:03:50.928810'
 ---
 # Вопрос (RU)
 > Обрабатываются ли ошибки по-разному в launch и async?

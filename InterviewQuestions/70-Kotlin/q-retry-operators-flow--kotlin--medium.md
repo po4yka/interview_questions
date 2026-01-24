@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-retry-operators-flow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292981
+  synced_at: '2026-01-23T17:03:51.576662'
 - slug: q-retry-operators-flow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293006
+  synced_at: '2026-01-23T17:03:51.577453'
 ---
 # Question (EN)
 > What are `retry` and `retryWhen` operators in Kotlin `Flow`? How do they work?

@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-const--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289030
+  synced_at: '2026-01-23T17:03:51.325776'
 - slug: q-kotlin-const--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289055
+  synced_at: '2026-01-23T17:03:51.327673'
 ---
 # Question (EN)
 > What is the `const` keyword in Kotlin?

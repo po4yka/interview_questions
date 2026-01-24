@@ -29,18 +29,12 @@ tags:
 anki_cards:
 - slug: kotlin-157-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - inline-functions
+  anki_id: 1768326282704
+  synced_at: '2026-01-23T17:03:50.739211'
 - slug: kotlin-157-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - inline-functions
+  anki_id: 1768326282730
+  synced_at: '2026-01-23T17:03:50.741647'
 ---
 # Вопрос (RU)
 > Для чего нужно ключевое слово `crossinline` в inline-функциях Kotlin?

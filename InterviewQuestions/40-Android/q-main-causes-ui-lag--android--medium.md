@@ -1,71 +1,50 @@
 ---
 id: android-246
 anki_cards:
-  - slug: android-246-0-en
-    front: "What are the main causes of UI lag in Android apps?"
-    back: |
-      **1. Heavy operations on main thread:**
-      - Network, DB, file I/O
-      - Solution: `withContext(Dispatchers.IO)`
-
-      **2. Unoptimized layouts:**
-      - Deep nesting
-      - Solution: `ConstraintLayout`, flat hierarchy
-
-      **3. Image issues:**
-      - Large images without scaling
-      - Solution: Glide/Coil with caching
-
-      **4. Frequent UI updates:**
-      - `notifyDataSetChanged()` abuse
-      - Solution: `DiffUtil`, `ListAdapter`
-
-      **5. Heavy animations:**
-      - Solution: `ViewPropertyAnimator` (hardware-accelerated)
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-246-0-ru
-    front: "Какие основные причины тормозов UI в Android приложениях?"
-    back: |
-      **1. Тяжелые операции в главном потоке:**
-      - Сеть, БД, файловый I/O
-      - Решение: `withContext(Dispatchers.IO)`
-
-      **2. Неоптимизированные макеты:**
-      - Глубокая вложенность
-      - Решение: `ConstraintLayout`, плоская иерархия
-
-      **3. Проблемы с изображениями:**
-      - Большие изображения без масштабирования
-      - Решение: Glide/Coil с кэшированием
-
-      **4. Частые обновления UI:**
-      - Злоупотребление `notifyDataSetChanged()`
-      - Решение: `DiffUtil`, `ListAdapter`
-
-      **5. Тяжелые анимации:**
-      - Решение: `ViewPropertyAnimator` (hardware-accelerated)
-    tags:
-      - android_general
-      - difficulty::medium
-title: "Main Causes UI Lag / Основные причины тормозов UI"
-aliases: [Main Causes UI Lag, UI Lag, UI Performance, Основные причины тормозов UI]
+- slug: android-246-0-en
+  language: en
+  anki_id: 1768414369445
+  synced_at: '2026-01-23T16:45:05.864067'
+- slug: android-246-0-ru
+  language: ru
+  anki_id: 1768414369469
+  synced_at: '2026-01-23T16:45:05.866411'
+title: Main Causes UI Lag / Основные причины тормозов UI
+aliases:
+- Main Causes UI Lag
+- UI Lag
+- UI Performance
+- Основные причины тормозов UI
 topic: android
-subtopics: [performance-memory, performance-rendering, threads-sync]
+subtopics:
+- performance-memory
+- performance-rendering
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-compose-performance-optimization--android--hard, q-mvvm-pattern--android--medium, q-reduce-apk-size-techniques--android--medium]
+related:
+- c-android
+- q-compose-performance-optimization--android--hard
+- q-mvvm-pattern--android--medium
+- q-reduce-apk-size-techniques--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/performance-memory, android/performance-rendering, android/threads-sync, difficulty/medium, performance, threading, ui]
-
----\
+tags:
+- android/performance-memory
+- android/performance-rendering
+- android/threads-sync
+- difficulty/medium
+- performance
+- threading
+- ui
+---
 # Вопрос (RU)
 
 > Какие основные причины торможения UI в Android-приложениях?

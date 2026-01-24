@@ -1,63 +1,47 @@
----\
+---
 id: android-418
-title: "In What Cases Might You Need To Call Commitallowingstateloss / В каких случаях может понадобиться commitAllowingStateLoss"
-aliases: [commitAllowingStateLoss, commitAllowingStateLoss vs commit, commitAllowingStateLoss в Android, Fragment state loss]
+title: In What Cases Might You Need To Call Commitallowingstateloss / В каких случаях
+  может понадобиться commitAllowingStateLoss
+aliases:
+- commitAllowingStateLoss
+- commitAllowingStateLoss vs commit
+- commitAllowingStateLoss в Android
+- Fragment state loss
 topic: android
-subtopics: [fragment, lifecycle]
+subtopics:
+- fragment
+- lifecycle
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, q-fragments-and-activity-relationship--android--hard, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]
+related:
+- c-activity-lifecycle
+- q-fragments-and-activity-relationship--android--hard
+- q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle]
+tags:
+- android/fragment
+- android/lifecycle
+- difficulty/hard
+- fragments
+- lifecycle
 anki_cards:
-  - slug: android-418-0-en
-    front: "When should you use commitAllowingStateLoss() for Fragment transactions?"
-    back: |
-      **Use when:** Transaction loss is acceptable after `onSaveInstanceState()`
-
-      **Valid cases:**
-      - Non-critical UI updates (banners, notifications)
-      - Ephemeral dialogs that don't need restoration
-      - Better to lose transaction than crash with `IllegalStateException`
-
-      **Avoid for:**
-      - User navigation
-      - User data input
-      - Critical UI state
-
-      **Alternative:** Defer transaction until Activity is resumed
-    tags:
-      - android_fragments
-      - android_lifecycle
-      - difficulty::hard
-  - slug: android-418-0-ru
-    front: "Когда использовать commitAllowingStateLoss() для Fragment транзакций?"
-    back: |
-      **Использовать когда:** Допустима потеря транзакции после `onSaveInstanceState()`
-
-      **Допустимые случаи:**
-      - Некритичные UI обновления (баннеры, уведомления)
-      - Временные диалоги, не требующие восстановления
-      - Лучше потерять транзакцию, чем получить `IllegalStateException`
-
-      **Избегать для:**
-      - Навигации пользователя
-      - Пользовательского ввода
-      - Критичного UI состояния
-
-      **Альтернатива:** Отложить транзакцию до resumed состояния Activity
-    tags:
-      - android_fragments
-      - android_lifecycle
-      - difficulty::hard
-
----\
+- slug: android-418-0-en
+  language: en
+  anki_id: 1768381534010
+  synced_at: '2026-01-23T16:45:06.371760'
+- slug: android-418-0-ru
+  language: ru
+  anki_id: 1768381534033
+  synced_at: '2026-01-23T16:45:06.372556'
+---
 # Вопрос (RU)
 
 > В каких случаях может понадобиться вызывать commitAllowingStateLoss?

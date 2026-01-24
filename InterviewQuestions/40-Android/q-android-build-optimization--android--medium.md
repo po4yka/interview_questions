@@ -40,11 +40,11 @@ anki_cards:
 - slug: android-158-0-en
   language: en
   anki_id: 1768363601523
-  synced_at: '2026-01-14T09:17:53.098891'
+  synced_at: '2026-01-23T16:45:05.467146'
 - slug: android-158-0-ru
   language: ru
   anki_id: 1768363601548
-  synced_at: '2026-01-14T09:17:53.100821'
+  synced_at: '2026-01-23T16:45:05.469357'
 ---
 # Вопрос (RU)
 > Как оптимизировать время сборки Android-приложения?

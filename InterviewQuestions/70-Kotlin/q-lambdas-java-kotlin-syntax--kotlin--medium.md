@@ -33,22 +33,12 @@ tags:
 anki_cards:
 - slug: kotlin-139-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - lambdas
-  - syntax
+  anki_id: 1768326279005
+  synced_at: '2026-01-23T17:03:50.411102'
 - slug: kotlin-139-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - lambdas
-  - syntax
+  anki_id: 1768326279030
+  synced_at: '2026-01-23T17:03:50.413334'
 ---
 # Вопрос (RU)
 > Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?

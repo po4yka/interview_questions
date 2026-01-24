@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-what-is-garbage-in-gc--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294281
+  synced_at: '2026-01-23T17:03:51.631380'
 - slug: q-what-is-garbage-in-gc--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294305
+  synced_at: '2026-01-23T17:03:51.633879'
 ---
 ## Follow-ups (RU)
 

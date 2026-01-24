@@ -31,20 +31,12 @@ tags:
 anki_cards:
 - slug: lang-038-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - functional-programming
+  anki_id: 1768326287506
+  synced_at: '2026-01-23T17:03:51.194275'
 - slug: lang-038-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - functional-programming
+  anki_id: 1768326287531
+  synced_at: '2026-01-23T17:03:51.195833'
 ---
 # Вопрос (RU)
 > Какой результат выполнения выражения `val result = (1..3).flatMap { listOf(it, it * 2) }`?

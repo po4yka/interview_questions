@@ -29,18 +29,12 @@ tags:
 anki_cards:
 - slug: kotlin-160-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
+  anki_id: 1768326282955
+  synced_at: '2026-01-23T17:03:50.759373'
 - slug: kotlin-160-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
+  anki_id: 1768326282981
+  synced_at: '2026-01-23T17:03:50.760631'
 ---
 # Вопрос (RU)
 > В чем разница между `ArrayList`, `LinkedList` и `Vector`?

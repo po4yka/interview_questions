@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-context-receivers--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279305
+  synced_at: '2026-01-23T17:03:50.442042'
 - slug: q-context-receivers--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279330
+  synced_at: '2026-01-23T17:03:50.444019'
 ---
 # Question (EN)
 > Explain context receivers in Kotlin. How do they differ from extension receivers? Provide DSL examples.

@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-003-0-en
   language: en
   anki_id: 1768364267073
-  synced_at: '2026-01-14T09:17:53.217684'
+  synced_at: '2026-01-23T16:45:05.662956'
 - slug: android-003-0-ru
   language: ru
   anki_id: 1768364267096
-  synced_at: '2026-01-14T09:17:53.221474'
+  synced_at: '2026-01-23T16:45:05.664453'
 ---
 # Вопрос (RU)
 > Что такое ANR (`Application` Not Responding) и как его предотвратить?

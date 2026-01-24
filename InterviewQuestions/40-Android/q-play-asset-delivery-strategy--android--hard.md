@@ -1,80 +1,47 @@
 ---
 id: android-639
 anki_cards:
-  - slug: android-639-0-en
-    front: "What are the three Play Asset Delivery modes and when to use each?"
-    back: |
-      **Delivery modes:**
-
-      | Mode | When Downloaded | Use For |
-      |------|-----------------|---------|
-      | **install-time** | With APK | Critical core assets |
-      | **fast-follow** | After install (auto) | Large, likely needed soon |
-      | **on-demand** | When requested | Optional/rare content |
-
-      **Runtime management:**
-      ```kotlin
-      val manager = AssetPackManagerFactory.getInstance(ctx)
-      manager.fetch(listOf("pack_name"))
-      manager.registerListener { state ->
-          when (state.status()) {
-              DOWNLOADING -> showProgress()
-              COMPLETED -> loadAssets()
-          }
-      }
-      ```
-
-      **Benefits:** Asset-only updates without full release, size optimization via ABI/texture splits.
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-639-0-ru
-    front: "Какие три режима Play Asset Delivery и когда использовать каждый?"
-    back: |
-      **Режимы доставки:**
-
-      | Режим | Когда загружается | Для чего |
-      |-------|-------------------|----------|
-      | **install-time** | С APK | Критичные ассеты |
-      | **fast-follow** | После установки (авто) | Крупные, скоро нужны |
-      | **on-demand** | По запросу | Опциональный контент |
-
-      **Runtime управление:**
-      ```kotlin
-      val manager = AssetPackManagerFactory.getInstance(ctx)
-      manager.fetch(listOf("pack_name"))
-      manager.registerListener { state ->
-          when (state.status()) {
-              DOWNLOADING -> showProgress()
-              COMPLETED -> loadAssets()
-          }
-      }
-      ```
-
-      **Преимущества:** Обновление ассетов без релиза, оптимизация размера через ABI/texture splits.
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-639-0-en
+  language: en
+  anki_id: 1768413947269
+  synced_at: '2026-01-23T16:45:06.191465'
+- slug: android-639-0-ru
+  language: ru
+  anki_id: 1768413947293
+  synced_at: '2026-01-23T16:45:06.192238'
 title: Play Asset Delivery Strategy / Стратегия Play Asset Delivery
-aliases: [Play Asset Delivery Strategy, Стратегия Play Asset Delivery]
+aliases:
+- Play Asset Delivery Strategy
+- Стратегия Play Asset Delivery
 topic: android
-subtopics: [app-bundle]
+subtopics:
+- app-bundle
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-app-bundle, q-android-app-bundles--android--easy, q-play-billing-v6-architecture--android--hard, q-play-feature-delivery--android--medium, q-play-feature-delivery-dynamic-modules--android--medium]
+related:
+- c-app-bundle
+- q-android-app-bundles--android--easy
+- q-play-billing-v6-architecture--android--hard
+- q-play-feature-delivery--android--medium
+- q-play-feature-delivery-dynamic-modules--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/app-bundle, difficulty/hard, play-asset-delivery]
+tags:
+- android/app-bundle
+- difficulty/hard
+- play-asset-delivery
 sources:
-- url: "https://developer.android.com/guide/playcore/asset-delivery"
+- url: https://developer.android.com/guide/playcore/asset-delivery
   note: Play Asset Delivery documentation
-- url: "https://developer.android.com/guide/app-bundle/asset-delivery-options"
+- url: https://developer.android.com/guide/app-bundle/asset-delivery-options
   note: Delivery modes overview
----\
+---
 # Вопрос (RU)
 > Как разработать стратегию Play Asset Delivery: выбрать режимы (install-time, fast-follow, on-demand), управлять динамическими фичами, обновлять ассеты без релиза и мониторить доставку?
 

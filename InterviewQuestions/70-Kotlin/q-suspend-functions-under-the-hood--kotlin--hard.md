@@ -31,16 +31,12 @@ tags:
 anki_cards:
 - slug: q-suspend-functions-under-the-hood--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285155
+  synced_at: '2026-01-23T17:03:50.972761'
 - slug: q-suspend-functions-under-the-hood--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285179
+  synced_at: '2026-01-23T17:03:50.974698'
 ---
 # Вопрос (RU)
 > Как работают suspend-функции под капотом?

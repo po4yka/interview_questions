@@ -39,16 +39,12 @@ tags:
 anki_cards:
 - slug: q-testing-coroutines-runtest--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288581
+  synced_at: '2026-01-23T17:03:51.288871'
 - slug: q-testing-coroutines-runtest--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288606
+  synced_at: '2026-01-23T17:03:51.290004'
 ---
 # Вопрос (RU)
 > Как тестировать корутины с `runTest` и `TestDispatcher`? Объясните виртуальное время, `StandardTestDispatcher` vs `UnconfinedTestDispatcher` и практические паттерны тестирования для `ViewModel`.

@@ -1,49 +1,48 @@
----\
+---
 id: android-180
-title: "WorkManager Decision Guide / Руководство по выбору WorkManager"
-aliases: ["WorkManager Decision Guide", "Руководство по выбору WorkManager"]
+title: WorkManager Decision Guide / Руководство по выбору WorkManager
+aliases:
+- WorkManager Decision Guide
+- Руководство по выбору WorkManager
 topic: android
-subtopics: [background-execution, coroutines, performance-battery]
+subtopics:
+- background-execution
+- coroutines
+- performance-battery
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-background-tasks, q-api-rate-limiting-throttling--android--medium, q-compose-modifier-system--android--medium, q-databases-android--android--easy]
+related:
+- c-background-tasks
+- q-api-rate-limiting-throttling--android--medium
+- q-compose-modifier-system--android--medium
+- q-databases-android--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/background-execution, android/coroutines, android/performance-battery, background-work, difficulty/medium, service, workmanager]
+tags:
+- android/background-execution
+- android/coroutines
+- android/performance-battery
+- background-work
+- difficulty/medium
+- service
+- workmanager
 anki_cards:
-  - slug: android-180-0-en
-    front: "When to use WorkManager vs Coroutines vs Service?"
-    back: |
-      **WorkManager:** Deferrable work that must survive process death (uploads, sync, periodic tasks >= 15min). Supports constraints, retry, survives reboot.
-
-      **Coroutines:** UI-bound async work within process lifetime (network calls, DB operations). Cancelled when app closes.
-
-      **Foreground Service:** Long-running user-visible work (music player, location tracking). Requires ongoing notification.
-
-      **Rule:** Need reliability after app close? -> WorkManager. UI-only? -> Coroutines. User must see notification? -> Foreground Service.
-    tags:
-      - android_workmanager
-      - difficulty::medium
-  - slug: android-180-0-ru
-    front: "Когда использовать WorkManager vs Coroutines vs Service?"
-    back: |
-      **WorkManager:** Отложенная работа, переживающая смерть процесса (загрузки, синхронизация, периодические задачи >= 15мин). Поддерживает constraints, retry, переживает reboot.
-
-      **Coroutines:** UI-связанная async работа в пределах жизни процесса (сетевые запросы, DB операции). Отменяется при закрытии приложения.
-
-      **Foreground Service:** Долгая работа, видимая пользователю (музыкальный плеер, трекинг геолокации). Требует постоянного notification.
-
-      **Правило:** Нужна надёжность после закрытия приложения? -> WorkManager. Только для UI? -> Coroutines. Пользователь должен видеть уведомление? -> Foreground Service.
-    tags:
-      - android_workmanager
-      - difficulty::medium
-
----\
+- slug: android-180-0-en
+  language: en
+  anki_id: 1768398629785
+  synced_at: '2026-01-23T16:45:05.573870'
+- slug: android-180-0-ru
+  language: ru
+  anki_id: 1768398629808
+  synced_at: '2026-01-23T16:45:05.575853'
+---
 # Вопрос (RU)
 
 > Когда использовать `WorkManager` vs Coroutines vs `Service` для фоновой работы в Android?

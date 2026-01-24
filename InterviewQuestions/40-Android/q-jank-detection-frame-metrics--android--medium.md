@@ -1,54 +1,47 @@
----\
+---
 id: android-053
 title: Jank Detection and Frame Metrics / Обнаружение рывков и метрики кадров
-aliases: [Jank Detection and Frame Metrics, Обнаружение рывков и метрики кадров]
+aliases:
+- Jank Detection and Frame Metrics
+- Обнаружение рывков и метрики кадров
 topic: android
-subtopics: [monitoring-slo, performance-rendering]
+subtopics:
+- monitoring-slo
+- performance-rendering
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: Original
 source_note: Frame rendering performance best practices
 status: draft
 moc: moc-android
-related: [c-perfetto, c-performance, q-compose-gesture-detection--android--medium, q-mlkit-face-detection--android--medium, q-performance-monitoring-jank-compose--android--medium]
+related:
+- c-perfetto
+- c-performance
+- q-compose-gesture-detection--android--medium
+- q-mlkit-face-detection--android--medium
+- q-performance-monitoring-jank-compose--android--medium
 created: 2025-10-11
 updated: 2025-11-11
-tags: [android/monitoring-slo, android/performance-rendering, difficulty/medium, en, ru]
+tags:
+- android/monitoring-slo
+- android/performance-rendering
+- difficulty/medium
+- en
+- ru
 anki_cards:
-  - slug: android-053-0-en
-    front: "How to detect and measure jank (frame drops) in Android?"
-    back: |
-      **Frame budget**: 16ms (60fps), 11ms (90fps), 8ms (120fps)
-
-      **Detection tools**:
-      - `FrameMetricsAggregator` - aggregates frame timings (API 24+)
-      - `OnFrameMetricsAvailableListener` - per-frame callback
-      - Perfetto/Systrace - system-level tracing
-      - GPU Profiler bars in DevOptions
-
-      **Common causes**: overdraw, deep view hierarchy, main thread blocking, heavy onBindViewHolder, bitmap decoding on UI thread, GC pauses
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-053-0-ru
-    front: "Как обнаружить и измерить jank (пропуск кадров) в Android?"
-    back: |
-      **Бюджет кадра**: 16мс (60fps), 11мс (90fps), 8мс (120fps)
-
-      **Инструменты обнаружения**:
-      - `FrameMetricsAggregator` - агрегирует тайминги кадров (API 24+)
-      - `OnFrameMetricsAvailableListener` - callback на каждый кадр
-      - Perfetto/Systrace - системная трассировка
-      - GPU Profiler в настройках разработчика
-
-      **Частые причины**: overdraw, глубокая иерархия view, блокировка главного потока, тяжёлый onBindViewHolder, декодирование bitmap в UI, паузы GC
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-053-0-en
+  language: en
+  anki_id: 1768380219903
+  synced_at: '2026-01-23T16:45:06.318653'
+- slug: android-053-0-ru
+  language: ru
+  anki_id: 1768380219925
+  synced_at: '2026-01-23T16:45:06.319452'
+---
 # Вопрос (RU)
 > Реализуйте мониторинг метрик кадров для обнаружения и исправления рывков. Используйте FrameMetricsAggregator, OnFrameMetricsAvailableListener и инструменты трассировки (Systrace/Perfetto) для выявления проблем рендеринга.
 

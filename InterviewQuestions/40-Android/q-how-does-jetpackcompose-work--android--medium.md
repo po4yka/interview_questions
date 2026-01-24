@@ -1,65 +1,51 @@
----\
+---
 id: android-119
 title: How Does Jetpack Compose Work / Как работает Jetpack Compose
-aliases: [How Does Jetpack Compose Work, Как работает Jetpack Compose]
+aliases:
+- How Does Jetpack Compose Work
+- Как работает Jetpack Compose
 topic: android
-subtopics: [architecture-mvvm, ui-compose, ui-state]
+subtopics:
+- architecture-mvvm
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, c-mvvm, q-cache-implementation-strategies--android--medium, q-how-does-activity-lifecycle-work--android--medium, q-how-does-jetpack-compose-work--android--medium, q-how-does-the-main-thread-work--android--medium, q-how-jetpack-compose-works--android--medium, q-jetpack-compose-basics--android--medium]
+related:
+- c-compose-state
+- c-jetpack-compose
+- c-mvvm
+- q-cache-implementation-strategies--android--medium
+- q-how-does-activity-lifecycle-work--android--medium
+- q-how-does-jetpack-compose-work--android--medium
+- q-how-does-the-main-thread-work--android--medium
+- q-how-jetpack-compose-works--android--medium
+- q-jetpack-compose-basics--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-state, difficulty/medium]
+tags:
+- android
+- android/architecture-mvvm
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
 anki_cards:
-  - slug: android-119-0-en
-    front: "What are the key principles of Jetpack Compose?"
-    back: |
-      **Declarative** - describe what UI should look like, not how to build it
-
-      **Reactive** - UI updates automatically when state changes
-
-      **Composition** - builds UI tree via @Composable functions using slot table
-
-      **Recomposition** - only invalidated parts re-execute:
-      1. State changes (`count++`)
-      2. Affected scopes marked invalid
-      3. Only those scopes recompose
-
-      **State hoisting** - lift state up for reusability:
-      ```kotlin
-      fun Counter(count: Int, onIncrement: () -> Unit)
-      ```
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-119-0-ru
-    front: "Каковы ключевые принципы Jetpack Compose?"
-    back: |
-      **Декларативный** - описывайте как UI должен выглядеть, а не как его строить
-
-      **Реактивный** - UI обновляется автоматически при изменении состояния
-
-      **Composition** - строит дерево UI через @Composable функции используя slot table
-
-      **Рекомпозиция** - перевыполняются только невалидные части:
-      1. Состояние меняется (`count++`)
-      2. Затронутые scope помечаются невалидными
-      3. Только эти scope рекомпозируются
-
-      **State hoisting** - поднимайте состояние для переиспользуемости:
-      ```kotlin
-      fun Counter(count: Int, onIncrement: () -> Unit)
-      ```
-    tags:
-      - android_compose
-      - difficulty::medium
-
----\
+- slug: android-119-0-en
+  language: en
+  anki_id: 1768378364866
+  synced_at: '2026-01-23T16:45:05.266855'
+- slug: android-119-0-ru
+  language: ru
+  anki_id: 1768378364889
+  synced_at: '2026-01-23T16:45:05.269082'
+---
 # Вопрос (RU)
 
 > Как работает Jetpack Compose?

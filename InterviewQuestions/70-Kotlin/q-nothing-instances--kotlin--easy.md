@@ -31,18 +31,12 @@ tags:
 anki_cards:
 - slug: kotlin-178-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - type-system
+  anki_id: 1768326285806
+  synced_at: '2026-01-23T17:03:51.028020'
 - slug: kotlin-178-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - type-system
+  anki_id: 1768326285830
+  synced_at: '2026-01-23T17:03:51.029865'
 ---
 # Вопрос (RU)
 > Сколько экземпляров имеет тип Nothing в Kotlin?

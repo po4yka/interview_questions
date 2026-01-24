@@ -1,58 +1,47 @@
----\
+---
 id: android-020
 title: kapt vs KSP comparison / Сравнение kapt и KSP
-aliases: [kapt vs KSP comparison, Сравнение kapt и KSP]
+aliases:
+- kapt vs KSP comparison
+- Сравнение kapt и KSP
 topic: android
-subtopics: [gradle]
+subtopics:
+- gradle
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
+language_tags:
+- en
+- ru
+source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
-related: [c-gradle, q-fix-slow-app-startup-legacy--android--hard, q-flutter-comparison--android--medium, q-kapt-ksp-migration--android--medium, q-looper-thread-connection--android--medium, q-macrobenchmark-startup--android--medium, q-react-native-vs-flutter--android--medium]
+related:
+- c-gradle
+- q-fix-slow-app-startup-legacy--android--hard
+- q-flutter-comparison--android--medium
+- q-kapt-ksp-migration--android--medium
+- q-looper-thread-connection--android--medium
+- q-macrobenchmark-startup--android--medium
+- q-react-native-vs-flutter--android--medium
 created: 2025-10-06
 updated: 2025-11-10
-tags: [android/gradle, difficulty/medium, en, ru]
+tags:
+- android/gradle
+- difficulty/medium
+- en
+- ru
 anki_cards:
-  - slug: android-020-0-en
-    front: "What is the difference between kapt and KSP in Android?"
-    back: |
-      **kapt**: Kotlin Annotation Processing Tool
-      - Generates Java stubs, slower
-      - Uses Java APT (JSR 269)
-      - Works with all Java annotation processors
-
-      **KSP**: Kotlin Symbol Processing
-      - Kotlin-first, no stubs, ~2x faster
-      - Better incremental builds
-      - Room, Moshi, Hilt 2.44+ support KSP
-
-      **Prefer KSP** when library supports it; keep kapt only for legacy processors.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-020-0-ru
-    front: "В чём разница между kapt и KSP в Android?"
-    back: |
-      **kapt**: Kotlin Annotation Processing Tool
-      - Генерирует Java stubs, медленнее
-      - Использует Java APT (JSR 269)
-      - Работает со всеми Java процессорами
-
-      **KSP**: Kotlin Symbol Processing
-      - Kotlin-first, без stubs, ~2x быстрее
-      - Лучшая инкрементальная сборка
-      - Room, Moshi, Hilt 2.44+ поддерживают KSP
-
-      **Предпочитайте KSP** когда библиотека поддерживает; kapt только для legacy.
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-020-0-en
+  language: en
+  anki_id: 1768379769301
+  synced_at: '2026-01-23T16:45:05.759158'
+- slug: android-020-0-ru
+  language: ru
+  anki_id: 1768379769323
+  synced_at: '2026-01-23T16:45:05.761845'
+---
 # Вопрос (RU)
 > В чем разница между kapt и KSP? Какой использовать?
 

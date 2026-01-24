@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-singleton-creation--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292281
+  synced_at: '2026-01-23T17:03:51.545854'
 - slug: q-kotlin-singleton-creation--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292306
+  synced_at: '2026-01-23T17:03:51.546790'
 ---
 ## Дополнительные Вопросы (RU)
 

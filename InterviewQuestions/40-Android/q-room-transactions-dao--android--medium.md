@@ -1,78 +1,44 @@
----\
+---
 id: android-279
 anki_cards:
-  - slug: android-279-0-en
-    front: "How do you ensure atomicity for multi-table operations in Room?"
-    back: |
-      **Use @Transaction annotation** for atomic DAO operations:
-      ```kotlin
-      @Transaction
-      suspend fun insertUserWithPosts(user: User, posts: List<Post>) {
-          val userId = insertUser(user)
-          insertPosts(posts.map { it.copy(authorId = userId) })
-          // Rolls back if exception thrown
-      }
-      ```
-
-      **Use withTransaction** for complex logic:
-      ```kotlin
-      database.withTransaction {
-          userDao.insertUser(user)
-          statsDao.incrementUserCount()
-      }
-      ```
-
-      **Key points:**
-      - Transaction rolls back only on uncaught exception
-      - Keep transactions short (no network calls)
-      - Use batch operations instead of loops
-    tags:
-      - android_room
-      - difficulty::medium
-  - slug: android-279-0-ru
-    front: "Как обеспечить атомарность операций с несколькими таблицами в Room?"
-    back: |
-      **Используйте аннотацию @Transaction** для атомарных DAO-операций:
-      ```kotlin
-      @Transaction
-      suspend fun insertUserWithPosts(user: User, posts: List<Post>) {
-          val userId = insertUser(user)
-          insertPosts(posts.map { it.copy(authorId = userId) })
-          // Откатывается при исключении
-      }
-      ```
-
-      **Используйте withTransaction** для сложной логики:
-      ```kotlin
-      database.withTransaction {
-          userDao.insertUser(user)
-          statsDao.incrementUserCount()
-      }
-      ```
-
-      **Ключевые моменты:**
-      - Транзакция откатывается только при неперехваченном исключении
-      - Держите транзакции короткими (без сетевых вызовов)
-      - Используйте batch-операции вместо циклов
-    tags:
-      - android_room
-      - difficulty::medium
-title: "Room Transactions Dao / Транзакции DAO в Room"
-aliases: ["Room Transactions Dao", "Транзакции DAO в Room"]
+- slug: android-279-0-en
+  language: en
+  anki_id: 1768420261015
+  synced_at: '2026-01-23T16:45:06.004172'
+- slug: android-279-0-ru
+  language: ru
+  anki_id: 1768420261057
+  synced_at: '2026-01-23T16:45:06.005711'
+title: Room Transactions Dao / Транзакции DAO в Room
+aliases:
+- Room Transactions Dao
+- Транзакции DAO в Room
 topic: android
-subtopics: [coroutines, room]
+subtopics:
+- coroutines
+- room
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-room, q-room-library-definition--android--easy]
+related:
+- c-room
+- q-room-library-definition--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/coroutines, android/room, dao, database, difficulty/medium, transactions]
----\
+tags:
+- android/coroutines
+- android/room
+- dao
+- database
+- difficulty/medium
+- transactions
+---
 # Вопрос (RU)
 
 > Как обеспечить атомарность операций с несколькими таблицами в `Room`? Покажите использование @Transaction для критических операций.

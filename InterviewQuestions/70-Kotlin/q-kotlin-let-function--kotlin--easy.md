@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-let-function--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293079
+  synced_at: '2026-01-23T17:03:51.580190'
 - slug: q-kotlin-let-function--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293106
+  synced_at: '2026-01-23T17:03:51.580976'
 ---
 # Question (EN)
 > What is the `let` function used for in Kotlin?

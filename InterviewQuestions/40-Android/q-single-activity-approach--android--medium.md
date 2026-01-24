@@ -1,54 +1,50 @@
 ---
-id: android-725
-anki_cards:
-  - slug: android-436-0-en
-    front: "What is the Single Activity approach in Android development?"
-    back: |
-      **Single Activity** is an architecture where one root Activity hosts all navigation, and screens are implemented via Fragments.
-
-      **Benefits**:
-      - **Simplified state management**: Single lifecycle host for navigation
-      - **Faster transitions**: Fragment transactions are lighter than Activity launches
-      - **Better navigation**: NavController, Safe Args, unified back stack
-
-      **When to use Multi-Activity**:
-      - Separate feature modules with independent entry points
-      - Different UI modes (fullscreen video, picture-in-picture)
-      - Legacy integration during gradual migration
-    tags: ["android_navigation", "android_fragments", "difficulty::medium"]
-  - slug: android-436-0-ru
-    front: "Что означает подход Single Activity в Android-разработке?"
-    back: |
-      **Single Activity** - архитектура, где одна корневая Activity хостит всю навигацию, а экраны реализованы через Fragment.
-
-      **Преимущества**:
-      - **Упрощённое управление состоянием**: единый lifecycle-хост для навигации
-      - **Быстрые переходы**: транзакции Fragment легче, чем запуск Activity
-      - **Улучшенная навигация**: NavController, Safe Args, единый back stack
-
-      **Когда использовать Multi-Activity**:
-      - Отдельные feature-модули с независимыми точками входа
-      - Разные UI-режимы (fullscreen видео, picture-in-picture)
-      - Интеграция с legacy-кодом при постепенной миграции
-    tags: ["android_navigation", "android_fragments", "difficulty::medium"]
 id: android-436
-title: "Single Activity Approach / Подход Single Activity"
-aliases: ["Single Activity Approach", "Подход Single Activity"]
+anki_cards:
+- slug: android-436-0-en
+  language: en
+  anki_id: 1768447086584
+  synced_at: '2026-01-23T16:45:06.431988'
+- slug: android-436-0-ru
+  language: ru
+  anki_id: 1768447086606
+  synced_at: '2026-01-23T16:45:06.432839'
+- slug: android-725-0-en
+  language: en
+- slug: android-725-0-ru
+  language: ru
+title: Single Activity Approach / Подход Single Activity
+aliases:
+- Single Activity Approach
+- Подход Single Activity
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-lifecycle, q-activity-lifecycle-methods--android--medium, q-navigation-methods-android--android--medium]
+related:
+- c-lifecycle
+- q-activity-lifecycle-methods--android--medium
+- q-navigation-methods-android--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [activity, android, android/activity, android/ui-navigation, difficulty/medium, fragment, jetpack-navigation]
-
----\
+tags:
+- activity
+- android
+- android/activity
+- android/ui-navigation
+- difficulty/medium
+- fragment
+- jetpack-navigation
+---
 # Вопрос (RU)
 > Что означает в Android-разработке подход Single `Activity`?
 

@@ -1,65 +1,50 @@
----\
+---
 id: android-257
 title: How To Pass Photo To Editor / Как передать фото в редактор
-aliases: [How To Pass Photo To Editor, Как передать фото в редактор]
+aliases:
+- How To Pass Photo To Editor
+- Как передать фото в редактор
 topic: android
-subtopics: [files-media, intents-deeplinks, ui-graphics]
+subtopics:
+- files-media
+- intents-deeplinks
+- ui-graphics
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-intent, c-scoped-storage-security, q-android-storage-types--android--medium, q-fileprovider-secure-sharing--android--medium, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-how-to-pass-data-from-one-fragment-to-another--android--medium, q-how-to-pass-parameters-to-a-fragment--android--easy, q-what-are-intents-for--android--medium]
+related:
+- c-intent
+- c-scoped-storage-security
+- q-android-storage-types--android--medium
+- q-fileprovider-secure-sharing--android--medium
+- q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy
+- q-how-to-pass-data-from-one-fragment-to-another--android--medium
+- q-how-to-pass-parameters-to-a-fragment--android--easy
+- q-what-are-intents-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/files-media, android/intents-deeplinks, android/ui-graphics, difficulty/medium, image-processing]
+tags:
+- android/files-media
+- android/intents-deeplinks
+- android/ui-graphics
+- difficulty/medium
+- image-processing
 anki_cards:
-  - slug: android-257-0-en
-    front: "How to pass a photo to an editor in Android?"
-    back: |
-      **External editor:**
-      ```kotlin
-      Intent(ACTION_EDIT).apply {
-          setDataAndType(photoUri, "image/*")
-          addFlags(FLAG_GRANT_READ_URI_PERMISSION)
-      }
-      ```
-
-      **Internal editor:** Pass `content://` URI via FileProvider
-
-      **Rules:**
-      - Use `content://` not `file://`
-      - Never pass large bitmaps via Intent (~500KB limit)
-      - Use FileProvider for Android 7.0+
-    tags:
-      - android_intents
-      - android_storage
-      - difficulty::medium
-  - slug: android-257-0-ru
-    front: "Как передать фото в редактор в Android?"
-    back: |
-      **Внешний редактор:**
-      ```kotlin
-      Intent(ACTION_EDIT).apply {
-          setDataAndType(photoUri, "image/*")
-          addFlags(FLAG_GRANT_READ_URI_PERMISSION)
-      }
-      ```
-
-      **Внутренний редактор:** Передать `content://` URI через FileProvider
-
-      **Правила:**
-      - Использовать `content://`, не `file://`
-      - Не передавать большие bitmap через Intent (~500KB лимит)
-      - Использовать FileProvider для Android 7.0+
-    tags:
-      - android_intents
-      - android_storage
-      - difficulty::medium
-
----\
+- slug: android-257-0-en
+  language: en
+  anki_id: 1768380827430
+  synced_at: '2026-01-23T16:45:05.897070'
+- slug: android-257-0-ru
+  language: ru
+  anki_id: 1768380827455
+  synced_at: '2026-01-23T16:45:05.898215'
+---
 # Вопрос (RU)
 
 > Как передать фотографию в редактор — внутри приложения и во внешнее приложение?

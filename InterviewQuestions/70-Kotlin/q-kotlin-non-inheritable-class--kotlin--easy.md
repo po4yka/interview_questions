@@ -33,20 +33,12 @@ tags:
 anki_cards:
 - slug: lang-091-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - inheritance
-  - type-system
+  anki_id: 1768326293632
+  synced_at: '2026-01-23T17:03:51.606481'
 - slug: lang-091-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - inheritance
-  - type-system
+  anki_id: 1768326293657
+  synced_at: '2026-01-23T17:03:51.607250'
 ---
 # Вопрос (RU)
 > Как в Kotlin определить класс, который не может быть унаследован?

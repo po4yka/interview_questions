@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-basics--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287706
+  synced_at: '2026-01-23T17:03:51.211822'
 - slug: q-flow-basics--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287731
+  synced_at: '2026-01-23T17:03:51.213114'
 ---
 ## Answer (EN)
 

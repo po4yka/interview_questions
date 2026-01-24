@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-043-0-en
   language: en
   anki_id: 1768364989748
-  synced_at: '2026-01-14T09:17:53.272347'
+  synced_at: '2026-01-23T16:45:05.792532'
 - slug: android-043-0-ru
   language: ru
   anki_id: 1768364989773
-  synced_at: '2026-01-14T09:17:53.274377'
+  synced_at: '2026-01-23T16:45:05.795724'
 ---
 # Вопрос (RU)
 > Как оптимизировать сборку Gradle в Android?

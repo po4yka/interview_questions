@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-462-0-en
   language: en
   anki_id: 1768366755276
-  synced_at: '2026-01-14T09:17:53.606331'
+  synced_at: '2026-01-23T16:45:06.221659'
 - slug: android-462-0-ru
   language: ru
   anki_id: 1768366755301
-  synced_at: '2026-01-14T09:17:53.609615'
+  synced_at: '2026-01-23T16:45:06.222437'
 sources:
 - https://dagger.dev/api/latest/dagger/Scope.html
 ---

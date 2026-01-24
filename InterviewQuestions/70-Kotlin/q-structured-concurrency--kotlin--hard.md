@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-structured-concurrency--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294131
+  synced_at: '2026-01-23T17:03:51.624316'
 - slug: q-structured-concurrency--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294155
+  synced_at: '2026-01-23T17:03:51.625298'
 ---
 # Question (EN)
 > What is structured concurrency in Kotlin? Explain parent-child coroutine hierarchy, cancellation propagation, exception propagation, and differences between coroutineScope, supervisorScope, and withContext.

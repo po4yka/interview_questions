@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flatmap-variants-flow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296230
+  synced_at: '2026-01-23T17:03:51.712722'
 - slug: q-flatmap-variants-flow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296255
+  synced_at: '2026-01-23T17:03:51.713597'
 ---
 # Question (EN)
 > What is the difference between `flatMapConcat`, `flatMapMerge`, and `flatMapLatest` in Kotlin `Flow`?

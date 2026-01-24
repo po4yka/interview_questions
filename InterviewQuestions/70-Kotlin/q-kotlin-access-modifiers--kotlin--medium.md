@@ -25,16 +25,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-access-modifiers--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288531
+  synced_at: '2026-01-23T17:03:51.286542'
 - slug: q-kotlin-access-modifiers--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288556
+  synced_at: '2026-01-23T17:03:51.287666'
 ---
 # Вопрос (RU)
 > Что известно про модификаторы доступа в Kotlin?

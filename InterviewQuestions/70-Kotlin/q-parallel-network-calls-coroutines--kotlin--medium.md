@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-parallel-network-calls-coroutines--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279555
+  synced_at: '2026-01-23T17:03:50.467382'
 - slug: q-parallel-network-calls-coroutines--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279580
+  synced_at: '2026-01-23T17:03:50.469718'
 ---
 # Question (EN)
 > How do you make multiple network calls in parallel using Kotlin coroutines?

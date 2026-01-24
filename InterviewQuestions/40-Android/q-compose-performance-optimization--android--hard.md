@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-443-0-en
   language: en
   anki_id: 1768366066674
-  synced_at: '2026-01-14T09:17:53.113282'
+  synced_at: '2026-01-23T16:45:05.485845'
 - slug: android-443-0-ru
   language: ru
   anki_id: 1768366066699
-  synced_at: '2026-01-14T09:17:53.116018'
+  synced_at: '2026-01-23T16:45:05.487518'
 ---
 # Вопрос (RU)
 

@@ -1,75 +1,48 @@
----\
+---
 id: android-619
 title: Play Integrity Attestation / Аттестация Play Integrity
-aliases: [Play Integrity Attestation, Аттестация Play Integrity]
+aliases:
+- Play Integrity Attestation
+- Аттестация Play Integrity
 topic: android
-subtopics: [billing, keystore-crypto, play-console]
+subtopics:
+- billing
+- keystore-crypto
+- play-console
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-keystore, q-android-security-best-practices--android--medium, q-play-billing-v6-architecture--android--hard, q-play-feature-delivery--android--medium, q-play-store-publishing--android--medium]
+related:
+- c-android-keystore
+- q-android-security-best-practices--android--medium
+- q-play-billing-v6-architecture--android--hard
+- q-play-feature-delivery--android--medium
+- q-play-store-publishing--android--medium
 created: 2024-11-02
 updated: 2025-11-10
-tags: [android/billing, android/keystore-crypto, android/play-console, difficulty/hard]
+tags:
+- android/billing
+- android/keystore-crypto
+- android/play-console
+- difficulty/hard
 sources:
-  - "https://cloud.google.com/play-integrity/reference/rest"
-  - "https://developer.android.com/google/play/integrity"
+- https://cloud.google.com/play-integrity/reference/rest
+- https://developer.android.com/google/play/integrity
 anki_cards:
-  - slug: android-619-0-en
-    front: "How do you implement Play Integrity API for app attestation?"
-    back: |
-      **Client-side:**
-      ```kotlin
-      val token = IntegrityManagerFactory.create(context)
-          .requestIntegrityToken(
-              IntegrityTokenRequest.builder()
-                  .setNonce(generateNonce())
-                  .build()
-          ).await().token()
-      ```
-
-      **Server-side verification:**
-      - Decode via Play Integrity API (service account)
-      - Verify: `requestPackageName`, `nonce`, `timestampMillis`
-      - Check verdicts: `deviceRecognitionVerdict`, `appLicensingVerdict`
-
-      **Key points:**
-      - Nonce must be unique per request (replay protection)
-      - Never store keys on client
-      - Use capability tokens for offline scenarios
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-619-0-ru
-    front: "Как реализовать Play Integrity API для аттестации приложения?"
-    back: |
-      **На клиенте:**
-      ```kotlin
-      val token = IntegrityManagerFactory.create(context)
-          .requestIntegrityToken(
-              IntegrityTokenRequest.builder()
-                  .setNonce(generateNonce())
-                  .build()
-          ).await().token()
-      ```
-
-      **Проверка на сервере:**
-      - Декодирование через Play Integrity API (service account)
-      - Проверка: `requestPackageName`, `nonce`, `timestampMillis`
-      - Анализ вердиктов: `deviceRecognitionVerdict`, `appLicensingVerdict`
-
-      **Ключевые моменты:**
-      - Nonce уникален для каждого запроса (защита от replay)
-      - Никогда не храните ключи на клиенте
-      - Используйте capability tokens для оффлайн-сценариев
-    tags:
-      - android_general
-      - difficulty::hard
-
----\
+- slug: android-619-0-en
+  language: en
+  anki_id: 1768417702354
+  synced_at: '2026-01-23T16:45:05.755370'
+- slug: android-619-0-ru
+  language: ru
+  anki_id: 1768417702375
+  synced_at: '2026-01-23T16:45:05.756984'
+---
 # Вопрос (RU)
 > Как реализовать Play Integrity: запрос токена на клиенте, проверка вердикта на сервере, использование capability tokens и связь с Play Billing?
 

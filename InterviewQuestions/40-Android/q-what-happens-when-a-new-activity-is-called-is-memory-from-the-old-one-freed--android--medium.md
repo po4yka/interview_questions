@@ -1,55 +1,51 @@
----\
+---
 id: android-151
-title: What Happens When A New Activity Is Called Is Memory From The Old One Freed / Что происходит когда вызывается новая Activity освобождается ли память от старой
-aliases: [What Happens When A New Activity Is Called Is Memory From The Old One Freed, Что происходит когда вызывается новая Activity освобождается ли память от старой]
+title: What Happens When A New Activity Is Called Is Memory From The Old One Freed
+  / Что происходит когда вызывается новая Activity освобождается ли память от старой
+aliases:
+- What Happens When A New Activity Is Called Is Memory From The Old One Freed
+- Что происходит когда вызывается новая Activity освобождается ли память от старой
 topic: android
-subtopics: [lifecycle, performance-memory]
+subtopics:
+- lifecycle
+- performance-memory
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-memory-management, q-activity-lifecycle-methods--android--medium, q-activity-navigation-how-it-works--android--medium, q-how-does-activity-lifecycle-work--android--medium, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-how-to-pass-data-from-one-activity-to-another--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium]
+related:
+- c-lifecycle
+- c-memory-management
+- q-activity-lifecycle-methods--android--medium
+- q-activity-navigation-how-it-works--android--medium
+- q-how-does-activity-lifecycle-work--android--medium
+- q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
+- q-how-to-pass-data-from-one-activity-to-another--android--medium
+- q-how-to-pass-data-from-one-fragment-to-another--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/lifecycle, android/performance-memory, difficulty/medium, lifecycle, performance-memory]
+tags:
+- android
+- android/lifecycle
+- android/performance-memory
+- difficulty/medium
+- lifecycle
+- performance-memory
 anki_cards:
-  - slug: android-151-0-en
-    front: "Is memory freed when a new Activity is launched?"
-    back: |
-      **No, not immediately.** Previous Activity stays in memory (STOPPED state) while in back stack.
-
-      **Lifecycle:** A.onPause() -> B.onCreate/onStart/onResume -> A.onStop()
-
-      **Memory freed when:**
-      - User presses Back / finish() called (isFinishing=true)
-      - System kills process under memory pressure
-      - Configuration change (recreated)
-
-      **Tip:** Release heavy resources in onStop(), restore in onStart()
-    tags:
-      - android_lifecycle
-      - difficulty::medium
-  - slug: android-151-0-ru
-    front: "Освобождается ли память при запуске новой Activity?"
-    back: |
-      **Нет, не сразу.** Предыдущая Activity остаётся в памяти (состояние STOPPED) пока в back stack.
-
-      **Жизненный цикл:** A.onPause() -> B.onCreate/onStart/onResume -> A.onStop()
-
-      **Память освобождается когда:**
-      - Пользователь нажал Back / вызван finish() (isFinishing=true)
-      - Система убивает процесс при нехватке памяти
-      - Изменение конфигурации (пересоздание)
-
-      **Совет:** Освобождать тяжёлые ресурсы в onStop(), восстанавливать в onStart()
-    tags:
-      - android_lifecycle
-      - difficulty::medium
-
----\
+- slug: android-151-0-en
+  language: en
+  anki_id: 1768398220407
+  synced_at: '2026-01-23T16:45:05.411886'
+- slug: android-151-0-ru
+  language: ru
+  anki_id: 1768398220433
+  synced_at: '2026-01-23T16:45:05.414083'
+---
 # Вопрос (RU)
 
 > Что происходит, когда запускается новая `Activity`? Освобождается ли память предыдущей?

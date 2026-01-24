@@ -25,18 +25,12 @@ tags:
 anki_cards:
 - slug: kotlin-189-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
+  anki_id: 1768326288230
+  synced_at: '2026-01-23T17:03:51.266643'
 - slug: kotlin-189-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - coroutines
+  anki_id: 1768326288255
+  synced_at: '2026-01-23T17:03:51.267884'
 ---
 # Вопрос (RU)
 > В чем отличие между Job и SupervisorJob?

@@ -25,16 +25,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-any-unit-nothing--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292731
+  synced_at: '2026-01-23T17:03:51.567964'
 - slug: q-kotlin-any-unit-nothing--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292756
+  synced_at: '2026-01-23T17:03:51.568889'
 ---
 # Вопрос (RU)
 > Что известно про типы `Any`, `Unit`, `Nothing` в Kotlin?

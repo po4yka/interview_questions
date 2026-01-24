@@ -1,59 +1,46 @@
 ---
 id: android-490
 anki_cards:
-  - slug: android-490-0-en
-    front: "How to design secure sign-in and transaction signing for a banking app?"
-    back: |
-      **Credentials:** Passkeys (FIDO2) + biometric unlock, fallback to rate-limited OTP (not SMS alone).
-
-      **Keys:** Android Keystore (StrongBox), non-exportable, user verification gated.
-
-      **Transaction signing:**
-      - Canonical payload (recipient, amount, nonce, expiry)
-      - Sign with device-bound private key
-      - Server validates signature + nonce + expiry
-
-      **Session:** Short-lived tokens, rotate on risk events.
-
-      **Key:** Out-of-band push approval with clear context, Play Integrity for device attestation.
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-490-0-ru
-    front: "Как спроектировать безопасный вход и подписание транзакций для банковского приложения?"
-    back: |
-      **Учетные данные:** Passkeys (FIDO2) + биометрия для разблокировки, fallback на rate-limited OTP (не только SMS).
-
-      **Ключи:** Android Keystore (StrongBox), non-exportable, защита user verification.
-
-      **Подписание транзакций:**
-      - Канонический payload (получатель, сумма, nonce, срок)
-      - Подпись приватным ключом устройства
-      - Сервер проверяет подпись + nonce + срок
-
-      **Сессия:** Короткоживущие токены, ротация при risk events.
-
-      **Ключ:** Out-of-band push approval с понятным контекстом, Play Integrity для attestation.
-    tags:
-      - android_general
-      - difficulty::hard
-title: Design Mobile Banking Auth & Transaction Signing / Проектирование аутентификации и подписания транзакций
-aliases: [Design Mobile Banking Auth & Transaction Signing, Проектирование аутентификации и подписания транзакций]
+- slug: android-490-0-en
+  language: en
+  anki_id: 1768414565371
+  synced_at: '2026-01-23T16:45:06.351926'
+- slug: android-490-0-ru
+  language: ru
+  anki_id: 1768414565395
+  synced_at: '2026-01-23T16:45:06.352727'
+title: Design Mobile Banking Auth & Transaction Signing / Проектирование аутентификации
+  и подписания транзакций
+aliases:
+- Design Mobile Banking Auth & Transaction Signing
+- Проектирование аутентификации и подписания транзакций
 topic: android
-subtopics: [keystore-crypto, networking-http, permissions]
+subtopics:
+- keystore-crypto
+- networking-http
+- permissions
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-keystore, c-security-hardening, c-biometric-authentication]
+related:
+- c-android-keystore
+- c-security-hardening
+- c-biometric-authentication
 sources: []
 created: 2025-10-29
 updated: 2025-11-10
-tags: [android/keystore-crypto, android/networking-http, android/permissions, difficulty/hard, topic/android]
-
----\
+tags:
+- android/keystore-crypto
+- android/networking-http
+- android/permissions
+- difficulty/hard
+- topic/android
+---
 # Вопрос (RU)
 
 > Как спроектировать безопасный вход и подписание транзакций для банковского приложения?

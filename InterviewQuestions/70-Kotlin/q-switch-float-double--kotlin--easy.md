@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-switch-float-double--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281255
+  synced_at: '2026-01-23T17:03:50.621524'
 - slug: q-switch-float-double--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281280
+  synced_at: '2026-01-23T17:03:50.623300'
 ---
 ## Ответ (RU)
 

@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-297-0-en
   language: en
   anki_id: 1768363328671
-  synced_at: '2026-01-14T09:17:53.444602'
+  synced_at: '2026-01-23T16:45:06.057313'
 - slug: android-297-0-ru
   language: ru
   anki_id: 1768363328695
-  synced_at: '2026-01-14T09:17:53.447021'
+  synced_at: '2026-01-23T16:45:06.058467'
 ---
 # Вопрос (RU)
 > Что такое Android Runtime (ART) и чем он отличается от Dalvik?

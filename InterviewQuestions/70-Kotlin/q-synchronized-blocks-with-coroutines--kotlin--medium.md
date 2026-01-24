@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-synchronized-blocks-with-coroutines--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294482
+  synced_at: '2026-01-23T17:03:51.639852'
 - slug: q-synchronized-blocks-with-coroutines--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294507
+  synced_at: '2026-01-23T17:03:51.640682'
 ---
 ## Дополнительные Вопросы (RU)
 

@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-333-0-en
   language: en
   anki_id: 1768366070779
-  synced_at: '2026-01-14T09:17:53.529882'
+  synced_at: '2026-01-23T16:45:06.162906'
 - slug: android-333-0-ru
   language: ru
   anki_id: 1768366070798
-  synced_at: '2026-01-14T09:17:53.533590'
+  synced_at: '2026-01-23T16:45:06.163726'
 ---
 # Вопрос (RU)
 > Как работают Slot Table и рекомпозиция в Jetpack Compose? Объясните механизм внутреннего представления и оптимизации перерисовки.

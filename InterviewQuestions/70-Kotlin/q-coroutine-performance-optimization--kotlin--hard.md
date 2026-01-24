@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-performance-optimization--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283505
+  synced_at: '2026-01-23T17:03:50.798804'
 - slug: q-coroutine-performance-optimization--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283529
+  synced_at: '2026-01-23T17:03:50.800158'
 ---
 # Question (EN)
 > Kotlin Coroutines advanced topic 140021

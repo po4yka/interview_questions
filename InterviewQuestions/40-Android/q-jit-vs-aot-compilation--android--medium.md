@@ -1,60 +1,49 @@
 ---
 id: android-412
 title: JIT vs AOT Compilation / JIT vs AOT компиляция
-aliases: [Ahead-Of-Time, Android Runtime, ART, JIT vs AOT Compilation, JIT vs AOT компиляция, Just-In-Time]
+aliases:
+- Ahead-Of-Time
+- Android Runtime
+- ART
+- JIT vs AOT Compilation
+- JIT vs AOT компиляция
+- Just-In-Time
 topic: android
-subtopics: [performance-startup, profiling]
+subtopics:
+- performance-startup
+- profiling
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-build-optimization--android--medium, q-app-startup-optimization--android--medium, q-kapt-vs-ksp--android--medium]
+related:
+- q-android-build-optimization--android--medium
+- q-app-startup-optimization--android--medium
+- q-kapt-vs-ksp--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/performance-startup, android/profiling, aot, art, baseline-profiles, compilation, difficulty/medium, jit]
+tags:
+- android/performance-startup
+- android/profiling
+- aot
+- art
+- baseline-profiles
+- compilation
+- difficulty/medium
+- jit
 anki_cards:
-  - slug: android-412-0-en
-    front: "What is the difference between JIT and AOT compilation in Android?"
-    back: |
-      **JIT (Just-In-Time):**
-      - Compiles hot code at runtime
-      - Fast install, smaller size
-      - Requires warm-up time
-
-      **AOT (Ahead-Of-Time):**
-      - Compiles before execution (dex2oat)
-      - Fast from first run
-      - Larger storage, slower install
-
-      **Hybrid (Android 7+):**
-      Profile-guided optimization - JIT profiles hot paths, background AOT compiles them.
-
-      **Baseline Profiles:** Pre-generated profiles shipped with APK for faster cold starts (~30%+).
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-412-0-ru
-    front: "В чём разница между JIT и AOT компиляцией в Android?"
-    back: |
-      **JIT (Just-In-Time):**
-      - Компилирует горячий код во время выполнения
-      - Быстрая установка, меньший размер
-      - Требует прогрева
-
-      **AOT (Ahead-Of-Time):**
-      - Компилирует заранее (dex2oat)
-      - Быстро с первого запуска
-      - Больше места, медленнее установка
-
-      **Гибрид (Android 7+):**
-      Profile-guided optimization - JIT профилирует горячие пути, фоновый AOT компилирует их.
-
-      **Baseline Profiles:** Предгенерированные профили в APK для быстрого cold start (~30%+).
-    tags:
-      - android_general
-      - difficulty::medium
+- slug: android-412-0-en
+  language: en
+  anki_id: 1768396763004
+  synced_at: '2026-01-23T16:45:06.361654'
+- slug: android-412-0-ru
+  language: ru
+  anki_id: 1768396763027
+  synced_at: '2026-01-23T16:45:06.362556'
 sources: []
 ---
 # Вопрос (RU)

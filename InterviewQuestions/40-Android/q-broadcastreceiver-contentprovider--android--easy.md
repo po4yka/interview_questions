@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-320-0-en
   language: en
   anki_id: 1768364991251
-  synced_at: '2026-01-14T09:17:53.505214'
+  synced_at: '2026-01-23T16:45:06.129896'
 - slug: android-320-0-ru
   language: ru
   anki_id: 1768364991273
-  synced_at: '2026-01-14T09:17:53.507850'
+  synced_at: '2026-01-23T16:45:06.133119'
 ---
 # Вопрос (RU)
 > Что такое `BroadcastReceiver` и `ContentProvider` в Android?

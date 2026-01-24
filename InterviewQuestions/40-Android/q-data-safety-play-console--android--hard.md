@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-635-0-en
   language: en
   anki_id: 1768366757176
-  synced_at: '2026-01-14T09:17:53.743042'
+  synced_at: '2026-01-23T16:45:06.315102'
 - slug: android-635-0-ru
   language: ru
   anki_id: 1768366757202
-  synced_at: '2026-01-14T09:17:53.745755'
+  synced_at: '2026-01-23T16:45:06.315995'
 sources:
 - url: https://support.google.com/googleplay/android-developer/answer/10787469
   note: Play Data Safety form policies

@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-data-class-component-functions--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280805
+  synced_at: '2026-01-23T17:03:50.588706'
 - slug: q-data-class-component-functions--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280830
+  synced_at: '2026-01-23T17:03:50.590769'
 ---
 ## Ответ (RU)
 

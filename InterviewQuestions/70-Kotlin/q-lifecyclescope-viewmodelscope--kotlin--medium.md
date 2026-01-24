@@ -36,16 +36,12 @@ tags:
 anki_cards:
 - slug: q-lifecyclescope-viewmodelscope--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284255
+  synced_at: '2026-01-23T17:03:50.879336'
 - slug: q-lifecyclescope-viewmodelscope--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284281
+  synced_at: '2026-01-23T17:03:50.881704'
 ---
 # Вопрос (RU)
 > В чем разница между lifecycleScope и viewModelScope? Когда использовать каждый, как они обрабатывают события жизненного цикла и какие есть лучшие практики для Android coroutine scopes.

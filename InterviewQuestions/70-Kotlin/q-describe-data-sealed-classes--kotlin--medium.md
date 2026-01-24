@@ -126,16 +126,12 @@ tags:
 anki_cards:
 - slug: q-describe-data-sealed-classes--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281055
+  synced_at: '2026-01-23T17:03:50.607098'
 - slug: q-describe-data-sealed-classes--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281081
+  synced_at: '2026-01-23T17:03:50.608481'
 ---
 # Вопрос (RU)
 > Опишите data классы и sealed классы в Kotlin. Каковы их ключевые особенности и применения?

@@ -1,54 +1,47 @@
----\
+---
 id: android-214
 title: View Redraw Methods / Методы перерисовки View
-aliases: [View Redraw Methods, Методы перерисовки View]
+aliases:
+- View Redraw Methods
+- Методы перерисовки View
 topic: android
-subtopics: [lifecycle, ui-views]
+subtopics:
+- lifecycle
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-view-system, q-view-methods-and-their-purpose--android--medium, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+- c-android-view-system
+- q-view-methods-and-their-purpose--android--medium
+- q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
+- q-what-is-known-about-methods-that-redraw-view--android--medium
+- q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/lifecycle, android/ui-views, difficulty/medium, drawing, invalidate, requestLayout, view-rendering]
+tags:
+- android/lifecycle
+- android/ui-views
+- difficulty/medium
+- drawing
+- invalidate
+- requestLayout
+- view-rendering
 anki_cards:
-  - slug: android-214-0-en
-    front: "What are the main methods for View redrawing in Android and when to use each?"
-    back: |
-      **View redraw methods:**
-
-      | Method | Thread | Triggers | Use Case |
-      |--------|--------|----------|----------|
-      | `invalidate()` | UI | `onDraw()` | Visual changes only (color, text) |
-      | `requestLayout()` | UI | `onMeasure()`, `onLayout()` | Size/position changes |
-      | `postInvalidate()` | Any | `onDraw()` on UI thread | Updates from background thread |
-      | `forceLayout()` | UI | Marks for layout | Force remeasure on next pass |
-
-      **Best practice:** Use `invalidate()` for visual-only, `requestLayout()` for size changes, `postInvalidate()` from background threads
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-214-0-ru
-    front: "Какие основные методы для перерисовки View в Android и когда использовать каждый?"
-    back: |
-      **Методы перерисовки View:**
-
-      | Метод | Поток | Вызывает | Случай использования |
-      |-------|-------|----------|---------------------|
-      | `invalidate()` | UI | `onDraw()` | Только визуальные изменения (цвет, текст) |
-      | `requestLayout()` | UI | `onMeasure()`, `onLayout()` | Изменения размера/позиции |
-      | `postInvalidate()` | Любой | `onDraw()` в UI потоке | Обновления из фонового потока |
-      | `forceLayout()` | UI | Помечает для layout | Принудительный пересчет |
-
-      **Лучшая практика:** `invalidate()` для визуальных изменений, `requestLayout()` для размеров, `postInvalidate()` из фоновых потоков
-    tags:
-      - android_views
-      - difficulty::medium
-
----\
+- slug: android-214-0-en
+  language: en
+  anki_id: 1768399145636
+  synced_at: '2026-01-23T16:45:05.718197'
+- slug: android-214-0-ru
+  language: ru
+  anki_id: 1768399145662
+  synced_at: '2026-01-23T16:45:05.720128'
+---
 # Вопрос (RU)
 > Методы перерисовки `View`
 

@@ -32,22 +32,12 @@ tags:
 anki_cards:
 - slug: lang-044-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - data-structures
-  - hash-tables
+  anki_id: 1768326294581
+  synced_at: '2026-01-23T17:03:51.643078'
 - slug: lang-044-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - data-structures
-  - hash-tables
+  anki_id: 1768326294605
+  synced_at: '2026-01-23T17:03:51.643874'
 ---
 # Вопрос (RU)
 > Как работает `HashMap`?

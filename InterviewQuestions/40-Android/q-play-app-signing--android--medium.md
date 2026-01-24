@@ -1,72 +1,53 @@
 ---
 id: android-302
 anki_cards:
-  - slug: android-302-0-en
-    front: "What is Play App Signing and how does the two-key system work?"
-    back: |
-      **Play App Signing**: Google service managing app signing keys securely.
-
-      **Two-key system:**
-      - **App Signing Key** - stored by Google, signs distributed APKs
-      - **Upload Key** - stored by developer, signs uploads to Play Console
-
-      **Flow:**
-      ```
-      Developer -> sign with upload key -> Play Console
-                                              |
-                   Google verifies -> signs with app signing key
-                                              |
-                                    Distribution to users
-      ```
-
-      **Benefits:**
-      - Upload key can be reset if compromised
-      - Required for AAB publishing (since Aug 2021)
-      - Reduces app size 15-35% via split APKs
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-302-0-ru
-    front: "Что такое Play App Signing и как работает система двух ключей?"
-    back: |
-      **Play App Signing**: сервис Google для безопасного управления ключами подписи.
-
-      **Система двух ключей:**
-      - **App Signing Key** - хранится в Google, подписывает APK для пользователей
-      - **Upload Key** - хранится у разработчика, подписывает загрузки в Play Console
-
-      **Процесс:**
-      ```
-      Разработчик -> подпись upload key -> Play Console
-                                              |
-                   Google верифицирует -> подписывает app signing key
-                                              |
-                                    Распространение пользователям
-      ```
-
-      **Преимущества:**
-      - Upload key можно сбросить при компрометации
-      - Обязателен для AAB (с августа 2021)
-      - Уменьшает размер на 15-35% через split APKs
-    tags:
-      - android_general
-      - difficulty::medium
-title: "Play App Signing / Подписание приложений Play"
-aliases: ["App Signing Key", "Play App Signing", "Upload Key", "Подписание приложений Play"]
+- slug: android-302-0-en
+  language: en
+  anki_id: 1768413943143
+  synced_at: '2026-01-23T16:45:06.072448'
+- slug: android-302-0-ru
+  language: ru
+  anki_id: 1768413943166
+  synced_at: '2026-01-23T16:45:06.073630'
+title: Play App Signing / Подписание приложений Play
+aliases:
+- App Signing Key
+- Play App Signing
+- Upload Key
+- Подписание приложений Play
 topic: android
-subtopics: [app-bundle, keystore-crypto, play-console]
+subtopics:
+- app-bundle
+- keystore-crypto
+- play-console
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-keystore, c-app-bundle, q-android-app-bundles--android--easy, q-android-release-pipeline-cicd--android--hard, q-android-security-best-practices--android--medium]
+related:
+- c-android-keystore
+- c-app-bundle
+- q-android-app-bundles--android--easy
+- q-android-release-pipeline-cicd--android--hard
+- q-android-security-best-practices--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/app-bundle, android/keystore-crypto, android/play-console, difficulty/medium, play-app-signing, security, signing]
-sources: ["https://developer.android.com/studio/publish/app-signing#app-signing-google-play", "https://support.google.com/googleplay/android-developer/answer/9842756"]
----\
+tags:
+- android/app-bundle
+- android/keystore-crypto
+- android/play-console
+- difficulty/medium
+- play-app-signing
+- security
+- signing
+sources:
+- https://developer.android.com/studio/publish/app-signing#app-signing-google-play
+- https://support.google.com/googleplay/android-developer/answer/9842756
+---
 # Вопрос (RU)
 
 > Что такое Play App Signing и как он работает?

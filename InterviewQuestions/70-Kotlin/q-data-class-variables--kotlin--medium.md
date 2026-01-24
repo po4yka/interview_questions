@@ -124,16 +124,12 @@ tags:
 anki_cards:
 - slug: q-data-class-variables--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280905
+  synced_at: '2026-01-23T17:03:50.597745'
 - slug: q-data-class-variables--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280930
+  synced_at: '2026-01-23T17:03:50.599472'
 ---
 # Вопрос (RU)
 > Какие переменные можно использовать в data class в Kotlin?

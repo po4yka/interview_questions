@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-internal-modifier--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290882
+  synced_at: '2026-01-23T17:03:51.475645'
 - slug: q-kotlin-internal-modifier--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290907
+  synced_at: '2026-01-23T17:03:51.476791'
 ---
 ## Дополнительные Вопросы (RU)
 

@@ -31,11 +31,11 @@ anki_cards:
 - slug: android-465-0-en
   language: en
   anki_id: 1768366561476
-  synced_at: '2026-01-14T09:17:53.688819'
+  synced_at: '2026-01-23T16:45:06.283502'
 - slug: android-465-0-ru
   language: ru
   anki_id: 1768366561501
-  synced_at: '2026-01-14T09:17:53.691148'
+  synced_at: '2026-01-23T16:45:06.284239'
 sources:
 - https://dagger.dev/api/latest/dagger/Component.html
 ---

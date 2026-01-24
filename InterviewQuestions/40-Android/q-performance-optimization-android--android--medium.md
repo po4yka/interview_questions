@@ -1,57 +1,54 @@
----\
+---
 id: android-136
 anki_cards:
-  - slug: android-136-0-en
-    front: "What are the main areas of Android performance optimization?"
-    back: |
-      **7 key areas:**
-
-      1. **Startup** - lazy init, App Startup library, Baseline Profiles
-      2. **UI/Rendering** - flat layouts, ViewStub, 60 FPS target
-      3. **RecyclerView** - DiffUtil, stable IDs, prefetch
-      4. **Memory** - bitmap sampling, SparseArray, LeakCanary
-      5. **Network** - offline-first, OkHttp cache, pagination
-      6. **Battery** - WorkManager with constraints, location intervals
-      7. **Build** - R8 shrinking, ABI splits, App Bundle
-
-      **Targets:** Cold start <1s, 60 FPS, minimal APK size
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-136-0-ru
-    front: "Какие основные области оптимизации производительности Android?"
-    back: |
-      **7 ключевых областей:**
-
-      1. **Запуск** - lazy init, App Startup library, Baseline Profiles
-      2. **UI/Рендеринг** - плоские layouts, ViewStub, цель 60 FPS
-      3. **RecyclerView** - DiffUtil, stable IDs, prefetch
-      4. **Память** - bitmap sampling, SparseArray, LeakCanary
-      5. **Сеть** - offline-first, OkHttp cache, пагинация
-      6. **Батарея** - WorkManager с constraints, интервалы location
-      7. **Сборка** - R8 shrinking, ABI splits, App Bundle
-
-      **Цели:** Cold start <1с, 60 FPS, минимальный размер APK
-    tags:
-      - android_general
-      - difficulty::medium
+- slug: android-136-0-en
+  language: en
+  anki_id: 1768419388213
+  synced_at: '2026-01-23T16:45:05.331131'
+- slug: android-136-0-ru
+  language: ru
+  anki_id: 1768419388312
+  synced_at: '2026-01-23T16:45:05.333008'
 title: Performance Optimization Android / Performance Оптимизация Android
-aliases: [Performance Optimization Android, Performance Оптимизация Android]
+aliases:
+- Performance Optimization Android
+- Performance Оптимизация Android
 topic: android
-subtopics: [performance-battery, performance-memory, performance-rendering]
+subtopics:
+- performance-battery
+- performance-memory
+- performance-rendering
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-memory-management, c-performance, c-power-profiling, q-android-build-optimization--android--medium, q-baseline-profiles-android--android--medium, q-notification-channels-android--android--medium, q-optimize-memory-usage-android--android--medium, q-parsing-optimization-android--android--medium]
+related:
+- c-memory-management
+- c-performance
+- c-power-profiling
+- q-android-build-optimization--android--medium
+- q-baseline-profiles-android--android--medium
+- q-notification-channels-android--android--medium
+- q-optimize-memory-usage-android--android--medium
+- q-parsing-optimization-android--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/performance-battery, android/performance-memory, android/performance-rendering, checklist, difficulty/medium, optimization, performance, performance-memory, performance-rendering]
-
----\
+tags:
+- android/performance-battery
+- android/performance-memory
+- android/performance-rendering
+- checklist
+- difficulty/medium
+- optimization
+- performance
+- performance-memory
+- performance-rendering
+---
 # Вопрос (RU)
 
 > Каков комплексный подход к оптимизации производительности Android-приложения? На какие ключевые области сосредоточиться?

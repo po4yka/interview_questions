@@ -1,71 +1,41 @@
----\
+---
 id: android-163
-title: "How To Register Broadcastreceiver To Receive Messages / Как зарегистрировать BroadcastReceiver для получения сообщений"
-aliases: ["How To Register BroadcastReceiver", "Как зарегистрировать BroadcastReceiver"]
+title: How To Register Broadcastreceiver To Receive Messages / Как зарегистрировать
+  BroadcastReceiver для получения сообщений
+aliases:
+- How To Register BroadcastReceiver
+- Как зарегистрировать BroadcastReceiver
 topic: android
-subtopics: [broadcast-receiver]
+subtopics:
+- broadcast-receiver
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-broadcast-receiver, q-what-is-broadcastreceiver--android--easy]
+related:
+- c-broadcast-receiver
+- q-what-is-broadcastreceiver--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/broadcast-receiver, difficulty/medium]
+tags:
+- android
+- android/broadcast-receiver
+- difficulty/medium
 sources: []
 anki_cards:
-  - slug: android-163-0-en
-    front: "How to register a BroadcastReceiver in Android?"
-    back: |
-      **Dynamic (runtime):**
-      ```kotlin
-      registerReceiver(receiver, IntentFilter("action"),
-          RECEIVER_NOT_EXPORTED) // API 33+
-      unregisterReceiver(receiver) // in onStop
-      ```
-
-      **Static (manifest):**
-      ```xml
-      <receiver android:name=".BootReceiver"
-          android:exported="false">
-          <intent-filter>
-              <action android:name="android.intent.action.BOOT_COMPLETED"/>
-          </intent-filter>
-      </receiver>
-      ```
-
-      **Dynamic:** Lives with component. **Static:** Survives process death
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-163-0-ru
-    front: "Как зарегистрировать BroadcastReceiver в Android?"
-    back: |
-      **Динамическая (runtime):**
-      ```kotlin
-      registerReceiver(receiver, IntentFilter("action"),
-          RECEIVER_NOT_EXPORTED) // API 33+
-      unregisterReceiver(receiver) // в onStop
-      ```
-
-      **Статическая (manifest):**
-      ```xml
-      <receiver android:name=".BootReceiver"
-          android:exported="false">
-          <intent-filter>
-              <action android:name="android.intent.action.BOOT_COMPLETED"/>
-          </intent-filter>
-      </receiver>
-      ```
-
-      **Динамическая:** Живёт с компонентом. **Статическая:** Переживает смерть процесса
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-163-0-en
+  language: en
+  anki_id: 1768381018656
+  synced_at: '2026-01-23T16:45:05.489139'
+- slug: android-163-0-ru
+  language: ru
+  anki_id: 1768381018680
+  synced_at: '2026-01-23T16:45:05.491330'
+---
 # Вопрос (RU)
 
 > Как зарегистрировать `BroadcastReceiver` для получения сообщений?

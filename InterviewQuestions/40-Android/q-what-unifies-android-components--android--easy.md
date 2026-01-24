@@ -1,64 +1,47 @@
----\
+---
 id: android-209
 title: Unified Android Components / Объединение компонентов Android
-aliases: [Unified Components, Объединение компонентов]
+aliases:
+- Unified Components
+- Объединение компонентов
 topic: android
-subtopics: [activity, fragment, service]
+subtopics:
+- activity
+- fragment
+- service
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, c-intent, c-lifecycle, q-android-components-besides-activity--android--easy, q-main-android-components--android--easy, q-what-unites-the-main-components-of-an-android-application--android--medium]
+related:
+- c-android-components
+- c-intent
+- c-lifecycle
+- q-android-components-besides-activity--android--easy
+- q-main-android-components--android--easy
+- q-what-unites-the-main-components-of-an-android-application--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/fragment, android/intent, android/service, difficulty/easy]
+tags:
+- android/activity
+- android/fragment
+- android/intent
+- android/service
+- difficulty/easy
 anki_cards:
-  - slug: android-209-0-en
-    front: "What are the three things that unify Android application components?"
-    back: |
-      **Three unifying aspects:**
-
-      1. **Context** - All components work with `Context` for resources and system services
-         - Activity/Service extend Context
-         - BroadcastReceiver receives Context in `onReceive()`
-         - Fragment uses `requireContext()`
-
-      2. **AndroidManifest.xml** - Four core components declared here:
-         - Activity, Service, BroadcastReceiver, ContentProvider
-         - Fragment is NOT declared in manifest
-
-      3. **Intent** - Activation mechanism (where applicable):
-         - Start Activity/Service via Intent
-         - Send broadcasts via Intent
-         - ContentProvider uses URI/ContentResolver instead
-    tags:
-      - android_general
-      - difficulty::easy
-  - slug: android-209-0-ru
-    front: "Какие три вещи объединяют компоненты Android-приложения?"
-    back: |
-      **Три объединяющих аспекта:**
-
-      1. **Context** - Все компоненты работают с `Context` для доступа к ресурсам
-         - Activity/Service наследуют Context
-         - BroadcastReceiver получает Context в `onReceive()`
-         - Fragment использует `requireContext()`
-
-      2. **AndroidManifest.xml** - Четыре основных компонента объявляются здесь:
-         - Activity, Service, BroadcastReceiver, ContentProvider
-         - Fragment НЕ объявляется в манифесте
-
-      3. **Intent** - Механизм активации (где применимо):
-         - Запуск Activity/Service через Intent
-         - Отправка broadcasts через Intent
-         - ContentProvider использует URI/ContentResolver
-    tags:
-      - android_general
-      - difficulty::easy
-
----\
+- slug: android-209-0-en
+  language: en
+  anki_id: 1768399145487
+  synced_at: '2026-01-23T16:45:05.703034'
+- slug: android-209-0-ru
+  language: ru
+  anki_id: 1768399145511
+  synced_at: '2026-01-23T16:45:05.704290'
+---
 # Вопрос (RU)
 > Объединение компонентов Android
 

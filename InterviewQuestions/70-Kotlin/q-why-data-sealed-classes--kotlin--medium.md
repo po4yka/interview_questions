@@ -39,22 +39,12 @@ anki_last_sync: '2025-11-26T22:32:40.783101'
 anki_cards:
 - slug: kotlin-226-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - data-classes
-  - sealed-classes
+  anki_id: 1768326295980
+  synced_at: '2026-01-23T17:03:51.699105'
 - slug: kotlin-226-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - data-classes
-  - sealed-classes
+  anki_id: 1768326296006
+  synced_at: '2026-01-23T17:03:51.699927'
 ---
 # Вопрос (RU)
 

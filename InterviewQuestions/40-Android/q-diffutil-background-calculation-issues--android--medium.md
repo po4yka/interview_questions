@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-473-0-en
   language: en
   anki_id: 1768366962980
-  synced_at: '2026-01-14T09:17:53.856971'
+  synced_at: '2026-01-23T16:45:06.401366'
 - slug: android-473-0-ru
   language: ru
   anki_id: 1768366963005
-  synced_at: '2026-01-14T09:17:53.859701'
+  synced_at: '2026-01-23T16:45:06.403451'
 sources:
 - https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
 ---

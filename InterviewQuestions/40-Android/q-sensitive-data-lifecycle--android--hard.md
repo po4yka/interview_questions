@@ -1,64 +1,55 @@
 ---
-id: android-718
-anki_cards:
-  - slug: android-637-0-en
-    front: "How should sensitive data be managed throughout its lifecycle in Android?"
-    back: |
-      **Data classification**: Identify sensitivity levels (PII, credentials, financial).
-
-      **Encryption at rest**:
-      - Use `EncryptedSharedPreferences` for key-value data
-      - Use `EncryptedFile` for file storage
-      - SQLCipher for Room databases
-
-      **Encryption in transit**: TLS 1.2+, certificate pinning.
-
-      **Secure deletion**:
-      - Overwrite memory with zeros before releasing
-      - Use crypto-shredding (delete encryption key)
-      - Clear arrays: `Arrays.fill(charArray, '\u0000')`
-    tags: ["android_storage", "difficulty::hard"]
-  - slug: android-637-0-ru
-    front: "Как следует управлять чувствительными данными на протяжении их жизненного цикла в Android?"
-    back: |
-      **Классификация данных**: определите уровни чувствительности (персональные данные, учётные данные, финансовые).
-
-      **Шифрование при хранении**:
-      - `EncryptedSharedPreferences` для пар ключ-значение
-      - `EncryptedFile` для файлов
-      - SQLCipher для баз данных Room
-
-      **Шифрование при передаче**: TLS 1.2+, закрепление сертификатов.
-
-      **Безопасное удаление**:
-      - Перезаписывать память нулями перед освобождением
-      - Криптошрединг (удаление ключа шифрования)
-      - Очистка массивов: `Arrays.fill(charArray, '\u0000')`
-    tags: ["android_storage", "difficulty::hard"]
 id: android-637
+anki_cards:
+- slug: android-637-0-en
+  language: en
+  anki_id: 1768447067959
+  synced_at: '2026-01-23T16:45:06.029527'
+- slug: android-637-0-ru
+  language: ru
+  anki_id: 1768447067981
+  synced_at: '2026-01-23T16:45:06.030637'
+- slug: android-718-0-en
+  language: en
+- slug: android-718-0-ru
+  language: ru
 title: Sensitive Data Lifecycle / Жизненный цикл чувствительных данных
-aliases: [Sensitive Data Lifecycle, Жизненный цикл чувствительных данных]
+aliases:
+- Sensitive Data Lifecycle
+- Жизненный цикл чувствительных данных
 topic: android
-subtopics: [keystore-crypto, privacy-sdks]
+subtopics:
+- keystore-crypto
+- privacy-sdks
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-keystore, q-android-security-best-practices--android--medium, q-data-sync-unstable-network--android--hard, q-save-data-outside-fragment--android--medium, q-what-is-data-binding--android--easy]
+related:
+- c-android-keystore
+- q-android-security-best-practices--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-save-data-outside-fragment--android--medium
+- q-what-is-data-binding--android--easy
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/keystore-crypto, android/privacy-sdks, data-lifecycle, difficulty/hard]
+tags:
+- android/keystore-crypto
+- android/privacy-sdks
+- data-lifecycle
+- difficulty/hard
 sources:
-- url: "https://developer.android.com/topic/security/data"
+- url: https://developer.android.com/topic/security/data
   note: Protecting user data guide
-- url: "https://developer.android.com/topic/security/best-practices"
+- url: https://developer.android.com/topic/security/best-practices
   note: Android security best practices
-- url: "https://owasp.org/www-project-mobile-security-testing-guide/"
+- url: https://owasp.org/www-project-mobile-security-testing-guide/
   note: OWASP MSTG data storage/testing guidance
-
----\
+---
 # Вопрос (RU)
 > Как построить систему управления жизненным циклом чувствительных данных в Android: классификация, минимизация, шифрование, контролируемое кеширование, безопасное удаление и аудит?
 

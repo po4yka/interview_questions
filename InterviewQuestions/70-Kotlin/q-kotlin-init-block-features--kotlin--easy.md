@@ -32,20 +32,12 @@ tags:
 anki_cards:
 - slug: lang-033-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - initialization
-  - type-system
+  anki_id: 1768326296382
+  synced_at: '2026-01-23T17:03:51.717908'
 - slug: lang-033-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - initialization
-  - type-system
+  anki_id: 1768326296407
+  synced_at: '2026-01-23T17:03:51.718704'
 ---
 # Вопрос (RU)
 > Есть какие-то особенности использования `init` блока?

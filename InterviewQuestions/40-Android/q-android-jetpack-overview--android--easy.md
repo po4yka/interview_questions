@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-103-0-en
   language: en
   anki_id: 1768363502647
-  synced_at: '2026-01-14T09:17:53.759105'
+  synced_at: '2026-01-23T16:45:06.323678'
 - slug: android-103-0-ru
   language: ru
   anki_id: 1768363502671
-  synced_at: '2026-01-14T09:17:53.761898'
+  synced_at: '2026-01-23T16:45:06.324538'
 ---
 # Вопрос (RU)
 > Что такое Android Jetpack и какие его основные компоненты?

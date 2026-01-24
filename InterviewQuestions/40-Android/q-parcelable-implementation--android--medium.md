@@ -1,69 +1,53 @@
----\
+---
 id: android-101
 anki_cards:
-  - slug: android-101-0-en
-    front: "What is Parcelable and when should you use it?"
-    back: |
-      **Parcelable** - Android interface for efficient object serialization.
-
-      **Use for:**
-      - Passing data via Intent between Activities
-      - Fragment arguments
-      - `onSaveInstanceState`
-      - IPC (AIDL, Messenger)
-
-      **Key points:**
-      - Faster than Serializable (no reflection)
-      - Use `@Parcelize` annotation
-      - ~1MB Binder transaction limit
-
-      ```kotlin
-      @Parcelize
-      data class User(val id: Int, val name: String) : Parcelable
-      ```
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-101-0-ru
-    front: "Что такое Parcelable и когда его использовать?"
-    back: |
-      **Parcelable** - Android интерфейс для эффективной сериализации объектов.
-
-      **Используется для:**
-      - Передачи данных через Intent между Activity
-      - Аргументов Fragment
-      - `onSaveInstanceState`
-      - IPC (AIDL, Messenger)
-
-      **Ключевые моменты:**
-      - Быстрее Serializable (без рефлексии)
-      - Используйте аннотацию `@Parcelize`
-      - Лимит транзакции Binder ~1MB
-
-      ```kotlin
-      @Parcelize
-      data class User(val id: Int, val name: String) : Parcelable
-      ```
-    tags:
-      - android_general
-      - difficulty::medium
-title: "Parcelable Implementation / Реализация Parcelable"
-aliases: [Android Parcelable, Parcelable, Parcelable Implementation, Реализация Parcelable]
+- slug: android-101-0-en
+  language: en
+  anki_id: 1768419426543
+  synced_at: '2026-01-23T16:45:06.297751'
+- slug: android-101-0-ru
+  language: ru
+  anki_id: 1768419426575
+  synced_at: '2026-01-23T16:45:06.298693'
+title: Parcelable Implementation / Реализация Parcelable
+aliases:
+- Android Parcelable
+- Parcelable
+- Parcelable Implementation
+- Реализация Parcelable
 topic: android
-subtopics: [intents-deeplinks, performance-memory, serialization]
+subtopics:
+- intents-deeplinks
+- performance-memory
+- serialization
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, c-service, q-bundle-data-types--android--medium, q-how-to-pass-parameters-to-fragment--android--easy, q-what-are-intents-for--android--medium]
+related:
+- c-activity
+- c-service
+- q-bundle-data-types--android--medium
+- q-how-to-pass-parameters-to-fragment--android--easy
+- q-what-are-intents-for--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/intents-deeplinks, android/performance-memory, android/serialization, bundle, difficulty/medium, ipc, parcelable]
-sources: ["https://developer.android.com/reference/android/os/Parcelable", "https://kotlinlang.org/docs/compiler-plugins.html#parcelable-implementations-generator"]
-
----\
+tags:
+- android/intents-deeplinks
+- android/performance-memory
+- android/serialization
+- bundle
+- difficulty/medium
+- ipc
+- parcelable
+sources:
+- https://developer.android.com/reference/android/os/Parcelable
+- https://kotlinlang.org/docs/compiler-plugins.html#parcelable-implementations-generator
+---
 # Вопрос (RU)
 
 > Что вы знаете о `Parcelable`?

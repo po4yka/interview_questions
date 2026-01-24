@@ -1,59 +1,57 @@
 ---
 id: android-211
 anki_cards:
-  - slug: android-211-0-en
-    front: "How do you detect and fix jank in Jetpack Compose apps?"
-    back: |
-      **Jank**: UI stuttering when frame misses deadline (>16ms at 60Hz).
-
-      **Detection tools:**
-      - **Layout Inspector** - highlight recompositions
-      - **Composition Tracing** - profiler system trace
-      - **Macrobenchmark** - P50/P90/P99 frame timing
-      - **FrameMetrics API** - runtime monitoring
-
-      **Optimization:**
-      - `remember(key)` - cache expensive computations
-      - `derivedStateOf` - reduce recomposition scope
-      - `@Stable/@Immutable` - help skip unchanged composables
-      - `LazyColumn` keys - preserve item identity
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-211-0-ru
-    front: "Как обнаружить и устранить jank в Jetpack Compose приложениях?"
-    back: |
-      **Jank**: замирания UI когда кадр не укладывается в дедлайн (>16мс при 60Hz).
-
-      **Инструменты обнаружения:**
-      - **Layout Inspector** - подсветка recomposition
-      - **Composition Tracing** - system trace в профайлере
-      - **Macrobenchmark** - P50/P90/P99 frame timing
-      - **FrameMetrics API** - runtime мониторинг
-
-      **Оптимизация:**
-      - `remember(key)` - кэширование вычислений
-      - `derivedStateOf` - сужение scope recomposition
-      - `@Stable/@Immutable` - помощь в пропуске composables
-      - `LazyColumn` keys - сохранение идентичности элементов
-    tags:
-      - android_compose
-      - difficulty::medium
-title: "Performance Monitoring Jank Compose / Мониторинг производительности и джанка в Compose"
-aliases: [Compose Performance, Jank Detection, Performance Monitoring Jank Compose, Мониторинг производительности и джанка в Compose]
+- slug: android-211-0-en
+  language: en
+  anki_id: 1768413934444
+  synced_at: '2026-01-23T16:45:05.708305'
+- slug: android-211-0-ru
+  language: ru
+  anki_id: 1768413934468
+  synced_at: '2026-01-23T16:45:05.711824'
+title: Performance Monitoring Jank Compose / Мониторинг производительности и джанка
+  в Compose
+aliases:
+- Compose Performance
+- Jank Detection
+- Performance Monitoring Jank Compose
+- Мониторинг производительности и джанка в Compose
 topic: android
-subtopics: [performance-rendering, profiling, ui-compose]
+subtopics:
+- performance-rendering
+- profiling
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-jetpack-compose, c-perfetto, c-performance-optimization, c-power-profiling, c-recomposition, q-compose-lazy-layout-optimization--android--hard, q-compose-performance-optimization--android--hard]
+related:
+- c-compose-recomposition
+- c-jetpack-compose
+- c-perfetto
+- c-performance-optimization
+- c-power-profiling
+- c-recomposition
+- q-compose-lazy-layout-optimization--android--hard
+- q-compose-performance-optimization--android--hard
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/performance-rendering, android/profiling, android/ui-compose, difficulty/medium, jank, optimization, performance, recomposition]
-sources: [https://developer.android.com/jetpack/compose/performance, https://developer.android.com/topic/performance/vitals/render]
+tags:
+- android/performance-rendering
+- android/profiling
+- android/ui-compose
+- difficulty/medium
+- jank
+- optimization
+- performance
+- recomposition
+sources:
+- https://developer.android.com/jetpack/compose/performance
+- https://developer.android.com/topic/performance/vitals/render
 ---
 # Вопрос (RU)
 

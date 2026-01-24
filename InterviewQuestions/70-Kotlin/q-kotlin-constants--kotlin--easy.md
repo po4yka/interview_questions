@@ -25,16 +25,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-constants--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286406
+  synced_at: '2026-01-23T17:03:51.113743'
 - slug: q-kotlin-constants--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286431
+  synced_at: '2026-01-23T17:03:51.114929'
 ---
 # Вопрос (RU)
 > Что такое константы и можно ли их изменять?

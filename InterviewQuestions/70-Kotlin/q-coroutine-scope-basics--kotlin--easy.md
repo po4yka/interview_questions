@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-scope-basics--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290981
+  synced_at: '2026-01-23T17:03:51.480466'
 - slug: q-coroutine-scope-basics--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291006
+  synced_at: '2026-01-23T17:03:51.483013'
 ---
 # Question (EN)
 > Basic question about `CoroutineScope` in Kotlin (based on topic 140030)

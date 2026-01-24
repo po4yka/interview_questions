@@ -1,68 +1,54 @@
 ---
 id: android-245
-title: How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно
-aliases: [Display Two Identical Fragments, Multiple Fragment Instances, Два одинаковых фрагмента, Несколько экземпляров Fragment]
+title: How To Display Two Identical Fragments On The Screen At The Same Time / Как
+  отобразить два одинаковых Fragment на экране одновременно
+aliases:
+- Display Two Identical Fragments
+- Multiple Fragment Instances
+- Два одинаковых фрагмента
+- Несколько экземпляров Fragment
 topic: android
-subtopics: [fragment, ui-views]
+subtopics:
+- fragment
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-fragments, c-lifecycle, c-recomposition, c-wear-compose, q-dagger-build-time-optimization--android--medium, q-fragment-basics--android--easy, q-how-to-choose-layout-for-fragment--android--easy, q-save-data-outside-fragment--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-why-use-fragments-when-we-have-activities--android--medium]
+related:
+- c-compose-recomposition
+- c-fragments
+- c-lifecycle
+- c-recomposition
+- c-wear-compose
+- q-dagger-build-time-optimization--android--medium
+- q-fragment-basics--android--easy
+- q-how-to-choose-layout-for-fragment--android--easy
+- q-save-data-outside-fragment--android--medium
+- q-why-are-fragments-needed-if-there-is-activity--android--hard
+- q-why-use-fragments-when-we-have-activities--android--medium
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [android/fragment, android/ui-views, difficulty/easy, fragments, ui]
+tags:
+- android/fragment
+- android/ui-views
+- difficulty/easy
+- fragments
+- ui
 anki_cards:
-  - slug: android-245-0-en
-    front: "How to display two identical fragments on the screen at the same time?"
-    back: |
-      Add **two separate instances** of the same Fragment class to different containers.
-
-      **Key steps**:
-      1. Create layout with two `FrameLayout` containers
-      2. Use `newInstance()` factory method for each fragment
-      3. Add with unique tags in `FragmentTransaction`
-
-      ```kotlin
-      if (savedInstanceState == null) {
-          supportFragmentManager.beginTransaction()
-              .add(R.id.container_1, MyFragment.newInstance("A"), "frag_1")
-              .add(R.id.container_2, MyFragment.newInstance("B"), "frag_2")
-              .commit()
-      }
-      ```
-
-      **Key rule**: One Fragment instance per container. Never reuse the same object.
-    tags:
-      - android_fragments
-      - difficulty::easy
-  - slug: android-245-0-ru
-    front: "Как отобразить два одинаковых Fragment на экране одновременно?"
-    back: |
-      Добавьте **два отдельных экземпляра** одного класса Fragment в разные контейнеры.
-
-      **Ключевые шаги**:
-      1. Создайте макет с двумя `FrameLayout` контейнерами
-      2. Используйте factory-метод `newInstance()` для каждого фрагмента
-      3. Добавляйте с уникальными тегами в `FragmentTransaction`
-
-      ```kotlin
-      if (savedInstanceState == null) {
-          supportFragmentManager.beginTransaction()
-              .add(R.id.container_1, MyFragment.newInstance("A"), "frag_1")
-              .add(R.id.container_2, MyFragment.newInstance("B"), "frag_2")
-              .commit()
-      }
-      ```
-
-      **Ключевое правило**: один экземпляр Fragment на контейнер. Никогда не переиспользуйте один объект.
-    tags:
-      - android_fragments
-      - difficulty::easy
-
+- slug: android-245-0-en
+  language: en
+  anki_id: 1768379208949
+  synced_at: '2026-01-23T16:45:05.857483'
+- slug: android-245-0-ru
+  language: ru
+  anki_id: 1768379208972
+  synced_at: '2026-01-23T16:45:05.858643'
 ---
 # Вопрос (RU)
 

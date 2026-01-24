@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-performance--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289681
+  synced_at: '2026-01-23T17:03:51.375504'
 - slug: q-flow-performance--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289705
+  synced_at: '2026-01-23T17:03:51.377045'
 ---
 # Question (EN)
 > Kotlin Coroutines advanced topic 140023

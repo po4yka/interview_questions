@@ -29,20 +29,12 @@ tags:
 anki_cards:
 - slug: kotlin-174-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - type-system
+  anki_id: 1768326285306
+  synced_at: '2026-01-23T17:03:50.983596'
 - slug: kotlin-174-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - type-system
+  anki_id: 1768326285332
+  synced_at: '2026-01-23T17:03:50.985142'
 ---
 # Вопрос (RU)
 > Какие виды дженериков существуют в Kotlin и Java?

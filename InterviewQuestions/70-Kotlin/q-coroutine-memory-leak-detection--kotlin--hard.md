@@ -36,18 +36,12 @@ tags:
 anki_cards:
 - slug: kotlin-131-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
+  anki_id: 1768326295081
+  synced_at: '2026-01-23T17:03:51.663911'
 - slug: kotlin-131-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
+  anki_id: 1768326295107
+  synced_at: '2026-01-23T17:03:51.664897'
 ---
 # Вопрос (RU)
 

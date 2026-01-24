@@ -39,22 +39,12 @@ subtopics:
 anki_cards:
 - slug: q-continuation-cps-internals--kotlin--hard-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - continuation
-  - coroutines
-  - state-machine
+  anki_id: 1768326292231
+  synced_at: '2026-01-23T17:03:51.544055'
 - slug: q-continuation-cps-internals--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - continuation
-  - coroutines
-  - state-machine
+  anki_id: 1768326292256
+  synced_at: '2026-01-23T17:03:51.544976'
 ---
 # Вопрос (RU)
 > Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?

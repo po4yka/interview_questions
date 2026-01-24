@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-channels-vs-flow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294631
+  synced_at: '2026-01-23T17:03:51.644607'
 - slug: q-channels-vs-flow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294655
+  synced_at: '2026-01-23T17:03:51.645404'
 ---
 # Question (EN)
 > When should you use Channels vs `Flow`? Implement a buffered channel with different capacity strategies and explain their behavior.

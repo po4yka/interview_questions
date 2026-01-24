@@ -1,69 +1,47 @@
----\
+---
 id: android-018
-title: "Multi-module Architecture Best Practices / Лучшие практики мульти-модульной архитектуры"
-aliases: ["Multi-module Architecture", "Мульти-модульная архитектура"]
+title: Multi-module Architecture Best Practices / Лучшие практики мульти-модульной
+  архитектуры
+aliases:
+- Multi-module Architecture
+- Мульти-модульная архитектура
 topic: android
-subtopics: [architecture-clean, architecture-modularization, gradle]
+subtopics:
+- architecture-clean
+- architecture-modularization
+- gradle
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-sources: ["https://github.com/amitshekhariitbhu/android-interview-questions"]
+language_tags:
+- en
+- ru
+sources:
+- https://github.com/amitshekhariitbhu/android-interview-questions
 status: draft
 moc: moc-android
-related: [c-gradle, c-modularization, q-android-jetpack-overview--android--easy, q-how-compose-draws-on-screen--android--hard]
+related:
+- c-gradle
+- c-modularization
+- q-android-jetpack-overview--android--easy
+- q-how-compose-draws-on-screen--android--hard
 created: 2025-10-06
 updated: 2025-11-10
-tags: [android/architecture-clean, android/architecture-modularization, android/gradle, difficulty/hard]
+tags:
+- android/architecture-clean
+- android/architecture-modularization
+- android/gradle
+- difficulty/hard
 anki_cards:
-  - slug: android-018-0-en
-    front: "What are the key rules for multi-module architecture in Android?"
-    back: |
-      **Module types**: app, feature, core, data
-
-      **Critical rule**: Features do NOT depend on each other directly.
-
-      ```text
-      :feature:auth -> :core:ui, :data:user  (OK)
-      :feature:auth -> :feature:profile      (BAD)
-      ```
-
-      **Communication**: via dependency inversion (interfaces in core, implementations in app)
-
-      **Best practices**:
-      - Convention plugins for Gradle config
-      - Version catalogs for dependencies
-      - `implementation` over `api` to hide transitives
-
-      **When to use**: 5+ devs, 50K+ LOC, shared code, long builds
-    tags:
-      - android_architecture
-      - difficulty::hard
-  - slug: android-018-0-ru
-    front: "Какие ключевые правила мульти-модульной архитектуры в Android?"
-    back: |
-      **Типы модулей**: app, feature, core, data
-
-      **Критическое правило**: Features НЕ зависят друг от друга напрямую.
-
-      ```text
-      :feature:auth -> :core:ui, :data:user  (OK)
-      :feature:auth -> :feature:profile      (ПЛОХО)
-      ```
-
-      **Коммуникация**: через инверсию зависимостей (интерфейсы в core, реализации в app)
-
-      **Лучшие практики**:
-      - Convention plugins для конфигурации Gradle
-      - Version catalogs для зависимостей
-      - `implementation` вместо `api` для сокрытия транзитивных
-
-      **Когда использовать**: 5+ разработчиков, 50K+ строк, общий код, долгие сборки
-    tags:
-      - android_architecture
-      - difficulty::hard
-
----\
+- slug: android-018-0-en
+  language: en
+  anki_id: 1768379581250
+  synced_at: '2026-01-23T16:45:05.476759'
+- slug: android-018-0-ru
+  language: ru
+  anki_id: 1768379581273
+  synced_at: '2026-01-23T16:45:05.478354'
+---
 # Вопрос (RU)
 > Какие лучшие практики для мульти-модульной архитектуры в Android? Когда и зачем её использовать?
 

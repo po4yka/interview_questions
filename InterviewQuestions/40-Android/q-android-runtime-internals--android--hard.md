@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-107-0-en
   language: en
   anki_id: 1768363503096
-  synced_at: '2026-01-14T09:17:53.821229'
+  synced_at: '2026-01-23T16:45:06.368558'
 - slug: android-107-0-ru
   language: ru
   anki_id: 1768363503122
-  synced_at: '2026-01-14T09:17:53.823919'
+  synced_at: '2026-01-23T16:45:06.369369'
 ---
 # Вопрос (RU)
 > Как устроено внутреннее функционирование Android Runtime (ART)?

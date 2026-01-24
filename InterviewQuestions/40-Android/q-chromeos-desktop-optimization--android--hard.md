@@ -42,11 +42,11 @@ anki_cards:
 - slug: android-633-0-en
   language: en
   anki_id: 1768365309625
-  synced_at: '2026-01-14T09:17:53.577759'
+  synced_at: '2026-01-23T16:45:06.188488'
 - slug: android-633-0-ru
   language: ru
   anki_id: 1768365309648
-  synced_at: '2026-01-14T09:17:53.580844'
+  synced_at: '2026-01-23T16:45:06.189170'
 ---
 # Вопрос (RU)
 > Как адаптировать Android-приложение для ChromeOS/Desktop: поддержать resizeable окна, клавиатуру/мышь, drag-and-drop, файловые диалоги и Play Games on PC требования?

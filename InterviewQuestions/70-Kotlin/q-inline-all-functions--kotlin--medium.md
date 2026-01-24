@@ -36,16 +36,12 @@ tags:
 anki_cards:
 - slug: q-inline-all-functions--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287956
+  synced_at: '2026-01-23T17:03:51.247601'
 - slug: q-inline-all-functions--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287981
+  synced_at: '2026-01-23T17:03:51.249385'
 ---
 # Вопрос (RU)
 > Можно ли на уровне компилятора сделать все функции inline?

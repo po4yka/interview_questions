@@ -2,18 +2,13 @@
 anki_cards:
 - slug: q-kotlin-scope-functions-advanced--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284055
+  synced_at: '2026-01-23T17:03:50.842993'
 - slug: q-kotlin-scope-functions-advanced--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284081
+  synced_at: '2026-01-23T17:03:50.845179'
 ---
-
 ---
 ---
 ---\

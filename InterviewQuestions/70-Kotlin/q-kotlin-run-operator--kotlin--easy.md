@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-run-operator--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287105
+  synced_at: '2026-01-23T17:03:51.160701'
 - slug: q-kotlin-run-operator--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287130
+  synced_at: '2026-01-23T17:03:51.162505'
 ---
 # Question (EN)
 > Which operator in Kotlin executes a block of code and returns its value?

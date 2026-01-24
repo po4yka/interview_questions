@@ -1,59 +1,42 @@
 ---
 id: android-352
-title: How To Catch The Earliest Entry Point Into The Application / Как поймать самую раннюю точку входа в приложение
-aliases: [How To Catch The Earliest Entry Point Into The Application, Как поймать самую раннюю точку входа в приложение]
+title: How To Catch The Earliest Entry Point Into The Application / Как поймать самую
+  раннюю точку входа в приложение
+aliases:
+- How To Catch The Earliest Entry Point Into The Application
+- Как поймать самую раннюю точку входа в приложение
 topic: android
-subtopics: [lifecycle]
+subtopics:
+- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, q-hilt-entry-points--android--medium, q-how-application-priority-is-determined-by-the-system--android--hard, q-jetpack-compose-lazy-column--android--easy, q-retrofit-modify-all-requests--android--hard, q-which-class-to-catch-gestures--android--easy]
+related:
+- c-lifecycle
+- q-hilt-entry-points--android--medium
+- q-how-application-priority-is-determined-by-the-system--android--hard
+- q-jetpack-compose-lazy-column--android--easy
+- q-retrofit-modify-all-requests--android--hard
+- q-which-class-to-catch-gestures--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/lifecycle, difficulty/medium]
+tags:
+- android/lifecycle
+- difficulty/medium
 anki_cards:
-  - slug: android-352-0-en
-    front: "What is the earliest entry point into an Android application?"
-    back: |
-      **Order of execution (earliest to latest):**
-
-      1. **ContentProvider.onCreate()** - even before Application
-         - Includes `InitializationProvider` (App Startup)
-      2. **Application.attachBaseContext()**
-      3. **Application.onCreate()** - standard entry point
-
-      **Standard approach:** Use `Application.onCreate()` for:
-      - Logging (Timber)
-      - Crash reporting (Crashlytics)
-      - DI initialization
-
-      **For earliest:** Use App Startup library with `InitializationProvider`
-    tags:
-      - android_lifecycle
-      - difficulty::medium
-  - slug: android-352-0-ru
-    front: "Какая самая ранняя точка входа в Android приложение?"
-    back: |
-      **Порядок выполнения (от раннего к позднему):**
-
-      1. **ContentProvider.onCreate()** - даже до Application
-         - Включает `InitializationProvider` (App Startup)
-      2. **Application.attachBaseContext()**
-      3. **Application.onCreate()** - стандартная точка входа
-
-      **Стандартный подход:** Используйте `Application.onCreate()` для:
-      - Логирования (Timber)
-      - Crash reporting (Crashlytics)
-      - Инициализации DI
-
-      **Для самой ранней:** Используйте App Startup с `InitializationProvider`
-    tags:
-      - android_lifecycle
-      - difficulty::medium
-
+- slug: android-352-0-en
+  language: en
+  anki_id: 1768378641642
+  synced_at: '2026-01-23T16:45:06.205417'
+- slug: android-352-0-ru
+  language: ru
+  anki_id: 1768378641667
+  synced_at: '2026-01-23T16:45:06.206188'
 ---
 # Вопрос (RU)
 > Как поймать самую раннюю точку входа в приложение

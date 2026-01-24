@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-circuit-breaker-coroutines--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285005
+  synced_at: '2026-01-23T17:03:50.963041'
 - slug: q-circuit-breaker-coroutines--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285030
+  synced_at: '2026-01-23T17:03:50.964309'
 ---
 ## Follow-ups
 

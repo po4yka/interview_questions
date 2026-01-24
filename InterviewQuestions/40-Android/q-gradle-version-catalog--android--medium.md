@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-179-0-en
   language: en
   anki_id: 1768367361232
-  synced_at: '2026-01-14T09:17:53.141265'
+  synced_at: '2026-01-23T16:45:05.570637'
 - slug: android-179-0-ru
   language: ru
   anki_id: 1768367361257
-  synced_at: '2026-01-14T09:17:53.143449'
+  synced_at: '2026-01-23T16:45:05.572178'
 sources:
 - https://developer.android.com/build/migrate-to-catalogs
 - https://docs.gradle.org/current/userguide/platforms.html

@@ -132,16 +132,12 @@ tags:
 anki_cards:
 - slug: q-garbage-collector-basics--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283555
+  synced_at: '2026-01-23T17:03:50.801604'
 - slug: q-garbage-collector-basics--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283280
+  synced_at: '2026-01-23T17:03:50.802909'
 ---
 # Вопрос (RU)
 > Что такое сборщик мусора?

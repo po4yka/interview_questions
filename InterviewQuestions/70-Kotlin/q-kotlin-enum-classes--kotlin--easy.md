@@ -33,20 +33,12 @@ tags:
 anki_cards:
 - slug: kotlin-010-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - enums
-  - types
+  anki_id: 1768326284305
+  synced_at: '2026-01-23T17:03:50.884655'
 - slug: kotlin-010-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - enums
-  - types
+  anki_id: 1768326284330
+  synced_at: '2026-01-23T17:03:50.886659'
 ---
 # Вопрос (RU)
 > Что такое Enum в Kotlin?

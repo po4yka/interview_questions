@@ -32,22 +32,12 @@ tags:
 anki_cards:
 - slug: kotlin-195-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - object-comparison
+  anki_id: 1768326289180
+  synced_at: '2026-01-23T17:03:51.336203'
 - slug: kotlin-195-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - object-comparison
+  anki_id: 1768326289205
+  synced_at: '2026-01-23T17:03:51.338066'
 ---
 # Вопрос (RU)
 > Зачем нужны методы equals() и hashCode() в Kotlin/Java?

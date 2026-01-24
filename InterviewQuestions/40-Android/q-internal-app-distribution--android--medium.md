@@ -1,49 +1,48 @@
----\
+---
 id: android-402
-title: "Internal App Distribution / Внутреннее распространение приложения"
-aliases: [Beta Testing Distribution, Firebase App Distribution, Google Play Internal Testing, Internal App Distribution, Внутреннее распространение приложения]
+title: Internal App Distribution / Внутреннее распространение приложения
+aliases:
+- Beta Testing Distribution
+- Firebase App Distribution
+- Google Play Internal Testing
+- Internal App Distribution
+- Внутреннее распространение приложения
 topic: android
-subtopics: [ci-cd, play-console]
+subtopics:
+- ci-cd
+- play-console
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-gradle, q-android-app-bundles--android--easy]
-sources: ["https://developer.android.com/distribute/best-practices/develop/in-app-review", "https://firebase.google.com/docs/app-distribution"]
+related:
+- c-gradle
+- q-android-app-bundles--android--easy
+sources:
+- https://developer.android.com/distribute/best-practices/develop/in-app-review
+- https://firebase.google.com/docs/app-distribution
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ci-cd, android/play-console, beta-testing, difficulty/medium, firebase]
+tags:
+- android/ci-cd
+- android/play-console
+- beta-testing
+- difficulty/medium
+- firebase
 anki_cards:
-  - slug: android-402-0-en
-    front: "What are the main options for internal app distribution in Android?"
-    back: |
-      **Distribution channels:**
-      1. **Firebase App Distribution** - quick testing, tester groups
-      2. **Google Play Internal Testing** - closed/internal tracks
-      3. **Enterprise MDM** - Samsung Knox, VMware, etc.
-      4. **Direct APK sharing** - manual, requires "unknown sources"
-
-      **For enterprise:** Managed Google Play, MDM solutions
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-402-0-ru
-    front: "Какие основные способы внутреннего распространения приложений Android?"
-    back: |
-      **Каналы распространения:**
-      1. **Firebase App Distribution** - быстрое тестирование, группы тестеров
-      2. **Google Play Internal Testing** - закрытые/внутренние треки
-      3. **Enterprise MDM** - Samsung Knox, VMware и др.
-      4. **Прямая раздача APK** - ручной способ, требует "неизвестные источники"
-
-      **Для энтерпрайза:** Managed Google Play, MDM решения
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-402-0-en
+  language: en
+  anki_id: 1768381812988
+  synced_at: '2026-01-23T16:45:06.341673'
+- slug: android-402-0-ru
+  language: ru
+  anki_id: 1768381813010
+  synced_at: '2026-01-23T16:45:06.342420'
+---
 # Вопрос (RU)
 
 > Объясните стратегии внутреннего распространения приложений для бета-тестирования и QA. Как использовать Firebase App Distribution, Google Play Internal Testing и enterprise инструменты? Каковы best practices для управления группами тестировщиков, сбора feedback и автоматизации распространения?

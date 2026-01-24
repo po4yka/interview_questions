@@ -28,16 +28,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-double-bang-operator--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279906
+  synced_at: '2026-01-23T17:03:50.506350'
 - slug: q-kotlin-double-bang-operator--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279931
+  synced_at: '2026-01-23T17:03:50.508161'
 ---
 # Вопрос (RU)
 > Что известно о операторе double bang `!!` в Kotlin?

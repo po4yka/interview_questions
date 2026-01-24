@@ -1,73 +1,50 @@
----\
+---
 id: android-313
-title: "Presenter Notify View / Presenter уведомляет View"
-aliases: ["MVP communication", "Presenter Notify View", "Presenter уведомляет View", "Взаимодействие MVP"]
+title: Presenter Notify View / Presenter уведомляет View
+aliases:
+- MVP communication
+- Presenter Notify View
+- Presenter уведомляет View
+- Взаимодействие MVP
 topic: android
-subtopics: [architecture-mvvm]
+subtopics:
+- architecture-mvvm
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-kapt-vs-ksp--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-what-is-viewmodel--android--medium]
+related:
+- q-kapt-vs-ksp--android--medium
+- q-what-are-fragments-for-if-there-is-activity--android--medium
+- q-what-is-viewmodel--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, callback, difficulty/medium, lifecycle, mvp, platform/android, presenter, view]
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- architecture-mvvm
+- callback
+- difficulty/medium
+- lifecycle
+- mvp
+- platform/android
+- presenter
+- view
 anki_cards:
-  - slug: android-313-0-en
-    front: "How does a Presenter notify the View in MVP architecture?"
-    back: |
-      **Interface Contract (recommended):**
-      ```kotlin
-      interface UserContract {
-          interface View {
-              fun showUser(user: User)
-              fun showError(message: String)
-          }
-          interface Presenter {
-              fun attachView(view: View)
-              fun detachView()
-          }
-      }
-      ```
-
-      **Key points:**
-      - Use nullable `view?` for async callbacks
-      - Call `detachView()` in `onDestroy()`
-      - Ensure UI updates on main thread
-      - Never hold strong reference after detach
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-313-0-ru
-    front: "Как Presenter уведомляет View в архитектуре MVP?"
-    back: |
-      **Interface Contract (рекомендуется):**
-      ```kotlin
-      interface UserContract {
-          interface View {
-              fun showUser(user: User)
-              fun showError(message: String)
-          }
-          interface Presenter {
-              fun attachView(view: View)
-              fun detachView()
-          }
-      }
-      ```
-
-      **Ключевые моменты:**
-      - Использовать nullable `view?` для async callback
-      - Вызывать `detachView()` в `onDestroy()`
-      - Обновлять UI только на main thread
-      - Не держать strong reference после detach
-    tags:
-      - android_architecture
-      - difficulty::medium
-
----\
+- slug: android-313-0-en
+  language: en
+  anki_id: 1768417711828
+  synced_at: '2026-01-23T16:45:06.110407'
+- slug: android-313-0-ru
+  language: ru
+  anki_id: 1768417711850
+  synced_at: '2026-01-23T16:45:06.111465'
+---
 # Вопрос (RU)
 
 > После получения результата внутри Presenter как сообщить об этом `View`?

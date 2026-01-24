@@ -1,57 +1,44 @@
----\
+---
 id: android-114
 anki_cards:
-  - slug: android-114-0-en
-    front: "What are the main navigation methods in Android?"
-    back: |
-      **7 main approaches:**
-
-      1. **Activity (Intent)** - between Activities
-      2. **Fragment (FragmentManager)** - within Activity
-      3. **Navigation Component** - declarative with nav graph
-      4. **Bottom Navigation** - 3-5 top-level tabs
-      5. **Drawer Navigation** - side menu
-      6. **Deep Links** - URI-based navigation
-      7. **Compose Navigation** - NavHost for Compose
-
-      **Recommended:** Single Activity + Navigation Component
-    tags:
-      - android_navigation
-      - difficulty::medium
-  - slug: android-114-0-ru
-    front: "Какие основные методы навигации в Android?"
-    back: |
-      **7 основных подходов:**
-
-      1. **Activity (Intent)** - между Activity
-      2. **Fragment (FragmentManager)** - внутри Activity
-      3. **Navigation Component** - декларативный с nav graph
-      4. **Bottom Navigation** - 3-5 top-level вкладок
-      5. **Drawer Navigation** - боковое меню
-      6. **Deep Links** - навигация по URI
-      7. **Compose Navigation** - NavHost для Compose
-
-      **Рекомендуется:** Single Activity + Navigation Component
-    tags:
-      - android_navigation
-      - difficulty::medium
-title: "Navigation Methods Android / Методы навигации Android"
-aliases: ["Navigation Methods Android", "Методы навигации Android"]
+- slug: android-114-0-en
+  language: en
+  anki_id: 1768419434425
+  synced_at: '2026-01-23T16:45:06.441070'
+- slug: android-114-0-ru
+  language: ru
+  anki_id: 1768419434478
+  synced_at: '2026-01-23T16:45:06.442323'
+title: Navigation Methods Android / Методы навигации Android
+aliases:
+- Navigation Methods Android
+- Методы навигации Android
 topic: android
-subtopics: [ui-compose, ui-navigation]
+subtopics:
+- ui-compose
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
 sources: []
-tags: [android, android/ui-compose, android/ui-navigation, architecture, difficulty/medium, navigation]
+tags:
+- android
+- android/ui-compose
+- android/ui-navigation
+- architecture
+- difficulty/medium
+- navigation
 moc: moc-android
-related: [c-activity, q-navigation-methods-in-android--android--medium]
-
----\
+related:
+- c-activity
+- q-navigation-methods-in-android--android--medium
+---
 # Вопрос (RU)
 
 > Какие способы навигации знаешь в Android?

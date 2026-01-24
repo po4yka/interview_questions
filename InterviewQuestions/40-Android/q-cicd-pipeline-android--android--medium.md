@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-048-0-en
   language: en
   anki_id: 1768365309074
-  synced_at: '2026-01-14T09:17:53.471906'
+  synced_at: '2026-01-23T16:45:06.094507'
 - slug: android-048-0-ru
   language: ru
   anki_id: 1768365309098
-  synced_at: '2026-01-14T09:17:53.474530'
+  synced_at: '2026-01-23T16:45:06.095577'
 ---
 # Вопрос (RU)
 > Как построить эффективный CI/CD пайплайн для Android-приложения?

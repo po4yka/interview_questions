@@ -1,62 +1,49 @@
----\
+---
 id: android-487
 title: Design Client Observability & Health-Gated Rollouts / Проектирование клиентской
   наблюдаемости и health-gated релизов
-aliases: [Design Client Observability & Health-Gated Rollouts, Проектирование клиентской наблюдаемости и health-gated релизов]
+aliases:
+- Design Client Observability & Health-Gated Rollouts
+- Проектирование клиентской наблюдаемости и health-gated релизов
 topic: android
-subtopics: [analytics, logging-tracing, performance-startup]
+subtopics:
+- analytics
+- logging-tracing
+- performance-startup
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-room, c-workmanager, q-design-instagram-stories--android--hard, q-design-uber-app--android--hard, q-feature-flags-sdk--android--hard, q-wearos-health-connect-integration--android--hard]
+related:
+- c-room
+- c-workmanager
+- q-design-instagram-stories--android--hard
+- q-design-uber-app--android--hard
+- q-feature-flags-sdk--android--hard
+- q-wearos-health-connect-integration--android--hard
 sources: []
 created: 2025-10-29
 updated: 2025-10-29
-tags: [android/analytics, android/logging-tracing, android/performance-startup, difficulty/hard, topic/android]
+tags:
+- android/analytics
+- android/logging-tracing
+- android/performance-startup
+- difficulty/hard
+- topic/android
 anki_cards:
-  - slug: android-487-0-en
-    front: "How do you design an observability SDK for Android?"
-    back: |
-      **Architecture:** metrics-core, trace, crash-anr, sampler, store, uploader (WorkManager)
-
-      **Crash/ANR:**
-      - UncaughtExceptionHandler (Java)
-      - Signal handlers (NDK)
-      - Looper watchdog for ANR
-
-      **Health Gates:** SLOs (crash-free >99.8%, ANR <0.3%, cold start p95 <2.5s)
-      Auto-rollback when thresholds breached.
-
-      **Upload:** Batching, backoff, Wi-Fi preferred, PII redaction on-device.
-
-      Init <100ms, battery overhead <0.3%/day.
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-487-0-ru
-    front: "Как спроектировать SDK наблюдаемости для Android?"
-    back: |
-      **Архитектура:** metrics-core, trace, crash-anr, sampler, store, uploader (WorkManager)
-
-      **Crash/ANR:**
-      - UncaughtExceptionHandler (Java)
-      - Signal handlers (NDK)
-      - Looper watchdog для ANR
-
-      **Health Gates:** SLO (crash-free >99.8%, ANR <0.3%, cold start p95 <2.5s)
-      Авто-откат при нарушении порогов.
-
-      **Upload:** Batching, backoff, Wi-Fi preferred, PII redaction на устройстве.
-
-      Init <100мс, overhead батареи <0.3%/день.
-    tags:
-      - android_general
-      - difficulty::hard
-
----\
+- slug: android-487-0-en
+  language: en
+  anki_id: 1768398022458
+  synced_at: '2026-01-23T16:45:06.216717'
+- slug: android-487-0-ru
+  language: ru
+  anki_id: 1768398022482
+  synced_at: '2026-01-23T16:45:06.217543'
+---
 # Вопрос (RU)
 
 > Как спроектировать SDK наблюдаемости для Android, который обеспечивает crash/perf метрики и health‑gated staged rollouts?

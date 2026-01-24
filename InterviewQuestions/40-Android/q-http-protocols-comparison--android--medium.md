@@ -1,53 +1,48 @@
----\
+---
 id: android-022
-title: "HTTP vs Long-Polling vs WebSocket vs SSE / HTTP против Long-Polling против WebSocket против SSE"
-aliases: [HTTP Protocols Comparison, WebSocket vs HTTP, WebSocket против HTTP, Протоколы HTTP]
+title: HTTP vs Long-Polling vs WebSocket vs SSE / HTTP против Long-Polling против
+  WebSocket против SSE
+aliases:
+- HTTP Protocols Comparison
+- WebSocket vs HTTP
+- WebSocket против HTTP
+- Протоколы HTTP
 topic: android
-subtopics: [networking-http, performance-memory, websockets]
+subtopics:
+- networking-http
+- performance-memory
+- websockets
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-sources: ["https://github.com/amitshekhariitbhu/android-interview-questions"]
+language_tags:
+- en
+- ru
+sources:
+- https://github.com/amitshekhariitbhu/android-interview-questions
 status: draft
 moc: moc-android
-related: [q-retrofit-library--android--medium, q-server-sent-events-sse--android--medium, q-websocket-implementation--android--medium]
+related:
+- q-retrofit-library--android--medium
+- q-server-sent-events-sse--android--medium
+- q-websocket-implementation--android--medium
 created: 2025-10-06
 updated: 2025-10-28
-tags: [android/networking-http, android/performance-memory, android/websockets, difficulty/medium]
+tags:
+- android/networking-http
+- android/performance-memory
+- android/websockets
+- difficulty/medium
 anki_cards:
-  - slug: android-022-0-en
-    front: "When to use HTTP vs Long-Polling vs WebSocket vs SSE?"
-    back: |
-      | Protocol | Direction | Use Case |
-      |----------|-----------|----------|
-      | **HTTP** | Request-Response | REST API, CRUD |
-      | **Long-Polling** | Held request | Fallback, legacy |
-      | **WebSocket** | Bidirectional | Chats, games, real-time |
-      | **SSE** | Server->Client | News feeds, tickers |
-
-      **WebSocket**: full-duplex, low latency, needs heartbeat
-      **SSE**: simpler, text-only, auto-reconnect
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-022-0-ru
-    front: "Когда использовать HTTP vs Long-Polling vs WebSocket vs SSE?"
-    back: |
-      | Протокол | Направление | Применение |
-      |----------|-------------|------------|
-      | **HTTP** | Запрос-Ответ | REST API, CRUD |
-      | **Long-Polling** | Удержание | Fallback, legacy |
-      | **WebSocket** | Двунаправленный | Чаты, игры, real-time |
-      | **SSE** | Сервер->Клиент | Новости, тикеры |
-
-      **WebSocket**: полный дуплекс, низкая задержка, нужен heartbeat
-      **SSE**: проще, только текст, авто-переподключение
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-022-0-en
+  language: en
+  anki_id: 1768379770450
+  synced_at: '2026-01-23T16:45:05.847471'
+- slug: android-022-0-ru
+  language: ru
+  anki_id: 1768379770474
+  synced_at: '2026-01-23T16:45:05.848813'
+---
 # Вопрос (RU)
 > В чем разница между HTTP, `Long`-Polling, WebSocket и Server-Sent Events (SSE)? Когда следует использовать каждый из них?
 

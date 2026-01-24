@@ -31,20 +31,12 @@ tags:
 anki_cards:
 - slug: lang-029-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - extensions
-  - type-system
+  anki_id: 1768326293131
+  synced_at: '2026-01-23T17:03:51.583035'
 - slug: lang-029-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - extensions
-  - type-system
+  anki_id: 1768326293155
+  synced_at: '2026-01-23T17:03:51.583836'
 ---
 # Вопрос (RU)
 > Что известно про extension?

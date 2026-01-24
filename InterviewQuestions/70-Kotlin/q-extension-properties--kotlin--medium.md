@@ -123,16 +123,12 @@ tags:
 anki_cards:
 - slug: q-extension-properties--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285255
+  synced_at: '2026-01-23T17:03:50.980474'
 - slug: q-extension-properties--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285281
+  synced_at: '2026-01-23T17:03:50.982021'
 ---
 # Вопрос (RU)
 > Свойства какого вида можно добавить как расширение?

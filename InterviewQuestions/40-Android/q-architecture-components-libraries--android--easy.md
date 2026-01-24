@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-208-0-en
   language: en
   anki_id: 1768364695698
-  synced_at: '2026-01-14T09:17:53.235474'
+  synced_at: '2026-01-23T16:45:05.697160'
 - slug: android-208-0-ru
   language: ru
   anki_id: 1768364695722
-  synced_at: '2026-01-14T09:17:53.238111'
+  synced_at: '2026-01-23T16:45:05.698345'
 ---
 # Вопрос (RU)
 > Что такое Android Architecture Components и зачем они нужны?

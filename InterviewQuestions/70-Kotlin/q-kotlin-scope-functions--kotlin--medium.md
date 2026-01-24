@@ -36,22 +36,12 @@ tags:
 anki_cards:
 - slug: kotlin-014-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - apply
-  - let
-  - scope-functions
+  anki_id: 1768326286706
+  synced_at: '2026-01-23T17:03:51.134260'
 - slug: kotlin-014-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - apply
-  - let
-  - scope-functions
+  anki_id: 1768326286731
+  synced_at: '2026-01-23T17:03:51.135629'
 ---
 # Вопрос (RU)
 > Что такое функции области видимости (scope functions) в Kotlin?

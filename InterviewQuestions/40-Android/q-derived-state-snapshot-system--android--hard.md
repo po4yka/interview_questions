@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-464-0-en
   language: en
   anki_id: 1768367868383
-  synced_at: '2026-01-14T09:17:53.645359'
+  synced_at: '2026-01-23T16:45:06.239394'
 - slug: android-464-0-ru
   language: ru
   anki_id: 1768367868406
-  synced_at: '2026-01-14T09:17:53.648991'
+  synced_at: '2026-01-23T16:45:06.240217'
 tags:
 - android/performance-memory
 - android/ui-compose

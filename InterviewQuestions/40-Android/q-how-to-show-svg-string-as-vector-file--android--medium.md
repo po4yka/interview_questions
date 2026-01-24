@@ -1,64 +1,55 @@
----\
+---
 id: android-294
-title: How To Show SVG String As Vector File / Как показать SVG строку как векторный файл
-aliases: [SVG String Display, SVG Vector Rendering, Отображение SVG строки]
+title: How To Show SVG String As Vector File / Как показать SVG строку как векторный
+  файл
+aliases:
+- SVG String Display
+- SVG Vector Rendering
+- Отображение SVG строки
 topic: android
-subtopics: [ui-compose, ui-graphics, ui-views]
+subtopics:
+- ui-compose
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-api-file-upload-server--android--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium, q-large-file-upload--android--medium, q-vector-graphics-animations--android--medium, q-what-is-known-about-view-lifecycles--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-api-file-upload-server--android--medium
+- q-how-to-display-svg-string-as-a-vector-file--android--medium
+- q-large-file-upload--android--medium
+- q-vector-graphics-animations--android--medium
+- q-what-is-known-about-view-lifecycles--android--medium
+- q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources:
-  - "https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources"
-tags: [android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, image-loading, svg, vector-graphics]
+- https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources
+tags:
+- android/ui-compose
+- android/ui-graphics
+- android/ui-views
+- difficulty/medium
+- image-loading
+- svg
+- vector-graphics
 anki_cards:
-  - slug: android-294-0-en
-    front: "How to display SVG string as a vector image in Android?"
-    back: |
-      **Android doesn't support SVG natively.** Use libraries:
-
-      **AndroidSVG (recommended for strings):**
-      ```kotlin
-      val svg = SVG.getFromString(svgString)
-      val drawable = PictureDrawable(svg.renderToPicture())
-      imageView.setLayerType(LAYER_TYPE_SOFTWARE, null)
-      imageView.setImageDrawable(drawable)
-      ```
-
-      **Coil + SvgDecoder** - for URL/files
-      **Glide + GlideSvgModule** - alternative
-
-      Note: Can't convert SVG to `VectorDrawable` at runtime
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-294-0-ru
-    front: "Как отобразить SVG строку как векторное изображение в Android?"
-    back: |
-      **Android не поддерживает SVG нативно.** Используйте библиотеки:
-
-      **AndroidSVG (рекомендуется для строк):**
-      ```kotlin
-      val svg = SVG.getFromString(svgString)
-      val drawable = PictureDrawable(svg.renderToPicture())
-      imageView.setLayerType(LAYER_TYPE_SOFTWARE, null)
-      imageView.setImageDrawable(drawable)
-      ```
-
-      **Coil + SvgDecoder** - для URL/файлов
-      **Glide + GlideSvgModule** - альтернатива
-
-      Примечание: Нельзя конвертировать SVG в `VectorDrawable` в runtime
-    tags:
-      - android_views
-      - difficulty::medium
-
----\
+- slug: android-294-0-en
+  language: en
+  anki_id: 1768381027384
+  synced_at: '2026-01-23T16:45:06.053230'
+- slug: android-294-0-ru
+  language: ru
+  anki_id: 1768381027406
+  synced_at: '2026-01-23T16:45:06.054229'
+---
 # Вопрос (RU)
 
 > Как отобразить SVG строку в виде векторного изображения в Android?

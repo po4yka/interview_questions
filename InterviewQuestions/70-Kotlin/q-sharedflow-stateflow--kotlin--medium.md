@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-sharedflow-stateflow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290281
+  synced_at: '2026-01-23T17:03:51.426059'
 - slug: q-sharedflow-stateflow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290306
+  synced_at: '2026-01-23T17:03:51.427573'
 ---
 # Question (EN)
 > What's the difference between `SharedFlow` and `StateFlow`? When should you use each?

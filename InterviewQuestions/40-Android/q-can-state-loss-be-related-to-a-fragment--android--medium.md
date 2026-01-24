@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-174-0-en
   language: en
   anki_id: 1768365306523
-  synced_at: '2026-01-14T09:17:53.131949'
+  synced_at: '2026-01-23T16:45:05.551750'
 - slug: android-174-0-ru
   language: ru
   anki_id: 1768365306548
-  synced_at: '2026-01-14T09:17:53.133718'
+  synced_at: '2026-01-23T16:45:05.553969'
 ---
 # Вопрос (RU)
 > Бывает ли потеря состояния у `Fragment`?

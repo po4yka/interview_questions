@@ -1,57 +1,52 @@
----\
+---
 id: android-169
 title: KMM vs React Native / KMM против React Native
-aliases: [KMM vs React Native, KMM против React Native, React Native Comparison, React Native Сравнение]
+aliases:
+- KMM vs React Native
+- KMM против React Native
+- React Native Comparison
+- React Native Сравнение
 topic: android
-subtopics: [architecture-mvvm, kmp]
+subtopics:
+- architecture-mvvm
+- kmp
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-mvvm, q-how-does-jetpackcompose-work--android--medium, q-kmm-dependency-injection--android--medium, q-kmm-ktor-networking--android--medium, q-play-app-signing--android--medium, q-react-native-vs-flutter--android--medium]
+related:
+- c-mvvm
+- q-how-does-jetpackcompose-work--android--medium
+- q-kmm-dependency-injection--android--medium
+- q-kmm-ktor-networking--android--medium
+- q-play-app-signing--android--medium
+- q-react-native-vs-flutter--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-mvvm, android/kmp, difficulty/medium, javascript, kmp, kotlin, multiplatform, reactnative]
+tags:
+- android/architecture-mvvm
+- android/kmp
+- difficulty/medium
+- javascript
+- kmp
+- kotlin
+- multiplatform
+- reactnative
 anki_cards:
-  - slug: android-169-0-en
-    front: "What are the key differences between KMM and React Native?"
-    back: |
-      **Architecture:**
-      - **React Native:** JS layer -> JS Bridge -> Native -> Platform SDK
-      - **KMM:** Native UI -> Shared Kotlin -> Platform SDK (no JS bridge)
-
-      **Code Sharing:**
-      - RN: ~90%+ (including UI)
-      - KMM: ~50-80% (business logic, separate native UIs)
-
-      **Type Safety:** KMM has full compile-time safety; RN relies on TypeScript with runtime bridge risks.
-
-      **Performance:** KMM closer to native (no bridge overhead).
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-169-0-ru
-    front: "В чём ключевые различия между KMM и React Native?"
-    back: |
-      **Архитектура:**
-      - **React Native:** JS слой -> JS Bridge -> Native -> Platform SDK
-      - **KMM:** Нативный UI -> Shared Kotlin -> Platform SDK (без JS bridge)
-
-      **Шаринг кода:**
-      - RN: ~90%+ (включая UI)
-      - KMM: ~50-80% (бизнес-логика, отдельные нативные UI)
-
-      **Типобезопасность:** KMM имеет полную compile-time безопасность; RN полагается на TypeScript с runtime рисками на bridge.
-
-      **Производительность:** KMM ближе к нативной (без overhead bridge).
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-169-0-en
+  language: en
+  anki_id: 1768398426909
+  synced_at: '2026-01-23T16:45:05.535604'
+- slug: android-169-0-ru
+  language: ru
+  anki_id: 1768398426934
+  synced_at: '2026-01-23T16:45:05.537442'
+---
 # Вопрос (RU)
 >
 Сравните Kotlin Multiplatform Mobile с React Native. Каковы архитектурные различия, bridge overhead и зрелость экосистемы? Чем отличается JavaScript vs Kotlin/Native подход?

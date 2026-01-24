@@ -1,61 +1,42 @@
----\
+---
 id: android-023
-title: "React Native vs Flutter comparison / Сравнение React Native и Flutter"
-aliases: ["React Native vs Flutter", "Сравнение React Native и Flutter"]
+title: React Native vs Flutter comparison / Сравнение React Native и Flutter
+aliases:
+- React Native vs Flutter
+- Сравнение React Native и Flutter
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics:
+- ui-compose
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-sources: ["https://github.com/amitshekhariitbhu/android-interview-questions"]
+language_tags:
+- en
+- ru
+sources:
+- https://github.com/amitshekhariitbhu/android-interview-questions
 status: draft
 moc: moc-android
-related: [c-android, q-android-app-components--android--easy]
+related:
+- c-android
+- q-android-app-components--android--easy
 created: 2025-10-06
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-views, difficulty/medium]
+tags:
+- android/ui-compose
+- android/ui-views
+- difficulty/medium
 anki_cards:
-  - slug: android-023-0-en
-    front: "What are the key differences between React Native and Flutter?"
-    back: |
-      **React Native** (JS/React):
-      - Uses native UI components
-      - JS bridge (new arch: JSI/Fabric)
-      - NPM ecosystem, React skills transfer
-
-      **Flutter** (Dart):
-      - Own rendering engine (Skia)
-      - AOT compiled, no bridge
-      - Pixel-perfect cross-platform UI
-      - pub.dev ecosystem
-
-      **Choose RN**: JS team, web code sharing
-      **Choose Flutter**: performance-critical UI, pixel-perfect design
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-023-0-ru
-    front: "Какие ключевые различия между React Native и Flutter?"
-    back: |
-      **React Native** (JS/React):
-      - Использует нативные UI компоненты
-      - JS bridge (новая арх: JSI/Fabric)
-      - NPM экосистема, навыки React
-
-      **Flutter** (Dart):
-      - Собственный движок рендеринга (Skia)
-      - AOT компиляция, без bridge
-      - Pixel-perfect UI на всех платформах
-      - pub.dev экосистема
-
-      **Выбирайте RN**: JS команда, шаринг кода с web
-      **Выбирайте Flutter**: критичная производительность UI, pixel-perfect дизайн
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-023-0-en
+  language: en
+  anki_id: 1768379771601
+  synced_at: '2026-01-23T16:45:05.904550'
+- slug: android-023-0-ru
+  language: ru
+  anki_id: 1768379771623
+  synced_at: '2026-01-23T16:45:05.908031'
+---
 # Вопрос (RU)
 
 > Сравните React Native и Flutter: архитектуру, производительность, экосистему и сценарии использования.

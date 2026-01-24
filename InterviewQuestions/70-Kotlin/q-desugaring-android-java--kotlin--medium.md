@@ -30,18 +30,12 @@ tags:
 anki_cards:
 - slug: kotlin-173-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - compilation
+  anki_id: 1768326285057
+  synced_at: '2026-01-23T17:03:50.966109'
 - slug: kotlin-173-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - compilation
+  anki_id: 1768326285081
+  synced_at: '2026-01-23T17:03:50.967516'
 ---
 # Вопрос (RU)
 > Что такое desugaring в Android и как он работает?

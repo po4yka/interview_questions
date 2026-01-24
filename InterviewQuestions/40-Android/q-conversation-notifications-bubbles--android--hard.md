@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-644-0-en
   language: en
   anki_id: 1768366348550
-  synced_at: '2026-01-14T09:17:53.811274'
+  synced_at: '2026-01-23T16:45:06.355255'
 - slug: android-644-0-ru
   language: ru
   anki_id: 1768366348576
-  synced_at: '2026-01-14T09:17:53.813835'
+  synced_at: '2026-01-23T16:45:06.356176'
 ---
 # Вопрос (RU)
 > Как реализовать и поддерживать conversation notifications и bubbles: shortcuts, MessagingStyle, человекоориентированные уведомления, ограничения Android 11–14 и аналитика?

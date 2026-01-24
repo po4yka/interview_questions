@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-multiplatform-overview--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285555
+  synced_at: '2026-01-23T17:03:51.008257'
 - slug: q-kotlin-multiplatform-overview--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285581
+  synced_at: '2026-01-23T17:03:51.010370'
 ---
 # Question (EN)
 > Kotlin Multiplatform - How does it work?

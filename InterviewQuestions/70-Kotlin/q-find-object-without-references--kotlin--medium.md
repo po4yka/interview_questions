@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-find-object-without-references--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281505
+  synced_at: '2026-01-23T17:03:50.638295'
 - slug: q-find-object-without-references--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281531
+  synced_at: '2026-01-23T17:03:50.641005'
 ---
 # Question (EN)
 > How to find an object if there are no references to it?

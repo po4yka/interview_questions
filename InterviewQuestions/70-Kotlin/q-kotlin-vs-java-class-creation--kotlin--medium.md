@@ -35,22 +35,12 @@ tags:
 anki_cards:
 - slug: kotlin-171-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - data-classes
-  - syntax
+  anki_id: 1768326284856
+  synced_at: '2026-01-23T17:03:50.951383'
 - slug: kotlin-171-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - data-classes
-  - syntax
+  anki_id: 1768326284879
+  synced_at: '2026-01-23T17:03:50.953338'
 ---
 # Вопрос (RU)
 > Что при создании классов в Kotlin изменилось по сравнению с Java?

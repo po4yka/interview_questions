@@ -33,22 +33,12 @@ sources:
 anki_cards:
 - slug: kotlin-230-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - initialization
-  - kotlin-features
+  anki_id: 1768326284806
+  synced_at: '2026-01-23T17:03:50.947839'
 - slug: kotlin-230-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - initialization
-  - kotlin-features
+  anki_id: 1768326284830
+  synced_at: '2026-01-23T17:03:50.949848'
 ---
 # Вопрос (RU)
 > В каком порядке происходит инициализация класса в Kotlin?

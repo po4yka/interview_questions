@@ -1,45 +1,46 @@
----\
+---
 id: android-093
-title: "Koin Vs Hilt Comparison / Сравнение Koin и Hilt"
-aliases: ["Koin Vs Hilt Comparison", "Сравнение Koin и Hilt"]
+title: Koin Vs Hilt Comparison / Сравнение Koin и Hilt
+aliases:
+- Koin Vs Hilt Comparison
+- Сравнение Koin и Hilt
 topic: android
-subtopics: [di-hilt, di-koin]
+subtopics:
+- di-hilt
+- di-koin
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, c-dependency-injection]
+related:
+- c-dagger
+- c-dependency-injection
 created: 2025-10-13
 updated: 2025-11-10
 sources: []
-tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/medium, hilt, koin]
+tags:
+- android
+- android/di-hilt
+- android/di-koin
+- architecture
+- di
+- difficulty/medium
+- hilt
+- koin
 anki_cards:
-  - slug: android-093-0-en
-    front: "Compare Koin vs Hilt: when to choose each?"
-    back: |
-      **Koin:** Runtime DI via DSL, fast build, KMM support, easy to learn
-      **Hilt:** Compile-time DI (Dagger), type-safe, slower build, Android only
-
-      **Choose Koin:** KMM, prototypes, small/medium apps
-      **Choose Hilt:** Large teams, type-safety critical, long-term maintenance
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-093-0-ru
-    front: "Сравните Koin и Hilt: когда выбирать каждый?"
-    back: |
-      **Koin:** Runtime DI через DSL, быстрая сборка, поддержка KMM, легко изучить
-      **Hilt:** Compile-time DI (Dagger), типобезопасность, медленная сборка, только Android
-
-      **Выбирайте Koin:** KMM, прототипы, малые/средние приложения
-      **Выбирайте Hilt:** Большие команды, критична типобезопасность, долгосрочная поддержка
-    tags:
-      - android_architecture
-      - difficulty::medium
-
----\
+- slug: android-093-0-en
+  language: en
+  anki_id: 1768382476037
+  synced_at: '2026-01-23T16:45:06.177455'
+- slug: android-093-0-ru
+  language: ru
+  anki_id: 1768382476063
+  synced_at: '2026-01-23T16:45:06.178268'
+---
 # Вопрос (RU)
 
 > Сравните `Koin` и `Hilt` детально. Когда вы бы выбрали один вместо другого? Обсудите compile-time vs runtime DI.

@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-336-0-en
   language: en
   anki_id: 1768364697098
-  synced_at: '2026-01-14T09:17:53.542282'
+  synced_at: '2026-01-23T16:45:06.169518'
 - slug: android-336-0-ru
   language: ru
   anki_id: 1768364697123
-  synced_at: '2026-01-14T09:17:53.544710'
+  synced_at: '2026-01-23T16:45:06.170347'
 ---
 # Вопрос (RU)
 > Какие существуют типы запуска Android-приложения (cold/warm/hot), и как оптимизировать каждый из них?

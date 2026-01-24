@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-076-0-en
   language: en
   anki_id: 1768364266231
-  synced_at: '2026-01-14T09:17:53.095346'
+  synced_at: '2026-01-23T16:45:05.448183'
 - slug: android-076-0-ru
   language: ru
   anki_id: 1768364266295
-  synced_at: '2026-01-14T09:17:53.097237'
+  synced_at: '2026-01-23T16:45:05.449633'
 ---
 # Вопрос (RU)
 > В чем разница между AnimatedVisibility, AnimatedContent и Crossfade в Jetpack Compose?

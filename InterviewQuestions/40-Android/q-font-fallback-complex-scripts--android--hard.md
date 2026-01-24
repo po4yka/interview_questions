@@ -32,11 +32,11 @@ anki_cards:
 - slug: android-643-0-en
   language: en
   anki_id: 1768367153855
-  synced_at: '2026-01-14T09:17:53.072686'
+  synced_at: '2026-01-23T16:45:05.425080'
 - slug: android-643-0-ru
   language: ru
   anki_id: 1768367153880
-  synced_at: '2026-01-14T09:17:53.075065'
+  synced_at: '2026-01-23T16:45:05.426205'
 sources:
 - https://developer.android.com/guide/topics/resources/font-resource
 - https://developer.android.com/guide/topics/text/downloadable-fonts

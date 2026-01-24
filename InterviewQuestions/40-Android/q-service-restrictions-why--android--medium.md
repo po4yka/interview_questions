@@ -1,56 +1,42 @@
----\
+---
 id: android-205
 title: Service Restrictions / Ограничения Service
-aliases: [Service Restrictions, Ограничения Service]
+aliases:
+- Service Restrictions
+- Ограничения Service
 topic: android
-subtopics: [service]
+subtopics:
+- service
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-android-service-types--android--easy, q-foreground-service-types--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-what-is-data-binding--android--easy, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- c-android-components
+- q-android-service-types--android--easy
+- q-foreground-service-types--android--medium
+- q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+- q-what-is-data-binding--android--easy
+- q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/service, difficulty/medium]
+tags:
+- android/service
+- difficulty/medium
 anki_cards:
-  - slug: android-205-0-en
-    front: "Why are background Service restrictions introduced in Android?"
-    back: |
-      **Reasons:**
-      - Battery optimization (prevent 24/7 GPS, network, wake locks)
-      - Memory/CPU pressure from multiple bg services
-      - Security/privacy (prevent hidden tracking)
-
-      **Key restrictions:**
-      - Android 8+: No `startService()` from background (use `startForegroundService()`)
-      - Doze/App Standby: defer network, alarms, jobs
-      - Android 10+: Restricted bg Activity starts
-
-      **Use:** WorkManager for deferrable work, Foreground Service for user-visible tasks
-    tags:
-      - android_services
-      - difficulty::medium
-  - slug: android-205-0-ru
-    front: "Почему введены ограничения на фоновые Service в Android?"
-    back: |
-      **Причины:**
-      - Экономия батареи (запрет 24/7 GPS, сети, wake locks)
-      - Нагрузка на память/CPU от множества bg сервисов
-      - Безопасность/приватность (предотвращение скрытого трекинга)
-
-      **Ключевые ограничения:**
-      - Android 8+: Нельзя `startService()` из фона (используйте `startForegroundService()`)
-      - Doze/App Standby: откладывают сеть, алармы, задачи
-      - Android 10+: Ограничен запуск Activity из фона
-
-      **Используйте:** WorkManager для отложенных задач, Foreground Service для видимых пользователю задач
-    tags:
-      - android_services
-      - difficulty::medium
-
----\
+- slug: android-205-0-en
+  language: en
+  anki_id: 1768398852714
+  synced_at: '2026-01-23T16:45:05.682499'
+- slug: android-205-0-ru
+  language: ru
+  anki_id: 1768398852736
+  synced_at: '2026-01-23T16:45:05.683888'
+---
 # Вопрос (RU)
 > Ограничения `Service`
 

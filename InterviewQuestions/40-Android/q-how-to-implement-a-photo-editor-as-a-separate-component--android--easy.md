@@ -1,67 +1,56 @@
----\
+---
 id: android-247
-title: How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент
-aliases: [Photo Editor Component, Separate Photo Editor, Отдельный компонент редактора, Фоторедактор как компонент]
+title: How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор
+  как отдельный компонент
+aliases:
+- Photo Editor Component
+- Separate Photo Editor
+- Отдельный компонент редактора
+- Фоторедактор как компонент
 topic: android
-subtopics: [fragment, ui-graphics, ui-views]
+subtopics:
+- fragment
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, q-how-to-pass-photo-to-editor--android--medium, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-implement-voice-video-call--android--hard, q-why-separate-ui-and-business-logic--android--easy, q-workmanager-vs-alternatives--android--medium]
+related:
+- c-activity
+- q-how-to-pass-photo-to-editor--android--medium
+- q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium
+- q-implement-voice-video-call--android--hard
+- q-why-separate-ui-and-business-logic--android--easy
+- q-workmanager-vs-alternatives--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/fragment, android/ui-graphics, android/ui-views, bitmap, canvas, difficulty/easy, fragments, imageview, views]
+tags:
+- android
+- android/fragment
+- android/ui-graphics
+- android/ui-views
+- bitmap
+- canvas
+- difficulty/easy
+- fragments
+- imageview
+- views
 anki_cards:
-  - slug: android-247-0-en
-    front: "How to implement a photo editor as a separate component in Android?"
-    back: |
-      **Approach:** Create reusable `Fragment` with clear API
-
-      **Key components:**
-      - `ImageView` for display
-      - `Matrix` for transformations (rotate, scale)
-      - `ColorMatrix` for color effects (grayscale, brightness)
-      - `MediaStore` for saving results
-
-      **API pattern:**
-      ```kotlin
-      PhotoEditorFragment.newInstance(imageUri)
-      // Return via Fragment Result API
-      ```
-
-      **Memory:** Clear bitmap refs in `onDestroyView`, use proper decode scaling
-    tags:
-      - android_fragments
-      - android_views
-      - difficulty::easy
-  - slug: android-247-0-ru
-    front: "Как реализовать фоторедактор как отдельный компонент в Android?"
-    back: |
-      **Подход:** Создать переиспользуемый `Fragment` с четким API
-
-      **Ключевые компоненты:**
-      - `ImageView` для отображения
-      - `Matrix` для трансформаций (rotate, scale)
-      - `ColorMatrix` для цветовых эффектов (grayscale, яркость)
-      - `MediaStore` для сохранения результатов
-
-      **Паттерн API:**
-      ```kotlin
-      PhotoEditorFragment.newInstance(imageUri)
-      // Возврат через Fragment Result API
-      ```
-
-      **Память:** Очищайте ссылки на bitmap в `onDestroyView`, используйте масштабирование при декодировании
-    tags:
-      - android_fragments
-      - android_views
-      - difficulty::easy
-
----\
+- slug: android-247-0-en
+  language: en
+  anki_id: 1768380642828
+  synced_at: '2026-01-23T16:45:05.868268'
+- slug: android-247-0-ru
+  language: ru
+  anki_id: 1768380642854
+  synced_at: '2026-01-23T16:45:05.870299'
+---
 # Вопрос (RU)
 
 > Как реализовать фоторедактор как отдельный компонент?

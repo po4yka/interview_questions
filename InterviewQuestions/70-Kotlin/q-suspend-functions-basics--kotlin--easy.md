@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-suspend-functions-basics--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281555
+  synced_at: '2026-01-23T17:03:50.643557'
 - slug: q-suspend-functions-basics--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281582
+  synced_at: '2026-01-23T17:03:50.645398'
 ---
 # Question (EN)
 > Kotlin Coroutines advanced topic 140028

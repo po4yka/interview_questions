@@ -32,20 +32,12 @@ tags:
 anki_cards:
 - slug: kotlin-002-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - equality
-  - operators
+  anki_id: 1768326279705
+  synced_at: '2026-01-23T17:03:50.485545'
 - slug: kotlin-002-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - equality
-  - operators
+  anki_id: 1768326279730
+  synced_at: '2026-01-23T17:03:50.487405'
 ---
 # Вопрос (RU)
 > В чем разница между == и === в Kotlin?

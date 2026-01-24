@@ -1,57 +1,49 @@
 ---
 id: android-030
-title: Repository Pattern with Multiple Data Sources / Паттерн Repository с несколькими источниками данных
-aliases: [Repository Pattern with Multiple Data Sources, Паттерн Repository с несколькими источниками данных]
+title: Repository Pattern with Multiple Data Sources / Паттерн Repository с несколькими
+  источниками данных
+aliases:
+- Repository Pattern with Multiple Data Sources
+- Паттерн Repository с несколькими источниками данных
 topic: android
-subtopics: [architecture-clean, cache-offline]
+subtopics:
+- architecture-clean
+- cache-offline
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-source: "https://github.com/amitshekhariitbhu/android-interview-questions"
+language_tags:
+- en
+- ru
+source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
-related: [c-clean-architecture, c-database-design, q-dagger-field-injection--android--medium, q-data-sync-unstable-network--android--hard, q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-mvvm-pattern--android--medium, q-repository-pattern--android--medium]
+related:
+- c-clean-architecture
+- c-database-design
+- q-dagger-field-injection--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-does-state-made-in-compose-help-avoid-race-condition--android--medium
+- q-mvvm-pattern--android--medium
+- q-repository-pattern--android--medium
 created: 2025-10-06
 updated: 2025-11-10
-tags: [android/architecture-clean, android/cache-offline, difficulty/medium, en, ru]
+tags:
+- android/architecture-clean
+- android/cache-offline
+- difficulty/medium
+- en
+- ru
 anki_cards:
-  - slug: android-030-0-en
-    front: "What are common data source strategies in Repository pattern?"
-    back: |
-      **Strategies**:
-      1. **Single Source of Truth** - DB observed via Flow, network updates it
-      2. **Cache-first** - memory -> network -> update cache
-      3. **Network-first + fallback** - network -> DB if fails
-      4. **Stale-while-revalidate** - show cache, refresh in background
-      5. **Time-based** - check TTL before network request
-
-      ```kotlin
-      fun getProducts(): Flow<List<Product>> = dao.observeProducts()
-          .onStart { refreshFromNetwork() }
-      ```
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-030-0-ru
-    front: "Какие стратегии источников данных используются в паттерне Repository?"
-    back: |
-      **Стратегии**:
-      1. **Single Source of Truth** - БД наблюдается через Flow, сеть обновляет её
-      2. **Cache-first** - память -> сеть -> обновить кэш
-      3. **Network-first + fallback** - сеть -> БД при ошибке
-      4. **Stale-while-revalidate** - показать кэш, обновить в фоне
-      5. **Time-based** - проверить TTL перед запросом
-
-      ```kotlin
-      fun getProducts(): Flow<List<Product>> = dao.observeProducts()
-          .onStart { refreshFromNetwork() }
-      ```
-    tags:
-      - android_architecture
-      - difficulty::medium
-
+- slug: android-030-0-en
+  language: en
+  anki_id: 1768379974951
+  synced_at: '2026-01-23T16:45:06.271612'
+- slug: android-030-0-ru
+  language: ru
+  anki_id: 1768379974975
+  synced_at: '2026-01-23T16:45:06.272376'
 ---
 # Вопрос (RU)
 > Как реализовать паттерн Repository с несколькими источниками данных (сеть, БД, кэш)?

@@ -29,18 +29,12 @@ tags:
 anki_cards:
 - slug: lang-094-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - type-system
+  anki_id: 1768326280405
+  synced_at: '2026-01-23T17:03:50.551591'
 - slug: lang-094-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - type-system
+  anki_id: 1768326280430
+  synced_at: '2026-01-23T17:03:50.553476'
 ---
 # Вопрос (RU)
 > Какие примитивы есть в Kotlin, а какие в Java?

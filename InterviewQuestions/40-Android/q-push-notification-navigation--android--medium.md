@@ -1,71 +1,51 @@
----\
+---
 id: android-305
 title: Push Notification Navigation / Навигация из push уведомлений
-aliases: [FCM Navigation, Navigation from Notifications, Push Notification Navigation, Навигация из push уведомлений]
+aliases:
+- FCM Navigation
+- Navigation from Notifications
+- Push Notification Navigation
+- Навигация из push уведомлений
 topic: android
-subtopics: [notifications, ui-navigation]
+subtopics:
+- notifications
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-navigation, q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-how-dialog-differs-from-other-navigation--android--medium, q-how-navigation-is-implemented-in-android--android--medium, q-what-navigation-methods-do-you-know--android--medium]
+related:
+- c-compose-navigation
+- q-activity-navigation-how-it-works--android--medium
+- q-compose-navigation-advanced--android--medium
+- q-how-dialog-differs-from-other-navigation--android--medium
+- q-how-navigation-is-implemented-in-android--android--medium
+- q-what-navigation-methods-do-you-know--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/notifications, android/ui-navigation, deeplink, difficulty/medium, fcm, navigation, notifications]
+tags:
+- android/notifications
+- android/ui-navigation
+- deeplink
+- difficulty/medium
+- fcm
+- navigation
+- notifications
 anki_cards:
-  - slug: android-305-0-en
-    front: "How do you open a specific screen from a push notification?"
-    back: |
-      **Approach:**
-      1. FCM service creates PendingIntent with navigation data
-      2. Handle Intent in Activity via `onCreate()`/`onNewIntent()`
-
-      ```kotlin
-      // In FirebaseMessagingService
-      val intent = Intent(this, MainActivity::class.java).apply {
-          flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TOP
-          putExtra("screen", "details")
-          putExtra("item_id", itemId)
-      }
-      val pendingIntent = PendingIntent.getActivity(
-          this, requestCode, intent,
-          FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
-      )
-      ```
-
-      **Key:** Use `singleTop` launch mode, handle both `onCreate()` and `onNewIntent()`.
-    tags:
-      - android_navigation
-      - difficulty::medium
-  - slug: android-305-0-ru
-    front: "Как открыть конкретный экран из push-уведомления?"
-    back: |
-      **Подход:**
-      1. FCM service создаёт PendingIntent с данными навигации
-      2. Обработать Intent в Activity через `onCreate()`/`onNewIntent()`
-
-      ```kotlin
-      // В FirebaseMessagingService
-      val intent = Intent(this, MainActivity::class.java).apply {
-          flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TOP
-          putExtra("screen", "details")
-          putExtra("item_id", itemId)
-      }
-      val pendingIntent = PendingIntent.getActivity(
-          this, requestCode, intent,
-          FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
-      )
-      ```
-
-      **Ключевое:** Использовать `singleTop` launch mode, обрабатывать и `onCreate()`, и `onNewIntent()`.
-    tags:
-      - android_navigation
-      - difficulty::medium
-
----\
+- slug: android-305-0-en
+  language: en
+  anki_id: 1768418255755
+  synced_at: '2026-01-23T16:45:06.080920'
+- slug: android-305-0-ru
+  language: ru
+  anki_id: 1768418255774
+  synced_at: '2026-01-23T16:45:06.082138'
+---
 # Вопрос (RU)
 
 > Как открыть конкретную `Activity` или `Fragment` из push-уведомления?

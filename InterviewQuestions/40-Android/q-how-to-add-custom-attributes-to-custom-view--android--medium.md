@@ -1,73 +1,42 @@
 ---
 id: android-347
-title: How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты к кастомным View
-aliases: [How To Add Custom Attributes To Custom View, Как добавить кастомные атрибуты к кастомным View]
+title: How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты
+  к кастомным View
+aliases:
+- How To Add Custom Attributes To Custom View
+- Как добавить кастомные атрибуты к кастомным View
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-custom-view-accessibility--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-performance-optimization-android--android--medium]
+related:
+- c-android-components
+- q-custom-view-accessibility--android--medium
+- q-custom-view-attributes--android--medium
+- q-custom-view-lifecycle--android--medium
+- q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
+- q-performance-optimization-android--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/medium]
+tags:
+- android/ui-views
+- difficulty/medium
 anki_cards:
-  - slug: android-347-0-en
-    front: "How to add custom attributes to a Custom View in Android?"
-    back: |
-      **4 steps:**
-
-      1. **Define in attrs.xml:**
-      ```xml
-      <declare-styleable name="MyView">
-          <attr name="progress" format="integer"/>
-          <attr name="color" format="color"/>
-      </declare-styleable>
-      ```
-
-      2. **Read in constructor:**
-      ```kotlin
-      val a = context.obtainStyledAttributes(attrs, R.styleable.MyView)
-      progress = a.getInt(R.styleable.MyView_progress, 0)
-      a.recycle() // Important!
-      ```
-
-      3. **Use in XML:** `app:progress="50"`
-
-      Formats: `integer`, `color`, `dimension`, `boolean`, `enum`, `reference`
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-347-0-ru
-    front: "Как добавить кастомные атрибуты к Custom View в Android?"
-    back: |
-      **4 шага:**
-
-      1. **Определить в attrs.xml:**
-      ```xml
-      <declare-styleable name="MyView">
-          <attr name="progress" format="integer"/>
-          <attr name="color" format="color"/>
-      </declare-styleable>
-      ```
-
-      2. **Прочитать в конструкторе:**
-      ```kotlin
-      val a = context.obtainStyledAttributes(attrs, R.styleable.MyView)
-      progress = a.getInt(R.styleable.MyView_progress, 0)
-      a.recycle() // Важно!
-      ```
-
-      3. **Использовать в XML:** `app:progress="50"`
-
-      Форматы: `integer`, `color`, `dimension`, `boolean`, `enum`, `reference`
-    tags:
-      - android_views
-      - difficulty::medium
-
+- slug: android-347-0-en
+  language: en
+  anki_id: 1768378376393
+  synced_at: '2026-01-23T16:45:06.192928'
+- slug: android-347-0-ru
+  language: ru
+  anki_id: 1768378376419
+  synced_at: '2026-01-23T16:45:06.193651'
 ---
 # Вопрос (RU)
 > Как добавить кастомные атрибуты к кастомным `View`

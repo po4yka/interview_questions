@@ -36,16 +36,12 @@ tags:
 anki_cards:
 - slug: q-fan-in-fan-out--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285104
+  synced_at: '2026-01-23T17:03:50.968960'
 - slug: q-fan-in-fan-out--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285132
+  synced_at: '2026-01-23T17:03:50.970911'
 ---
 # Вопрос (RU)
 > Что такое паттерны Fan-in и Fan-out в корутинах Kotlin? Объясните как распределять работу между несколькими воркерами и агрегировать результаты из множества источников.

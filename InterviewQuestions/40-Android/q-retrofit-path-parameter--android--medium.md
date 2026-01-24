@@ -1,70 +1,46 @@
----\
+---
 id: android-289
 anki_cards:
-  - slug: android-289-0-en
-    front: "How do you use @Path annotation in Retrofit to insert values into URLs?"
-    back: |
-      Use **@Path** to bind method parameters to URL placeholders in curly braces.
-
-      ```kotlin
-      @GET("users/{userId}/posts/{postId}")
-      suspend fun getPost(
-          @Path("userId") userId: String,
-          @Path("postId") postId: String
-      ): Response<Post>
-
-      // Call: api.getPost("123", "456")
-      // URL: /users/123/posts/456
-      ```
-
-      **@Path vs @Query:**
-      - `@Path` - in URL path: `/users/123` (resource IDs)
-      - `@Query` - in query string: `/users?id=123` (filters)
-
-      **URL encoding:** By default encodes special chars. Use `encoded = true` to preserve slashes.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-289-0-ru
-    front: "Как использовать аннотацию @Path в Retrofit для подстановки значений в URL?"
-    back: |
-      Используйте **@Path** для привязки параметров метода к плейсхолдерам в фигурных скобках.
-
-      ```kotlin
-      @GET("users/{userId}/posts/{postId}")
-      suspend fun getPost(
-          @Path("userId") userId: String,
-          @Path("postId") postId: String
-      ): Response<Post>
-
-      // Вызов: api.getPost("123", "456")
-      // URL: /users/123/posts/456
-      ```
-
-      **@Path vs @Query:**
-      - `@Path` - в пути URL: `/users/123` (ID ресурсов)
-      - `@Query` - в query-строке: `/users?id=123` (фильтры)
-
-      **URL-кодирование:** По умолчанию кодирует спецсимволы. Используйте `encoded = true` для сохранения слешей.
-    tags:
-      - android_general
-      - difficulty::medium
+- slug: android-289-0-en
+  language: en
+  anki_id: 1768420262243
+  synced_at: '2026-01-23T16:45:06.042788'
+- slug: android-289-0-ru
+  language: ru
+  anki_id: 1768420262304
+  synced_at: '2026-01-23T16:45:06.043823'
 title: Retrofit Path Parameter / Path параметр Retrofit
-aliases: [Path параметр Retrofit, Retrofit Path Parameter]
+aliases:
+- Path параметр Retrofit
+- Retrofit Path Parameter
 topic: android
-subtopics: [networking-http]
+subtopics:
+- networking-http
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-retrofit, q-http-protocols-comparison--android--medium, q-retrofit-library--android--medium, q-retrofit-modify-all-requests--android--hard, q-retrofit-usage-tutorial--android--medium]
+related:
+- c-retrofit
+- q-http-protocols-comparison--android--medium
+- q-retrofit-library--android--medium
+- q-retrofit-modify-all-requests--android--hard
+- q-retrofit-usage-tutorial--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/networking-http, difficulty/medium, networking, path-parameters, rest-api, retrofit]
----\
+tags:
+- android/networking-http
+- difficulty/medium
+- networking
+- path-parameters
+- rest-api
+- retrofit
+---
 # Вопрос (RU)
 > Как в `Retrofit` в GET-методе поставить атрибут в конкретное место пути?
 

@@ -1,76 +1,43 @@
----\
+---
 id: android-220
 title: Room Advanced Type Converters / Продвинутые Type Converters в Room
-aliases: [Room Advanced Type Converters, Продвинутые Type Converters в Room]
+aliases:
+- Room Advanced Type Converters
+- Продвинутые Type Converters в Room
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-room, q-how-to-animate-adding-removing-items-in-recyclerview--android--medium, q-room-code-generation-timing--android--medium, q-room-relations-embedded--android--medium, q-room-type-converters--android--medium, q-tasks-back-stack--android--medium, q-what-is-broadcastreceiver--android--easy]
+related:
+- c-room
+- q-how-to-animate-adding-removing-items-in-recyclerview--android--medium
+- q-room-code-generation-timing--android--medium
+- q-room-relations-embedded--android--medium
+- q-room-type-converters--android--medium
+- q-tasks-back-stack--android--medium
+- q-what-is-broadcastreceiver--android--easy
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/room, difficulty/medium]
+tags:
+- android/room
+- difficulty/medium
 anki_cards:
-  - slug: android-220-0-en
-    front: "What are advanced Room TypeConverters and when to use them?"
-    back: |
-      **Room TypeConverters** map custom types to supported types:
-
-      **Common converters:**
-      - `LocalDateTime` -> String (ISO-8601)
-      - `Instant` -> Long (epoch millis)
-      - `UUID` -> String or ByteArray
-      - `BigDecimal` -> String (preserves precision)
-      - `Enum` -> String (name) or Int (code)
-      - `List<T>` -> JSON String
-
-      **Best practices:**
-      1. Reuse serializer instances (Gson/Moshi/kotlinx)
-      2. Use `@ProvidedTypeConverter` for DI
-      3. Handle nulls explicitly
-      4. Use simple formats (delimiter) for primitives
-      5. JSON for complex nested objects
-
-      ```kotlin
-      @TypeConverter
-      fun fromUUID(uuid: UUID?): String? = uuid?.toString()
-      ```
-    tags:
-      - android_room
-      - difficulty::medium
-  - slug: android-220-0-ru
-    front: "Что такое продвинутые TypeConverters в Room и когда их использовать?"
-    back: |
-      **Room TypeConverters** преобразуют кастомные типы в поддерживаемые:
-
-      **Распространенные конвертеры:**
-      - `LocalDateTime` -> String (ISO-8601)
-      - `Instant` -> Long (epoch millis)
-      - `UUID` -> String или ByteArray
-      - `BigDecimal` -> String (сохраняет точность)
-      - `Enum` -> String (name) или Int (код)
-      - `List<T>` -> JSON String
-
-      **Лучшие практики:**
-      1. Переиспользуйте сериализаторы (Gson/Moshi/kotlinx)
-      2. Используйте `@ProvidedTypeConverter` для DI
-      3. Обрабатывайте null явно
-      4. Простые форматы (разделитель) для примитивов
-      5. JSON для сложных вложенных объектов
-
-      ```kotlin
-      @TypeConverter
-      fun fromUUID(uuid: UUID?): String? = uuid?.toString()
-      ```
-    tags:
-      - android_room
-      - difficulty::medium
-
----\
+- slug: android-220-0-en
+  language: en
+  anki_id: 1768399454291
+  synced_at: '2026-01-23T16:45:05.763752'
+- slug: android-220-0-ru
+  language: ru
+  anki_id: 1768399454313
+  synced_at: '2026-01-23T16:45:05.765220'
+---
 # Вопрос (RU)
 > Продвинутые Type Converters в `Room`
 

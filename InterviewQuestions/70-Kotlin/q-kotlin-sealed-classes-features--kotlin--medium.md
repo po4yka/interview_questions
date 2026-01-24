@@ -125,16 +125,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-sealed-classes-features--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296432
+  synced_at: '2026-01-23T17:03:51.719508'
 - slug: q-kotlin-sealed-classes-features--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326296457
+  synced_at: '2026-01-23T17:03:51.720279'
 ---
 # Вопрос (RU)
 > В чем особенность sealed классов?

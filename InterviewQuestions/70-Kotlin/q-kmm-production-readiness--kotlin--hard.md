@@ -2,18 +2,13 @@
 anki_cards:
 - slug: q-kmm-production-readiness--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294432
+  synced_at: '2026-01-23T17:03:51.638113'
 - slug: q-kmm-production-readiness--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294457
+  synced_at: '2026-01-23T17:03:51.638978'
 ---
-
 ---
 ---
 ---\

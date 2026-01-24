@@ -1,72 +1,46 @@
 ---
 id: android-229
 anki_cards:
-  - slug: android-229-0-en
-    front: "How does Looper connect to a thread?"
-    back: |
-      **Two steps + ThreadLocal:**
-
-      1. `Looper.prepare()` - creates Looper, stores in `ThreadLocal<Looper>`
-      2. `Looper.loop()` - starts infinite message loop (blocks until quit)
-
-      ```kotlin
-      class LooperThread : Thread() {
-          override fun run() {
-              Looper.prepare()  // Bind Looper to this thread
-              val handler = Handler(Looper.myLooper()!!)
-              Looper.loop()     // Block and process messages
-          }
-      }
-      ```
-
-      **Key rules:**
-      - One Looper per thread (second `prepare()` throws)
-      - Main thread gets Looper automatically
-      - Use `HandlerThread` for simpler setup
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-229-0-ru
-    front: "Как Looper связывается с потоком?"
-    back: |
-      **Два шага + ThreadLocal:**
-
-      1. `Looper.prepare()` - создает Looper, сохраняет в `ThreadLocal<Looper>`
-      2. `Looper.loop()` - запускает бесконечный цикл (блокирует до quit)
-
-      ```kotlin
-      class LooperThread : Thread() {
-          override fun run() {
-              Looper.prepare()  // Привязать Looper к потоку
-              val handler = Handler(Looper.myLooper()!!)
-              Looper.loop()     // Блокировать и обрабатывать
-          }
-      }
-      ```
-
-      **Ключевые правила:**
-      - Один Looper на поток (второй `prepare()` выбросит исключение)
-      - Main thread получает Looper автоматически
-      - Используйте `HandlerThread` для упрощения
-    tags:
-      - android_general
-      - difficulty::medium
+- slug: android-229-0-en
+  language: en
+  anki_id: 1768414139894
+  synced_at: '2026-01-23T16:45:05.799994'
+- slug: android-229-0-ru
+  language: ru
+  anki_id: 1768414139918
+  synced_at: '2026-01-23T16:45:05.801271'
 title: Looper Thread Connection / Связь Looper и потока
-aliases: [Looper Thread Connection, Связь Looper и потока]
+aliases:
+- Looper Thread Connection
+- Связь Looper и потока
 topic: android
-subtopics: [coroutines, threads-sync]
+subtopics:
+- coroutines
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, q-handler-looper-comprehensive--android--medium, q-handler-looper-main-thread--android--medium, q-main-thread-android--android--medium]
+related:
+- c-coroutines
+- q-handler-looper-comprehensive--android--medium
+- q-handler-looper-main-thread--android--medium
+- q-main-thread-android--android--medium
 sources: []
 created: 2024-10-15
 updated: 2025-11-11
-tags: [android/coroutines, android/threads-sync, difficulty/medium, handler, looper, message-queue]
----\
+tags:
+- android/coroutines
+- android/threads-sync
+- difficulty/medium
+- handler
+- looper
+- message-queue
+---
 # Вопрос (RU)
 
 > Как `Looper` связывается с потоком?

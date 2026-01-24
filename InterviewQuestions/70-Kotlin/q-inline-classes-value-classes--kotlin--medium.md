@@ -37,16 +37,12 @@ tags:
 anki_cards:
 - slug: q-inline-classes-value-classes--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289230
+  synced_at: '2026-01-23T17:03:51.339764'
 - slug: q-inline-classes-value-classes--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289255
+  synced_at: '2026-01-23T17:03:51.340924'
 ---
 # Вопрос (RU)
 > Что такое встроенные классы (value классы) в Kotlin?

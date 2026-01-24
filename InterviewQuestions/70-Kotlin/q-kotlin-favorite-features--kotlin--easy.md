@@ -37,16 +37,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-favorite-features--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291580
+  synced_at: '2026-01-23T17:03:51.516200'
 - slug: q-kotlin-favorite-features--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291605
+  synced_at: '2026-01-23T17:03:51.517140'
 ---
 # Расскажи Про Три Любимых Фичи В Kotlin
 

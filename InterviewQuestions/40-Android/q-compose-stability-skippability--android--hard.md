@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-142-0-en
   language: en
   anki_id: 1768366065529
-  synced_at: '2026-01-14T09:17:53.031337'
+  synced_at: '2026-01-23T16:45:05.350851'
 - slug: android-142-0-ru
   language: ru
   anki_id: 1768366065552
-  synced_at: '2026-01-14T09:17:53.033878'
+  synced_at: '2026-01-23T16:45:05.352940'
 ---
 # Вопрос (RU)
 > Как стабильность типов влияет на пропускаемость перекомпозиции в Jetpack Compose?

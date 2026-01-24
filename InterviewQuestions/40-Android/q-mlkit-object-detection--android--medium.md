@@ -1,65 +1,50 @@
 ---
 id: android-362
 anki_cards:
-  - slug: android-362-0-en
-    front: "How to implement ML Kit object detection, image labeling, and barcode scanning?"
-    back: |
-      **Image Labeling:**
-      ```kotlin
-      val labeler = ImageLabeling.getClient(
-          ImageLabelerOptions.Builder()
-              .setConfidenceThreshold(0.7f)
-              .build()
-      )
-      ```
-
-      **Object Detection:**
-      - `STREAM_MODE` for camera, `SINGLE_IMAGE_MODE` for photos
-      - `enableMultipleObjects()`, `enableClassification()`
-
-      **Barcode:** QR, EAN-13, Code-128, etc.
-
-      **Key:** Use `STRATEGY_KEEP_ONLY_LATEST`, always `imageProxy.close()`, `detector.close()` on destroy.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-362-0-ru
-    front: "Как реализовать детекцию объектов, маркировку изображений и сканирование штрих-кодов в ML Kit?"
-    back: |
-      **Маркировка изображений:**
-      ```kotlin
-      val labeler = ImageLabeling.getClient(
-          ImageLabelerOptions.Builder()
-              .setConfidenceThreshold(0.7f)
-              .build()
-      )
-      ```
-
-      **Детекция объектов:**
-      - `STREAM_MODE` для камеры, `SINGLE_IMAGE_MODE` для фото
-      - `enableMultipleObjects()`, `enableClassification()`
-
-      **Штрих-коды:** QR, EAN-13, Code-128 и др.
-
-      **Ключ:** `STRATEGY_KEEP_ONLY_LATEST`, всегда `imageProxy.close()`, `detector.close()` при уничтожении.
-    tags:
-      - android_general
-      - difficulty::medium
+- slug: android-362-0-en
+  language: en
+  anki_id: 1768414559695
+  synced_at: '2026-01-23T16:45:06.230999'
+- slug: android-362-0-ru
+  language: ru
+  anki_id: 1768414559721
+  synced_at: '2026-01-23T16:45:06.231795'
 title: ML Kit Object Detection / Распознавание объектов ML Kit
-aliases: [ML Kit Barcode Scanning, ML Kit Image Labeling, ML Kit Object Detection, Распознавание объектов ML Kit]
+aliases:
+- ML Kit Barcode Scanning
+- ML Kit Image Labeling
+- ML Kit Object Detection
+- Распознавание объектов ML Kit
 topic: android
-subtopics: [camera, media]
+subtopics:
+- camera
+- media
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-camerax, c-media3, q-compose-gesture-detection--android--medium, q-compose-performance-optimization--android--hard, q-mlkit-custom-models--android--hard, q-mlkit-face-detection--android--medium, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- c-camerax
+- c-media3
+- q-compose-gesture-detection--android--medium
+- q-compose-performance-optimization--android--hard
+- q-mlkit-custom-models--android--hard
+- q-mlkit-face-detection--android--medium
+- q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/camera, android/media, barcode-scanning, difficulty/medium, ml-kit, object-detection]
----\
+tags:
+- android/camera
+- android/media
+- barcode-scanning
+- difficulty/medium
+- ml-kit
+- object-detection
+---
 # Вопрос (RU)
 
 > Как реализовать обнаружение объектов, распознавание изображений и сканирование штрих-кодов с помощью ML Kit? В чём разница между моделями на устройстве и облачными моделями? Как обрабатывать обнаружение в реальном времени с камеры?

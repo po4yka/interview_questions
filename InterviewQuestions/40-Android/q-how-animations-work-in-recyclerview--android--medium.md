@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-201-0-en
   language: en
   anki_id: 1768367584457
-  synced_at: '2026-01-14T09:17:53.230472'
+  synced_at: '2026-01-23T16:45:05.674025'
 - slug: android-201-0-ru
   language: ru
   anki_id: 1768367584482
-  synced_at: '2026-01-14T09:17:53.233007'
+  synced_at: '2026-01-23T16:45:05.675209'
 ---
 # Вопрос (RU)
 > Как работают анимации в `RecyclerView`

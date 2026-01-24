@@ -32,22 +32,12 @@ tags:
 anki_cards:
 - slug: kotlin-177-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - collections
-  - functions
-  - types
+  anki_id: 1768326285505
+  synced_at: '2026-01-23T17:03:51.003824'
 - slug: kotlin-177-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - collections
-  - functions
-  - types
+  anki_id: 1768326285531
+  synced_at: '2026-01-23T17:03:51.005864'
 ---
 # Вопрос (RU)
 > Что такое heap pollution (загрязнение кучи) в дженериках Kotlin/Java? Как это происходит и как можно предотвратить?

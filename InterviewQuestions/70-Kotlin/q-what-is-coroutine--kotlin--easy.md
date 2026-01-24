@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-what-is-coroutine--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281355
+  synced_at: '2026-01-23T17:03:50.629835'
 - slug: q-what-is-coroutine--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281379
+  synced_at: '2026-01-23T17:03:50.631120'
 ---
 ## Answer (EN)
 

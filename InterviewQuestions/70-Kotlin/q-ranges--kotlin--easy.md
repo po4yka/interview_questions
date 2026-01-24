@@ -30,22 +30,12 @@ tags:
 anki_cards:
 - slug: kotlin-022-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - iteration
-  - ranges
-  - step
+  anki_id: 1768326291181
+  synced_at: '2026-01-23T17:03:51.493802'
 - slug: kotlin-022-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - iteration
-  - ranges
-  - step
+  anki_id: 1768326291205
+  synced_at: '2026-01-23T17:03:51.495033'
 ---
 # Вопрос (RU)
 > Что такое диапазоны в Kotlin и как их использовать?

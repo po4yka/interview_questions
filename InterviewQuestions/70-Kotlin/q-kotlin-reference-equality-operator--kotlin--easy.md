@@ -128,16 +128,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-reference-equality-operator--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289130
+  synced_at: '2026-01-23T17:03:51.332670'
 - slug: q-kotlin-reference-equality-operator--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289155
+  synced_at: '2026-01-23T17:03:51.334592'
 ---
 # Вопрос (RU)
 > Какой оператор используется для проверки равенства ссылок в Kotlin?

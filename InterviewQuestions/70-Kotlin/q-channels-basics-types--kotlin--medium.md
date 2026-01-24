@@ -35,16 +35,12 @@ tags:
 anki_cards:
 - slug: q-channels-basics-types--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293181
+  synced_at: '2026-01-23T17:03:51.586240'
 - slug: q-channels-basics-types--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293205
+  synced_at: '2026-01-23T17:03:51.587284'
 ---
 # Вопрос (RU)
 > Что такое каналы в корутинах Kotlin? Объясните различные типы каналов (Rendezvous, Buffered, Unlimited, Conflated), их характеристики и когда использовать каждый тип.

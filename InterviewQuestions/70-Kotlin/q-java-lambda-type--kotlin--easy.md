@@ -127,16 +127,12 @@ tags:
 anki_cards:
 - slug: q-java-lambda-type--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284206
+  synced_at: '2026-01-23T17:03:50.875466'
 - slug: q-java-lambda-type--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326284231
+  synced_at: '2026-01-23T17:03:50.877288'
 ---
 # Вопрос (RU)
 > Какой тип у лямбды в Java?

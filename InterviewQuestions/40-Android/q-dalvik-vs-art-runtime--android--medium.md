@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-442-0-en
   language: en
   anki_id: 1768366747779
-  synced_at: '2026-01-14T09:17:53.050256'
+  synced_at: '2026-01-23T16:45:05.363333'
 - slug: android-442-0-ru
   language: ru
   anki_id: 1768366747800
-  synced_at: '2026-01-14T09:17:53.052078'
+  synced_at: '2026-01-23T16:45:05.365416'
 sources:
 - https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
 ---

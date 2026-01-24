@@ -32,11 +32,11 @@ anki_cards:
 - slug: android-403-0-en
   language: en
   anki_id: 1768367594459
-  synced_at: '2026-01-14T09:17:53.797980'
+  synced_at: '2026-01-23T16:45:06.347193'
 - slug: android-403-0-ru
   language: ru
   anki_id: 1768367594481
-  synced_at: '2026-01-14T09:17:53.800154'
+  synced_at: '2026-01-23T16:45:06.347999'
 ---
 # Вопрос (RU)
 > Компоненты и скоупы `Hilt`

@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-delay-vs-thread-sleep--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292480
+  synced_at: '2026-01-23T17:03:51.557808'
 - slug: q-coroutine-delay-vs-thread-sleep--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292505
+  synced_at: '2026-01-23T17:03:51.558753'
 ---
 ## Answer (EN)
 

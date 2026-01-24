@@ -37,20 +37,12 @@ tags:
 anki_cards:
 - slug: kotlin-201-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - type-system
+  anki_id: 1768326290430
+  synced_at: '2026-01-23T17:03:51.441303'
 - slug: kotlin-201-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - type-system
+  anki_id: 1768326290456
+  synced_at: '2026-01-23T17:03:51.443189'
 ---
 # Вопрос (RU)
 > Объясните variance на месте объявления против на месте использования в Kotlin. В чем разница между in, out и star проекциями?

@@ -1,59 +1,46 @@
 ---
-id: android-724
-anki_cards:
-  - slug: android-287-0-en
-    front: "What is SharedPreferences and when should you use it?"
-    back: |
-      **SharedPreferences** stores small key-value pairs in XML format in app's private storage.
-
-      **Supported types**: Boolean, Int, Float, Long, String, StringSet
-
-      **apply() vs commit()**:
-      - `apply()`: Async, non-blocking (use on UI thread)
-      - `commit()`: Sync, returns success boolean
-
-      **When NOT to use**:
-      - Large data -> Room/SQLite
-      - Sensitive data -> EncryptedSharedPreferences
-      - Type-safe/reactive -> DataStore
-
-      Data is deleted when app is uninstalled.
-    tags: ["android_storage", "difficulty::easy"]
-  - slug: android-287-0-ru
-    front: "Что такое SharedPreferences и когда его использовать?"
-    back: |
-      **SharedPreferences** хранит небольшие пары ключ-значение в XML-формате в приватном хранилище.
-
-      **Поддерживаемые типы**: Boolean, Int, Float, Long, String, StringSet
-
-      **apply() vs commit()**:
-      - `apply()`: Асинхронно, не блокирует (для UI-потока)
-      - `commit()`: Синхронно, возвращает boolean успеха
-
-      **Когда НЕ использовать**:
-      - Большие данные -> Room/SQLite
-      - Чувствительные данные -> EncryptedSharedPreferences
-      - Типобезопасность/реактивность -> DataStore
-
-      Данные удаляются при удалении приложения.
-    tags: ["android_storage", "difficulty::easy"]
 id: android-287
-title: "SharedPreferences / Хранилище пар ключ-значение"
-aliases: ["Shared Preferences", "SharedPreferences", "Хранилище пар ключ-значение"]
+anki_cards:
+- slug: android-287-0-en
+  language: en
+  anki_id: 1768447068006
+  synced_at: '2026-01-23T16:45:06.034171'
+- slug: android-287-0-ru
+  language: ru
+  anki_id: 1768447068031
+  synced_at: '2026-01-23T16:45:06.036671'
+- slug: android-724-0-en
+  language: en
+- slug: android-724-0-ru
+  language: ru
+title: SharedPreferences / Хранилище пар ключ-значение
+aliases:
+- Shared Preferences
+- SharedPreferences
+- Хранилище пар ключ-значение
 topic: android
-subtopics: [datastore, files-media]
+subtopics:
+- datastore
+- files-media
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-storage-options, q-room-relations-embedded--android--medium]
+related:
+- c-android-storage-options
+- q-room-relations-embedded--android--medium
 created: 2023-10-15
 updated: 2025-11-10
-tags: [android, android/datastore, android/files-media, difficulty/easy]
-
----\
+tags:
+- android
+- android/datastore
+- android/files-media
+- difficulty/easy
+---
 # Вопрос (RU)
 
 > Что такое `SharedPreferences` и для чего используется?

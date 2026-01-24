@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-439-0-en
   language: en
   anki_id: 1768366552936
-  synced_at: '2026-01-14T08:56:04.055595'
+  synced_at: '2026-01-23T16:45:05.235404'
 - slug: android-439-0-ru
   language: ru
   anki_id: 1768366552990
-  synced_at: '2026-01-14T08:56:04.059392'
+  synced_at: '2026-01-23T16:45:05.238556'
 sources:
 - https://dagger.dev/hilt/
 ---

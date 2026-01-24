@@ -1,65 +1,49 @@
 ---
 id: android-106
 anki_cards:
-  - slug: android-106-0-en
-    front: "What happens when Looper.loop() processes an empty MessageQueue?"
-    back: |
-      **The thread blocks (does NOT terminate):**
-
-      1. Blocks inside `MessageQueue.next()`
-      2. Enters native wait via `nativePollOnce()` (epoll)
-      3. **No CPU consumption** - efficient idle
-      4. Wakes on `nativeWake()` when message posted
-
-      ```java
-      Message next() {
-          nativePollOnce(ptr, -1); // Blocks until wake
-          return mMessages;
-      }
-      ```
-
-      **Only `quit()`/`quitSafely()` exits the loop** - empty queue alone does NOT terminate thread.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-106-0-ru
-    front: "Что происходит когда Looper.loop() обрабатывает пустую MessageQueue?"
-    back: |
-      **Поток блокируется (НЕ завершается):**
-
-      1. Блокируется в `MessageQueue.next()`
-      2. Входит в native ожидание через `nativePollOnce()` (epoll)
-      3. **Не потребляет CPU** - эффективный idle
-      4. Пробуждается при `nativeWake()` когда сообщение добавлено
-
-      ```java
-      Message next() {
-          nativePollOnce(ptr, -1); // Блокируется до wake
-          return mMessages;
-      }
-      ```
-
-      **Только `quit()`/`quitSafely()` завершает цикл** - пустая очередь НЕ завершает поток.
-    tags:
-      - android_general
-      - difficulty::medium
+- slug: android-106-0-en
+  language: en
+  anki_id: 1768414158170
+  synced_at: '2026-01-23T16:45:06.365113'
+- slug: android-106-0-ru
+  language: ru
+  anki_id: 1768414158193
+  synced_at: '2026-01-23T16:45:06.365882'
 title: Looper Empty Queue Behavior / Поведение Looper при пустой очереди
-aliases: [Looper Blocking Behavior, Looper Empty Queue, Блокировка Looper, Поведение Looper при пустой очереди]
+aliases:
+- Looper Blocking Behavior
+- Looper Empty Queue
+- Блокировка Looper
+- Поведение Looper при пустой очереди
 topic: android
-subtopics: [coroutines, threads-sync]
+subtopics:
+- coroutines
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-concurrency, q-handler-looper-comprehensive--android--medium, q-handler-looper-main-thread--android--medium, q-looper-thread-connection--android--medium]
+related:
+- c-android
+- c-concurrency
+- q-handler-looper-comprehensive--android--medium
+- q-handler-looper-main-thread--android--medium
+- q-looper-thread-connection--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-11-11
-tags: [android/coroutines, android/threads-sync, blocking, difficulty/medium, looper, message-queue]
-
----\
+tags:
+- android/coroutines
+- android/threads-sync
+- blocking
+- difficulty/medium
+- looper
+- message-queue
+---
 # Вопрос (RU)
 
 > Что происходит, когда поток разбирает пустую очередь сообщений с помощью `Looper`.loop()?

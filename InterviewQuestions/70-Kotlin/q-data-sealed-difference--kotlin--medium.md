@@ -126,16 +126,12 @@ tags:
 anki_cards:
 - slug: q-data-sealed-difference--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290931
+  synced_at: '2026-01-23T17:03:51.477897'
 - slug: q-data-sealed-difference--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290956
+  synced_at: '2026-01-23T17:03:51.479006'
 ---
 # Вопрос (RU)
 > В чём разница между data class и sealed class в Kotlin?

@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-483-0-en
   language: en
   anki_id: 1768363328621
-  synced_at: '2026-01-14T09:17:53.378757'
+  synced_at: '2026-01-23T16:45:05.956014'
 - slug: android-483-0-ru
   language: ru
   anki_id: 1768363328646
-  synced_at: '2026-01-14T09:17:53.381460'
+  synced_at: '2026-01-23T16:45:05.957799'
 ---
 # Вопрос (RU)
 > Что такое проблема размера страницы DEX 16KB в Android?

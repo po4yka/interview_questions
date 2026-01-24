@@ -126,16 +126,12 @@ tags:
 anki_cards:
 - slug: q-equals-hashcode-contracts--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283155
+  synced_at: '2026-01-23T17:03:50.777204'
 - slug: q-equals-hashcode-contracts--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283181
+  synced_at: '2026-01-23T17:03:50.778654'
 ---
 # Вопрос (RU)
 > Расскажите о контрактах equals() и hashCode() в Kotlin. Каковы их требования и как они работают вместе?

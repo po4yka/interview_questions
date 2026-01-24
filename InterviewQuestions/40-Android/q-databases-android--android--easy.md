@@ -33,11 +33,11 @@ anki_cards:
 - slug: android-475-0-en
   language: en
   anki_id: 1768366758926
-  synced_at: '2026-01-14T09:17:53.881436'
+  synced_at: '2026-01-23T16:45:06.423038'
 - slug: android-475-0-ru
   language: ru
   anki_id: 1768366758952
-  synced_at: '2026-01-14T09:17:53.883547'
+  synced_at: '2026-01-23T16:45:06.423989'
 sources:
 - https://developer.android.com/training/data-storage
 ---

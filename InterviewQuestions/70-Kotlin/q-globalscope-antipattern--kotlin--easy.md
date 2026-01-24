@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-globalscope-antipattern--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288880
+  synced_at: '2026-01-23T17:03:51.315358'
 - slug: q-globalscope-antipattern--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288905
+  synced_at: '2026-01-23T17:03:51.317823'
 ---
 # Question (EN)
 > Why should you avoid using `GlobalScope` in Android applications?

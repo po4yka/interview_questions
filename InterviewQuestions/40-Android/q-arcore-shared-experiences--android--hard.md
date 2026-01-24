@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-628-0-en
   language: en
   anki_id: 1768364694357
-  synced_at: '2026-01-14T09:17:53.067631'
+  synced_at: '2026-01-23T16:45:05.422098'
 - slug: android-628-0-ru
   language: ru
   anki_id: 1768364694406
-  synced_at: '2026-01-14T09:17:53.070263'
+  synced_at: '2026-01-23T16:45:05.423782'
 ---
 # Вопрос (RU)
 > Как построить многопользовательский AR-опыт на ARCore: синхронизировать Cloud Anchors, использовать Depth API для окклюзии, совмещать Sceneform/Filament рендеринг и гарантировать стабильность трекинга?

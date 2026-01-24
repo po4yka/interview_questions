@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-623-0-en
   language: en
   anki_id: 1768364268221
-  synced_at: '2026-01-14T09:17:53.558438'
+  synced_at: '2026-01-23T16:45:06.180560'
 - slug: android-623-0-ru
   language: ru
   anki_id: 1768364268248
-  synced_at: '2026-01-14T09:17:53.561024'
+  synced_at: '2026-01-23T16:45:06.181306'
 ---
 # Вопрос (RU)
 > Как построить интерфейс Android TV, совмещая Legacy Leanback и Compose for TV, обеспечивая навигацию фокусом, рекомендации и сертификацию Google TV?

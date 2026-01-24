@@ -29,16 +29,12 @@ tags:
 anki_cards:
 - slug: q-flow-combining-zip-combine--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287255
+  synced_at: '2026-01-23T17:03:51.176845'
 - slug: q-flow-combining-zip-combine--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287280
+  synced_at: '2026-01-23T17:03:51.178516'
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140020

@@ -127,16 +127,12 @@ tags:
 anki_cards:
 - slug: q-how-gc-knows-object-can-be-destroyed--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280655
+  synced_at: '2026-01-23T17:03:50.575709'
 - slug: q-how-gc-knows-object-can-be-destroyed--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280680
+  synced_at: '2026-01-23T17:03:50.579213'
 ---
 # Вопрос (RU)
 > Как сборщик мусора понимает что объект можно уничтожить?

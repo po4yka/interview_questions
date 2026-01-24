@@ -36,18 +36,12 @@ tags:
 anki_cards:
 - slug: kotlin-114-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
+  anki_id: 1768326290781
+  synced_at: '2026-01-23T17:03:51.470700'
 - slug: kotlin-114-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - coroutines
+  anki_id: 1768326290806
+  synced_at: '2026-01-23T17:03:51.471998'
 ---
 # Вопрос (RU)
 > Что такое стратегии буферизации каналов в Kotlin? Объясните каналы RENDEZVOUS, BUFFERED, UNLIMITED и CONFLATED и когда использовать каждый.

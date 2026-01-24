@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-051-0-en
   language: en
   anki_id: 1768364268727
-  synced_at: '2026-01-14T09:17:53.718362'
+  synced_at: '2026-01-23T16:45:06.303475'
 - slug: android-051-0-ru
   language: ru
   anki_id: 1768364268749
-  synced_at: '2026-01-14T09:17:53.721327'
+  synced_at: '2026-01-23T16:45:06.304256'
 ---
 # Вопрос (RU)
 > Какие техники используются для уменьшения размера Android-приложения?

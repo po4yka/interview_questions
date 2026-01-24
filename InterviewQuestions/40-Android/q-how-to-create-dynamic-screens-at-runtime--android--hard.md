@@ -1,68 +1,44 @@
----\
+---
 id: android-184
-title: How To Create Dynamic Screens At Runtime / Как создавать динамические экраны во время выполнения
-aliases: [How To Create Dynamic Screens At Runtime, Как создавать динамические экраны во время выполнения]
+title: How To Create Dynamic Screens At Runtime / Как создавать динамические экраны
+  во время выполнения
+aliases:
+- How To Create Dynamic Screens At Runtime
+- Как создавать динамические экраны во время выполнения
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-dalvik-vs-art-runtime--android--medium, q-fragments-history-and-purpose--android--hard, q-how-is-navigation-implemented--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-material3-dynamic-color-theming--android--medium, q-runtime-permissions-best-practices--android--medium]
+related:
+- c-android-components
+- q-dalvik-vs-art-runtime--android--medium
+- q-fragments-history-and-purpose--android--hard
+- q-how-is-navigation-implemented--android--medium
+- q-how-to-add-fragment-synchronously-asynchronously--android--medium
+- q-material3-dynamic-color-theming--android--medium
+- q-runtime-permissions-best-practices--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/hard]
+tags:
+- android/ui-views
+- difficulty/hard
 anki_cards:
-  - slug: android-184-0-en
-    front: "How to create dynamic screens at runtime in Android?"
-    back: |
-      **Server-Driven UI approach:**
-
-      1. **Load config from backend** (JSON/XML/Proto)
-      2. **Map to local model:**
-      ```kotlin
-      data class ScreenConfig(
-          val components: List<Component>
-      )
-      ```
-
-      3. **Use factory pattern** to build UI from description:
-      - Fragment factories
-      - Compose + `when` on component type
-      - RecyclerView with different ViewTypes
-
-      **Benefits:** Update UI without app release
-      **Considerations:** Validation, security, schema versioning
-    tags:
-      - android_architecture
-      - difficulty::hard
-  - slug: android-184-0-ru
-    front: "Как создавать динамические экраны во время выполнения в Android?"
-    back: |
-      **Подход Server-Driven UI:**
-
-      1. **Загрузить конфиг с бэкенда** (JSON/XML/Proto)
-      2. **Мапить в локальную модель:**
-      ```kotlin
-      data class ScreenConfig(
-          val components: List<Component>
-      )
-      ```
-
-      3. **Использовать паттерн фабрика** для построения UI:
-      - Fragment factories
-      - Compose + `when` по типу компонента
-      - RecyclerView с разными ViewTypes
-
-      **Преимущества:** Обновление UI без релиза приложения
-      **Важно:** Валидация, безопасность, версионирование схемы
-    tags:
-      - android_architecture
-      - difficulty::hard
-
----\
+- slug: android-184-0-en
+  language: en
+  anki_id: 1768380638779
+  synced_at: '2026-01-23T16:45:05.602006'
+- slug: android-184-0-ru
+  language: ru
+  anki_id: 1768380638804
+  synced_at: '2026-01-23T16:45:05.603497'
+---
 # Вопрос (RU)
 
 > Как в runtime делать динамические экраны которые не были предусмотрены

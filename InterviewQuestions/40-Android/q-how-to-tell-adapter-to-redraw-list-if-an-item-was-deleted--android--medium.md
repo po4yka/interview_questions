@@ -1,65 +1,53 @@
----\
+---
 id: android-315
-title: How To Tell Adapter To Redraw List If An Item Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален
-aliases: [Adapter Redraw on Item Deletion, Перерисовка адаптера при удалении элемента]
+title: How To Tell Adapter To Redraw List If An Item Was Deleted / Как сказать адаптеру
+  перерисовать список если элемент был удален
+aliases:
+- Adapter Redraw on Item Deletion
+- Перерисовка адаптера при удалении элемента
 topic: android
-subtopics: [architecture-modularization, ui-views, ui-widgets]
+subtopics:
+- architecture-modularization
+- ui-views
+- ui-widgets
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-recyclerview, q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium, q-mvi-handle-one-time-events--android--hard, q-tasks-back-stack--android--medium, q-view-fundamentals--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-problems-can-there-be-with-list-items--android--easy]
+related:
+- c-recyclerview
+- q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium
+- q-mvi-handle-one-time-events--android--hard
+- q-tasks-back-stack--android--medium
+- q-view-fundamentals--android--easy
+- q-what-is-known-about-methods-that-redraw-view--android--medium
+- q-what-problems-can-there-be-with-list-items--android--easy
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [adapters, android, android/architecture-modularization, android/ui-views, android/ui-widgets, difficulty/medium, recyclerview, ui]
+tags:
+- adapters
+- android
+- android/architecture-modularization
+- android/ui-views
+- android/ui-widgets
+- difficulty/medium
+- recyclerview
+- ui
 anki_cards:
-  - slug: android-315-0-en
-    front: "How to notify RecyclerView adapter when an item is deleted?"
-    back: |
-      **Best approaches:**
-
-      1. **notifyItemRemoved(position)** - smooth animation
-      ```kotlin
-      items.removeAt(position)
-      notifyItemRemoved(position)
-      ```
-
-      2. **ListAdapter + DiffUtil** (recommended)
-      ```kotlin
-      val newList = currentList.toMutableList().apply { remove(item) }
-      submitList(newList)  // Auto-calculates changes
-      ```
-
-      **Avoid:** `notifyDataSetChanged()` - no animation, inefficient
-    tags:
-      - android_layouts
-      - difficulty::medium
-  - slug: android-315-0-ru
-    front: "Как уведомить адаптер RecyclerView об удалении элемента?"
-    back: |
-      **Лучшие подходы:**
-
-      1. **notifyItemRemoved(position)** - плавная анимация
-      ```kotlin
-      items.removeAt(position)
-      notifyItemRemoved(position)
-      ```
-
-      2. **ListAdapter + DiffUtil** (рекомендуется)
-      ```kotlin
-      val newList = currentList.toMutableList().apply { remove(item) }
-      submitList(newList)  // Авто-вычисление изменений
-      ```
-
-      **Избегать:** `notifyDataSetChanged()` - нет анимации, неэффективно
-    tags:
-      - android_layouts
-      - difficulty::medium
-
----\
+- slug: android-315-0-en
+  language: en
+  anki_id: 1768381281407
+  synced_at: '2026-01-23T16:45:06.118975'
+- slug: android-315-0-ru
+  language: ru
+  anki_id: 1768381281431
+  synced_at: '2026-01-23T16:45:06.119971'
+---
 # Вопрос (RU)
 
 > Как сказать адаптеру перерисовать список, если какой-то элемент удалился?

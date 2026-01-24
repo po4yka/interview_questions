@@ -39,11 +39,11 @@ anki_cards:
 - slug: android-482-0-en
   language: en
   anki_id: 1768366348126
-  synced_at: '2026-01-14T09:17:53.774686'
+  synced_at: '2026-01-23T16:45:06.330563'
 - slug: android-482-0-ru
   language: ru
   anki_id: 1768366348149
-  synced_at: '2026-01-14T09:17:53.776733'
+  synced_at: '2026-01-23T16:45:06.331336'
 ---
 # Вопрос (RU)
 > Какие типы `Context` существуют в Android и когда следует использовать каждый из них?

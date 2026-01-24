@@ -31,22 +31,12 @@ tags:
 anki_cards:
 - slug: lang-083-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - collections
-  - equality
-  - object-methods
+  anki_id: 1768326285856
+  synced_at: '2026-01-23T17:03:51.031941'
 - slug: lang-083-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - collections
-  - equality
-  - object-methods
+  anki_id: 1768326285882
+  synced_at: '2026-01-23T17:03:51.034245'
 ---
 # Вопрос (RU)
 > Зачем нужны методы `equals()` и `hashCode()` в Kotlin и Java?

@@ -31,20 +31,12 @@ tags:
 anki_cards:
 - slug: lang-070-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - queues
+  anki_id: 1768326292881
+  synced_at: '2026-01-23T17:03:51.573230'
 - slug: lang-070-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
-  - queues
+  anki_id: 1768326292907
+  synced_at: '2026-01-23T17:03:51.574064'
 ---
 # Вопрос (RU)
 > Какова разница между `PriorityQueue` и `Deque`?

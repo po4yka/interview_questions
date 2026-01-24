@@ -1,72 +1,44 @@
----\
+---
 id: android-065
-title: "WorkManager Advanced / Продвинутый WorkManager"
-aliases: ["WorkManager Advanced", "Продвинутый WorkManager"]
+title: WorkManager Advanced / Продвинутый WorkManager
+aliases:
+- WorkManager Advanced
+- Продвинутый WorkManager
 topic: android
-subtopics: [background-execution]
+subtopics:
+- background-execution
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-background-tasks, c-android-background-execution, c-jobscheduler]
+related:
+- c-background-tasks
+- c-android-background-execution
+- c-jobscheduler
 created: 2025-10-12
 updated: 2025-11-10
-tags: [android/background-execution, background-processing, difficulty/medium, jetpack, workmanager]
-sources: ["https://developer.android.com/topic/libraries/architecture/workmanager"]
+tags:
+- android/background-execution
+- background-processing
+- difficulty/medium
+- jetpack
+- workmanager
+sources:
+- https://developer.android.com/topic/libraries/architecture/workmanager
 anki_cards:
-  - slug: android-065-0-en
-    front: "What are the advanced features of WorkManager?"
-    back: |
-      **Constraints:** Execute when conditions met (WiFi, battery)
-      ```kotlin
-      Constraints.Builder()
-          .setRequiredNetworkType(NetworkType.UNMETERED)
-          .setRequiresBatteryNotLow(true).build()
-      ```
-
-      **Chaining:** Sequential/parallel with data passing
-      ```kotlin
-      beginWith(download).then(process).then(upload).enqueue()
-      ```
-
-      **ExistingWorkPolicy:** REPLACE, KEEP, APPEND_OR_REPLACE
-
-      **Periodic:** Min 15min interval with flex window
-
-      **Persistence:** SQLite-backed, survives reboots
-
-      **Progress:** `setProgress()` + `getWorkInfoByIdLiveData()`
-    tags:
-      - android_workmanager
-      - difficulty::medium
-  - slug: android-065-0-ru
-    front: "Какие продвинутые возможности WorkManager?"
-    back: |
-      **Constraints:** Выполнение при соблюдении условий (WiFi, батарея)
-      ```kotlin
-      Constraints.Builder()
-          .setRequiredNetworkType(NetworkType.UNMETERED)
-          .setRequiresBatteryNotLow(true).build()
-      ```
-
-      **Chaining:** Последовательное/параллельное с передачей данных
-      ```kotlin
-      beginWith(download).then(process).then(upload).enqueue()
-      ```
-
-      **ExistingWorkPolicy:** REPLACE, KEEP, APPEND_OR_REPLACE
-
-      **Periodic:** Мин. 15 минут с гибким окном
-
-      **Persistence:** SQLite, выживает после перезагрузки
-
-      **Progress:** `setProgress()` + `getWorkInfoByIdLiveData()`
-    tags:
-      - android_workmanager
-      - difficulty::medium
----\
+- slug: android-065-0-en
+  language: en
+  anki_id: 1768380467678
+  synced_at: '2026-01-23T16:45:05.920072'
+- slug: android-065-0-ru
+  language: ru
+  anki_id: 1768380467702
+  synced_at: '2026-01-23T16:45:05.921441'
+---
 # Вопрос (RU)
 > Какие продвинутые возможности `WorkManager`?
 

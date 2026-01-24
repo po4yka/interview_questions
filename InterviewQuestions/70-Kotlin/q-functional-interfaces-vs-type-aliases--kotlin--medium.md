@@ -31,18 +31,12 @@ tags:
 anki_cards:
 - slug: kotlin-006-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
+  anki_id: 1768326282657
+  synced_at: '2026-01-23T17:03:50.733326'
 - slug: kotlin-006-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
+  anki_id: 1768326282680
+  synced_at: '2026-01-23T17:03:50.737192'
 ---
 # Вопрос (RU)
 > В чем разница между функциональными интерфейсами и псевдонимами типов в Kotlin?

@@ -1,70 +1,42 @@
----\
+---
 id: android-280
-title: How To Connect BroadcastReceiver So It Can Receive Messages / Как подключить BroadcastReceiver для получения сообщений
-aliases: [How To Connect BroadcastReceiver So It Can Receive Messages, Как подключить BroadcastReceiver для получения сообщений]
+title: How To Connect BroadcastReceiver So It Can Receive Messages / Как подключить
+  BroadcastReceiver для получения сообщений
+aliases:
+- How To Connect BroadcastReceiver So It Can Receive Messages
+- Как подключить BroadcastReceiver для получения сообщений
 topic: android
-subtopics: [broadcast-receiver]
+subtopics:
+- broadcast-receiver
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-broadcast-receiver, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-what-can-be-done-through-composer--android--medium, q-what-is-broadcastreceiver--android--easy]
+related:
+- c-broadcast-receiver
+- q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
+- q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+- q-what-can-be-done-through-composer--android--medium
+- q-what-is-broadcastreceiver--android--easy
 created: 2024-10-15
 updated: 2025-11-10
-tags: [android/broadcast-receiver, difficulty/medium]
+tags:
+- android/broadcast-receiver
+- difficulty/medium
 anki_cards:
-  - slug: android-280-0-en
-    front: "What are the two ways to register a BroadcastReceiver?"
-    back: |
-      **1. Static (Manifest):**
-      ```xml
-      <receiver android:name=".BootReceiver"
-                android:exported="true">
-          <intent-filter>
-              <action android:name="android.intent.action.BOOT_COMPLETED"/>
-          </intent-filter>
-      </receiver>
-      ```
-      - System can launch app to deliver broadcast
-      - Limited by Android 8+ restrictions
-
-      **2. Dynamic (Code):**
-      ```kotlin
-      registerReceiver(receiver, IntentFilter(action))
-      // Don't forget: unregisterReceiver() in onDestroy
-      ```
-      - Lives only while component is active
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-280-0-ru
-    front: "Какие два способа регистрации BroadcastReceiver?"
-    back: |
-      **1. Статический (Manifest):**
-      ```xml
-      <receiver android:name=".BootReceiver"
-                android:exported="true">
-          <intent-filter>
-              <action android:name="android.intent.action.BOOT_COMPLETED"/>
-          </intent-filter>
-      </receiver>
-      ```
-      - Система может запустить приложение для доставки broadcast
-      - Ограничен Android 8+ ограничениями
-
-      **2. Динамический (Код):**
-      ```kotlin
-      registerReceiver(receiver, IntentFilter(action))
-      // Не забудьте: unregisterReceiver() в onDestroy
-      ```
-      - Живет только пока компонент активен
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-280-0-en
+  language: en
+  anki_id: 1768378890449
+  synced_at: '2026-01-23T16:45:06.007287'
+- slug: android-280-0-ru
+  language: ru
+  anki_id: 1768378890470
+  synced_at: '2026-01-23T16:45:06.008979'
+---
 # Вопрос (RU)
 > Как подключить `BroadcastReceiver` для получения сообщений
 

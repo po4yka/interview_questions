@@ -1,67 +1,52 @@
----\
+---
 id: android-421
 title: How Is Navigation Implemented / Как реализована навигация
-aliases: [Android Navigation, How Is Navigation Implemented, Как реализована навигация, Навигация в Android]
+aliases:
+- Android Navigation
+- How Is Navigation Implemented
+- Как реализована навигация
+- Навигация в Android
 topic: android
-subtopics: [fragment, ui-navigation]
+subtopics:
+- fragment
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-navigation, c-fragments, q-how-dialog-differs-from-other-navigation--android--medium, q-how-navigation-is-implemented-in-android--android--medium, q-navigation-methods-in-kotlin--android--medium, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy, q-what-navigation-methods-do-you-know--android--medium]
+related:
+- c-compose-navigation
+- c-fragments
+- q-how-dialog-differs-from-other-navigation--android--medium
+- q-how-navigation-is-implemented-in-android--android--medium
+- q-navigation-methods-in-kotlin--android--medium
+- q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy
+- q-what-navigation-methods-do-you-know--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/fragment, android/ui-navigation, difficulty/medium, fragments, navigation, navigation-component, ui]
+tags:
+- android/fragment
+- android/ui-navigation
+- difficulty/medium
+- fragments
+- navigation
+- navigation-component
+- ui
 anki_cards:
-  - slug: android-421-0-en
-    front: "What are the main approaches to navigation in Android?"
-    back: |
-      **1. Navigation Component (recommended):**
-      - NavController + navigation graph (XML)
-      - Safe Args for type-safe arguments
-      - `findNavController().navigate(R.id.action_to_detail)`
-
-      **2. Bottom Navigation:**
-      - 3-5 main sections
-      - `setupWithNavController(navController)`
-
-      **3. Navigation Drawer:**
-      - Side menu for additional sections
-
-      **4. Manual Fragment transactions:**
-      - `replace()` + `addToBackStack()`
-
-      **Key concepts:** Back stack, Deep links, Safe Args
-    tags:
-      - android_navigation
-      - difficulty::medium
-  - slug: android-421-0-ru
-    front: "Какие основные подходы к навигации в Android?"
-    back: |
-      **1. Navigation Component (рекомендуется):**
-      - NavController + граф навигации (XML)
-      - Safe Args для типобезопасных аргументов
-      - `findNavController().navigate(R.id.action_to_detail)`
-
-      **2. Bottom Navigation:**
-      - 3-5 основных разделов
-      - `setupWithNavController(navController)`
-
-      **3. Navigation Drawer:**
-      - Боковое меню для дополнительных разделов
-
-      **4. Ручные Fragment-транзакции:**
-      - `replace()` + `addToBackStack()`
-
-      **Ключевые концепции:** Back stack, Deep links, Safe Args
-    tags:
-      - android_navigation
-      - difficulty::medium
-
----\
+- slug: android-421-0-en
+  language: en
+  anki_id: 1768378131667
+  synced_at: '2026-01-23T16:45:06.386672'
+- slug: android-421-0-ru
+  language: ru
+  anki_id: 1768378131692
+  synced_at: '2026-01-23T16:45:06.387338'
+---
 # Вопрос (RU)
 
 > Как реализована навигация в Android приложениях?

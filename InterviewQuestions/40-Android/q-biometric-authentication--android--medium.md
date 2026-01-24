@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-068-0-en
   language: en
   anki_id: 1768364992150
-  synced_at: '2026-01-14T09:17:53.713704'
+  synced_at: '2026-01-23T16:45:06.301787'
 - slug: android-068-0-ru
   language: ru
   anki_id: 1768364992173
-  synced_at: '2026-01-14T09:17:53.716101'
+  synced_at: '2026-01-23T16:45:06.302657'
 ---
 # Вопрос (RU)
 > Как реализовать биометрическую аутентификацию в Android?

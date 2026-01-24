@@ -1,65 +1,46 @@
 ---
 id: android-016
 title: Task Affinity in Android / Task Affinity в Android
-aliases: [Task Affinity in Android, Task Affinity в Android]
+aliases:
+- Task Affinity in Android
+- Task Affinity в Android
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, q-android-app-components--android--easy, q-android-lint-tool--android--medium, q-main-thread-android--android--medium, q-parsing-optimization-android--android--medium]
+related:
+- c-activity
+- q-android-app-components--android--easy
+- q-android-lint-tool--android--medium
+- q-main-thread-android--android--medium
+- q-parsing-optimization-android--android--medium
 created: 2025-10-05
 updated: 2025-11-10
-tags: [android/activity, android/ui-navigation, difficulty/medium, task-affinity, tasks]
+tags:
+- android/activity
+- android/ui-navigation
+- difficulty/medium
+- task-affinity
+- tasks
 sources:
-  - "https://developer.android.com/guide/components/activities/tasks-and-back-stack"
+- https://developer.android.com/guide/components/activities/tasks-and-back-stack
 anki_cards:
-  - slug: android-016-0-en
-    front: "What is taskAffinity in Android and when does it take effect?"
-    back: |
-      **taskAffinity** - defines which task an Activity prefers to belong to.
-
-      **Default**: all activities share app's package name as affinity.
-
-      **Takes effect when**:
-      1. **FLAG_ACTIVITY_NEW_TASK** - places Activity in task with matching affinity
-      2. **allowTaskReparenting=true** - Activity moves to its affinity task when it comes to foreground
-
-      ```xml
-      <activity
-          android:taskAffinity="com.example.weather"
-          android:allowTaskReparenting="true" />
-      ```
-
-      **Use cases**: separate workflows, notification handling, cross-app grouping.
-    tags:
-      - android_activities
-      - difficulty::medium
-  - slug: android-016-0-ru
-    front: "Что такое taskAffinity в Android и когда она применяется?"
-    back: |
-      **taskAffinity** - определяет какой задаче Activity предпочитает принадлежать.
-
-      **По умолчанию**: все Activity имеют affinity равный package name приложения.
-
-      **Вступает в силу когда**:
-      1. **FLAG_ACTIVITY_NEW_TASK** - размещает Activity в задаче с совпадающим affinity
-      2. **allowTaskReparenting=true** - Activity перемещается в свою affinity задачу при выходе на передний план
-
-      ```xml
-      <activity
-          android:taskAffinity="com.example.weather"
-          android:allowTaskReparenting="true" />
-      ```
-
-      **Применение**: разделение рабочих процессов, обработка уведомлений, группировка между приложениями.
-    tags:
-      - android_activities
-      - difficulty::medium
-
+- slug: android-016-0-en
+  language: en
+  anki_id: 1768379598650
+  synced_at: '2026-01-23T16:45:06.443723'
+- slug: android-016-0-ru
+  language: ru
+  anki_id: 1768379598673
+  synced_at: '2026-01-23T16:45:06.444853'
 ---
 # Вопрос (RU)
 > Что такое taskAffinity и как она работает?

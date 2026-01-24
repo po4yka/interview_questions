@@ -1,57 +1,48 @@
----\
+---
 id: android-139
-title: "Save Data Outside Fragment / Сохранение данных вне Fragment"
-aliases: ["Save Data Outside Fragment", "Сохранение данных вне Fragment"]
+title: Save Data Outside Fragment / Сохранение данных вне Fragment
+aliases:
+- Save Data Outside Fragment
+- Сохранение данных вне Fragment
 topic: android
-subtopics: [architecture-mvvm, lifecycle, room]
+subtopics:
+- architecture-mvvm
+- lifecycle
+- room
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-what-is-layout-types-and-when-to-use--android--easy]
+related:
+- c-android-components
+- q-what-is-layout-types-and-when-to-use--android--easy
 created: 2024-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-mvvm, android/lifecycle, android/room, data-persistence, datastore, difficulty/medium, fragments, sharedpreferences, viewmodel]
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- android/room
+- data-persistence
+- datastore
+- difficulty/medium
+- fragments
+- sharedpreferences
+- viewmodel
 anki_cards:
-  - slug: android-139-0-en
-    front: "How can you save data outside a Fragment in Android?"
-    back: |
-      **Methods by persistence:**
-
-      | Method | Survives rotation | Survives process death |
-      |--------|-------------------|------------------------|
-      | ViewModel | Yes | No |
-      | SavedStateHandle | Yes | Yes (small data) |
-      | SharedPreferences | Yes | Yes |
-      | DataStore | Yes | Yes |
-      | Room | Yes | Yes |
-
-      **Architecture:** Fragment -> ViewModel -> Repository -> Data Sources
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-139-0-ru
-    front: "Как сохранить данные за пределами Fragment в Android?"
-    back: |
-      **Методы по персистентности:**
-
-      | Метод | Переживает ротацию | Переживает смерть процесса |
-      |-------|--------------------|-----------------------------|
-      | ViewModel | Да | Нет |
-      | SavedStateHandle | Да | Да (малые данные) |
-      | SharedPreferences | Да | Да |
-      | DataStore | Да | Да |
-      | Room | Да | Да |
-
-      **Архитектура:** Fragment -> ViewModel -> Repository -> Data Sources
-    tags:
-      - android_architecture
-      - difficulty::medium
-
----\
+- slug: android-139-0-en
+  language: en
+  anki_id: 1768396251173
+  synced_at: '2026-01-23T16:45:05.338994'
+- slug: android-139-0-ru
+  language: ru
+  anki_id: 1768396251198
+  synced_at: '2026-01-23T16:45:05.340880'
+---
 # Вопрос (RU)
 
 > Каким образом можно сохранить данные за пределами фрагмента?

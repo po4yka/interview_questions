@@ -31,11 +31,11 @@ anki_cards:
 - slug: android-353-0-en
   language: en
   anki_id: 1768367590859
-  synced_at: '2026-01-14T09:17:53.583411'
+  synced_at: '2026-01-23T16:45:06.207129'
 - slug: android-353-0-ru
   language: ru
   anki_id: 1768367590880
-  synced_at: '2026-01-14T09:17:53.585942'
+  synced_at: '2026-01-23T16:45:06.207924'
 tags:
 - android
 - android/architecture-mvvm

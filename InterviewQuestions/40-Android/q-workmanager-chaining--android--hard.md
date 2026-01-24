@@ -1,53 +1,44 @@
----\
+---
 id: android-173
-title: "Workmanager Chaining / Цепочки WorkManager"
-aliases: ["Workmanager Chaining", "Цепочки WorkManager"]
+title: Workmanager Chaining / Цепочки WorkManager
+aliases:
+- Workmanager Chaining
+- Цепочки WorkManager
 topic: android
-subtopics: [background-execution, coroutines]
+subtopics:
+- background-execution
+- coroutines
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, q-android-async-primitives--android--easy]
+related:
+- c-coroutines
+- q-android-async-primitives--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/background-execution, android/coroutines, background, difficulty/hard, workmanager]
+tags:
+- android
+- android/background-execution
+- android/coroutines
+- background
+- difficulty/hard
+- workmanager
 anki_cards:
-  - slug: android-173-0-en
-    front: "How do you chain workers in WorkManager?"
-    back: |
-      **Sequential:** `beginWith(A).then(B).then(C).enqueue()`
-
-      **Parallel (fan-out):** `.then(listOf(B, C, D))`
-
-      **Fan-in:** `beginWith(listOf(A, B, C)).then(aggregator)`
-
-      **Data passing:** Use `workDataOf()` in Result.success(), read via `inputData` in next worker. Keep data < 10KB.
-
-      **Error handling:** Result.retry() for transient errors, Result.failure() stops chain. Use soft-failure (success + error flag) for fallback patterns.
-    tags:
-      - android_workmanager
-      - difficulty::hard
-  - slug: android-173-0-ru
-    front: "Как создавать цепочки воркеров в WorkManager?"
-    back: |
-      **Последовательно:** `beginWith(A).then(B).then(C).enqueue()`
-
-      **Параллельно (fan-out):** `.then(listOf(B, C, D))`
-
-      **Fan-in:** `beginWith(listOf(A, B, C)).then(aggregator)`
-
-      **Передача данных:** Используйте `workDataOf()` в Result.success(), читайте через `inputData` в следующем воркере. Данные < 10KB.
-
-      **Обработка ошибок:** Result.retry() для временных ошибок, Result.failure() останавливает цепь. Используйте soft-failure (success + флаг ошибки) для fallback паттернов.
-    tags:
-      - android_workmanager
-      - difficulty::hard
-
----\
+- slug: android-173-0-en
+  language: en
+  anki_id: 1768398427161
+  synced_at: '2026-01-23T16:45:05.548152'
+- slug: android-173-0-ru
+  language: ru
+  anki_id: 1768398427186
+  synced_at: '2026-01-23T16:45:05.549947'
+---
 # Вопрос (RU)
 
 > Объясните продвинутые паттерны цепочек `WorkManager`. Как реализовать параллельное выполнение, последовательные цепи и сложные графы зависимостей? Каковы best practices для обработки ошибок и передачи данных между воркерами?

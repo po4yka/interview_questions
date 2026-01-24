@@ -1,61 +1,53 @@
 ---
 id: android-301
 anki_cards:
-  - slug: android-301-0-en
-    front: "What is Overdraw and how to optimize it in Android?"
-    back: |
-      **Overdraw** - multiple rendering of same pixel in one frame.
-
-      **Debug GPU Overdraw colors:**
-      - Blue: no overdraw
-      - Green: 1x (acceptable)
-      - Light red: 2x (monitor)
-      - Dark red: 3x+ (critical)
-
-      **Optimization:**
-      - Remove redundant backgrounds
-      - Use ConstraintLayout (flatten hierarchy)
-      - `window.setBackgroundDrawable(null)`
-      - ViewStub for lazy loading
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-301-0-ru
-    front: "Что такое Overdraw и как его оптимизировать в Android?"
-    back: |
-      **Overdraw** - многократная отрисовка одного пикселя за кадр.
-
-      **Цвета Debug GPU Overdraw:**
-      - Синий: нет overdraw
-      - Зеленый: 1x (приемлемо)
-      - Светло-красный: 2x (контролировать)
-      - Темно-красный: 3x+ (критично)
-
-      **Оптимизация:**
-      - Удалить избыточные фоны
-      - Использовать ConstraintLayout (плоская иерархия)
-      - `window.setBackgroundDrawable(null)`
-      - ViewStub для ленивой загрузки
-    tags:
-      - android_views
-      - difficulty::medium
+- slug: android-301-0-en
+  language: en
+  anki_id: 1768400152097
+  synced_at: '2026-01-23T16:45:06.069337'
+- slug: android-301-0-ru
+  language: ru
+  anki_id: 1768400152118
+  synced_at: '2026-01-23T16:45:06.071516'
 title: Overdraw Gpu Rendering / Overdraw и GPU рендеринг
-aliases: [Overdraw GPU Rendering, Overdraw и GPU рендеринг]
+aliases:
+- Overdraw GPU Rendering
+- Overdraw и GPU рендеринг
 topic: android
-subtopics: [performance-rendering, profiling, ui-graphics]
+subtopics:
+- performance-rendering
+- profiling
+- ui-graphics
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-perfetto, c-performance, q-android-performance-measurement-tools--android--medium, q-opengl-advanced-rendering--android--medium, q-performance-optimization-android--android--medium, q-surfaceview-rendering--android--medium, q-what-is-layout-performance-measured-in--android--medium, q-which-class-to-use-for-rendering-view-in-background-thread--android--hard]
+related:
+- c-perfetto
+- c-performance
+- q-android-performance-measurement-tools--android--medium
+- q-opengl-advanced-rendering--android--medium
+- q-performance-optimization-android--android--medium
+- q-surfaceview-rendering--android--medium
+- q-what-is-layout-performance-measured-in--android--medium
+- q-which-class-to-use-for-rendering-view-in-background-thread--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, gpu, overdraw, performance, rendering]
+tags:
+- android/performance-rendering
+- android/profiling
+- android/ui-graphics
+- difficulty/medium
+- gpu
+- overdraw
+- performance
+- rendering
 sources: []
-
----\
+---
 # Вопрос (RU)
 
 > Что такое Overdraw и как его оптимизировать?

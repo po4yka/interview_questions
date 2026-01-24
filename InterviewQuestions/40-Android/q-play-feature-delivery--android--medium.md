@@ -1,66 +1,49 @@
 ---
 id: android-189
 title: Play Feature Delivery / Play Feature Delivery
-aliases: [App Bundle, Dynamic Feature Modules, Play Feature Delivery, Динамические модули]
+aliases:
+- App Bundle
+- Dynamic Feature Modules
+- Play Feature Delivery
+- Динамические модули
 topic: android
-subtopics: [app-bundle, build-variants, gradle]
+subtopics:
+- app-bundle
+- build-variants
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-app-bundle, c-gradle, c-play-feature-delivery, q-android-build-optimization--android--medium]
+related:
+- c-app-bundle
+- c-gradle
+- c-play-feature-delivery
+- q-android-build-optimization--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/app-bundle, android/build-variants, android/gradle, app-bundle, difficulty/medium, dynamic-modules]
+tags:
+- android
+- android/app-bundle
+- android/build-variants
+- android/gradle
+- app-bundle
+- difficulty/medium
+- dynamic-modules
 sources: []
 anki_cards:
-  - slug: android-189-0-en
-    front: "What is Play Feature Delivery and what are the module delivery types?"
-    back: |
-      **Play Feature Delivery** - Android App Bundles technology for conditional/on-demand feature delivery.
-
-      **Delivery types:**
-      1. **Install-time** - installed with base app
-      2. **On-demand** - downloaded when user needs it via `SplitInstallManager`
-      3. **Conditional** - delivered based on device conditions (API level, region, capabilities)
-
-      ```kotlin
-      splitInstallManager.startInstall(
-          SplitInstallRequest.newBuilder()
-              .addModule("dynamic_feature")
-              .build()
-      )
-      ```
-
-      **Requires:** `com.android.dynamic-feature` plugin, SplitCompat for older Android versions.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-189-0-ru
-    front: "Что такое Play Feature Delivery и какие типы доставки модулей существуют?"
-    back: |
-      **Play Feature Delivery** - технология Android App Bundles для условной/on-demand доставки функций.
-
-      **Типы доставки:**
-      1. **Install-time** - устанавливается с базовым приложением
-      2. **On-demand** - загружается по требованию через `SplitInstallManager`
-      3. **Conditional** - доставляется по условиям устройства (API level, регион, capabilities)
-
-      ```kotlin
-      splitInstallManager.startInstall(
-          SplitInstallRequest.newBuilder()
-              .addModule("dynamic_feature")
-              .build()
-      )
-      ```
-
-      **Требуется:** плагин `com.android.dynamic-feature`, SplitCompat для старых версий Android.
-    tags:
-      - android_general
-      - difficulty::medium
-
+- slug: android-189-0-en
+  language: en
+  anki_id: 1768417698125
+  synced_at: '2026-01-23T16:45:05.614236'
+- slug: android-189-0-ru
+  language: ru
+  anki_id: 1768417698150
+  synced_at: '2026-01-23T16:45:05.616299'
 ---
 # Вопрос (RU)
 

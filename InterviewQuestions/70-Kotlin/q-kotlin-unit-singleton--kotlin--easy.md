@@ -34,16 +34,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-unit-singleton--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286905
+  synced_at: '2026-01-23T17:03:51.147578'
 - slug: q-kotlin-unit-singleton--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286929
+  synced_at: '2026-01-23T17:03:51.148870'
 ---
 # Вопрос (RU)
 > Сколько инстансов `Unit` существует в одном приложении?

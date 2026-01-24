@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-context-elements--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283355
+  synced_at: '2026-01-23T17:03:50.790735'
 - slug: q-coroutine-context-elements--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283380
+  synced_at: '2026-01-23T17:03:50.792742'
 ---
 ## Ответ (RU)
 

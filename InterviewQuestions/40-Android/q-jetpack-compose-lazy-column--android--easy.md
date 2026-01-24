@@ -1,65 +1,45 @@
----\
+---
 id: android-438
-title: "Jetpack Compose Lazy Column / LazyColumn в Jetpack Compose"
-aliases: ["Compose список", "Jetpack Compose Lazy Column", "LazyColumn в Jetpack Compose"]
+title: Jetpack Compose Lazy Column / LazyColumn в Jetpack Compose
+aliases:
+- Compose список
+- Jetpack Compose Lazy Column
+- LazyColumn в Jetpack Compose
 topic: android
-subtopics: [ui-compose, ui-widgets]
+subtopics:
+- ui-compose
+- ui-widgets
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-recyclerview, q-jetpack-compose-basics--android--medium, q-which-layout-for-large-list--android--easy]
+related:
+- c-jetpack-compose
+- c-recyclerview
+- q-jetpack-compose-basics--android--medium
+- q-which-layout-for-large-list--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/ui-compose, android/ui-widgets, difficulty/easy, lazy-list]
+tags:
+- android/ui-compose
+- android/ui-widgets
+- difficulty/easy
+- lazy-list
 anki_cards:
-  - slug: android-438-0-en
-    front: "How to create a RecyclerView-like list in Jetpack Compose?"
-    back: |
-      Use **LazyColumn** (vertical) or **LazyRow** (horizontal):
-
-      ```kotlin
-      LazyColumn {
-          items(contacts, key = { it.id }) { contact ->
-              ContactRow(contact)
-          }
-      }
-      ```
-
-      **Features:**
-      - Lazy: only renders visible items
-      - No Adapter/ViewHolder needed
-      - Use `key` for stable identity
-      - Use `contentType` for optimization
-    tags:
-      - android_compose
-      - difficulty::easy
-  - slug: android-438-0-ru
-    front: "Как создать список типа RecyclerView в Jetpack Compose?"
-    back: |
-      Использовать **LazyColumn** (вертикальный) или **LazyRow** (горизонтальный):
-
-      ```kotlin
-      LazyColumn {
-          items(contacts, key = { it.id }) { contact ->
-              ContactRow(contact)
-          }
-      }
-      ```
-
-      **Особенности:**
-      - Ленивый: рендерит только видимые элементы
-      - Не нужен Adapter/ViewHolder
-      - Использовать `key` для стабильной идентичности
-      - Использовать `contentType` для оптимизации
-    tags:
-      - android_compose
-      - difficulty::easy
-
----\
+- slug: android-438-0-en
+  language: en
+  anki_id: 1768381816337
+  synced_at: '2026-01-23T16:45:06.438720'
+- slug: android-438-0-ru
+  language: ru
+  anki_id: 1768381816360
+  synced_at: '2026-01-23T16:45:06.439933'
+---
 # Вопрос (RU)
 
 > Как в Jetpack Compose создать список, аналогичный `RecyclerView`?

@@ -1,52 +1,46 @@
 ---
-id: android-719
-anki_cards:
-  - slug: android-288-0-en
-    front: "Why should UI and business logic be separated in Android?"
-    back: |
-      **Key reasons**:
-      - **Testability**: Business logic can be unit tested without UI framework
-      - **Reusability**: Logic can be shared across Activities/Fragments
-      - **Maintainability**: Changes in UI don't affect business rules
-
-      **Common patterns**:
-      - **MVVM**: ViewModel holds logic, View observes state
-      - **MVI**: Unidirectional data flow with intents and states
-      - **MVP**: Presenter mediates between View and Model
-
-      Activity/Fragment should only handle UI events and display state.
-    tags: ["android_architecture", "difficulty::easy"]
-  - slug: android-288-0-ru
-    front: "Почему необходимо разделять UI и бизнес-логику в Android?"
-    back: |
-      **Основные причины**:
-      - **Тестируемость**: бизнес-логику можно тестировать без UI-фреймворка
-      - **Переиспользуемость**: логику можно разделять между Activity/Fragment
-      - **Поддерживаемость**: изменения в UI не влияют на бизнес-правила
-
-      **Распространённые паттерны**:
-      - **MVVM**: ViewModel хранит логику, View наблюдает за состоянием
-      - **MVI**: однонаправленный поток данных с интентами и состояниями
-      - **MVP**: Presenter связывает View и Model
-
-      Activity/Fragment должны только обрабатывать UI-события и отображать состояние.
-    tags: ["android_architecture", "difficulty::easy"]
 id: android-288
+anki_cards:
+- slug: android-288-0-en
+  language: en
+  anki_id: 1768447068056
+  synced_at: '2026-01-23T16:45:06.038127'
+- slug: android-288-0-ru
+  language: ru
+  anki_id: 1768447068082
+  synced_at: '2026-01-23T16:45:06.039415'
+- slug: android-719-0-en
+  language: en
+- slug: android-719-0-ru
+  language: ru
 title: Separate UI and Business Logic / Разделение UI и бизнес-логики
-aliases: [Separate UI and Business Logic, Разделение UI и бизнес-логики]
+aliases:
+- Separate UI and Business Logic
+- Разделение UI и бизнес-логики
 topic: android
-subtopics: [architecture-mvvm]
+subtopics:
+- architecture-mvvm
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-android-ui-composition, q-how-to-draw-ui-without-xml--android--easy, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-proguard-r8--android--medium, q-why-fragment-needs-separate-callback-for-ui-creation--android--hard, q-why-separate-ui-and-business-logic--android--easy]
+related:
+- c-android
+- c-android-ui-composition
+- q-how-to-draw-ui-without-xml--android--easy
+- q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy
+- q-proguard-r8--android--medium
+- q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
+- q-why-separate-ui-and-business-logic--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvvm, difficulty/easy]
-
+tags:
+- android/architecture-mvvm
+- difficulty/easy
 ---
 # Вопрос (RU)
 > Разделение UI и бизнес-логики

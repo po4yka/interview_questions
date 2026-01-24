@@ -32,11 +32,11 @@ anki_cards:
 - slug: android-387-0-en
   language: en
   anki_id: 1768364992400
-  synced_at: '2026-01-14T09:17:53.734090'
+  synced_at: '2026-01-23T16:45:06.308192'
 - slug: android-387-0-ru
   language: ru
   anki_id: 1768364992423
-  synced_at: '2026-01-14T09:17:53.736036'
+  synced_at: '2026-01-23T16:45:06.309071'
 ---
 # Вопрос (RU)
 > Какие типы данных поддерживает `Bundle`?

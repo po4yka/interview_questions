@@ -129,16 +129,12 @@ tags:
 anki_cards:
 - slug: q-primitive-vs-reference-types--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287806
+  synced_at: '2026-01-23T17:03:51.236294'
 - slug: q-primitive-vs-reference-types--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326287831
+  synced_at: '2026-01-23T17:03:51.237989'
 ---
 # Вопрос (RU)
 > В чем разница примитивного и ссылочного типов?

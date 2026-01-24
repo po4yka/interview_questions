@@ -31,11 +31,11 @@ anki_cards:
 - slug: android-330-0-en
   language: en
   anki_id: 1768364991298
-  synced_at: '2026-01-14T09:17:53.515799'
+  synced_at: '2026-01-23T16:45:06.154639'
 - slug: android-330-0-ru
   language: ru
   anki_id: 1768364991323
-  synced_at: '2026-01-14T09:17:53.518558'
+  synced_at: '2026-01-23T16:45:06.155505'
 ---
 # Вопрос (RU)
 > Может ли сервис общаться с пользователем?

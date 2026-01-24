@@ -38,20 +38,12 @@ tags:
 anki_cards:
 - slug: q-channel-flow-comparison--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - channels
-  - coroutines
+  anki_id: 1768326284105
+  synced_at: '2026-01-23T17:03:50.847212'
 - slug: q-channel-flow-comparison--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - channels
-  - coroutines
+  anki_id: 1768326284130
+  synced_at: '2026-01-23T17:03:50.848944'
 ---
 # Вопрос (RU)
 > В чем разница между `Channel` и `Flow`? Объясните горячие и холодные потоки, обработку backpressure и когда выбирать каждый подход.

@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-191-0-en
   language: en
   anki_id: 1768366067526
-  synced_at: '2026-01-14T09:17:53.176210'
+  synced_at: '2026-01-23T16:45:05.622522'
 - slug: android-191-0-ru
   language: ru
   anki_id: 1768366067549
-  synced_at: '2026-01-14T09:17:53.179437'
+  synced_at: '2026-01-23T16:45:05.623954'
 ---
 # Вопрос (RU)
 > Что такое Compose Multiplatform и как реализовать кроссплатформенную UI-архитектуру?

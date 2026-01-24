@@ -32,18 +32,12 @@ tags:
 anki_cards:
 - slug: kotlin-149-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - sealed-classes
+  anki_id: 1768326280505
+  synced_at: '2026-01-23T17:03:50.564280'
 - slug: kotlin-149-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - sealed-classes
+  anki_id: 1768326280531
+  synced_at: '2026-01-23T17:03:50.566323'
 ---
 # Вопрос (RU)
 

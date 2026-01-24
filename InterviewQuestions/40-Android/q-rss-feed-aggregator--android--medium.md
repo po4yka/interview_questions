@@ -1,62 +1,46 @@
----\
+---
 id: android-348
 anki_cards:
-  - slug: android-348-0-en
-    front: "What are the key components for building an RSS aggregator app?"
-    back: |
-      **Architecture:**
-      - **Network layer:** XML parser (Jsoup/dedicated RSS lib)
-      - **Database:** Room with Feed/Item entities (foreign keys)
-      - **Sync:** WorkManager for periodic background refresh
-      - **UI:** ViewModel + Flow + LazyColumn/RecyclerView
-
-      **Key features:**
-      - PagingSource from Room for feed items
-      - RemoteMediator for offline-first
-      - Mark as read, favorites, swipe-to-refresh
-      - Cleanup old items (e.g., 30+ days)
-      - Notifications for new content
-    tags:
-      - android_architecture
-      - android_room
-      - android_workmanager
-      - difficulty::medium
-  - slug: android-348-0-ru
-    front: "Какие ключевые компоненты нужны для создания RSS-агрегатора?"
-    back: |
-      **Архитектура:**
-      - **Сетевой слой:** XML-парсер (Jsoup/специализированная RSS-библиотека)
-      - **База данных:** Room с сущностями Feed/Item (внешние ключи)
-      - **Синхронизация:** WorkManager для периодического фонового обновления
-      - **UI:** ViewModel + Flow + LazyColumn/RecyclerView
-
-      **Ключевые функции:**
-      - PagingSource из Room для элементов ленты
-      - RemoteMediator для offline-first
-      - Отметка прочитанного, избранное, pull-to-refresh
-      - Очистка старых элементов (например, старше 30 дней)
-      - Уведомления о новом контенте
-    tags:
-      - android_architecture
-      - android_room
-      - android_workmanager
-      - difficulty::medium
+- slug: android-348-0-en
+  language: en
+  anki_id: 1768420269095
+  synced_at: '2026-01-23T16:45:06.196367'
+- slug: android-348-0-ru
+  language: ru
+  anki_id: 1768420269129
+  synced_at: '2026-01-23T16:45:06.197173'
 title: RSS Feed Aggregator / Агрегатор RSS лент
-aliases: [RSS Feed Aggregator, Агрегатор RSS лент]
+aliases:
+- RSS Feed Aggregator
+- Агрегатор RSS лент
 topic: android
-subtopics: [networking-http, room]
+subtopics:
+- networking-http
+- room
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-retrofit, c-room, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-databases-android--android--easy, q-how-to-choose-layout-for-fragment--android--easy, q-tiktok-video-feed--android--hard, q-webp-image-format-android--android--easy]
+related:
+- c-retrofit
+- c-room
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-databases-android--android--easy
+- q-how-to-choose-layout-for-fragment--android--easy
+- q-tiktok-video-feed--android--hard
+- q-webp-image-format-android--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/networking-http, android/room, difficulty/medium]
-
----\
+tags:
+- android/networking-http
+- android/room
+- difficulty/medium
+---
 # Вопрос (RU)
 > Агрегатор RSS лент
 

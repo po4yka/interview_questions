@@ -1,55 +1,47 @@
 ---
-id: android-721
-anki_cards:
-  - slug: android-325-0-en
-    front: "What is the difference between startService() and bindService() in Android?"
-    back: |
-      **startService()**:
-      - Service runs independently of caller
-      - Lifecycle: `onCreate()` -> `onStartCommand()` -> `onDestroy()`
-      - Stops via `stopSelf()` or `stopService()`
-
-      **bindService()**:
-      - Service is bound to client's lifecycle
-      - Lifecycle: `onCreate()` -> `onBind()` -> `onUnbind()` -> `onDestroy()`
-      - Stops when all clients unbind
-
-      **Combined usage**: Service stays alive if started OR has bound clients.
-      Foreground services (Android 12+) require notification and type declaration.
-    tags: ["android_services", "difficulty::hard"]
-  - slug: android-325-0-ru
-    front: "В чём разница между startService() и bindService() в Android?"
-    back: |
-      **startService()**:
-      - Сервис работает независимо от вызывающего компонента
-      - Жизненный цикл: `onCreate()` -> `onStartCommand()` -> `onDestroy()`
-      - Останавливается через `stopSelf()` или `stopService()`
-
-      **bindService()**:
-      - Сервис привязан к жизненному циклу клиента
-      - Жизненный цикл: `onCreate()` -> `onBind()` -> `onUnbind()` -> `onDestroy()`
-      - Останавливается, когда все клиенты отвязываются
-
-      **Комбинированное использование**: сервис живёт, если запущен ИЛИ есть привязанные клиенты.
-      Foreground-сервисы (Android 12+) требуют уведомление и объявление типа.
-    tags: ["android_services", "difficulty::hard"]
 id: android-325
+anki_cards:
+- slug: android-325-0-en
+  language: en
+  anki_id: 1768447072056
+  synced_at: '2026-01-23T16:45:06.143816'
+- slug: android-325-0-ru
+  language: ru
+  anki_id: 1768447072083
+  synced_at: '2026-01-23T16:45:06.144725'
+- slug: android-721-0-en
+  language: en
+- slug: android-721-0-ru
+  language: ru
 title: Service Lifecycle and Binding / Жизненный цикл и привязка Service
-aliases: [Service Lifecycle and Binding, Жизненный цикл и привязка Service]
+aliases:
+- Service Lifecycle and Binding
+- Жизненный цикл и привязка Service
 topic: android
-subtopics: [service]
+subtopics:
+- service
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-foreground-service-types--android--medium, q-how-to-add-custom-attributes-to-custom-view--android--medium, q-migration-to-compose--android--medium, q-viewmodel-pattern--android--easy, q-what-is-data-binding--android--easy, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- c-android
+- q-foreground-service-types--android--medium
+- q-how-to-add-custom-attributes-to-custom-view--android--medium
+- q-migration-to-compose--android--medium
+- q-viewmodel-pattern--android--easy
+- q-what-is-data-binding--android--easy
+- q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-10
 updated: 2025-11-11
-tags: [android/service, difficulty/hard]
-
----\
+tags:
+- android/service
+- difficulty/hard
+---
 # Вопрос (RU)
 >
 Объясните жизненный цикл `Service`, механизмы binding и паттерны коммуникации. Как реализовать bound services с AIDL? В чем разница между `startService()` и `bindService()`? Как управлять жизненным циклом сервисов в современном Android (12+)?

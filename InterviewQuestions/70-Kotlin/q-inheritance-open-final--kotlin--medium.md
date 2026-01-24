@@ -37,16 +37,12 @@ sources:
 anki_cards:
 - slug: q-inheritance-open-final--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294730
+  synced_at: '2026-01-23T17:03:51.648154'
 - slug: q-inheritance-open-final--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294755
+  synced_at: '2026-01-23T17:03:51.648956'
 ---
 # Вопрос (RU)
 > Как работают ключевые слова open, final, abstract и override в наследовании Kotlin?

@@ -129,16 +129,12 @@ tags:
 anki_cards:
 - slug: q-java-equals-default-behavior--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282506
+  synced_at: '2026-01-23T17:03:50.724183'
 - slug: q-java-equals-default-behavior--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282530
+  synced_at: '2026-01-23T17:03:50.725386'
 ---
 # Вопрос (RU)
 > Как по умолчанию работает метод equals() из java.lang.Object в Java, что именно он сравнивает?

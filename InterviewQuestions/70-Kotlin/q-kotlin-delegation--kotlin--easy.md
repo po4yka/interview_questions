@@ -28,22 +28,12 @@ tags:
 anki_cards:
 - slug: lang-005-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - c-kotlin
-  - c-kotlin-coroutines-basics
-  - c-kotlin-features
+  anki_id: 1768326290031
+  synced_at: '2026-01-23T17:03:51.402873'
 - slug: lang-005-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - c-kotlin
-  - c-kotlin-coroutines-basics
-  - c-kotlin-features
+  anki_id: 1768326290056
+  synced_at: '2026-01-23T17:03:51.404687'
 ---
 # Вопрос (RU)
 > Что известно о делегировании?

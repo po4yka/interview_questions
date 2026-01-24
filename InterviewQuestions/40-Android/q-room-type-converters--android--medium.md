@@ -1,72 +1,40 @@
----\
+---
 id: android-354
 anki_cards:
-  - slug: android-354-0-en
-    front: "What are Room TypeConverters and when do you need them?"
-    back: |
-      **TypeConverters** convert custom types to SQLite-supported types (Int, Long, String, Boolean, etc.).
-
-      **Example (Date to Long):**
-      ```kotlin
-      class Converters {
-          @TypeConverter
-          fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }
-
-          @TypeConverter
-          fun toTimestamp(date: Date?): Long? = date?.time
-      }
-
-      @Database(entities = [User::class], version = 1)
-      @TypeConverters(Converters::class)
-      abstract class AppDatabase : RoomDatabase()
-      ```
-
-      **Common uses:** Date, Enum, List (via JSON), custom objects.
-      **Scopes:** Database, Entity, DAO, or field level.
-    tags:
-      - android_room
-      - difficulty::medium
-  - slug: android-354-0-ru
-    front: "Что такое TypeConverters в Room и когда они нужны?"
-    back: |
-      **TypeConverters** конвертируют кастомные типы в типы, поддерживаемые SQLite (Int, Long, String, Boolean и др.).
-
-      **Пример (Date в Long):**
-      ```kotlin
-      class Converters {
-          @TypeConverter
-          fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }
-
-          @TypeConverter
-          fun toTimestamp(date: Date?): Long? = date?.time
-      }
-
-      @Database(entities = [User::class], version = 1)
-      @TypeConverters(Converters::class)
-      abstract class AppDatabase : RoomDatabase()
-      ```
-
-      **Частые случаи:** Date, Enum, List (через JSON), кастомные объекты.
-      **Области видимости:** Database, Entity, DAO или уровень поля.
-    tags:
-      - android_room
-      - difficulty::medium
+- slug: android-354-0-en
+  language: en
+  anki_id: 1768420269723
+  synced_at: '2026-01-23T16:45:06.210935'
+- slug: android-354-0-ru
+  language: ru
+  anki_id: 1768420269764
+  synced_at: '2026-01-23T16:45:06.211691'
 title: Room Type Converters / TypeConverters в Room
-aliases: [Room Type Converters, Room конвертеры типов, TypeConverters в Room]
+aliases:
+- Room Type Converters
+- Room конвертеры типов
+- TypeConverters в Room
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-room-library-definition--android--easy, q-room-vs-sqlite--android--medium]
+related:
+- q-room-library-definition--android--easy
+- q-room-vs-sqlite--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/room, difficulty/medium]
----\
+tags:
+- android/room
+- difficulty/medium
+---
 # Вопрос (RU)
 
 > Что вы знаете о TypeConverters в `Room`?

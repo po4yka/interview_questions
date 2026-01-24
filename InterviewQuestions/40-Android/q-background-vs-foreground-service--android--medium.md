@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-195-0-en
   language: en
   anki_id: 1768364695547
-  synced_at: '2026-01-14T09:17:53.201114'
+  synced_at: '2026-01-23T16:45:05.637875'
 - slug: android-195-0-ru
   language: ru
   anki_id: 1768364695572
-  synced_at: '2026-01-14T09:17:53.203279'
+  synced_at: '2026-01-23T16:45:05.639954'
 ---
 # Вопрос (RU)
 > В чем разница между background-сервисом и foreground-сервисом в Android?

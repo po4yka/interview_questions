@@ -1,68 +1,43 @@
----\
+---
 id: android-188
-title: How To Change The Number Of Columns In RecyclerView Depending On
-  Orientation / Как изменить количество колонок в RecyclerView в зависимости от
-  ориентации
-aliases: [How To Change The Number Of Columns In RecyclerView Depending On
-      Orientation, Как изменить количество колонок в RecyclerView в зависимости
-      от ориентации]
+title: How To Change The Number Of Columns In RecyclerView Depending On Orientation
+  / Как изменить количество колонок в RecyclerView в зависимости от ориентации
+aliases:
+- How To Change The Number Of Columns In RecyclerView Depending On Orientation
+- Как изменить количество колонок в RecyclerView в зависимости от ориентации
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-broadcastreceiver-contentprovider--android--easy, q-compose-ui-testing-advanced--android--hard, q-how-animations-work-in-recyclerview--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-recyclerview-itemdecoration-advanced--android--medium]
+related:
+- c-android
+- q-broadcastreceiver-contentprovider--android--easy
+- q-compose-ui-testing-advanced--android--hard
+- q-how-animations-work-in-recyclerview--android--medium
+- q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+- q-recyclerview-itemdecoration-advanced--android--medium
 created: 2024-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/easy]
+tags:
+- android/ui-views
+- difficulty/easy
 anki_cards:
-  - slug: android-188-0-en
-    front: "How to dynamically change RecyclerView columns by orientation?"
-    back: |
-      **Use GridLayoutManager + resource qualifiers:**
-
-      ```xml
-      <!-- values/integers.xml -->
-      <integer name="columns">2</integer>
-      <!-- values-land/integers.xml -->
-      <integer name="columns">4</integer>
-      ```
-
-      ```kotlin
-      val columns = resources.getInteger(R.integer.columns)
-      recyclerView.layoutManager = GridLayoutManager(this, columns)
-      ```
-
-      **Alternative:** Check `Configuration.orientation` programmatically, but resources approach is cleaner.
-    tags:
-      - android_layouts
-      - difficulty::easy
-  - slug: android-188-0-ru
-    front: "Как динамически изменять количество колонок RecyclerView по ориентации?"
-    back: |
-      **Используйте GridLayoutManager + resource qualifiers:**
-
-      ```xml
-      <!-- values/integers.xml -->
-      <integer name="columns">2</integer>
-      <!-- values-land/integers.xml -->
-      <integer name="columns">4</integer>
-      ```
-
-      ```kotlin
-      val columns = resources.getInteger(R.integer.columns)
-      recyclerView.layoutManager = GridLayoutManager(this, columns)
-      ```
-
-      **Альтернатива:** Проверять `Configuration.orientation` программно, но подход через ресурсы чище.
-    tags:
-      - android_layouts
-      - difficulty::easy
-
----\
+- slug: android-188-0-en
+  language: en
+  anki_id: 1768378885721
+  synced_at: '2026-01-23T16:45:05.611613'
+- slug: android-188-0-ru
+  language: ru
+  anki_id: 1768378885746
+  synced_at: '2026-01-23T16:45:05.612888'
+---
 # Вопрос (RU)
 > Как изменить количество колонок в `RecyclerView` в зависимости от ориентации
 

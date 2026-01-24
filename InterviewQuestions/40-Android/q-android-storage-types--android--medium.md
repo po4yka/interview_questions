@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-183-0-en
   language: en
   anki_id: 1768363949922
-  synced_at: '2026-01-14T09:17:53.163976'
+  synced_at: '2026-01-23T16:45:05.598374'
 - slug: android-183-0-ru
   language: ru
   anki_id: 1768363949948
-  synced_at: '2026-01-14T09:17:53.166480'
+  synced_at: '2026-01-23T16:45:05.600371'
 ---
 # Вопрос (RU)
 > Какие существуют типы хранилищ данных в Android и когда их использовать?

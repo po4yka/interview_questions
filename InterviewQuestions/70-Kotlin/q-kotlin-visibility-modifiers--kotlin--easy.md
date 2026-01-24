@@ -35,22 +35,12 @@ tags:
 anki_cards:
 - slug: kotlin-023-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - access-control
-  - encapsulation
-  - modifiers
+  anki_id: 1768326291281
+  synced_at: '2026-01-23T17:03:51.501073'
 - slug: kotlin-023-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - access-control
-  - encapsulation
-  - modifiers
+  anki_id: 1768326291305
+  synced_at: '2026-01-23T17:03:51.502177'
 ---
 # Вопрос (RU)
 > Что такое модификаторы видимости в Kotlin?

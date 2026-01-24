@@ -123,18 +123,12 @@ tags:
 anki_cards:
 - slug: q-by-keyword-function-call--kotlin--easy-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - delegation
+  anki_id: 1768326291932
+  synced_at: '2026-01-23T17:03:51.533301'
 - slug: q-by-keyword-function-call--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - delegation
+  anki_id: 1768326291955
+  synced_at: '2026-01-23T17:03:51.534297'
 ---
 # Вопрос (RU)
 > Можно ли вызывать функцию или конструктор после ключевого слова `by` в Kotlin?

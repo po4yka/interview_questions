@@ -1,63 +1,46 @@
 ---
 id: android-258
-title: "Play Store Publishing / Публикация в Play Store"
-aliases: [App Bundle, Google Play Publishing, Play Store Publishing, Staged Rollout, Публикация в Play Store]
+title: Play Store Publishing / Публикация в Play Store
+aliases:
+- App Bundle
+- Google Play Publishing
+- Play Store Publishing
+- Staged Rollout
+- Публикация в Play Store
 topic: android
-subtopics: [ab-testing, app-bundle, play-console]
+subtopics:
+- ab-testing
+- app-bundle
+- play-console
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-app-bundle, q-android-app-bundles--android--easy]
+related:
+- c-app-bundle
+- q-android-app-bundles--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ab-testing, android/app-bundle, android/play-console, difficulty/medium, distribution, release-management]
+tags:
+- android/ab-testing
+- android/app-bundle
+- android/play-console
+- difficulty/medium
+- distribution
+- release-management
 anki_cards:
-  - slug: android-258-0-en
-    front: "What are the release tracks in Google Play and staged rollout best practices?"
-    back: |
-      **Release tracks:**
-      | Track | Testers | Use |
-      |-------|---------|-----|
-      | Internal | 100 | QA, daily builds |
-      | Closed | 50K | Beta features |
-      | Open | unlimited | Public beta |
-      | Production | unlimited | All users |
-
-      **Staged rollout:**
-      - Day 1: 5% (monitor crashes, ANR)
-      - Day 3: 20% (check reviews)
-      - Day 5: 50% (stability check)
-      - Day 7: 100%
-
-      **Halt if:** crash rate +0.5%, ANR +0.2%, critical bugs.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-258-0-ru
-    front: "Какие треки релизов есть в Google Play и как проводить staged rollout?"
-    back: |
-      **Треки релизов:**
-      | Трек | Тестеров | Использование |
-      |------|----------|---------------|
-      | Internal | 100 | QA, daily builds |
-      | Closed | 50K | Бета-функции |
-      | Open | неогр. | Публичная бета |
-      | Production | неогр. | Все пользователи |
-
-      **Staged rollout:**
-      - День 1: 5% (мониторинг crash, ANR)
-      - День 3: 20% (проверка отзывов)
-      - День 5: 50% (проверка стабильности)
-      - День 7: 100%
-
-      **Остановить если:** crash rate +0.5%, ANR +0.2%, критические баги.
-    tags:
-      - android_general
-      - difficulty::medium
-
+- slug: android-258-0-en
+  language: en
+  anki_id: 1768417706151
+  synced_at: '2026-01-23T16:45:05.899580'
+- slug: android-258-0-ru
+  language: ru
+  anki_id: 1768417706176
+  synced_at: '2026-01-23T16:45:05.901425'
 ---
 # Вопрос (RU)
 

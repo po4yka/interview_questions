@@ -38,11 +38,11 @@ anki_cards:
 - slug: android-393-0-en
   language: en
   anki_id: 1768363328721
-  synced_at: '2026-01-14T09:17:53.764841'
+  synced_at: '2026-01-23T16:45:06.325422'
 - slug: android-393-0-ru
   language: ru
   anki_id: 1768363328745
-  synced_at: '2026-01-14T09:17:53.767049'
+  synced_at: '2026-01-23T16:45:06.326202'
 ---
 # Вопрос (RU)
 > Назовите четыре основных компонента Android приложения и их назначение.

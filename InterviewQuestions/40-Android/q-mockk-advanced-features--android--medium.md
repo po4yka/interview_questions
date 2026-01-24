@@ -1,67 +1,41 @@
 ---
 id: android-351
 anki_cards:
-  - slug: android-351-0-en
-    front: "What are the key features of MockK for Kotlin testing?"
-    back: |
-      **Relaxed mocks:** Return defaults for unstubbed calls
-      ```kotlin
-      val mock = mockk<Repo>(relaxed = true)
-      ```
-
-      **Spy:** Partial mocking with real implementation
-      ```kotlin
-      val spy = spyk(RealClass())
-      ```
-
-      **Coroutines:** `coEvery` / `coVerify` for suspend functions
-
-      **Annotations:** `@MockK`, `@RelaxedMockK`, `@SpyK`, `@InjectMockKs`
-
-      **Advanced:** `answers {}`, `slot<T>()` capture, `verifyOrder`, object/static mocking.
-
-      **Key:** Kotlin-first DSL, built-in final class support.
-    tags:
-      - android_testing
-      - difficulty::medium
-  - slug: android-351-0-ru
-    front: "Какие ключевые возможности MockK для тестирования на Kotlin?"
-    back: |
-      **Relaxed моки:** Возвращают значения по умолчанию
-      ```kotlin
-      val mock = mockk<Repo>(relaxed = true)
-      ```
-
-      **Spy:** Частичное мокирование с реальной реализацией
-      ```kotlin
-      val spy = spyk(RealClass())
-      ```
-
-      **Корутины:** `coEvery` / `coVerify` для suspend-функций
-
-      **Аннотации:** `@MockK`, `@RelaxedMockK`, `@SpyK`, `@InjectMockKs`
-
-      **Продвинутое:** `answers {}`, захват `slot<T>()`, `verifyOrder`, мокирование object/static.
-
-      **Ключ:** Kotlin-first DSL, встроенная поддержка final классов.
-    tags:
-      - android_testing
-      - difficulty::medium
+- slug: android-351-0-en
+  language: en
+  anki_id: 1768414558448
+  synced_at: '2026-01-23T16:45:06.202940'
+- slug: android-351-0-ru
+  language: ru
+  anki_id: 1768414558468
+  synced_at: '2026-01-23T16:45:06.204655'
 title: MockK Advanced Features / Продвинутые возможности MockK
-aliases: [MockK Advanced Features, Продвинутые возможности MockK]
+aliases:
+- MockK Advanced Features
+- Продвинутые возможности MockK
 topic: android
-subtopics: [testing-mocks]
+subtopics:
+- testing-mocks
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-testing, q-android-testing-strategies--android--medium, q-camerax-advanced-pipeline--android--hard, q-recyclerview-itemdecoration-advanced--android--medium, q-room-type-converters-advanced--android--medium, q-why-use-diffutil--android--medium]
+related:
+- c-android-testing
+- q-android-testing-strategies--android--medium
+- q-camerax-advanced-pipeline--android--hard
+- q-recyclerview-itemdecoration-advanced--android--medium
+- q-room-type-converters-advanced--android--medium
+- q-why-use-diffutil--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/testing-mocks, difficulty/medium]
-
+tags:
+- android/testing-mocks
+- difficulty/medium
 ---
 # Вопрос (RU)
 > Объясните relaxed mocks, spy, аннотации MockK и моккирование корутин в MockK. Чем MockK отличается от Mockito?

@@ -1,67 +1,45 @@
----\
+---
 id: android-334
-title: "How Does The Main Thread Work / Как работает главный поток"
-aliases: ["How Does The Main Thread Work", "Как работает главный поток"]
+title: How Does The Main Thread Work / Как работает главный поток
+aliases:
+- How Does The Main Thread Work
+- Как работает главный поток
 topic: android
-subtopics: [lifecycle, performance-rendering, threads-sync]
+subtopics:
+- lifecycle
+- performance-rendering
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-does-jetpack-compose-work--android--medium, q-what-is-known-about-view-lifecycles--android--medium, q-which-layout-allows-views-to-overlap--android--easy]
+related:
+- q-how-does-jetpack-compose-work--android--medium
+- q-what-is-known-about-view-lifecycles--android--medium
+- q-which-layout-allows-views-to-overlap--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/medium]
+tags:
+- android
+- android/lifecycle
+- android/performance-rendering
+- android/threads-sync
+- difficulty/medium
 anki_cards:
-  - slug: android-334-0-en
-    front: "How does the main thread work in Android?"
-    back: |
-      **Main thread (UI thread)** uses **Looper + MessageQueue + Handler** model.
-
-      **Responsibilities:**
-      - UI rendering (measure, layout, draw)
-      - Input processing (touch, gestures)
-      - Lifecycle callbacks
-
-      **Frame budget:** ~16ms for 60fps
-
-      **ANR thresholds:**
-      - Input: >5 seconds
-      - BroadcastReceiver: >10 seconds
-
-      **Never block with:** network, heavy DB, file I/O, `Thread.sleep()`
-
-      Use `withContext(Dispatchers.IO)` for background work.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-334-0-ru
-    front: "Как работает главный поток в Android?"
-    back: |
-      **Главный поток (UI thread)** использует модель **Looper + MessageQueue + Handler**.
-
-      **Обязанности:**
-      - Отрисовка UI (measure, layout, draw)
-      - Обработка ввода (touch, жесты)
-      - Lifecycle callbacks
-
-      **Бюджет кадра:** ~16ms для 60fps
-
-      **Пороги ANR:**
-      - Input: >5 секунд
-      - BroadcastReceiver: >10 секунд
-
-      **Нельзя блокировать:** сеть, тяжелые БД, файловый I/O, `Thread.sleep()`
-
-      Используйте `withContext(Dispatchers.IO)` для фоновой работы.
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-334-0-en
+  language: en
+  anki_id: 1768378126164
+  synced_at: '2026-01-23T16:45:06.166221'
+- slug: android-334-0-ru
+  language: ru
+  anki_id: 1768378126189
+  synced_at: '2026-01-23T16:45:06.167006'
+---
 # Вопрос (RU)
 
 > Как работает главный поток в Android?

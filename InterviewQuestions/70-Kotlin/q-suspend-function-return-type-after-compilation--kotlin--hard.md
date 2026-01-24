@@ -28,16 +28,12 @@ tags:
 anki_cards:
 - slug: q-suspend-function-return-type-after-compilation--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293582
+  synced_at: '2026-01-23T17:03:51.604841'
 - slug: q-suspend-function-return-type-after-compilation--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293607
+  synced_at: '2026-01-23T17:03:51.605671'
 ---
 # Вопрос (RU)
 > Каким становится тип возврата suspend-функции после компиляции?

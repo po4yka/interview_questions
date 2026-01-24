@@ -1,63 +1,53 @@
----\
+---
 id: android-231
-title: "How to Save and Apply Theme Settings / Как сохранять и применять настройки темы"
-aliases: ["How to Save and Apply Theme Settings", "Theme Settings", "Как сохранять и применять настройки темы", "Настройки темы"]
+title: How to Save and Apply Theme Settings / Как сохранять и применять настройки
+  темы
+aliases:
+- How to Save and Apply Theme Settings
+- Theme Settings
+- Как сохранять и применять настройки темы
+- Настройки темы
 topic: android
-subtopics: [datastore, ui-compose, ui-theming]
+subtopics:
+- datastore
+- ui-compose
+- ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-lifecycle, q-dark-theme-android--android--medium, q-datastore-preferences-proto--android--medium, q-how-to-save-activity-state--android--medium]
+related:
+- c-jetpack-compose
+- c-lifecycle
+- q-dark-theme-android--android--medium
+- q-datastore-preferences-proto--android--medium
+- q-how-to-save-activity-state--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/datastore, android/ui-compose, android/ui-theming, android/ui-views, dark-mode, difficulty/medium, sharedpreferences, themes]
+tags:
+- android/datastore
+- android/ui-compose
+- android/ui-theming
+- android/ui-views
+- dark-mode
+- difficulty/medium
+- sharedpreferences
+- themes
 sources: []
 anki_cards:
-  - slug: android-231-0-en
-    front: "How to save and apply theme settings in Android?"
-    back: |
-      **Key:** Apply theme **before** UI renders
-
-      ```kotlin
-      // In Application.onCreate()
-      val mode = prefs.getInt("night_mode", MODE_NIGHT_FOLLOW_SYSTEM)
-      AppCompatDelegate.setDefaultNightMode(mode)
-      ```
-
-      **Options:**
-      - `MODE_NIGHT_NO` - light
-      - `MODE_NIGHT_YES` - dark
-      - `MODE_NIGHT_FOLLOW_SYSTEM` - system default
-
-      **Storage:** SharedPreferences or DataStore
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-231-0-ru
-    front: "Как сохранять и применять настройки темы в Android?"
-    back: |
-      **Ключевое:** Применить тему **до** отрисовки UI
-
-      ```kotlin
-      // В Application.onCreate()
-      val mode = prefs.getInt("night_mode", MODE_NIGHT_FOLLOW_SYSTEM)
-      AppCompatDelegate.setDefaultNightMode(mode)
-      ```
-
-      **Варианты:**
-      - `MODE_NIGHT_NO` - светлая
-      - `MODE_NIGHT_YES` - тёмная
-      - `MODE_NIGHT_FOLLOW_SYSTEM` - по системе
-
-      **Хранение:** SharedPreferences или DataStore
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-231-0-en
+  language: en
+  anki_id: 1768381022932
+  synced_at: '2026-01-23T16:45:05.808948'
+- slug: android-231-0-ru
+  language: ru
+  anki_id: 1768381022956
+  synced_at: '2026-01-23T16:45:05.810519'
+---
 # Вопрос (RU)
 
 > Как сохранять и применять настройки темы в Android-приложении?

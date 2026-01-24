@@ -32,20 +32,12 @@ tags:
 anki_cards:
 - slug: kotlin-033-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - language-features
+  anki_id: 1768326294831
+  synced_at: '2026-01-23T17:03:51.651519'
 - slug: kotlin-033-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - functions
-  - language-features
+  anki_id: 1768326294855
+  synced_at: '2026-01-23T17:03:51.652351'
 ---
 # Вопрос (RU)
 > Что вы знаете о расширениях в Kotlin?

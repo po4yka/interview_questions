@@ -28,20 +28,12 @@ tags:
 anki_cards:
 - slug: kotlin-213-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - data-classes
-  - sealed-classes
+  anki_id: 1768326292331
+  synced_at: '2026-01-23T17:03:51.547676'
 - slug: kotlin-213-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - data-classes
-  - sealed-classes
+  anki_id: 1768326292356
+  synced_at: '2026-01-23T17:03:51.549890'
 ---
 # Вопрос (RU)
 > Для чего используются `data` классы и `sealed` классы в Kotlin? Каковы их практические применения?

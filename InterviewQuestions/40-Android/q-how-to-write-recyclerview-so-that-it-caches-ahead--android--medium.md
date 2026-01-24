@@ -1,55 +1,54 @@
----\
+---
 id: android-267
 title: How To Write RecyclerView So That It Caches Ahead
-aliases: [RecyclerView caching, RecyclerView prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
+aliases:
+- RecyclerView caching
+- RecyclerView prefetching
+- Кеширование RecyclerView
+- Предзагрузка RecyclerView
 topic: android
-subtopics: [performance-memory, performance-rendering, ui-views]
+subtopics:
+- performance-memory
+- performance-rendering
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-how-animations-work-in-recyclerview--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-write-recyclerview-cache-ahead--android--medium, q-recyclerview-async-list-differ--android--medium, q-recyclerview-sethasfixedsize--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- c-android-components
+- q-how-animations-work-in-recyclerview--android--medium
+- q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+- q-how-to-write-recyclerview-cache-ahead--android--medium
+- q-recyclerview-async-list-differ--android--medium
+- q-recyclerview-sethasfixedsize--android--easy
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android, android/performance-memory, android/performance-rendering, android/ui-views, caching, difficulty/medium, prefetching, recyclerview]
+tags:
+- android
+- android/performance-memory
+- android/performance-rendering
+- android/ui-views
+- caching
+- difficulty/medium
+- prefetching
+- recyclerview
 anki_cards:
-  - slug: android-267-0-en
-    front: "What are RecyclerView's caching levels?"
-    back: |
-      **4 caching levels:**
-
-      1. **Scrap** - detached views, no rebind needed
-      2. **Cache** (`setItemViewCacheSize`) - by position, no rebind
-      3. **RecycledViewPool** - by viewType, requires `onBindViewHolder`
-      4. **ViewCacheExtension** - custom caching (rarely used)
-
-      **Flow:** Scrap -> Cache -> Pool -> Create new
-
-      Optimize with `setHasStableIds(true)` and `setItemViewCacheSize(n)`
-    tags:
-      - android_layouts
-      - difficulty::medium
-  - slug: android-267-0-ru
-    front: "Какие уровни кэширования есть в RecyclerView?"
-    back: |
-      **4 уровня кэширования:**
-
-      1. **Scrap** - отсоединённые view, не нужен rebind
-      2. **Cache** (`setItemViewCacheSize`) - по позиции, без rebind
-      3. **RecycledViewPool** - по viewType, требует `onBindViewHolder`
-      4. **ViewCacheExtension** - кастомное кэширование (редко)
-
-      **Порядок:** Scrap -> Cache -> Pool -> Создать новый
-
-      Оптимизация: `setHasStableIds(true)` и `setItemViewCacheSize(n)`
-    tags:
-      - android_layouts
-      - difficulty::medium
-
----\
+- slug: android-267-0-en
+  language: en
+  anki_id: 1768381278131
+  synced_at: '2026-01-23T16:45:05.943786'
+- slug: android-267-0-ru
+  language: ru
+  anki_id: 1768381278156
+  synced_at: '2026-01-23T16:45:05.945855'
+---
 # Вопрос (RU)
 
 > Как можно писать `RecyclerView`, чтобы он кэшировал наперёд?

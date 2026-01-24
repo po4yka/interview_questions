@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-job-lifecycle--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293280
+  synced_at: '2026-01-23T17:03:51.592431'
 - slug: q-coroutine-job-lifecycle--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293306
+  synced_at: '2026-01-23T17:03:51.594466'
 ---
 ## Answer (EN)
 

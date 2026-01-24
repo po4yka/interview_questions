@@ -39,11 +39,11 @@ anki_cards:
 - slug: android-381-0-en
   language: en
   anki_id: 1768365660875
-  synced_at: '2026-01-14T09:17:53.697702'
+  synced_at: '2026-01-23T16:45:06.288222'
 - slug: android-381-0-ru
   language: ru
   anki_id: 1768365660900
-  synced_at: '2026-01-14T09:17:53.700384'
+  synced_at: '2026-01-23T16:45:06.289045'
 ---
 # Вопрос (RU)
 > Как оптимизировать производительность Lazy-layout (LazyColumn, LazyRow) в Jetpack Compose?

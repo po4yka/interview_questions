@@ -32,11 +32,11 @@ anki_cards:
 - slug: sec-001-0-en
   language: en
   anki_id: 1768363502147
-  synced_at: '2026-01-14T09:17:53.306545'
+  synced_at: '2026-01-23T16:45:05.838549'
 - slug: sec-001-0-ru
   language: ru
   anki_id: 1768363502172
-  synced_at: '2026-01-14T09:17:53.308958'
+  synced_at: '2026-01-23T16:45:05.840813'
 ---
 # Вопрос (RU)
 > Как реализовать безопасное хранение ключей с помощью Android Keystore?

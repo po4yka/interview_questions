@@ -33,20 +33,12 @@ tags:
 anki_cards:
 - slug: kotlin-003-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - fold
+  anki_id: 1768326281707
+  synced_at: '2026-01-23T17:03:50.655805'
 - slug: kotlin-003-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - fold
+  anki_id: 1768326281730
+  synced_at: '2026-01-23T17:03:50.657396'
 ---
 # Вопрос (RU)
 > Какая разница между fold и reduce в Kotlin?

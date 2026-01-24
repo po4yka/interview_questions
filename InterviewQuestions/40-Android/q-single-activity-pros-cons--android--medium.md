@@ -1,63 +1,51 @@
----\
+---
 id: android-171
 title: Single Activity Pros Cons / Преимущества и недостатки Single Activity
-aliases: [Single Activity Pros Cons, Преимущества и недостатки Single Activity]
+aliases:
+- Single Activity Pros Cons
+- Преимущества и недостатки Single Activity
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, c-compose-navigation, q-activity-lifecycle-methods--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-single-activity-approach--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
+related:
+- c-activity
+- c-compose-navigation
+- q-activity-lifecycle-methods--android--medium
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-single-activity-approach--android--medium
+- q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
+- q-why-are-fragments-needed-if-there-is-activity--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/activity, android/ui-navigation, difficulty/medium, navigation, single-activity, viewmodel]
+tags:
+- android
+- android/activity
+- android/ui-navigation
+- difficulty/medium
+- navigation
+- single-activity
+- viewmodel
 anki_cards:
-  - slug: android-171-0-en
-    front: "What are the pros and cons of Single Activity approach?"
-    back: |
-      **Pros:**
-      - Simplified navigation via NavController
-      - Shared ViewModel between screens
-      - Shared UI elements (Toolbar, BottomNav)
-      - Better animations between fragments
-      - Lower transition overhead
-
-      **Cons:**
-      - Complex Fragment lifecycle
-      - Memory leak risk (ViewBinding must be cleared in onDestroyView)
-      - FragmentManager complexity
-      - State loss issues (IllegalStateException)
-      - Testing requires FragmentScenario setup
-    tags:
-      - android_activities
-      - android_fragments
-      - difficulty::medium
-  - slug: android-171-0-ru
-    front: "Какие плюсы и минусы у подхода Single Activity?"
-    back: |
-      **Плюсы:**
-      - Упрощённая навигация через NavController
-      - Общий ViewModel между экранами
-      - Общие UI элементы (Toolbar, BottomNav)
-      - Лучшие анимации между фрагментами
-      - Меньше накладных расходов на переходы
-
-      **Минусы:**
-      - Сложный lifecycle Fragment
-      - Риск утечек памяти (ViewBinding нужно очищать в onDestroyView)
-      - Сложность FragmentManager
-      - Проблемы state loss (IllegalStateException)
-      - Тестирование требует настройки FragmentScenario
-    tags:
-      - android_activities
-      - android_fragments
-      - difficulty::medium
-
----\
+- slug: android-171-0-en
+  language: en
+  anki_id: 1768398427008
+  synced_at: '2026-01-23T16:45:05.542574'
+- slug: android-171-0-ru
+  language: ru
+  anki_id: 1768398427033
+  synced_at: '2026-01-23T16:45:05.544101'
+---
 # Вопрос (RU)
 
 > Какие у подхода Single `Activity` этого подхода плюсы и минусы?

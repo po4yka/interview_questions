@@ -1,51 +1,44 @@
----\
+---
 id: android-408
-title: "How To Fix A Bad Element Layout / Как исправить плохой layout элемента"
-aliases: ["How To Fix A Bad Element Layout", "Как исправить плохой layout элемента"]
+title: How To Fix A Bad Element Layout / Как исправить плохой layout элемента
+aliases:
+- How To Fix A Bad Element Layout
+- Как исправить плохой layout элемента
 topic: android
-subtopics: [performance-rendering, ui-views]
+subtopics:
+- performance-rendering
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-performance-optimization-android--android--medium, q-recyclerview-sethasfixedsize--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- q-performance-optimization-android--android--medium
+- q-recyclerview-sethasfixedsize--android--easy
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/performance-rendering, android/ui-views, difficulty/easy, layouts, performance]
+tags:
+- android/performance-rendering
+- android/ui-views
+- difficulty/easy
+- layouts
+- performance
 anki_cards:
-  - slug: android-408-0-en
-    front: "How to fix a bad element layout in Android?"
-    back: |
-      **Key optimizations:**
-      1. **Reduce nesting** - use `ConstraintLayout` instead of deep hierarchy
-      2. **Use ViewStub** - lazy inflate rarely used views
-      3. **Use `<merge>`** - eliminate redundant ViewGroups with `<include>`
-      4. **Avoid overdraw** - remove unnecessary backgrounds
-      5. **Optimize custom views** - cache calculations in `onSizeChanged`, avoid allocations in `onDraw`
-
-      **Tools:** Layout Inspector, GPU Overdraw, Systrace/Perfetto
-    tags:
-      - android_views
-      - difficulty::easy
-  - slug: android-408-0-ru
-    front: "Как исправить плохой layout элемента в Android?"
-    back: |
-      **Ключевые оптимизации:**
-      1. **Уменьшить вложенность** - использовать `ConstraintLayout` вместо глубокой иерархии
-      2. **Использовать ViewStub** - ленивый inflate редких элементов
-      3. **Использовать `<merge>`** - убрать лишние ViewGroup при `<include>`
-      4. **Избегать overdraw** - убрать лишние backgrounds
-      5. **Оптимизировать custom views** - кэшировать в `onSizeChanged`, не аллоцировать в `onDraw`
-
-      **Инструменты:** Layout Inspector, GPU Overdraw, Systrace/Perfetto
-    tags:
-      - android_views
-      - difficulty::easy
-
----\
+- slug: android-408-0-en
+  language: en
+  anki_id: 1768380654353
+  synced_at: '2026-01-23T16:45:06.358581'
+- slug: android-408-0-ru
+  language: ru
+  anki_id: 1768380654378
+  synced_at: '2026-01-23T16:45:06.359360'
+---
 # Вопрос (RU)
 
 > Как можно исправить плохой layout элемента?

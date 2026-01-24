@@ -31,20 +31,12 @@ tags:
 anki_cards:
 - slug: lang-088-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - c-kotlin
-  - c-kotlin-features
+  anki_id: 1768326291331
+  synced_at: '2026-01-23T17:03:51.503376'
 - slug: lang-088-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - c-kotlin
-  - c-kotlin-features
+  anki_id: 1768326291355
+  synced_at: '2026-01-23T17:03:51.504567'
 ---
 # Вопрос (RU)
 > Что такое object / companion object?

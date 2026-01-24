@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-055-0-en
   language: en
   anki_id: 1768363604322
-  synced_at: '2026-01-14T09:17:53.894601'
+  synced_at: '2026-01-23T16:45:06.433700'
 - slug: android-055-0-ru
   language: ru
   anki_id: 1768363604346
-  synced_at: '2026-01-14T09:17:53.897229'
+  synced_at: '2026-01-23T16:45:06.434559'
 sources:
 - https://developer.android.com/guide/topics/ui/accessibility
 - https://developer.android.com/jetpack/compose/accessibility

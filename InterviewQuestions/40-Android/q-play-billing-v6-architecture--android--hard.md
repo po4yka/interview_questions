@@ -1,72 +1,45 @@
 ---
 id: android-618
 anki_cards:
-  - slug: android-618-0-en
-    front: "What are the key components of Play Billing v6 architecture?"
-    back: |
-      **Client-side:**
-      - `BillingClient` v6 with `enablePendingPurchases()`
-      - `ProductDetails` with base plans and subscription offers
-      - `BillingFlowParams` with `offerToken` for purchase initiation
-
-      **Server-side:**
-      - Play Developer API: `purchases.subscriptionsv2.get`
-      - RTDN (Pub/Sub) for lifecycle events (renewal, expiration, revoke)
-      - Store `purchaseToken` + user mapping
-
-      **Purchase flow:**
-      1. Query `ProductDetails` -> cache
-      2. Launch billing flow with `offerToken`
-      3. Handle `PurchaseState.PURCHASED` / `PENDING`
-      4. Server validates -> `acknowledgePurchase`
-
-      **Critical:** Always acknowledge purchases or auto-refund occurs.
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-618-0-ru
-    front: "Какие ключевые компоненты архитектуры Play Billing v6?"
-    back: |
-      **Клиентская часть:**
-      - `BillingClient` v6 с `enablePendingPurchases()`
-      - `ProductDetails` с base plans и subscription offers
-      - `BillingFlowParams` с `offerToken` для запуска покупки
-
-      **Серверная часть:**
-      - Play Developer API: `purchases.subscriptionsv2.get`
-      - RTDN (Pub/Sub) для событий жизненного цикла (renewal, expiration, revoke)
-      - Хранение `purchaseToken` + привязка к пользователю
-
-      **Процесс покупки:**
-      1. Запрос `ProductDetails` -> кэширование
-      2. Запуск billing flow с `offerToken`
-      3. Обработка `PurchaseState.PURCHASED` / `PENDING`
-      4. Сервер валидирует -> `acknowledgePurchase`
-
-      **Критично:** Всегда подтверждать покупки иначе автовозврат.
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-618-0-en
+  language: en
+  anki_id: 1768413924566
+  synced_at: '2026-01-23T16:45:05.313709'
+- slug: android-618-0-ru
+  language: ru
+  anki_id: 1768413924591
+  synced_at: '2026-01-23T16:45:05.315699'
 title: Play Billing v6 Architecture / Архитектура Play Billing v6
-aliases: [Play Billing v6 Architecture, Архитектура Play Billing v6]
+aliases:
+- Play Billing v6 Architecture
+- Архитектура Play Billing v6
 topic: android
-subtopics: [billing]
+subtopics:
+- billing
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-play-billing, q-android-release-pipeline-cicd--android--hard, q-multi-module-best-practices--android--hard, q-play-feature-delivery--android--medium, q-quick-settings-tiles-architecture--android--medium]
+related:
+- c-play-billing
+- q-android-release-pipeline-cicd--android--hard
+- q-multi-module-best-practices--android--hard
+- q-play-feature-delivery--android--medium
+- q-quick-settings-tiles-architecture--android--medium
 created: 2024-11-02
 updated: 2025-11-10
-tags: [android/billing, difficulty/hard]
+tags:
+- android/billing
+- difficulty/hard
 sources:
-- url: "https://developer.android.com/google/play/billing/integrate"
+- url: https://developer.android.com/google/play/billing/integrate
   note: Google Play Billing integration guide
-- url: "https://developer.android.com/google/play/billing/migrate-gpblv6"
+- url: https://developer.android.com/google/play/billing/migrate-gpblv6
   note: Billing v6 migration
-
 ---
 # Вопрос (RU)
 > Как спроектировать архитектуру интеграции Play Billing v6: от каталога товаров и гибких подписок до бэкенд-проверки, RTDN и обработки отложенных покупок?

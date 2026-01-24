@@ -1,70 +1,43 @@
----\
+---
 id: android-218
-title: Save Markdown Structure To Database / Сохранение структуры Markdown в базе данных
-aliases: [Save Markdown Structure To Database, Сохранение структуры Markdown в базе данных]
+title: Save Markdown Structure To Database / Сохранение структуры Markdown в базе
+  данных
+aliases:
+- Save Markdown Structure To Database
+- Сохранение структуры Markdown в базе данных
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-database-design, q-database-encryption-android--android--medium, q-how-to-save-and-apply-theme-settings--android--medium, q-room-database-migrations--android--medium, q-save-data-outside-fragment--android--medium]
+related:
+- c-android
+- c-database-design
+- q-database-encryption-android--android--medium
+- q-how-to-save-and-apply-theme-settings--android--medium
+- q-room-database-migrations--android--medium
+- q-save-data-outside-fragment--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/room, difficulty/medium]
+tags:
+- android/room
+- difficulty/medium
 anki_cards:
-  - slug: android-218-0-en
-    front: "What are the approaches to save Markdown in an Android database?"
-    back: |
-      **4 approaches (often combined):**
-
-      1. **Plain text in Room** - Simple, store raw markdown as String
-      2. **AST/JSON + Room** - Parse to structure, store JSON for complex queries
-      3. **HTML + Room** - Pre-render HTML for fast WebView display
-      4. **Files (.md)** - Store content in files, Room for metadata/index
-
-      **Recommended hybrid:**
-      ```kotlin
-      @Entity
-      data class HybridDocument(
-          val markdownContent: String,  // Raw for editing
-          val htmlCache: String?,       // Fast display
-          val tags: String?             // Extracted metadata
-      )
-      ```
-
-      **Limit:** ~10KB for Room JSON; for large docs use files
-    tags:
-      - android_room
-      - difficulty::medium
-  - slug: android-218-0-ru
-    front: "Какие подходы для сохранения Markdown в базе данных Android?"
-    back: |
-      **4 подхода (часто комбинируются):**
-
-      1. **Обычный текст в Room** - Просто, хранить сырой markdown как String
-      2. **AST/JSON + Room** - Парсинг в структуру, JSON для сложных запросов
-      3. **HTML + Room** - Пред-рендеринг HTML для быстрого отображения в WebView
-      4. **Файлы (.md)** - Содержимое в файлах, Room для метаданных/индекса
-
-      **Рекомендуемый гибрид:**
-      ```kotlin
-      @Entity
-      data class HybridDocument(
-          val markdownContent: String,  // Сырой для редактирования
-          val htmlCache: String?,       // Быстрое отображение
-          val tags: String?             // Извлеченные метаданные
-      )
-      ```
-
-      **Лимит:** ~10KB для JSON в Room; для больших документов - файлы
-    tags:
-      - android_room
-      - difficulty::medium
-
----\
+- slug: android-218-0-en
+  language: en
+  anki_id: 1768399454038
+  synced_at: '2026-01-23T16:45:05.748772'
+- slug: android-218-0-ru
+  language: ru
+  anki_id: 1768399454064
+  synced_at: '2026-01-23T16:45:05.749952'
+---
 # Вопрос (RU)
 > Сохранение структуры Markdown в базе данных
 

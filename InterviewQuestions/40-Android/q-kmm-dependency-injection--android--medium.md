@@ -1,77 +1,47 @@
----\
+---
 id: android-222
-title: "KMM Dependency Injection / Dependency Injection в KMM"
-aliases: ["Dependency Injection в KMM", "KMM Dependency Injection", "KMM DI", "Koin для KMM", "Koin"]
+title: KMM Dependency Injection / Dependency Injection в KMM
+aliases:
+- Dependency Injection в KMM
+- KMM Dependency Injection
+- KMM DI
+- Koin для KMM
+- Koin
 topic: android
-subtopics: [di-koin, kmp]
+subtopics:
+- di-koin
+- kmp
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, moc-android]
+related:
+- c-dependency-injection
+- moc-android
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/di-koin, android/kmp, di, difficulty/medium, koin, kotlin]
+tags:
+- android/di-koin
+- android/kmp
+- di
+- difficulty/medium
+- koin
+- kotlin
 anki_cards:
-  - slug: android-222-0-en
-    front: "How do you implement dependency injection in KMM projects?"
-    back: |
-      **Koin for KMM** (most popular):
-      ```kotlin
-      // commonMain
-      val sharedModule = module {
-          single<TaskRepository> { TaskRepositoryImpl(get()) }
-      }
-
-      // androidMain
-      val androidModule = module {
-          single { DatabaseDriverFactory(androidContext()) }
-      }
-      ```
-
-      **Comparison:**
-      | Framework | Multiplatform | Compile-time safe |
-      |-----------|---------------|-------------------|
-      | Koin | Yes | No (runtime) |
-      | Dagger/Hilt | No (Android only) | Yes |
-      | Manual DI | Yes | Yes |
-
-      Use expect/actual for platform-specific factories.
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-222-0-ru
-    front: "Как реализовать dependency injection в KMM проектах?"
-    back: |
-      **Koin для KMM** (самый популярный):
-      ```kotlin
-      // commonMain
-      val sharedModule = module {
-          single<TaskRepository> { TaskRepositoryImpl(get()) }
-      }
-
-      // androidMain
-      val androidModule = module {
-          single { DatabaseDriverFactory(androidContext()) }
-      }
-      ```
-
-      **Сравнение:**
-      | Фреймворк | Multiplatform | Compile-time safe |
-      |-----------|---------------|-------------------|
-      | Koin | Да | Нет (runtime) |
-      | Dagger/Hilt | Нет (только Android) | Да |
-      | Manual DI | Да | Да |
-
-      Используйте expect/actual для платформенных фабрик.
-    tags:
-      - android_architecture
-      - difficulty::medium
-
----\
+- slug: android-222-0-en
+  language: en
+  anki_id: 1768396746878
+  synced_at: '2026-01-23T16:45:05.778621'
+- slug: android-222-0-ru
+  language: ru
+  anki_id: 1768396746901
+  synced_at: '2026-01-23T16:45:05.782836'
+---
 # Вопрос (RU)
 
 > Объясните стратегии dependency injection для KMM проектов. Как использовать `Koin` для multiplatform DI? Как обрабатывать platform-specific зависимости? В чем разница между `Koin`, Dagger/Hilt и manual DI в KMM?

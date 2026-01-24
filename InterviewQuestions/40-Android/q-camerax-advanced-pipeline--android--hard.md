@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-614-0-en
   language: en
   anki_id: 1768364987899
-  synced_at: '2026-01-14T09:17:53.077336'
+  synced_at: '2026-01-23T16:45:05.431558'
 - slug: android-614-0-ru
   language: ru
   anki_id: 1768364987922
-  synced_at: '2026-01-14T09:17:53.079647'
+  synced_at: '2026-01-23T16:45:05.432899'
 ---
 # Вопрос (RU)
 > Как построить продвинутый pipeline с CameraX: объединить Preview, ImageAnalysis и VideoCapture, вручную контролировать экспозицию/фокус и интегрировать ML-обработку кадров без лагов?

@@ -38,16 +38,12 @@ tags:
 anki_cards:
 - slug: q-sequences-vs-collections-performance--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285455
+  synced_at: '2026-01-23T17:03:50.999717'
 - slug: q-sequences-vs-collections-performance--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285481
+  synced_at: '2026-01-23T17:03:51.001774'
 ---
 # Вопрос (RU)
 > Когда следует использовать Sequences вместо Collections? Объясните промежуточные против терминальных операций и влияние на производительность.

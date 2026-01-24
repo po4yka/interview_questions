@@ -34,22 +34,12 @@ tags:
 anki_cards:
 - slug: lang-087-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - hash-tables
+  anki_id: 1768326293732
+  synced_at: '2026-01-23T17:03:51.610011'
 - slug: lang-087-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - hash-tables
+  anki_id: 1768326293756
+  synced_at: '2026-01-23T17:03:51.610845'
 ---
 # Вопрос (RU)
 > Зачем нужны методы equals и hashCode?

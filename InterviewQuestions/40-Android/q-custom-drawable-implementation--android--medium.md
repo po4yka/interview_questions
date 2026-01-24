@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-478-0-en
   language: en
   anki_id: 1768366342725
-  synced_at: '2026-01-14T09:17:53.256143'
+  synced_at: '2026-01-23T16:45:05.736563'
 - slug: android-478-0-ru
   language: ru
   anki_id: 1768366342750
-  synced_at: '2026-01-14T09:17:53.258165'
+  synced_at: '2026-01-23T16:45:05.738056'
 ---
 # Вопрос (RU)
 > Как реализовать Custom `Drawable` в Android?

@@ -1,59 +1,50 @@
----\
+---
 id: android-108
-title: "How MutableState Notifies / Как MutableState уведомляет"
-aliases: [MutableState notifications, MutableState уведомления, Snapshot system]
+title: How MutableState Notifies / Как MutableState уведомляет
+aliases:
+- MutableState notifications
+- MutableState уведомления
+- Snapshot system
 topic: android
-subtopics: [architecture-mvvm, ui-compose, ui-state]
+subtopics:
+- architecture-mvvm
+- ui-compose
+- ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/ui-compose, android/ui-state, difficulty/medium, mutablestate, observer-pattern, recomposition, snapshot-system, state-management]
+tags:
+- android/architecture-mvvm
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
+- mutablestate
+- observer-pattern
+- recomposition
+- snapshot-system
+- state-management
 moc: moc-android
-related: [c-compose-state, c-recomposition, q-recomposition-choreographer--android--hard]
+related:
+- c-compose-state
+- c-recomposition
+- q-recomposition-choreographer--android--hard
 sources: []
 anki_cards:
-  - slug: android-108-0-en
-    front: "How does MutableState notify Compose about changes?"
-    back: |
-      Uses **Snapshot system** with read/write tracking (Observer pattern):
-
-      **1. Subscription (read phase):**
-      - Reading `MutableState` during composition registers dependency
-      - `Text("$count")` - this composable now depends on `count`
-
-      **2. Notification (write phase):**
-      - `count++` writes new value
-      - Snapshot system marks dependent scopes invalid
-      - Recomposition scheduled for those scopes only
-
-      **Benefits:** Isolation, thread-safe reads, granular recomposition
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-108-0-ru
-    front: "Как MutableState уведомляет Compose об изменениях?"
-    back: |
-      Использует **Snapshot system** с отслеживанием чтений/записей (Observer pattern):
-
-      **1. Подписка (фаза чтения):**
-      - Чтение `MutableState` во время композиции регистрирует зависимость
-      - `Text("$count")` - этот composable теперь зависит от `count`
-
-      **2. Уведомление (фаза записи):**
-      - `count++` записывает новое значение
-      - Snapshot system помечает зависимые scope невалидными
-      - Рекомпозиция планируется только для этих scope
-
-      **Преимущества:** Изоляция, потокобезопасное чтение, гранулярная рекомпозиция
-    tags:
-      - android_compose
-      - difficulty::medium
-
----\
+- slug: android-108-0-en
+  language: en
+  anki_id: 1768378381242
+  synced_at: '2026-01-23T16:45:06.376401'
+- slug: android-108-0-ru
+  language: ru
+  anki_id: 1768378381265
+  synced_at: '2026-01-23T16:45:06.377130'
+---
 # Вопрос (RU)
 > Как MutableState уведомляет о том, что он изменился?
 

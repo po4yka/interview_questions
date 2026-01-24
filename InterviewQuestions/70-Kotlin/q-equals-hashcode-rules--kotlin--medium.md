@@ -31,22 +31,12 @@ tags:
 anki_cards:
 - slug: lang-049-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - object-methods
+  anki_id: 1768326295131
+  synced_at: '2026-01-23T17:03:51.665817'
 - slug: lang-049-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - collections
-  - equality
-  - object-methods
+  anki_id: 1768326295156
+  synced_at: '2026-01-23T17:03:51.666629'
 ---
 # Вопрос (RU)
 > Какие существуют правила для методов equals и hashcode?

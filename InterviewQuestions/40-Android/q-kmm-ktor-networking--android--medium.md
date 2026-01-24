@@ -1,67 +1,47 @@
----\
+---
 id: android-164
 title: KMM Ktor Networking / Сетевое взаимодействие с Ktor в KMM
-aliases: [KMM Ktor Networking, Сетевое взаимодействие с Ktor в KMM]
+aliases:
+- KMM Ktor Networking
+- Сетевое взаимодействие с Ktor в KMM
 topic: android
-subtopics: [coroutines, networking-http]
+subtopics:
+- coroutines
+- networking-http
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, c-retrofit, q-flutter-comparison--android--medium, q-kmm-dependency-injection--android--medium, q-react-native-comparison--android--medium]
+related:
+- c-coroutines
+- c-retrofit
+- q-flutter-comparison--android--medium
+- q-kmm-dependency-injection--android--medium
+- q-react-native-comparison--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/coroutines, android/networking-http, difficulty/medium, kmm, ktor, multiplatform]
+tags:
+- android/coroutines
+- android/networking-http
+- difficulty/medium
+- kmm
+- ktor
+- multiplatform
 sources: []
 anki_cards:
-  - slug: android-164-0-en
-    front: "How do you use Ktor for networking in KMM projects?"
-    back: |
-      **Ktor** - multiplatform HTTP client from JetBrains.
-
-      **Setup:** Platform engines (OkHttp for Android, Darwin for iOS).
-
-      **Key features:**
-      - Auth plugin with bearer token refresh
-      - HttpSend.intercept for retries with exponential backoff
-      - ContentNegotiation for JSON
-      - MockEngine for testing
-
-      ```kotlin
-      HttpClient {
-          install(ContentNegotiation) { json() }
-          install(HttpTimeout) { requestTimeoutMillis = 30_000 }
-      }
-      ```
-    tags:
-      - android_architecture
-      - difficulty::medium
-  - slug: android-164-0-ru
-    front: "Как использовать Ktor для сети в KMM проектах?"
-    back: |
-      **Ktor** - мультиплатформенный HTTP-клиент от JetBrains.
-
-      **Настройка:** Платформенные движки (OkHttp для Android, Darwin для iOS).
-
-      **Ключевые возможности:**
-      - Auth плагин с обновлением bearer токена
-      - HttpSend.intercept для ретраев с exponential backoff
-      - ContentNegotiation для JSON
-      - MockEngine для тестирования
-
-      ```kotlin
-      HttpClient {
-          install(ContentNegotiation) { json() }
-          install(HttpTimeout) { requestTimeoutMillis = 30_000 }
-      }
-      ```
-    tags:
-      - android_architecture
-      - difficulty::medium
-
----\
+- slug: android-164-0-en
+  language: en
+  anki_id: 1768396925805
+  synced_at: '2026-01-23T16:45:05.497515'
+- slug: android-164-0-ru
+  language: ru
+  anki_id: 1768396925826
+  synced_at: '2026-01-23T16:45:05.498799'
+---
 # Вопрос (RU)
 
 > Объясните как использовать Ktor client для multiplatform networking в KMM проектах. Как настроить platform-specific engines, обработать аутентификацию, реализовать retry логику и управлять сетевыми ошибками на Android и iOS?

@@ -1,63 +1,49 @@
----\
+---
 id: android-040
 title: Macrobenchmark for App Startup / Macrobenchmark для запуска приложения
-aliases: [Macrobenchmark for App Startup, Macrobenchmark для запуска приложения]
+aliases:
+- Macrobenchmark for App Startup
+- Macrobenchmark для запуска приложения
 topic: android
-subtopics: [testing-benchmark]
+subtopics:
+- testing-benchmark
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-perfetto, q-android-performance-measurement-tools--android--medium, q-app-startup-library--android--medium, q-app-startup-optimization--android--medium, q-baseline-profiles-optimization--android--medium, q-fix-slow-app-startup-legacy--android--hard, q-performance-optimization-android--android--medium]
+related:
+- c-perfetto
+- q-android-performance-measurement-tools--android--medium
+- q-app-startup-library--android--medium
+- q-app-startup-optimization--android--medium
+- q-baseline-profiles-optimization--android--medium
+- q-fix-slow-app-startup-legacy--android--hard
+- q-performance-optimization-android--android--medium
 created: 2025-10-11
 updated: 2025-11-10
-tags: [android/profiling, android/testing-benchmark, difficulty/medium, macrobenchmark, perfetto, performance, startup]
+tags:
+- android/profiling
+- android/testing-benchmark
+- difficulty/medium
+- macrobenchmark
+- perfetto
+- performance
+- startup
 anki_cards:
-  - slug: android-040-0-en
-    front: "What are the three startup types measured by Macrobenchmark?"
-    back: |
-      **Startup types**:
-      1. **Cold** - process doesn't exist, created from scratch (slowest)
-      2. **Warm** - process exists, Activity recreated
-      3. **Hot** - Activity in memory, brought to foreground (fastest)
-
-      ```kotlin
-      benchmarkRule.measureRepeated(
-          startupMode = StartupMode.COLD,
-          compilationMode = CompilationMode.Partial(),
-          iterations = 10
-      ) { startActivityAndWait() }
-      ```
-
-      Use Perfetto traces to identify bottlenecks.
-    tags:
-      - android_testing
-      - difficulty::medium
-  - slug: android-040-0-ru
-    front: "Какие три типа запуска измеряет Macrobenchmark?"
-    back: |
-      **Типы запуска**:
-      1. **Cold** - процесс не существует, создаётся с нуля (самый медленный)
-      2. **Warm** - процесс существует, Activity пересоздаётся
-      3. **Hot** - Activity в памяти, выводится на передний план (самый быстрый)
-
-      ```kotlin
-      benchmarkRule.measureRepeated(
-          startupMode = StartupMode.COLD,
-          compilationMode = CompilationMode.Partial(),
-          iterations = 10
-      ) { startActivityAndWait() }
-      ```
-
-      Используйте Perfetto-трассировки для поиска узких мест.
-    tags:
-      - android_testing
-      - difficulty::medium
-
----\
+- slug: android-040-0-en
+  language: en
+  anki_id: 1768379962574
+  synced_at: '2026-01-23T16:45:05.511162'
+- slug: android-040-0-ru
+  language: ru
+  anki_id: 1768379962599
+  synced_at: '2026-01-23T16:45:05.514528'
+---
 # Вопрос (RU)
 > Реализуйте macrobenchmark для запуска приложения. Измерьте холодный, теплый и горячий запуск. Используйте трассировку Perfetto для выявления узких мест и оптимизации на основе результатов.
 

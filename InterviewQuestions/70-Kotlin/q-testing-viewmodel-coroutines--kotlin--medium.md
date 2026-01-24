@@ -38,16 +38,12 @@ tags:
 anki_cards:
 - slug: q-testing-viewmodel-coroutines--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280555
+  synced_at: '2026-01-23T17:03:50.567419'
 - slug: q-testing-viewmodel-coroutines--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326280580
+  synced_at: '2026-01-23T17:03:50.569939'
 ---
 # Вопрос (RU)
 > Как тестировать `ViewModel` с корутинами? Объясните `TestCoroutineDispatcher`, `StandardTestDispatcher`, тестирование `StateFlow`/`SharedFlow` и мокирование suspend функций.

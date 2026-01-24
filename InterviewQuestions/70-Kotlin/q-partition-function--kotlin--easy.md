@@ -33,18 +33,12 @@ tags:
 anki_cards:
 - slug: kotlin-208-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
+  anki_id: 1768326291431
+  synced_at: '2026-01-23T17:03:51.509618'
 - slug: kotlin-208-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - collections
+  anki_id: 1768326291456
+  synced_at: '2026-01-23T17:03:51.510557'
 ---
 # Вопрос (RU)
 

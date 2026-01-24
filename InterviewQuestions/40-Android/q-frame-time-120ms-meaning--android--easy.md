@@ -30,11 +30,11 @@ anki_cards:
 - slug: android-094-0-en
   language: en
   anki_id: 1768367368384
-  synced_at: '2026-01-14T09:17:53.564937'
+  synced_at: '2026-01-23T16:45:06.185450'
 - slug: android-094-0-ru
   language: ru
   anki_id: 1768367368406
-  synced_at: '2026-01-14T09:17:53.567883'
+  synced_at: '2026-01-23T16:45:06.186215'
 moc: moc-android
 related:
 - c-android-basics

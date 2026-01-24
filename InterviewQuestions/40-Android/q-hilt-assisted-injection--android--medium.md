@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-049-0-en
   language: en
   anki_id: 1768367590110
-  synced_at: '2026-01-14T09:17:53.536738'
+  synced_at: '2026-01-23T16:45:06.164565'
 - slug: android-049-0-ru
   language: ru
   anki_id: 1768367590131
-  synced_at: '2026-01-14T09:17:53.539758'
+  synced_at: '2026-01-23T16:45:06.165330'
 sources:
 - https://dagger.dev/hilt/assisted-injection.html
 ---

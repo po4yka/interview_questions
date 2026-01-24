@@ -1,73 +1,50 @@
----\
+---
 id: android-400
-title: "KMM Testing / Тестирование в KMM"
-aliases: [KMM Testing, Kotlin Multiplatform Testing, Тестирование KMM, Тестирование Kotlin Multiplatform]
+title: KMM Testing / Тестирование в KMM
+aliases:
+- KMM Testing
+- Kotlin Multiplatform Testing
+- Тестирование KMM
+- Тестирование Kotlin Multiplatform
 topic: android
-subtopics: [coroutines, kmp, testing-unit]
+subtopics:
+- coroutines
+- kmp
+- testing-unit
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [moc-android, q-compose-testing--android--medium, q-testing-coroutines-flow--android--hard, q-testing-viewmodels-turbine--android--medium]
+related:
+- moc-android
+- q-compose-testing--android--medium
+- q-testing-coroutines-flow--android--hard
+- q-testing-viewmodels-turbine--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium, kotlin, multiplatform, testing]
+tags:
+- android/coroutines
+- android/kmp
+- android/testing-unit
+- difficulty/medium
+- kotlin
+- multiplatform
+- testing
 anki_cards:
-  - slug: android-400-0-en
-    front: "How do you test KMM projects across platforms?"
-    back: |
-      **Test structure:**
-      - `commonTest` - shared tests (business logic)
-      - `androidUnitTest` - Android-specific (JVM)
-      - `iosTest` - iOS-specific
-
-      **Key approaches:**
-      - Use `kotlin.test` assertions
-      - Turbine for Flow testing
-      - expect/actual for platform test drivers
-      - Fakes over mocks in commonTest
-
-      ```kotlin
-      @Test
-      fun test() = runTest {
-          repository.observeTasks().test {
-              assertEquals(emptyList(), awaitItem())
-          }
-      }
-      ```
-    tags:
-      - android_testing
-      - difficulty::medium
-  - slug: android-400-0-ru
-    front: "Как тестировать KMM проекты на разных платформах?"
-    back: |
-      **Структура тестов:**
-      - `commonTest` - общие тесты (бизнес-логика)
-      - `androidUnitTest` - Android-специфичные (JVM)
-      - `iosTest` - iOS-специфичные
-
-      **Ключевые подходы:**
-      - Используйте `kotlin.test` assertions
-      - Turbine для тестирования Flow
-      - expect/actual для платформенных тестовых драйверов
-      - Fakes вместо mocks в commonTest
-
-      ```kotlin
-      @Test
-      fun test() = runTest {
-          repository.observeTasks().test {
-              assertEquals(emptyList(), awaitItem())
-          }
-      }
-      ```
-    tags:
-      - android_testing
-      - difficulty::medium
-
----\
+- slug: android-400-0-en
+  language: en
+  anki_id: 1768396945930
+  synced_at: '2026-01-23T16:45:06.336858'
+- slug: android-400-0-ru
+  language: ru
+  anki_id: 1768396945951
+  synced_at: '2026-01-23T16:45:06.337694'
+---
 # Вопрос (RU)
 > Объясните стратегии тестирования KMM проектов. Как писать тесты в commonTest, androidTest и iosTest? Как мокировать платформо-специфичные зависимости?
 

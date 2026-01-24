@@ -28,16 +28,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-dsl-creation--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288831
+  synced_at: '2026-01-23T17:03:51.307502'
 - slug: q-kotlin-dsl-creation--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288856
+  synced_at: '2026-01-23T17:03:51.308803'
 ---
 # Вопрос (RU)
 > Разработайте и реализуйте типобезопасный DSL для построения UI компонентов. Используйте контроль области видимости, extension-лямбды и `@DslMarker`.

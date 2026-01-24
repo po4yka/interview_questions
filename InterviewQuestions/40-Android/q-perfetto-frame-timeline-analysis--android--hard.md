@@ -1,57 +1,48 @@
 ---
 id: android-625
 anki_cards:
-  - slug: android-625-0-en
-    front: "What are the key concepts in Perfetto Frame Timeline analysis?"
-    back: |
-      **Two frame types:**
-      - **AppFrame** - App finished preparing frame (RenderThread)
-      - **DisplayFrame** - SurfaceFlinger showed frame on screen
-
-      **Jank detection:** AppFrame misses vsync deadline for DisplayFrame.
-
-      **Analysis steps:**
-      1. Capture with `android.app_frame_timeline` data source
-      2. Correlate with Choreographer#doFrame, RenderThread, GPU
-      3. Query via `trace_processor_shell` for `jank_type != 0`
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-625-0-ru
-    front: "Какие ключевые концепции анализа Frame Timeline в Perfetto?"
-    back: |
-      **Два типа кадров:**
-      - **AppFrame** - Приложение завершило подготовку кадра (RenderThread)
-      - **DisplayFrame** - SurfaceFlinger показал кадр на экране
-
-      **Обнаружение jank:** AppFrame не успевает к vsync дедлайну DisplayFrame.
-
-      **Шаги анализа:**
-      1. Захват с data source `android.app_frame_timeline`
-      2. Корреляция с Choreographer#doFrame, RenderThread, GPU
-      3. Запрос через `trace_processor_shell` для `jank_type != 0`
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-625-0-en
+  language: en
+  anki_id: 1768413955220
+  synced_at: '2026-01-23T16:45:06.374816'
+- slug: android-625-0-ru
+  language: ru
+  anki_id: 1768413955242
+  synced_at: '2026-01-23T16:45:06.375598'
 title: Perfetto Frame Timeline Analysis / Анализ Frame Timeline в Perfetto
-aliases: [Perfetto Frame Timeline Analysis, Анализ Frame Timeline в Perfetto]
+aliases:
+- Perfetto Frame Timeline Analysis
+- Анализ Frame Timeline в Perfetto
 topic: android
-subtopics: [logging-tracing, monitoring-slo, performance-rendering]
+subtopics:
+- logging-tracing
+- monitoring-slo
+- performance-rendering
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-profiling, q-android-performance-measurement-tools--android--medium, q-frame-time-120ms-meaning--android--easy, q-jank-detection-frame-metrics--android--medium, q-leakcanary-heap-dump-analysis--android--medium]
+related:
+- c-android-profiling
+- q-android-performance-measurement-tools--android--medium
+- q-frame-time-120ms-meaning--android--easy
+- q-jank-detection-frame-metrics--android--medium
+- q-leakcanary-heap-dump-analysis--android--medium
 created: 2025-10-02
 updated: 2025-11-10
-tags: [android/logging-tracing, android/monitoring-slo, android/performance-rendering, difficulty/hard]
+tags:
+- android/logging-tracing
+- android/monitoring-slo
+- android/performance-rendering
+- difficulty/hard
 sources:
-  - "https://developer.android.com/topic/performance/tracing/perfetto"
-  - "https://perfetto.dev/docs/concepts/frame-timeline"
-
----\
+- https://developer.android.com/topic/performance/tracing/perfetto
+- https://perfetto.dev/docs/concepts/frame-timeline
+---
 # Вопрос (RU)
 > Как использовать Perfetto и Frame Timeline для анализа лагов: настройка трассировки, интерпретация DisplayFrame/AppFrame, корреляция с потоками и автоматизация метрик?
 

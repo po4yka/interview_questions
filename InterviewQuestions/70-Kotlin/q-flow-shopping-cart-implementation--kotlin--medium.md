@@ -33,16 +33,12 @@ tags:
 anki_cards:
 - slug: q-flow-shopping-cart-implementation--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286206
+  synced_at: '2026-01-23T17:03:51.095536'
 - slug: q-flow-shopping-cart-implementation--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286232
+  synced_at: '2026-01-23T17:03:51.098432'
 ---
 # Вопрос (RU)
 > Как реализовать работу `Flow` в приложении, когда нужно самостоятельно управлять всей корзиной на устройстве?

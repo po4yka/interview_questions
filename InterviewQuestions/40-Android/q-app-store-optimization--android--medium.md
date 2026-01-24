@@ -37,11 +37,11 @@ anki_cards:
 - slug: android-399-0-en
   language: en
   anki_id: 1768364698252
-  synced_at: '2026-01-14T09:17:53.779005'
+  synced_at: '2026-01-23T16:45:06.333614'
 - slug: android-399-0-ru
   language: ru
   anki_id: 1768364698273
-  synced_at: '2026-01-14T09:17:53.781474'
+  synced_at: '2026-01-23T16:45:06.334419'
 ---
 # Вопрос (RU)
 > Что такое оптимизация App Store и как её реализовать?

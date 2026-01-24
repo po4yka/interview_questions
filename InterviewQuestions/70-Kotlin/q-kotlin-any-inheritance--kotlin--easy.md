@@ -25,16 +25,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-any-inheritance--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283455
+  synced_at: '2026-01-23T17:03:50.796480'
 - slug: q-kotlin-any-inheritance--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326283481
+  synced_at: '2026-01-23T17:03:50.797735'
 ---
 # Вопрос (RU)
 > Все классы Kotlin наследуются от `Any`

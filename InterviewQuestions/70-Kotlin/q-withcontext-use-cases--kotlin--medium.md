@@ -2,18 +2,13 @@
 anki_cards:
 - slug: q-withcontext-use-cases--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286806
+  synced_at: '2026-01-23T17:03:51.139922'
 - slug: q-withcontext-use-cases--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286830
+  synced_at: '2026-01-23T17:03:51.142661'
 ---
-
 ---
 ---
 ---\

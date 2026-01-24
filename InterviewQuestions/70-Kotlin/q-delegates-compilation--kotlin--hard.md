@@ -31,18 +31,12 @@ tags:
 anki_cards:
 - slug: kotlin-169-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - delegation
+  anki_id: 1768326284555
+  synced_at: '2026-01-23T17:03:50.923933'
 - slug: kotlin-169-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - delegation
+  anki_id: 1768326284580
+  synced_at: '2026-01-23T17:03:50.925487'
 ---
 # Вопрос (RU)
 > Как делегаты Kotlin работают на уровне компиляции? Какой bytecode и вспомогательные структуры генерируются?

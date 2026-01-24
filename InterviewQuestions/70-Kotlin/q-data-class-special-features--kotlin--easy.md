@@ -131,16 +131,12 @@ sources:
 anki_cards:
 - slug: q-data-class-special-features--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290181
+  synced_at: '2026-01-23T17:03:51.417853'
 - slug: q-data-class-special-features--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290206
+  synced_at: '2026-01-23T17:03:51.420023'
 ---
 # Вопрос (RU)
 > Какие особенности имеет Data Class по сравнению с обычными Kotlin классами? Какие методы генерируются автоматически?

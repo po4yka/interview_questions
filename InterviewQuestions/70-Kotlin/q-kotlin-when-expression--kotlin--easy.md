@@ -34,20 +34,12 @@ tags:
 anki_cards:
 - slug: kotlin-190-0-en
   language: en
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - control-flow
-  - syntax
+  anki_id: 1768326288381
+  synced_at: '2026-01-23T17:03:51.276766'
 - slug: kotlin-190-0-ru
   language: ru
-  difficulty: 0.3
-  tags:
-  - Kotlin
-  - difficulty::easy
-  - control-flow
-  - syntax
+  anki_id: 1768326288406
+  synced_at: '2026-01-23T17:03:51.278188'
 ---
 # Вопрос (RU)
 > Как использовать `when` в Kotlin вместо `switch`?

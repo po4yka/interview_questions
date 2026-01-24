@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-object-singleton-companion--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292131
+  synced_at: '2026-01-23T17:03:51.540450'
 - slug: q-object-singleton-companion--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292156
+  synced_at: '2026-01-23T17:03:51.541280'
 ---
 ## Ответ (RU)
 

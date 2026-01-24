@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-properties--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279855
+  synced_at: '2026-01-23T17:03:50.501462'
 - slug: q-kotlin-properties--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279881
+  synced_at: '2026-01-23T17:03:50.503485'
 ---
 # Question (EN)
 > What are properties in Kotlin? Explain val vs var, custom getters and setters, backing fields, lateinit, and property delegation basics.

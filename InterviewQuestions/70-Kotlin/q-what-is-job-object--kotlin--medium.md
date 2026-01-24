@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-what-is-job-object--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292932
+  synced_at: '2026-01-23T17:03:51.574958'
 - slug: q-what-is-job-object--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292955
+  synced_at: '2026-01-23T17:03:51.575809'
 ---
 ## Answer (EN)
 

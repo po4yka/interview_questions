@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-lazy-vs-lateinit--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291379
+  synced_at: '2026-01-23T17:03:51.505728'
 - slug: q-lazy-vs-lateinit--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291405
+  synced_at: '2026-01-23T17:03:51.506924'
 ---
 # Question (EN)
 > What is the difference between `lazy` and `lateinit` in Kotlin?

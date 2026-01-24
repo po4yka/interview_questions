@@ -131,16 +131,12 @@ tags:
 anki_cards:
 - slug: q-collection-implementations--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290481
+  synced_at: '2026-01-23T17:03:51.445249'
 - slug: q-collection-implementations--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290505
+  synced_at: '2026-01-23T17:03:51.447410'
 ---
 # Какие Есть Реализации Коллекций?
 

@@ -34,20 +34,12 @@ tags:
 anki_cards:
 - slug: kotlin-029-0-en
   language: en
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - types
+  anki_id: 1768326292030
+  synced_at: '2026-01-23T17:03:51.537031'
 - slug: kotlin-029-0-ru
   language: ru
-  difficulty: 0.7
-  tags:
-  - Kotlin
-  - difficulty::hard
-  - generics
-  - types
+  anki_id: 1768326292055
+  synced_at: '2026-01-23T17:03:51.537917'
 ---
 # Вопрос (RU)
 > Что вы знаете об обобщениях (Generics) в Kotlin?

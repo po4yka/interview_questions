@@ -1,74 +1,48 @@
----\
+---
 id: android-081
 title: RecyclerView ItemDecoration Advanced / Продвинутый ItemDecoration для RecyclerView
-aliases: [RecyclerView ItemDecoration Advanced, Продвинутый ItemDecoration для RecyclerView]
+aliases:
+- RecyclerView ItemDecoration Advanced
+- Продвинутый ItemDecoration для RecyclerView
 topic: android
-subtopics: [ui-graphics, ui-views]
+subtopics:
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-graphics, q-android-app-components--android--easy, q-camerax-advanced-pipeline--android--hard, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-recyclerview-diffutil-advanced--android--medium]
+related:
+- c-android-graphics
+- q-android-app-components--android--easy
+- q-camerax-advanced-pipeline--android--hard
+- q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+- q-recyclerview-diffutil-advanced--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/ui-graphics, android/ui-views, custom-drawing, difficulty/medium, itemdecoration, ui]
+tags:
+- android/ui-graphics
+- android/ui-views
+- custom-drawing
+- difficulty/medium
+- itemdecoration
+- ui
 sources:
-  - "https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration"
+- https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration
 anki_cards:
-  - slug: android-081-0-en
-    front: "How to create custom ItemDecorations for RecyclerView?"
-    back: |
-      **ItemDecoration** adds custom drawing/offsets without modifying items.
-
-      **Three methods:**
-      - `onDraw()` - draw UNDER items (before)
-      - `onDrawOver()` - draw OVER items (after, for sticky headers)
-      - `getItemOffsets()` - add spacing (no drawing)
-
-      ```kotlin
-      class DividerDecoration : ItemDecoration() {
-          override fun getItemOffsets(outRect: Rect, ...) {
-              outRect.bottom = dividerHeight
-          }
-          override fun onDraw(canvas: Canvas, parent: RecyclerView, ...) {
-              // Draw divider lines
-          }
-      }
-      ```
-
-      Use `recyclerView.addItemDecoration(...)` to apply.
-    tags:
-      - android_layouts
-      - difficulty::medium
-  - slug: android-081-0-ru
-    front: "Как создать пользовательские ItemDecorations для RecyclerView?"
-    back: |
-      **ItemDecoration** добавляет кастомную отрисовку/отступы без изменения элементов.
-
-      **Три метода:**
-      - `onDraw()` - рисовать ПОД элементами (до)
-      - `onDrawOver()` - рисовать НАД элементами (после, для sticky headers)
-      - `getItemOffsets()` - добавить отступы (без отрисовки)
-
-      ```kotlin
-      class DividerDecoration : ItemDecoration() {
-          override fun getItemOffsets(outRect: Rect, ...) {
-              outRect.bottom = dividerHeight
-          }
-          override fun onDraw(canvas: Canvas, parent: RecyclerView, ...) {
-              // Рисуем разделители
-          }
-      }
-      ```
-
-      Применять через `recyclerView.addItemDecoration(...)`.
-    tags:
-      - android_layouts
-      - difficulty::medium
-
----\
+- slug: android-081-0-en
+  language: en
+  anki_id: 1768381953339
+  synced_at: '2026-01-23T16:45:05.668350'
+- slug: android-081-0-ru
+  language: ru
+  anki_id: 1768381953361
+  synced_at: '2026-01-23T16:45:05.669675'
+---
 # Вопрос (RU)
 > Как создать пользовательские ItemDecorations для `RecyclerView`?
 

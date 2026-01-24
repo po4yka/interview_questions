@@ -28,16 +28,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-crossinline--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285656
+  synced_at: '2026-01-23T17:03:51.016347'
 - slug: q-kotlin-crossinline--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326285681
+  synced_at: '2026-01-23T17:03:51.018461'
 ---
 # Вопрос (RU)
 > Зачем нужен `crossinline`?

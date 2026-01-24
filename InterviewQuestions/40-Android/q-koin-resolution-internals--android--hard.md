@@ -1,69 +1,54 @@
----\
+---
 id: android-611
 title: Koin Resolution Internals / Внутренние механизмы Koin
-aliases: [Koin Instance Resolution, Koin Resolution Internals, Внутренние механизмы Koin]
+aliases:
+- Koin Instance Resolution
+- Koin Resolution Internals
+- Внутренние механизмы Koin
 topic: android
-subtopics: [architecture-clean, di-koin]
+subtopics:
+- architecture-clean
+- di-koin
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-koin-fundamentals--android--medium, q-koin-scope-management--android--medium, q-koin-testing-strategies--android--medium, q-koin-vs-dagger-philosophy--android--hard, q-koin-vs-hilt-comparison--android--medium]
+related:
+- c-dependency-injection
+- q-koin-fundamentals--android--medium
+- q-koin-scope-management--android--medium
+- q-koin-testing-strategies--android--medium
+- q-koin-vs-dagger-philosophy--android--hard
+- q-koin-vs-hilt-comparison--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/architecture-clean, android/di-koin, dependency-injection, difficulty/hard, koin]
+tags:
+- android/architecture-clean
+- android/di-koin
+- dependency-injection
+- difficulty/hard
+- koin
 anki_cards:
-  - slug: android-611-0-en
-    front: "How does Koin resolve dependencies internally?"
-    back: |
-      **Pipeline:** DSL -> BeanDefinition -> BeanRegistry -> InstanceFactory
-
-      **Key components:**
-      - `BeanDefinition` - type, qualifier, kind, definition lambda
-      - `DefinitionResolver` - finds definition by (KClass, Qualifier)
-      - `ScopeRegistry` - manages scope lifecycle
-      - `InstanceFactory` - creates/caches instances
-
-      **Caching:**
-      - Single: InstanceHolder with synchronized lazy
-      - Factory: no cache
-      - Scoped: Scope.instances map
-
-      Cycle detection via resolution chain tracking.
-    tags:
-      - android_architecture
-      - difficulty::hard
-  - slug: android-611-0-ru
-    front: "Как Koin разрешает зависимости внутри?"
-    back: |
-      **Pipeline:** DSL -> BeanDefinition -> BeanRegistry -> InstanceFactory
-
-      **Ключевые компоненты:**
-      - `BeanDefinition` - тип, qualifier, kind, лямбда создания
-      - `DefinitionResolver` - находит definition по (KClass, Qualifier)
-      - `ScopeRegistry` - управляет жизненным циклом scope
-      - `InstanceFactory` - создаёт/кэширует экземпляры
-
-      **Кэширование:**
-      - Single: InstanceHolder с synchronized lazy
-      - Factory: без кэша
-      - Scoped: Scope.instances map
-
-      Обнаружение циклов через отслеживание цепочки разрешения.
-    tags:
-      - android_architecture
-      - difficulty::hard
+- slug: android-611-0-en
+  language: en
+  anki_id: 1768396936629
+  synced_at: '2026-01-23T16:45:06.067342'
+- slug: android-611-0-ru
+  language: ru
+  anki_id: 1768396936652
+  synced_at: '2026-01-23T16:45:06.068368'
 sources:
-  - url: "https://insert-koin.io/docs/reference/koin-core/architecture"
-    note: "Официальный обзор архитектуры Koin"
-  - url: "https://github.com/InsertKoinIO/koin/blob/master/core/koin-core/src/main/kotlin/org/koin/core/Koin.kt"
-    note: "Код ядра Koin (ScopeRegistry, DefinitionResolver)"
-  - url: "https://blog.insert-koin.io/posts/koin-3-4-deep-dive/"
-    note: "Deep dive по разрешению зависимостей в Koin 3.x"
-
----\
+- url: https://insert-koin.io/docs/reference/koin-core/architecture
+  note: Официальный обзор архитектуры Koin
+- url: https://github.com/InsertKoinIO/koin/blob/master/core/koin-core/src/main/kotlin/org/koin/core/Koin.kt
+  note: Код ядра Koin (ScopeRegistry, DefinitionResolver)
+- url: https://blog.insert-koin.io/posts/koin-3-4-deep-dive/
+  note: Deep dive по разрешению зависимостей в Koin 3.x
+---
 # Вопрос (RU)
 > Объясните, как `Koin` разрешает зависимости внутри себя: от DSL-модуля до получения экземпляра. Раскройте работу DefinitionResolver, ScopeRegistry, InstanceContext и стратегию выбора scope.
 

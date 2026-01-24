@@ -32,18 +32,12 @@ tags:
 anki_cards:
 - slug: lang-018-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - type-system
+  anki_id: 1768326280955
+  synced_at: '2026-01-23T17:03:50.600839'
 - slug: lang-018-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - type-system
+  anki_id: 1768326280980
+  synced_at: '2026-01-23T17:03:50.602380'
 ---
 # Вопрос (RU)
 > Какие типы данных существуют в Java и Kotlin?

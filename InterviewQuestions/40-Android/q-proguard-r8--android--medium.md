@@ -1,62 +1,49 @@
----\
+---
 id: android-001
 title: ProGuard and R8 / ProGuard и R8
-aliases: [ProGuard and R8, ProGuard и R8]
+aliases:
+- ProGuard and R8
+- ProGuard и R8
 topic: android
-subtopics: [gradle, obfuscation, performance-memory]
+subtopics:
+- gradle
+- obfuscation
+- performance-memory
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources:
-  - "https://github.com/Kirchhoff-Android-Interview-Questions"
+- https://github.com/Kirchhoff-Android-Interview-Questions
 status: draft
 moc: moc-android
-related: [c-gradle, c-memory-management, q-build-optimization-gradle--android--medium, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-proguard-r8-rules--android--medium, q-reduce-app-size--android--medium]
+related:
+- c-gradle
+- c-memory-management
+- q-build-optimization-gradle--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-proguard-r8-rules--android--medium
+- q-reduce-app-size--android--medium
 created: 2025-10-05
 updated: 2025-11-10
-tags: [android/gradle, android/obfuscation, android/performance-memory, difficulty/medium]
+tags:
+- android/gradle
+- android/obfuscation
+- android/performance-memory
+- difficulty/medium
 anki_cards:
-  - slug: android-001-0-en
-    front: "What is the difference between ProGuard and R8?"
-    back: |
-      **R8** is the modern replacement for **ProGuard** in Android builds.
-
-      Both perform:
-      - **Code shrinking** (remove unused classes/methods)
-      - **Obfuscation** (rename to short names)
-      - **Optimization** (bytecode improvements)
-
-      **Key difference**: R8 is integrated into AGP and converts Java bytecode directly to DEX. ProGuard is separate and older.
-
-      ```gradle
-      minifyEnabled true
-      shrinkResources true
-      ```
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-001-0-ru
-    front: "В чём разница между ProGuard и R8?"
-    back: |
-      **R8** - современная замена **ProGuard** в сборке Android.
-
-      Оба выполняют:
-      - **Сжатие кода** (удаление неиспользуемых классов/методов)
-      - **Обфускацию** (переименование в короткие имена)
-      - **Оптимизацию** (улучшение байткода)
-
-      **Ключевое отличие**: R8 интегрирован в AGP и конвертирует Java-байткод напрямую в DEX. ProGuard отдельный и устаревший.
-
-      ```gradle
-      minifyEnabled true
-      shrinkResources true
-      ```
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-001-0-en
+  language: en
+  anki_id: 1768379408047
+  synced_at: '2026-01-23T16:45:05.492630'
+- slug: android-001-0-ru
+  language: ru
+  anki_id: 1768379408073
+  synced_at: '2026-01-23T16:45:05.496394'
+---
 # Вопрос (RU)
 > Что такое ProGuard и R8?
 

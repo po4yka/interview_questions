@@ -1,63 +1,52 @@
----\
+---
 id: android-335
-title: In Which Thread Does A Regular Service Run / В каком потоке работает обычный Service
-aliases: [Main Thread Service, Service Thread, Поток Service, Сервис в главном потоке]
+title: In Which Thread Does A Regular Service Run / В каком потоке работает обычный
+  Service
+aliases:
+- Main Thread Service
+- Service Thread
+- Поток Service
+- Сервис в главном потоке
 topic: android
-subtopics: [lifecycle, service, threads-sync]
+subtopics:
+- lifecycle
+- service
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, c-lifecycle, c-service, q-android-service-types--android--easy, q-foreground-service-types--android--medium, q-main-thread-android--android--medium, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- c-coroutines
+- c-lifecycle
+- c-service
+- q-android-service-types--android--easy
+- q-foreground-service-types--android--medium
+- q-main-thread-android--android--medium
+- q-when-can-the-system-restart-a-service--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/lifecycle, android/service, android/threads-sync, difficulty/medium]
+tags:
+- android
+- android/lifecycle
+- android/service
+- android/threads-sync
+- difficulty/medium
 anki_cards:
-  - slug: android-335-0-en
-    front: "In which thread does a regular Service run by default?"
-    back: |
-      **Main thread (UI thread)** - common misconception!
-
-      All lifecycle callbacks (`onCreate`, `onStartCommand`, `onBind`) run on main thread.
-
-      **Consequences:**
-      - Long operations cause ANR
-      - Must offload work to background threads/coroutines
-
-      ```kotlin
-      override fun onStartCommand(...) {
-          // This runs on MAIN thread!
-          scope.launch(Dispatchers.IO) { /* heavy work */ }
-      }
-      ```
-    tags:
-      - android_services
-      - difficulty::medium
-  - slug: android-335-0-ru
-    front: "В каком потоке работает обычный Service по умолчанию?"
-    back: |
-      **Главный поток (UI thread)** - распространённое заблуждение!
-
-      Все колбэки жизненного цикла (`onCreate`, `onStartCommand`, `onBind`) работают в главном потоке.
-
-      **Последствия:**
-      - Долгие операции вызывают ANR
-      - Нужно выносить работу в фоновые потоки/корутины
-
-      ```kotlin
-      override fun onStartCommand(...) {
-          // Это выполняется в ГЛАВНОМ потоке!
-          scope.launch(Dispatchers.IO) { /* тяжёлая работа */ }
-      }
-      ```
-    tags:
-      - android_services
-      - difficulty::medium
-
----\
+- slug: android-335-0-en
+  language: en
+  anki_id: 1768381526885
+  synced_at: '2026-01-23T16:45:06.167868'
+- slug: android-335-0-ru
+  language: ru
+  anki_id: 1768381526908
+  synced_at: '2026-01-23T16:45:06.168678'
+---
 # Вопрос (RU)
 
 > В каком потоке работает обычный `Service` по умолчанию?

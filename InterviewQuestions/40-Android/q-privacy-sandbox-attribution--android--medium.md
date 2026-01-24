@@ -1,59 +1,45 @@
 ---
 id: android-238
-title: "Privacy Sandbox Attribution / Attribution Reporting API в Privacy Sandbox"
-aliases: ["Attribution Reporting API в Privacy Sandbox", "Attribution Reporting API", "Privacy Sandbox Attribution"]
+title: Privacy Sandbox Attribution / Attribution Reporting API в Privacy Sandbox
+aliases:
+- Attribution Reporting API в Privacy Sandbox
+- Attribution Reporting API
+- Privacy Sandbox Attribution
 topic: android
-subtopics: [privacy-sdks]
+subtopics:
+- privacy-sdks
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-scoped-storage-security, c-security-hardening, q-privacy-sandbox-topics-api--android--medium]
+related:
+- c-android
+- c-scoped-storage-security
+- c-security-hardening
+- q-privacy-sandbox-topics-api--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [advertising, android/privacy-sdks, attribution-reporting, difficulty/medium, privacy, privacy-sandbox]
+tags:
+- advertising
+- android/privacy-sdks
+- attribution-reporting
+- difficulty/medium
+- privacy
+- privacy-sandbox
 anki_cards:
-  - slug: android-238-0-en
-    front: "What are the two report types in Privacy Sandbox Attribution Reporting API?"
-    back: |
-      **Event-Level Reports:**
-      - Detailed source info (campaign, creative)
-      - Limited trigger data (3 bits, 0-7)
-      - Delayed delivery with noise
-      - Use: campaign optimization, A/B testing
-
-      **Aggregate Reports:**
-      - Summary statistics across conversions
-      - Detailed values (revenue, quantity)
-      - Noise added by aggregation service
-      - Use: revenue measurement, segment analysis
-
-      **Privacy:** on-device processing, batching, rate limits, no cross-app tracking.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-238-0-ru
-    front: "Какие два типа отчётов в Attribution Reporting API Privacy Sandbox?"
-    back: |
-      **Event-Level Reports:**
-      - Детальная информация источника (campaign, creative)
-      - Ограниченные данные триггера (3 бита, 0-7)
-      - Отложенная доставка с шумом
-      - Использование: оптимизация кампаний, A/B тесты
-
-      **Aggregate Reports:**
-      - Сводная статистика по конверсиям
-      - Детальные значения (revenue, quantity)
-      - Шум добавляется aggregation service
-      - Использование: измерение дохода, анализ сегментов
-
-      **Приватность:** on-device обработка, батчинг, rate limits, без cross-app трекинга.
-    tags:
-      - android_general
-      - difficulty::medium
+- slug: android-238-0-en
+  language: en
+  anki_id: 1768417704100
+  synced_at: '2026-01-23T16:45:05.829628'
+- slug: android-238-0-ru
+  language: ru
+  anki_id: 1768417704126
+  synced_at: '2026-01-23T16:45:05.831006'
 ---
 # Вопрос (RU)
 

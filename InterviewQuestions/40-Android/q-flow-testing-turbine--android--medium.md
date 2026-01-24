@@ -36,11 +36,11 @@ anki_cards:
 - slug: android-066-0-en
   language: en
   anki_id: 1768367161107
-  synced_at: '2026-01-14T09:17:53.521987'
+  synced_at: '2026-01-23T16:45:06.156335'
 - slug: android-066-0-ru
   language: ru
   anki_id: 1768367161130
-  synced_at: '2026-01-14T09:17:53.525708'
+  synced_at: '2026-01-23T16:45:06.157152'
 sources:
 - https://github.com/cashapp/turbine
 ---

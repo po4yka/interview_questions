@@ -130,16 +130,12 @@ tags:
 anki_cards:
 - slug: q-runtime-generic-access--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295681
+  synced_at: '2026-01-23T17:03:51.685199'
 - slug: q-runtime-generic-access--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326295706
+  synced_at: '2026-01-23T17:03:51.685957'
 ---
 # Вопрос (RU)
 > Можно ли получить в runtime доступ к типу дженерика?

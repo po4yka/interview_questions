@@ -34,11 +34,11 @@ anki_cards:
 - slug: android-359-0-en
   language: en
   anki_id: 1768366071225
-  synced_at: '2026-01-14T09:17:53.625448'
+  synced_at: '2026-01-23T16:45:06.226511'
 - slug: android-359-0-ru
   language: ru
   anki_id: 1768366071250
-  synced_at: '2026-01-14T09:17:53.627452'
+  synced_at: '2026-01-23T16:45:06.227292'
 ---
 # Вопрос (RU)
 > Как реализовать продвинутую навигацию в Jetpack Compose с аргументами, deep links и контролем back stack?

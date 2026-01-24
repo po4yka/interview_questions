@@ -1,65 +1,48 @@
----\
+---
 id: android-071
 title: LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid
-aliases: [LazyGrid & LazyStaggeredGrid, LazyGrid и LazyStaggeredGrid]
+aliases:
+- LazyGrid & LazyStaggeredGrid
+- LazyGrid и LazyStaggeredGrid
 topic: android
-subtopics: [performance-rendering, ui-compose]
+subtopics:
+- performance-rendering
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-ui-composition, q-compose-core-components--android--medium, q-compose-lazy-layout-optimization--android--hard, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard]
+related:
+- c-android-ui-composition
+- q-compose-core-components--android--medium
+- q-compose-lazy-layout-optimization--android--hard
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
 created: 2025-10-12
 updated: 2025-11-10
-tags: [android/performance-rendering, android/ui-compose, difficulty/medium, grid, lazy-layout, performance]
+tags:
+- android/performance-rendering
+- android/ui-compose
+- difficulty/medium
+- grid
+- lazy-layout
+- performance
 sources:
-  - "https://developer.android.com/jetpack/compose/lists"
+- https://developer.android.com/jetpack/compose/lists
 anki_cards:
-  - slug: android-071-0-en
-    front: "How do LazyGrid and LazyStaggeredGrid work in Compose?"
-    back: |
-      **LazyGrid types:**
-      - `LazyVerticalGrid` / `LazyHorizontalGrid` - regular grid
-      - `LazyVerticalStaggeredGrid` / `LazyHorizontalStaggeredGrid` - waterfall/Pinterest style
-
-      **Column types:**
-      ```kotlin
-      GridCells.Fixed(2)           // Always 2 columns
-      GridCells.Adaptive(120.dp)   // Min 120dp per column
-      ```
-
-      **Key features:**
-      - Lazy: only visible items composed
-      - `span` for multi-column items (LazyGrid only)
-      - StaggeredGrid allows variable item heights
-      - Use `key` for stable identity and `contentType` for optimization
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-071-0-ru
-    front: "Как работают LazyGrid и LazyStaggeredGrid в Compose?"
-    back: |
-      **Типы LazyGrid:**
-      - `LazyVerticalGrid` / `LazyHorizontalGrid` - обычная сетка
-      - `LazyVerticalStaggeredGrid` / `LazyHorizontalStaggeredGrid` - водопадный/Pinterest стиль
-
-      **Типы колонок:**
-      ```kotlin
-      GridCells.Fixed(2)           // Всегда 2 колонки
-      GridCells.Adaptive(120.dp)   // Минимум 120dp на колонку
-      ```
-
-      **Ключевые особенности:**
-      - Ленивые: только видимые элементы в композиции
-      - `span` для многоколоночных элементов (только LazyGrid)
-      - StaggeredGrid поддерживает разную высоту элементов
-      - Используйте `key` для стабильной идентичности и `contentType` для оптимизации
-    tags:
-      - android_compose
-      - difficulty::medium
----\
+- slug: android-071-0-en
+  language: en
+  anki_id: 1768380479703
+  synced_at: '2026-01-23T16:45:06.426747'
+- slug: android-071-0-ru
+  language: ru
+  anki_id: 1768380479727
+  synced_at: '2026-01-23T16:45:06.427686'
+---
 # Вопрос (RU)
 > Как работают LazyGrid и LazyStaggeredGrid в Jetpack Compose?
 

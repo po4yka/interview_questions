@@ -1,69 +1,51 @@
----\
+---
 id: android-616
-title: Jetpack Window Manager for Foldables / Jetpack Window Manager для складных устройств
-aliases: [Jetpack Window Manager Foldables, Jetpack Window Manager для складных устройств]
+title: Jetpack Window Manager for Foldables / Jetpack Window Manager для складных
+  устройств
+aliases:
+- Jetpack Window Manager Foldables
+- Jetpack Window Manager для складных устройств
 topic: android
-subtopics: [foldables-chromeos, ui-compose, ui-state]
+subtopics:
+- foldables-chromeos
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-adaptive-layouts-compose--kotlin--hard, q-how-does-jetpackcompose-work--android--medium, q-how-jetpack-compose-works--android--medium, q-jetpack-compose-basics--android--medium]
+related:
+- c-android
+- q-adaptive-layouts-compose--kotlin--hard
+- q-how-does-jetpackcompose-work--android--medium
+- q-how-jetpack-compose-works--android--medium
+- q-jetpack-compose-basics--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/foldables-chromeos, android/ui-compose, android/ui-state, difficulty/hard]
+tags:
+- android/foldables-chromeos
+- android/ui-compose
+- android/ui-state
+- difficulty/hard
 anki_cards:
-  - slug: android-616-0-en
-    front: "How do you adapt Android apps for foldables using Jetpack Window Manager?"
-    back: |
-      **Key APIs:**
-      - `WindowSizeClass` (compact/medium/expanded) from `calculateWindowSizeClass(activity)`
-      - `FoldingFeature` - posture (FLAT/HALF_OPENED), hinge bounds, isSeparating
-      - `WindowInfoTracker` for observing layout changes
-
-      **Adaptation:**
-      ```kotlin
-      when (windowSizeClass.widthSizeClass) {
-          Compact -> CompactLayout()
-          Medium -> ListDetailSplit()
-          Expanded -> ThreePaneLayout()
-      }
-      ```
-
-      Avoid placing UI under hinge. Use `NavigationSuiteScaffold` for adaptive navigation.
-    tags:
-      - android_compose
-      - difficulty::hard
-  - slug: android-616-0-ru
-    front: "Как адаптировать Android-приложение для складных устройств с Jetpack Window Manager?"
-    back: |
-      **Основные API:**
-      - `WindowSizeClass` (compact/medium/expanded) из `calculateWindowSizeClass(activity)`
-      - `FoldingFeature` - posture (FLAT/HALF_OPENED), bounds шарнира, isSeparating
-      - `WindowInfoTracker` для отслеживания изменений раскладки
-
-      **Адаптация:**
-      ```kotlin
-      when (windowSizeClass.widthSizeClass) {
-          Compact -> CompactLayout()
-          Medium -> ListDetailSplit()
-          Expanded -> ThreePaneLayout()
-      }
-      ```
-
-      Не размещать UI под шарниром. Использовать `NavigationSuiteScaffold` для адаптивной навигации.
-    tags:
-      - android_compose
-      - difficulty::hard
+- slug: android-616-0-en
+  language: en
+  anki_id: 1768396750103
+  synced_at: '2026-01-23T16:45:05.923278'
+- slug: android-616-0-ru
+  language: ru
+  anki_id: 1768396750127
+  synced_at: '2026-01-23T16:45:05.924688'
 sources:
-  - url: "https://developer.android.com/jetpack/androidx/releases/window"
-    note: "Jetpack Window Manager documentation"
-  - url: "https://developer.android.com/guide/topics/large-screens/ideas"
-    note: "Adaptive layout patterns"
-
----\
+- url: https://developer.android.com/jetpack/androidx/releases/window
+  note: Jetpack Window Manager documentation
+- url: https://developer.android.com/guide/topics/large-screens/ideas
+  note: Adaptive layout patterns
+---
 # Вопрос (RU)
 > Как адаптировать Android-приложение под планшеты и складные устройства с помощью Jetpack `Window` Manager: обрабатывать WindowSizeClass, posture, hinge и настраивать Compose/Views под разные состояния?
 

@@ -40,11 +40,11 @@ anki_cards:
 - slug: android-111-0-en
   language: en
   anki_id: 1768366073777
-  synced_at: '2026-01-14T09:17:53.876942'
+  synced_at: '2026-01-23T16:45:06.417683'
 - slug: android-111-0-ru
   language: ru
   anki_id: 1768366073800
-  synced_at: '2026-01-14T09:17:53.879125'
+  synced_at: '2026-01-23T16:45:06.418587'
 ---
 # Вопрос (RU)
 > В чем разница между побочными эффектами Compose: LaunchedEffect vs DisposableEffect?

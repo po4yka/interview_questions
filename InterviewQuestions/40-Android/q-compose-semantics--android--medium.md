@@ -43,11 +43,11 @@ anki_cards:
 - slug: android-026-0-en
   language: en
   anki_id: 1768366070176
-  synced_at: '2026-01-14T09:17:53.448858'
+  synced_at: '2026-01-23T16:45:06.062064'
 - slug: android-026-0-ru
   language: ru
   anki_id: 1768366070198
-  synced_at: '2026-01-14T09:17:53.450875'
+  synced_at: '2026-01-23T16:45:06.063301'
 ---
 # Вопрос (RU)
 > Что такое семантика в Jetpack Compose и зачем она нужна?

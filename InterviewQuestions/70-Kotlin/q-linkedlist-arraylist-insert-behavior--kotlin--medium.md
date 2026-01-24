@@ -128,16 +128,12 @@ tags:
 anki_cards:
 - slug: q-linkedlist-arraylist-insert-behavior--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279955
+  synced_at: '2026-01-23T17:03:50.509438'
 - slug: q-linkedlist-arraylist-insert-behavior--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279981
+  synced_at: '2026-01-23T17:03:50.510817'
 ---
 # Вопрос (RU)
 > Как будут вести себя `LinkedList` и `ArrayList`, если вставить в них элемент?

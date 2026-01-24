@@ -1,65 +1,48 @@
 ---
 id: android-262
 anki_cards:
-  - slug: android-262-0-en
-    front: "What is the strategy for migrating a large project to Jetpack Compose?"
-    back: |
-      **Hybrid bottom-up approach:**
-
-      **Phase 1:** Setup - BOM, buildFeatures.compose, Design System
-      **Phase 2:** ComposeView inside XML layouts
-      **Phase 3:** AndroidView for complex legacy Views
-      **Phase 4:** Module-by-module migration (simple first)
-      **Phase 5:** Hybrid navigation
-
-      **Common patterns:**
-      - RecyclerView -> LazyColumn
-      - ViewPager2 -> HorizontalPager
-      - Fragment -> @Composable
-      - LiveData.observe() -> collectAsState()
-
-      **Timeline for 50+ screens:** 9-13 months
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-262-0-ru
-    front: "Какая стратегия миграции большого проекта на Jetpack Compose?"
-    back: |
-      **Гибридный подход снизу вверх:**
-
-      **Фаза 1:** Настройка - BOM, buildFeatures.compose, Design System
-      **Фаза 2:** ComposeView внутри XML layouts
-      **Фаза 3:** AndroidView для сложных legacy Views
-      **Фаза 4:** Миграция по модулям (простые сначала)
-      **Фаза 5:** Гибридная навигация
-
-      **Типичные паттерны:**
-      - RecyclerView -> LazyColumn
-      - ViewPager2 -> HorizontalPager
-      - Fragment -> @Composable
-      - LiveData.observe() -> collectAsState()
-
-      **Сроки для 50+ экранов:** 9-13 месяцев
-    tags:
-      - android_compose
-      - difficulty::medium
-title: "Migration To Compose / Миграция на Compose"
-aliases: ["Migration To Compose", "Миграция на Compose"]
+- slug: android-262-0-en
+  language: en
+  anki_id: 1768414371195
+  synced_at: '2026-01-23T16:45:05.926175'
+- slug: android-262-0-ru
+  language: ru
+  anki_id: 1768414371219
+  synced_at: '2026-01-23T16:45:05.927694'
+title: Migration To Compose / Миграция на Compose
+aliases:
+- Migration To Compose
+- Миграция на Compose
 topic: android
-subtopics: [architecture-mvvm, testing-unit, ui-compose]
+subtopics:
+- architecture-mvvm
+- testing-unit
+- ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-mvvm, q-recyclerview-explained--android--medium, q-what-does-viewgroup-inherit-from--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- c-jetpack-compose
+- c-mvvm
+- q-recyclerview-explained--android--medium
+- q-what-does-viewgroup-inherit-from--android--easy
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/architecture-mvvm, android/testing-unit, android/ui-compose, difficulty/medium, migration, xml-to-compose]
-
----\
+tags:
+- android/architecture-mvvm
+- android/testing-unit
+- android/ui-compose
+- difficulty/medium
+- migration
+- xml-to-compose
+---
 # Вопрос (RU)
 
 > Какая стратегия миграции большого проекта на Jetpack Compose?

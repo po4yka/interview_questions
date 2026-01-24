@@ -35,20 +35,12 @@ tags:
 anki_cards:
 - slug: kotlin-143-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - singleton
+  anki_id: 1768326279404
+  synced_at: '2026-01-23T17:03:50.454150'
 - slug: kotlin-143-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
-  - classes
-  - singleton
+  anki_id: 1768326279430
+  synced_at: '2026-01-23T17:03:50.456625'
 ---
 # Что Такое Object / Companion Object?
 

@@ -39,16 +39,12 @@ tags:
 anki_cards:
 - slug: q-testing-stateflow-sharedflow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279505
+  synced_at: '2026-01-23T17:03:50.462900'
 - slug: q-testing-stateflow-sharedflow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326279530
+  synced_at: '2026-01-23T17:03:50.465213'
 ---
 # Вопрос (RU)
 > Как тестировать `StateFlow` и `SharedFlow` в `ViewModel`? Покрыть стратегии коллекции, библиотеку Turbine, `TestScope`, утверждения и граничные случаи вроде replay cache и семантики "latest value wins".

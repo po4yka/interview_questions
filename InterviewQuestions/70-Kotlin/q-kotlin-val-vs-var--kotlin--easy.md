@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-kotlin-val-vs-var--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291981
+  synced_at: '2026-01-23T17:03:51.535238'
 - slug: q-kotlin-val-vs-var--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292006
+  synced_at: '2026-01-23T17:03:51.536113'
 ---
 # Question (EN)
 > What's the difference between val and var in Kotlin? When should you use each?

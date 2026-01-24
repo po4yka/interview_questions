@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-room-coroutines-flow--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290832
+  synced_at: '2026-01-23T17:03:51.473127'
 - slug: q-room-coroutines-flow--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326290857
+  synced_at: '2026-01-23T17:03:51.474406'
 ---
 # Question (EN)
 > How to use `Room` database with coroutines and `Flow`? Explain suspend functions in DAO, `Flow` for reactive queries, transaction handling, and best practices.

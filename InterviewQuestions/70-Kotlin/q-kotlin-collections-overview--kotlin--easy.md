@@ -26,16 +26,12 @@ tags:
 anki_cards:
 - slug: q-kotlin-collections-overview--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294781
+  synced_at: '2026-01-23T17:03:51.649743'
 - slug: q-kotlin-collections-overview--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326294805
+  synced_at: '2026-01-23T17:03:51.650510'
 ---
 # Вопрос (RU)
 > Какие коллекции знаешь?

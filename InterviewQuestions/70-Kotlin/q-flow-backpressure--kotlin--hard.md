@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-flow-backpressure--kotlin--hard-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293031
+  synced_at: '2026-01-23T17:03:51.578222'
 - slug: q-flow-backpressure--kotlin--hard-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326293054
+  synced_at: '2026-01-23T17:03:51.579125'
 ---
 # Question (EN)
 > What is backpressure in Kotlin `Flow`? Explain `buffer()`, `conflate()`, and `collectLatest()` operators and when to use each strategy.

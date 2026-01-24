@@ -38,16 +38,12 @@ subtopics:
 anki_cards:
 - slug: q-semaphore-rate-limiting--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288930
+  synced_at: '2026-01-23T17:03:51.319010'
 - slug: q-semaphore-rate-limiting--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326288956
+  synced_at: '2026-01-23T17:03:51.320657'
 ---
 # Вопрос (RU)
 > Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?

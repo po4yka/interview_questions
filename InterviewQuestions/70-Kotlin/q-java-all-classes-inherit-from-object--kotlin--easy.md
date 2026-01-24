@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-java-all-classes-inherit-from-object--kotlin--easy-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286855
+  synced_at: '2026-01-23T17:03:51.143901'
 - slug: q-java-all-classes-inherit-from-object--kotlin--easy-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326286880
+  synced_at: '2026-01-23T17:03:51.145708'
 ---
 # Question (EN)
 > From which object do all classes in Java inherit?

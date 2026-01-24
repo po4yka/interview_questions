@@ -1,51 +1,41 @@
----\
+---
 id: android-083
-title: "Room Library Definition / Определение библиотеки Room"
-aliases: ["Room Library Definition", "Определение библиотеки Room"]
+title: Room Library Definition / Определение библиотеки Room
+aliases:
+- Room Library Definition
+- Определение библиотеки Room
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-database-design, q-android-jetpack-overview--android--easy]
+related:
+- c-database-design
+- q-android-jetpack-overview--android--easy
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/room, difficulty/easy]
-sources: ["https://developer.android.com/codelabs/android-room-with-a-view-kotlin", "https://developer.android.com/training/data-storage/room"]
+tags:
+- android/room
+- difficulty/easy
+sources:
+- https://developer.android.com/codelabs/android-room-with-a-view-kotlin
+- https://developer.android.com/training/data-storage/room
 anki_cards:
-  - slug: android-083-0-en
-    front: "What is the Room library in Android?"
-    back: |
-      **Room** is Google's ORM over SQLite with compile-time SQL validation.
-
-      **Three components:**
-      - `@Entity` - table definition (data class)
-      - `@Dao` - data access interface (queries)
-      - `@Database` - entry point (extends RoomDatabase)
-
-      **Benefits:** Type safety, LiveData/Flow/Coroutines support, migrations.
-    tags:
-      - android_room
-      - difficulty::easy
-  - slug: android-083-0-ru
-    front: "Что такое библиотека Room в Android?"
-    back: |
-      **Room** - ORM от Google над SQLite с проверкой SQL на этапе компиляции.
-
-      **Три компонента:**
-      - `@Entity` - определение таблицы (data class)
-      - `@Dao` - интерфейс доступа к данным (запросы)
-      - `@Database` - точка входа (наследует RoomDatabase)
-
-      **Преимущества:** Типобезопасность, поддержка LiveData/Flow/Coroutines, миграции.
-    tags:
-      - android_room
-      - difficulty::easy
-
----\
+- slug: android-083-0-en
+  language: en
+  anki_id: 1768382134765
+  synced_at: '2026-01-23T16:45:05.910040'
+- slug: android-083-0-ru
+  language: ru
+  anki_id: 1768382134786
+  synced_at: '2026-01-23T16:45:05.912329'
+---
 # Вопрос (RU)
 > Что такое библиотека `Room`?
 

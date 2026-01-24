@@ -2,18 +2,13 @@
 anki_cards:
 - slug: q-stateflow-purpose--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282805
+  synced_at: '2026-01-23T17:03:50.747581'
 - slug: q-stateflow-purpose--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282831
+  synced_at: '2026-01-23T17:03:50.749862'
 ---
-
 ---
 ---
 ---\

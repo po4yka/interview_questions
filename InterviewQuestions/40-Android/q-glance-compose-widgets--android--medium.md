@@ -35,11 +35,11 @@ anki_cards:
 - slug: android-621-0-en
   language: en
   anki_id: 1768367361280
-  synced_at: '2026-01-14T09:17:53.146242'
+  synced_at: '2026-01-23T16:45:05.577716'
 - slug: android-621-0-ru
   language: ru
   anki_id: 1768367361306
-  synced_at: '2026-01-14T09:17:53.149858'
+  synced_at: '2026-01-23T16:45:05.580185'
 sources:
 - url: https://developer.android.com/jetpack/compose/glance/appwidget
   note: Glance app widget guide

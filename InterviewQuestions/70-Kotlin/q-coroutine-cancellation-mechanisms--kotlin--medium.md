@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-coroutine-cancellation-mechanisms--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291081
+  synced_at: '2026-01-23T17:03:51.488849'
 - slug: q-coroutine-cancellation-mechanisms--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326291105
+  synced_at: '2026-01-23T17:03:51.490167'
 ---
 # Question (EN)
 > How does coroutine cancellation work, and how is it different from canceling a `Thread`?

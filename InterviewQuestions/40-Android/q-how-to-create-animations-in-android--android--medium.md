@@ -1,66 +1,44 @@
----\
+---
 id: android-394
 title: How To Create Animations In Android / Как создавать анимации в Android
-aliases: [How To Create Animations In Android, Как создавать анимации в Android]
+aliases:
+- How To Create Animations In Android
+- Как создавать анимации в Android
 topic: android
-subtopics: [ui-animation]
+subtopics:
+- ui-animation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, q-android-lint-tool--android--medium, q-app-start-types-android--android--medium, q-compose-custom-animations--android--medium, q-data-sync-unstable-network--android--hard, q-parsing-optimization-android--android--medium, q-stable-classes-compose--android--hard]
+related:
+- c-custom-views
+- q-android-lint-tool--android--medium
+- q-app-start-types-android--android--medium
+- q-compose-custom-animations--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-parsing-optimization-android--android--medium
+- q-stable-classes-compose--android--hard
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-animation, animations, difficulty/medium]
+tags:
+- android/ui-animation
+- animations
+- difficulty/medium
 anki_cards:
-  - slug: android-394-0-en
-    front: "What are the main animation types in Android?"
-    back: |
-      **1. Property Animations (modern):**
-      - `ObjectAnimator` - animates View properties
-      - `ValueAnimator` - animates values
-      - `AnimatorSet` - combines animations
-
-      **2. View Animations (legacy):**
-      - `TranslateAnimation`, `AlphaAnimation`, etc.
-      - XML in `res/anim/`
-
-      **3. Drawable Animations:**
-      - `AnimationDrawable` - frame-by-frame
-      - `AnimatedVectorDrawable` - path morphing
-
-      **4. MotionLayout** - complex UI transitions
-
-      **5. Compose:** `animateFloatAsState`, `AnimatedVisibility`
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-394-0-ru
-    front: "Какие основные типы анимаций в Android?"
-    back: |
-      **1. Property Animations (современные):**
-      - `ObjectAnimator` - анимирует свойства View
-      - `ValueAnimator` - анимирует значения
-      - `AnimatorSet` - комбинирует анимации
-
-      **2. View Animations (устаревшие):**
-      - `TranslateAnimation`, `AlphaAnimation` и др.
-      - XML в `res/anim/`
-
-      **3. Drawable Animations:**
-      - `AnimationDrawable` - покадровая
-      - `AnimatedVectorDrawable` - морфинг путей
-
-      **4. MotionLayout** - сложные UI-переходы
-
-      **5. Compose:** `animateFloatAsState`, `AnimatedVisibility`
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-394-0-en
+  language: en
+  anki_id: 1768378897770
+  synced_at: '2026-01-23T16:45:06.326966'
+- slug: android-394-0-ru
+  language: ru
+  anki_id: 1768378897794
+  synced_at: '2026-01-23T16:45:06.327846'
+---
 # Вопрос (RU)
 > Как создавать анимации в Android
 

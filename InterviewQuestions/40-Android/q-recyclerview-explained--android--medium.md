@@ -1,68 +1,41 @@
----\
+---
 id: android-292
 title: RecyclerView Explained / Объяснение RecyclerView
-aliases: [RecyclerView Explained, Объяснение RecyclerView]
+aliases:
+- RecyclerView Explained
+- Объяснение RecyclerView
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy, q-recyclerview-itemdecoration-advanced--android--medium, q-what-does-itemdecoration-do--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
+related:
+- q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+- q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+- q-recyclerview-itemdecoration-advanced--android--medium
+- q-what-does-itemdecoration-do--android--medium
+- q-why-are-fragments-needed-if-there-is-activity--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/medium]
+tags:
+- android/ui-views
+- difficulty/medium
 anki_cards:
-  - slug: android-292-0-en
-    front: "What are the main components of RecyclerView architecture?"
-    back: |
-      **Core components:**
-      1. **Adapter** - binds data to ViewHolder
-      2. **ViewHolder** - caches view references
-      3. **LayoutManager** - positions items (Linear, Grid, Staggered)
-      4. **ItemDecoration** - dividers, spacing
-      5. **ItemAnimator** - add/remove/change animations
-
-      **ViewHolder pattern:**
-      ```kotlin
-      class MyAdapter : RecyclerView.Adapter<MyVH>() {
-          override fun onCreateViewHolder(parent, type) = MyVH(inflate())
-          override fun onBindViewHolder(holder, pos) { holder.bind(data[pos]) }
-          override fun getItemCount() = data.size
-      }
-      ```
-
-      **Key benefit:** View recycling - only visible items + buffer are created.
-    tags:
-      - android_views
-      - difficulty::medium
-  - slug: android-292-0-ru
-    front: "Какие основные компоненты архитектуры RecyclerView?"
-    back: |
-      **Основные компоненты:**
-      1. **Adapter** - связывает данные с ViewHolder
-      2. **ViewHolder** - кэширует ссылки на View
-      3. **LayoutManager** - позиционирует элементы (Linear, Grid, Staggered)
-      4. **ItemDecoration** - разделители, отступы
-      5. **ItemAnimator** - анимации add/remove/change
-
-      **Паттерн ViewHolder:**
-      ```kotlin
-      class MyAdapter : RecyclerView.Adapter<MyVH>() {
-          override fun onCreateViewHolder(parent, type) = MyVH(inflate())
-          override fun onBindViewHolder(holder, pos) { holder.bind(data[pos]) }
-          override fun getItemCount() = data.size
-      }
-      ```
-
-      **Ключевое преимущество:** переиспользование View - создаются только видимые + буфер.
-    tags:
-      - android_views
-      - difficulty::medium
-
----\
+- slug: android-292-0-en
+  language: en
+  anki_id: 1768418254504
+  synced_at: '2026-01-23T16:45:06.044849'
+- slug: android-292-0-ru
+  language: ru
+  anki_id: 1768418254526
+  synced_at: '2026-01-23T16:45:06.046230'
+---
 # Вопрос (RU)
 > Объяснение `RecyclerView`
 

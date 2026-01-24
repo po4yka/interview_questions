@@ -1,64 +1,51 @@
----\
+---
 id: android-610
 title: Koin Testing Strategies / Стратегии тестирования Koin
-aliases: [Koin Testing Strategies, Тестирование модулей Koin]
+aliases:
+- Koin Testing Strategies
+- Тестирование модулей Koin
 topic: android
-subtopics: [architecture-clean, di-koin, testing-unit]
+subtopics:
+- architecture-clean
+- di-koin
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-android-testing-strategies--android--medium, q-integration-testing-strategies--android--medium, q-koin-fundamentals--android--medium, q-koin-scope-management--android--medium, q-tflite-acceleration-strategies--android--hard]
+related:
+- c-dependency-injection
+- q-android-testing-strategies--android--medium
+- q-integration-testing-strategies--android--medium
+- q-koin-fundamentals--android--medium
+- q-koin-scope-management--android--medium
+- q-tflite-acceleration-strategies--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/architecture-clean, android/di-koin, android/testing-unit, dependency-injection, difficulty/medium, koin]
+tags:
+- android/architecture-clean
+- android/di-koin
+- android/testing-unit
+- dependency-injection
+- difficulty/medium
+- koin
 anki_cards:
-  - slug: android-610-0-en
-    front: "How do you test Koin modules?"
-    back: |
-      **Key approaches:**
-      1. `checkModules` - validates graph at test time
-      2. `KoinTestRule` - starts/stops Koin per test
-      3. `loadKoinModules` - override dependencies
-
-      ```kotlin
-      koinApplication {
-          modules(appModules)
-      }.checkModules {
-          withInstance<Context>(mockk())
-      }
-      ```
-
-      Use `module(override = true)` to replace production deps with fakes.
-    tags:
-      - android_testing
-      - difficulty::medium
-  - slug: android-610-0-ru
-    front: "Как тестировать модули Koin?"
-    back: |
-      **Ключевые подходы:**
-      1. `checkModules` - валидация графа в тестах
-      2. `KoinTestRule` - старт/стоп Koin для каждого теста
-      3. `loadKoinModules` - переопределение зависимостей
-
-      ```kotlin
-      koinApplication {
-          modules(appModules)
-      }.checkModules {
-          withInstance<Context>(mockk())
-      }
-      ```
-
-      Используйте `module(override = true)` для замены production-зависимостей фейками.
-    tags:
-      - android_testing
-      - difficulty::medium
+- slug: android-610-0-en
+  language: en
+  anki_id: 1768397135728
+  synced_at: '2026-01-23T16:45:06.350348'
+- slug: android-610-0-ru
+  language: ru
+  anki_id: 1768397135754
+  synced_at: '2026-01-23T16:45:06.351064'
 sources:
-  - "https://insert-koin.io/docs/reference/koin-android/check-modules"
-  - "https://insert-koin.io/docs/reference/koin-test/testing"
----\
+- https://insert-koin.io/docs/reference/koin-android/check-modules
+- https://insert-koin.io/docs/reference/koin-test/testing
+---
 # Вопрос (RU)
 > Как организовать тестирование модулей `Koin`? Покажите стратегии для юнит-тестов, инструментальных тестов и проверки графа зависимостей.
 

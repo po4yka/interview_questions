@@ -129,16 +129,12 @@ tags:
 anki_cards:
 - slug: q-list-vs-sequence--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292630
+  synced_at: '2026-01-23T17:03:51.563879'
 - slug: q-list-vs-sequence--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326292656
+  synced_at: '2026-01-23T17:03:51.564990'
 ---
 # Вопрос (RU)
 > В чем разница между работой с `List` и работой с `Sequence`?

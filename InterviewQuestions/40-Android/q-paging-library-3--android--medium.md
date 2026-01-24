@@ -1,63 +1,48 @@
 ---
 id: android-409
 anki_cards:
-  - slug: android-409-0-en
-    front: "What are the core components of Paging 3 library?"
-    back: |
-      **3 core components:**
-
-      1. **PagingSource** - Loads data incrementally with `LoadResult.Page`
-      2. **Pager** - Creates `Flow<PagingData<T>>` with config
-      3. **PagingDataAdapter** - RecyclerView adapter with DiffUtil
-
-      ```kotlin
-      Pager(PagingConfig(pageSize = 20)) {
-          dao.pagingSource()
-      }.flow.cachedIn(viewModelScope)
-      ```
-
-      Use `RemoteMediator` for network + database.
-    tags:
-      - android_room
-      - android_architecture
-      - difficulty::medium
-  - slug: android-409-0-ru
-    front: "Какие основные компоненты библиотеки Paging 3?"
-    back: |
-      **3 основных компонента:**
-
-      1. **PagingSource** - Загружает данные инкрементально через `LoadResult.Page`
-      2. **Pager** - Создает `Flow<PagingData<T>>` с конфигурацией
-      3. **PagingDataAdapter** - Адаптер RecyclerView с DiffUtil
-
-      ```kotlin
-      Pager(PagingConfig(pageSize = 20)) {
-          dao.pagingSource()
-      }.flow.cachedIn(viewModelScope)
-      ```
-
-      Используйте `RemoteMediator` для network + database.
-    tags:
-      - android_room
-      - android_architecture
-      - difficulty::medium
+- slug: android-409-0-en
+  language: en
+  anki_id: 1768400163747
+  synced_at: '2026-01-23T16:45:06.360151'
+- slug: android-409-0-ru
+  language: ru
+  anki_id: 1768400163771
+  synced_at: '2026-01-23T16:45:06.360945'
 title: Paging Library 3 / Библиотека Paging 3
-aliases: [Android Paging, Paging 3, Paging Library 3, Библиотека Paging 3]
+aliases:
+- Android Paging
+- Paging 3
+- Paging Library 3
+- Библиотека Paging 3
 topic: android
-subtopics: [architecture-clean, room]
+subtopics:
+- architecture-clean
+- room
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-room, c-viewmodel]
+related:
+- c-room
+- c-viewmodel
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-clean, android/room, difficulty/medium, jetpack, pagination, paging, recyclerview]
-sources: ["https://github.com/Kirchhoff-/Android-Interview-Questions"]
-
----\
+tags:
+- android/architecture-clean
+- android/room
+- difficulty/medium
+- jetpack
+- pagination
+- paging
+- recyclerview
+sources:
+- https://github.com/Kirchhoff-/Android-Interview-Questions
+---
 # Вопрос (RU)
 
 > Что вы знаете о библиотеке Paging?

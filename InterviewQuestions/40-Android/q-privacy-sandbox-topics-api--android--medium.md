@@ -1,59 +1,45 @@
 ---
 id: android-388
-title: "Topics API в Privacy Sandbox / Privacy Sandbox Topics API"
-aliases: ["Privacy Sandbox Topics API", "Topics API"]
+title: Topics API в Privacy Sandbox / Privacy Sandbox Topics API
+aliases:
+- Privacy Sandbox Topics API
+- Topics API
 topic: android
-subtopics: [privacy-sdks]
+subtopics:
+- privacy-sdks
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-scoped-storage-security, c-security-hardening, q-android-security-best-practices--android--medium]
+related:
+- c-android
+- c-scoped-storage-security
+- c-security-hardening
+- q-android-security-best-practices--android--medium
 sources: []
 created: 2024-10-10
 updated: 2025-11-10
-tags: [advertising, android/privacy-sdks, difficulty/medium, privacy, privacy-sandbox, topics-api, user-privacy]
+tags:
+- advertising
+- android/privacy-sdks
+- difficulty/medium
+- privacy
+- privacy-sandbox
+- topics-api
+- user-privacy
 anki_cards:
-  - slug: android-388-0-en
-    front: "What is Topics API in Privacy Sandbox and how does it work?"
-    back: |
-      **Topics API** - interest-based ads without cross-app tracking.
-
-      **How it works:**
-      - System determines up to 3 topics per epoch (week)
-      - Topics from taxonomy (~350 coarse categories)
-      - Weekly recalculation based on app usage
-      - Random topic added for plausible deniability
-
-      **Privacy:**
-      - On-device computation
-      - No stable cross-app identifiers
-      - User control via Privacy Sandbox settings
-      - Only coarse-grained topics, not detailed history
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-388-0-ru
-    front: "Что такое Topics API в Privacy Sandbox и как он работает?"
-    back: |
-      **Topics API** - реклама на основе интересов без cross-app трекинга.
-
-      **Как работает:**
-      - Система определяет до 3 тем за эпоху (неделю)
-      - Темы из таксономии (~350 категорий)
-      - Еженедельный пересчёт по использованию приложений
-      - Случайная тема для правдоподобного отрицания
-
-      **Приватность:**
-      - Вычисления на устройстве
-      - Нет стабильных cross-app идентификаторов
-      - Контроль пользователя через настройки Privacy Sandbox
-      - Только грубые категории, не детальная история
-    tags:
-      - android_general
-      - difficulty::medium
+- slug: android-388-0-en
+  language: en
+  anki_id: 1768418265454
+  synced_at: '2026-01-23T16:45:06.311816'
+- slug: android-388-0-ru
+  language: ru
+  anki_id: 1768418265475
+  synced_at: '2026-01-23T16:45:06.312575'
 ---
 # Вопрос (RU)
 

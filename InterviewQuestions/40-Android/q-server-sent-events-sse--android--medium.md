@@ -1,59 +1,47 @@
 ---
-id: android-720
-anki_cards:
-  - slug: android-286-0-en
-    front: "What are Server-Sent Events (SSE) and how do they compare to WebSockets?"
-    back: |
-      **SSE** is a one-way streaming protocol where server pushes updates to client.
-
-      **Comparison**:
-      | Feature | SSE | WebSocket |
-      |---------|-----|-----------|
-      | Direction | Server to client | Bidirectional |
-      | Protocol | HTTP | WS |
-      | Reconnection | Automatic | Manual |
-      | Use case | Live feeds, notifications | Chat, gaming |
-
-      **OkHttp implementation**:
-      - Use `EventSource` or manual SSE parsing
-      - Parse `data:`, `event:`, `id:` fields
-      - Handle `text/event-stream` content type
-    tags: ["android_general", "difficulty::medium"]
-  - slug: android-286-0-ru
-    front: "Что такое Server-Sent Events (SSE) и чем они отличаются от WebSocket?"
-    back: |
-      **SSE** - протокол однонаправленной потоковой передачи от сервера к клиенту.
-
-      **Сравнение**:
-      | Характеристика | SSE | WebSocket |
-      |----------------|-----|-----------|
-      | Направление | Сервер к клиенту | Двунаправленное |
-      | Протокол | HTTP | WS |
-      | Переподключение | Автоматическое | Ручное |
-      | Применение | Ленты новостей, уведомления | Чат, игры |
-
-      **Реализация на OkHttp**:
-      - Использовать `EventSource` или ручной парсинг SSE
-      - Парсить поля `data:`, `event:`, `id:`
-      - Обрабатывать тип контента `text/event-stream`
-    tags: ["android_general", "difficulty::medium"]
 id: android-286
+anki_cards:
+- slug: android-286-0-en
+  language: en
+  anki_id: 1768447067908
+  synced_at: '2026-01-23T16:45:06.026495'
+- slug: android-286-0-ru
+  language: ru
+  anki_id: 1768447067933
+  synced_at: '2026-01-23T16:45:06.028540'
+- slug: android-720-0-en
+  language: en
+- slug: android-720-0-ru
+  language: ru
 title: Server-Sent Events (SSE) / Server-Sent Events (SSE)
-aliases: [Server-Sent Events, SSE]
+aliases:
+- Server-Sent Events
+- SSE
 topic: android
-subtopics: [networking-http]
+subtopics:
+- networking-http
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-retrofit, q-api-file-upload-server--android--medium, q-compose-testing--android--medium, q-http-protocols-comparison--android--medium, q-mvi-one-time-events--android--medium, q-recyclerview-explained--android--medium, q-recyclerview-viewtypes-delegation--android--medium]
+related:
+- c-retrofit
+- q-api-file-upload-server--android--medium
+- q-compose-testing--android--medium
+- q-http-protocols-comparison--android--medium
+- q-mvi-one-time-events--android--medium
+- q-recyclerview-explained--android--medium
+- q-recyclerview-viewtypes-delegation--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/networking-http, difficulty/medium]
-
----\
+tags:
+- android/networking-http
+- difficulty/medium
+---
 # Вопрос (RU)
 > Server-Sent Events (SSE)
 

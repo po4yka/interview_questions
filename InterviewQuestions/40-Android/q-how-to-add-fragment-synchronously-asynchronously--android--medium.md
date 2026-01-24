@@ -1,55 +1,43 @@
 ---
 id: android-337
-title: How To Add Fragment Synchronously/Asynchronously / Как добавить Fragment синхронно и асинхронно
-aliases: [How To Add Fragment Synchronously Asynchronously, Как добавить Fragment синхронно и асинхронно]
+title: How To Add Fragment Synchronously/Asynchronously / Как добавить Fragment синхронно
+  и асинхронно
+aliases:
+- How To Add Fragment Synchronously Asynchronously
+- Как добавить Fragment синхронно и асинхронно
 topic: android
-subtopics: [fragment]
+subtopics:
+- fragment
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-fragments, q-how-does-jetpackcompose-work--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-play-app-signing--android--medium, q-save-data-outside-fragment--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
+related:
+- c-fragments
+- q-how-does-jetpackcompose-work--android--medium
+- q-how-to-choose-layout-for-fragment--android--easy
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-play-app-signing--android--medium
+- q-save-data-outside-fragment--android--medium
+- q-what-unites-the-main-components-of-an-android-application--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/fragment, difficulty/medium]
+tags:
+- android/fragment
+- difficulty/medium
 anki_cards:
-  - slug: android-337-0-en
-    front: "What is the difference between commit() and commitNow() for Fragment transactions?"
-    back: |
-      **Asynchronous (default):**
-      - `commit()` - enqueues transaction, executes before next frame
-      - `commitAllowingStateLoss()` - same but allows after `onSaveInstanceState()`
-
-      **Synchronous (immediate):**
-      - `commitNow()` - executes immediately, blocks thread
-      - `commitNowAllowingStateLoss()` - same but allows state loss
-
-      **Key rules:**
-      - `commitNow*` cannot use `addToBackStack()`
-      - Regular `commit()` after `onSaveInstanceState()` throws `IllegalStateException`
-    tags:
-      - android_fragments
-      - difficulty::medium
-  - slug: android-337-0-ru
-    front: "В чём разница между commit() и commitNow() для Fragment-транзакций?"
-    back: |
-      **Асинхронный (по умолчанию):**
-      - `commit()` - ставит транзакцию в очередь, выполняет до следующего кадра
-      - `commitAllowingStateLoss()` - то же, но разрешает после `onSaveInstanceState()`
-
-      **Синхронный (немедленный):**
-      - `commitNow()` - выполняет немедленно, блокирует поток
-      - `commitNowAllowingStateLoss()` - то же, но разрешает потерю состояния
-
-      **Ключевые правила:**
-      - `commitNow*` нельзя использовать с `addToBackStack()`
-      - Обычный `commit()` после `onSaveInstanceState()` выбрасывает `IllegalStateException`
-    tags:
-      - android_fragments
-      - difficulty::medium
-
+- slug: android-337-0-en
+  language: en
+  anki_id: 1768378375745
+  synced_at: '2026-01-23T16:45:06.172601'
+- slug: android-337-0-ru
+  language: ru
+  anki_id: 1768378375767
+  synced_at: '2026-01-23T16:45:06.173455'
 ---
 # Вопрос (RU)
 > Как добавить `Fragment` синхронно и асинхронно

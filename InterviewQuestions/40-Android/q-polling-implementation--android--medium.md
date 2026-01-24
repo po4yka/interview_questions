@@ -1,71 +1,47 @@
----\
+---
 id: android-363
-title: "Polling Implementation / Реализация Polling"
-aliases: ["Android Polling", "Polling Implementation", "Реализация Polling"]
+title: Polling Implementation / Реализация Polling
+aliases:
+- Android Polling
+- Polling Implementation
+- Реализация Polling
 topic: android
-subtopics: [background-execution, coroutines, networking-http]
+subtopics:
+- background-execution
+- coroutines
+- networking-http
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-android-async-primitives--android--easy, q-android-lint-tool--android--medium]
+related:
+- c-android
+- q-android-async-primitives--android--easy
+- q-android-lint-tool--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/background-execution, android/coroutines, android/networking-http, background-tasks, difficulty/medium, polling]
+tags:
+- android/background-execution
+- android/coroutines
+- android/networking-http
+- background-tasks
+- difficulty/medium
+- polling
 sources: []
 anki_cards:
-  - slug: android-363-0-en
-    front: "What are the main approaches to implement polling in Android?"
-    back: |
-      **1. Coroutines + Flow (UI-bound):**
-      ```kotlin
-      fun pollData(): Flow<Data> = flow {
-          while (currentCoroutineContext().isActive) {
-              emit(api.getData())
-              delay(5000)
-          }
-      }.flowOn(Dispatchers.IO)
-      ```
-
-      **2. WorkManager (Background):**
-      - Min 15 min interval
-      - Survives reboot
-      - Battery-aware constraints
-
-      **3. Adaptive intervals** - adjust frequency based on data changes
-
-      **Best practices:** lifecycle-aware cancellation, exponential backoff, network checks.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-363-0-ru
-    front: "Какие основные подходы к реализации polling в Android?"
-    back: |
-      **1. Coroutines + Flow (UI-bound):**
-      ```kotlin
-      fun pollData(): Flow<Data> = flow {
-          while (currentCoroutineContext().isActive) {
-              emit(api.getData())
-              delay(5000)
-          }
-      }.flowOn(Dispatchers.IO)
-      ```
-
-      **2. WorkManager (Background):**
-      - Мин. интервал 15 минут
-      - Переживает перезагрузку
-      - Battery-aware constraints
-
-      **3. Adaptive intervals** - адаптация частоты по изменениям данных
-
-      **Best practices:** lifecycle-aware отмена, exponential backoff, проверка сети.
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-363-0-en
+  language: en
+  anki_id: 1768417716826
+  synced_at: '2026-01-23T16:45:06.235830'
+- slug: android-363-0-ru
+  language: ru
+  anki_id: 1768417716850
+  synced_at: '2026-01-23T16:45:06.236646'
+---
 # Вопрос (RU)
 
 > Как реализовать polling в Android приложении? Какие подходы существуют и когда их использовать?

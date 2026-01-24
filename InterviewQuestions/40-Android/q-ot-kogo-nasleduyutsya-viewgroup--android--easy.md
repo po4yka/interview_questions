@@ -1,54 +1,46 @@
 ---
 id: android-278
 anki_cards:
-  - slug: android-278-0-en
-    front: "What class does ViewGroup inherit from in Android?"
-    back: |
-      **ViewGroup inherits from View.**
-
-      ```
-      Object -> View -> ViewGroup -> Layouts
-      ```
-
-      - **View:** Handles drawing, measurement, touch events
-      - **ViewGroup:** Adds child management, `onLayout()`, `onInterceptTouchEvent()`
-
-      This allows polymorphism - ViewGroup can be used anywhere View is expected.
-    tags:
-      - android_views
-      - difficulty::easy
-  - slug: android-278-0-ru
-    front: "От какого класса наследуется ViewGroup в Android?"
-    back: |
-      **ViewGroup наследуется от View.**
-
-      ```
-      Object -> View -> ViewGroup -> Layouts
-      ```
-
-      - **View:** Отрисовка, измерение, обработка касаний
-      - **ViewGroup:** Добавляет управление дочерними элементами, `onLayout()`, `onInterceptTouchEvent()`
-
-      Это позволяет полиморфизм - ViewGroup можно использовать везде, где ожидается View.
-    tags:
-      - android_views
-      - difficulty::easy
+- slug: android-278-0-en
+  language: en
+  anki_id: 1768400150442
+  synced_at: '2026-01-23T16:45:06.001061'
+- slug: android-278-0-ru
+  language: ru
+  anki_id: 1768400150468
+  synced_at: '2026-01-23T16:45:06.002750'
 title: Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup
-aliases: [View Hierarchy, ViewGroup Inheritance, Иерархия View, Наследование ViewGroup]
+aliases:
+- View Hierarchy
+- ViewGroup Inheritance
+- Иерархия View
+- Наследование ViewGroup
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-canvas-optimization--android--medium, q-custom-viewgroup-layout--android--hard, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-viewgroup-vs-view-differences--android--easy, q-what-does-itemdecoration-do--android--medium, q-what-does-viewgroup-inherit-from--android--easy]
+related:
+- c-android-components
+- q-canvas-optimization--android--medium
+- q-custom-viewgroup-layout--android--hard
+- q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
+- q-viewgroup-vs-view-differences--android--easy
+- q-what-does-itemdecoration-do--android--medium
+- q-what-does-viewgroup-inherit-from--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/ui-views, difficulty/easy]
-
+tags:
+- android
+- android/ui-views
+- difficulty/easy
 ---
 # Вопрос (RU)
 

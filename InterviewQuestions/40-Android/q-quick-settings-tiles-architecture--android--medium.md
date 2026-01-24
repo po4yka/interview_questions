@@ -1,79 +1,51 @@
----\
+---
 id: android-631
 title: Quick Settings Tiles Architecture / Quick Settings
-aliases: [Quick Settings, Quick Settings Tiles Architecture]
+aliases:
+- Quick Settings
+- Quick Settings Tiles Architecture
 topic: android
-subtopics: [background-execution, shortcuts-widgets, ui-state]
+subtopics:
+- background-execution
+- shortcuts-widgets
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, c-android-surfaces, q-advanced-share-sheet-shortcuts--android--hard, q-architecture-components-libraries--android--easy, q-multi-module-best-practices--android--hard, q-play-billing-v6-architecture--android--hard]
+related:
+- c-android-components
+- c-android-surfaces
+- q-advanced-share-sheet-shortcuts--android--hard
+- q-architecture-components-libraries--android--easy
+- q-multi-module-best-practices--android--hard
+- q-play-billing-v6-architecture--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/background-execution, android/shortcuts-widgets, android/ui-state, difficulty/medium]
+tags:
+- android/background-execution
+- android/shortcuts-widgets
+- android/ui-state
+- difficulty/medium
 sources:
-- url: "https://developer.android.com/develop/ui/views/quicksettings"
+- url: https://developer.android.com/develop/ui/views/quicksettings
   note: Quick Settings tile guide
-- url: "https://developer.android.com/develop/shortcutmanager"
+- url: https://developer.android.com/develop/shortcutmanager
   note: App Shortcuts documentation
 anki_cards:
-  - slug: android-631-0-en
-    front: "How do you implement a Quick Settings Tile in Android?"
-    back: |
-      **TileService lifecycle:**
-      - `onStartListening()` - update tile state
-      - `onClick()` - handle tap action
-      - `onStopListening()` - cleanup
-
-      ```kotlin
-      class SyncTileService : TileService() {
-          override fun onStartListening() {
-              qsTile?.apply {
-                  state = if (isEnabled) STATE_ACTIVE else STATE_INACTIVE
-                  updateTile()
-              }
-          }
-          override fun onClick() {
-              // Toggle or launch activity
-          }
-      }
-      ```
-
-      **Manifest:** permission `BIND_QUICK_SETTINGS_TILE`, intent-filter `QS_TILE`.
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-631-0-ru
-    front: "Как реализовать Quick Settings Tile в Android?"
-    back: |
-      **Жизненный цикл TileService:**
-      - `onStartListening()` - обновить состояние тайла
-      - `onClick()` - обработать нажатие
-      - `onStopListening()` - очистка
-
-      ```kotlin
-      class SyncTileService : TileService() {
-          override fun onStartListening() {
-              qsTile?.apply {
-                  state = if (isEnabled) STATE_ACTIVE else STATE_INACTIVE
-                  updateTile()
-              }
-          }
-          override fun onClick() {
-              // Toggle или запуск activity
-          }
-      }
-      ```
-
-      **Манифест:** permission `BIND_QUICK_SETTINGS_TILE`, intent-filter `QS_TILE`.
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-631-0-en
+  language: en
+  anki_id: 1768418235102
+  synced_at: '2026-01-23T16:45:05.309400'
+- slug: android-631-0-ru
+  language: ru
+  anki_id: 1768418235126
+  synced_at: '2026-01-23T16:45:05.311673'
+---
 # Вопрос (RU)
 > Как спроектировать архитектуру Quick Settings Tile так, чтобы тайл оставался синхронизирован с состоянием приложения, безопасно поддерживал фоновые операции и был согласован с интеграцией App Shortcuts?
 

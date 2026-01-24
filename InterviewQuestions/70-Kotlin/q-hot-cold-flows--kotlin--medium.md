@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-hot-cold-flows--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281606
+  synced_at: '2026-01-23T17:03:50.647425'
 - slug: q-hot-cold-flows--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326281630
+  synced_at: '2026-01-23T17:03:50.649402'
 ---
 # Question (EN)
 > What's the difference between hot and cold Flows? Explain `Flow` (cold), `SharedFlow`, `StateFlow` (hot), when to use each, and how to convert between them.

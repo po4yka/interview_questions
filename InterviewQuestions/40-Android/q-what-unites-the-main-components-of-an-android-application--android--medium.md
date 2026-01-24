@@ -1,54 +1,45 @@
----\
+---
 id: android-206
 title: Android Components Unity / Объединение основных компонентов
-aliases: [Android Components Unity, Объединение компонентов]
+aliases:
+- Android Components Unity
+- Объединение компонентов
 topic: android
-subtopics: [activity, lifecycle, service]
+subtopics:
+- activity
+- lifecycle
+- service
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-android-components-besides-activity--android--easy, q-main-android-components--android--easy, q-what-each-android-component-represents--android--easy, q-what-unifies-android-components--android--easy]
+related:
+- c-android-components
+- q-android-components-besides-activity--android--easy
+- q-main-android-components--android--easy
+- q-what-each-android-component-represents--android--easy
+- q-what-unifies-android-components--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/lifecycle, android/service, difficulty/medium]
+tags:
+- android/activity
+- android/lifecycle
+- android/service
+- difficulty/medium
 anki_cards:
-  - slug: android-206-0-en
-    front: "What unites the 4 main Android components?"
-    back: |
-      **4 Components:** Activity, Service, BroadcastReceiver, ContentProvider
-
-      **Common traits:**
-      1. Declared in AndroidManifest.xml
-      2. System-managed lifecycle (not manually instantiated)
-      3. Intent-based communication (ContentProvider via ContentResolver)
-      4. Access to Context
-      5. Defined lifecycle callbacks
-      6. Run in app process by default
-      7. Permission-based security model
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-206-0-ru
-    front: "Что объединяет 4 основных компонента Android?"
-    back: |
-      **4 компонента:** Activity, Service, BroadcastReceiver, ContentProvider
-
-      **Общие черты:**
-      1. Объявляются в AndroidManifest.xml
-      2. Управляются системой (не создаются вручную)
-      3. Взаимодействие через Intent (ContentProvider через ContentResolver)
-      4. Доступ к Context
-      5. Определённые lifecycle callbacks
-      6. Работают в процессе приложения по умолчанию
-      7. Единая модель безопасности на основе разрешений
-    tags:
-      - android_general
-      - difficulty::medium
-
----\
+- slug: android-206-0-en
+  language: en
+  anki_id: 1768398852963
+  synced_at: '2026-01-23T16:45:05.691442'
+- slug: android-206-0-ru
+  language: ru
+  anki_id: 1768398852987
+  synced_at: '2026-01-23T16:45:05.692647'
+---
 # Вопрос (RU)
 > Объединение основных компонентов
 

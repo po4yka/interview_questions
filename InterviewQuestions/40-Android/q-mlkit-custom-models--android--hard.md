@@ -1,74 +1,50 @@
 ---
 id: android-126
 anki_cards:
-  - slug: android-126-0-en
-    front: "How do you integrate custom TensorFlow Lite models with ML Kit?"
-    back: |
-      **Model types:**
-      - **Bundled** - in APK, offline, increases size
-      - **Remote** - downloaded, updateable without release
-      - **AutoML** - trained via Vertex AI, exported as TFLite
-
-      **Integration:**
-      ```kotlin
-      val interpreter = Interpreter(modelBuffer, options)
-      // Always have local fallback
-      ```
-
-      **A/B testing:**
-      - Remote Config for model selection
-      - User-based bucketing for consistency
-      - Track inference time, accuracy, success rate
-
-      **Best practices:**
-      - GPU/NNAPI delegates for speedup
-      - Quantization to reduce size
-      - Gradual rollout (10% -> 50% -> 100%)
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-126-0-ru
-    front: "Как интегрировать пользовательские TensorFlow Lite модели с ML Kit?"
-    back: |
-      **Типы моделей:**
-      - **Локальные** - в APK, офлайн, увеличивают размер
-      - **Удаленные** - загружаются, обновляются без релиза
-      - **AutoML** - обучены через Vertex AI, экспортированы как TFLite
-
-      **Интеграция:**
-      ```kotlin
-      val interpreter = Interpreter(modelBuffer, options)
-      // Всегда имейте локальный fallback
-      ```
-
-      **A/B тестирование:**
-      - Remote Config для выбора модели
-      - User-based bucketing для консистентности
-      - Отслеживайте inference time, accuracy, success rate
-
-      **Лучшие практики:**
-      - GPU/NNAPI делегаты для ускорения
-      - Квантизация для уменьшения размера
-      - Постепенный rollout (10% -> 50% -> 100%)
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-126-0-en
+  language: en
+  anki_id: 1768414355593
+  synced_at: '2026-01-23T16:45:05.305668'
+- slug: android-126-0-ru
+  language: ru
+  anki_id: 1768414355618
+  synced_at: '2026-01-23T16:45:05.307534'
 title: ML Kit Custom Models / Кастомные модели ML Kit
-aliases: [ML Kit Custom Models, Кастомные модели ML Kit]
+aliases:
+- ML Kit Custom Models
+- Кастомные модели ML Kit
 topic: android
-subtopics: [ab-testing, analytics, performance-memory]
+subtopics:
+- ab-testing
+- analytics
+- performance-memory
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-memory-management, c-mobile-observability, q-compose-custom-animations--android--medium, q-custom-view-attributes--android--medium, q-mlkit-face-detection--android--medium, q-performance-optimization-android--android--medium, q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]
+related:
+- c-memory-management
+- c-mobile-observability
+- q-compose-custom-animations--android--medium
+- q-custom-view-attributes--android--medium
+- q-mlkit-face-detection--android--medium
+- q-performance-optimization-android--android--medium
+- q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/ab-testing, android/analytics, android/performance-memory, difficulty/hard, machine-learning, ml-kit, tensorflow-lite]
-
+tags:
+- android/ab-testing
+- android/analytics
+- android/performance-memory
+- difficulty/hard
+- machine-learning
+- ml-kit
+- tensorflow-lite
 ---
 # Вопрос (RU)
 

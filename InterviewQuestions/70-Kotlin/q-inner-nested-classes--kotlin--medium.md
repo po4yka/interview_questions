@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-inner-nested-classes--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289780
+  synced_at: '2026-01-23T17:03:51.382258'
 - slug: q-inner-nested-classes--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326289806
+  synced_at: '2026-01-23T17:03:51.383699'
 ---
 ## Ответ (RU)
 

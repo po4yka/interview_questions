@@ -1,64 +1,55 @@
----\
+---
 id: android-612
 title: Koin vs Dagger/Hilt Philosophy / Философия Koin против Dagger/Hilt
-aliases: [Koin vs Dagger Philosophy, Runtime vs Compile-Time DI Philosophy, Философия Koin и Dagger]
+aliases:
+- Koin vs Dagger Philosophy
+- Runtime vs Compile-Time DI Philosophy
+- Философия Koin и Dagger
 topic: android
-subtopics: [architecture-clean, di-hilt, di-koin]
+subtopics:
+- architecture-clean
+- di-hilt
+- di-koin
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-dagger-framework-overview--android--hard, q-hilt-entry-points--android--medium, q-koin-fundamentals--android--medium, q-koin-vs-hilt-comparison--android--medium]
+related:
+- c-dagger
+- c-dependency-injection
+- c-hilt
+- q-dagger-build-time-optimization--android--medium
+- q-dagger-framework-overview--android--hard
+- q-hilt-entry-points--android--medium
+- q-koin-fundamentals--android--medium
+- q-koin-vs-hilt-comparison--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/architecture-clean, android/di-hilt, android/di-koin, architecture/philosophy, dependency-injection, difficulty/hard]
+tags:
+- android/architecture-clean
+- android/di-hilt
+- android/di-koin
+- architecture/philosophy
+- dependency-injection
+- difficulty/hard
 anki_cards:
-  - slug: android-612-0-en
-    front: "What is the philosophical difference between Koin and Dagger/Hilt?"
-    back: |
-      **Koin (runtime DI):**
-      - DSL + runtime registry
-      - Simple, flexible, fast iteration
-      - No compile-time validation
-      - Better for KMM, prototypes
-
-      **Dagger/Hilt (compile-time DI):**
-      - Annotations + code generation
-      - Compile-time graph validation
-      - Stronger contracts, more boilerplate
-      - Better for large codebases
-
-      Trade-off: simplicity vs safety.
-    tags:
-      - android_architecture
-      - difficulty::hard
-  - slug: android-612-0-ru
-    front: "В чём философская разница между Koin и Dagger/Hilt?"
-    back: |
-      **Koin (runtime DI):**
-      - DSL + runtime реестр
-      - Простой, гибкий, быстрые итерации
-      - Нет compile-time валидации
-      - Лучше для KMM, прототипов
-
-      **Dagger/Hilt (compile-time DI):**
-      - Аннотации + кодогенерация
-      - Compile-time валидация графа
-      - Строгие контракты, больше boilerplate
-      - Лучше для больших кодовых баз
-
-      Компромисс: простота vs безопасность.
-    tags:
-      - android_architecture
-      - difficulty::hard
+- slug: android-612-0-en
+  language: en
+  anki_id: 1768397114577
+  synced_at: '2026-01-23T16:45:05.531458'
+- slug: android-612-0-ru
+  language: ru
+  anki_id: 1768397114601
+  synced_at: '2026-01-23T16:45:05.533337'
 sources:
-  - "https://dagger.dev/dev-guide/"
-  - "https://developer.android.com/training/dependency-injection/hilt-android"
-  - "https://github.com/InsertKoinIO/koin/blob/master/README.md#koin-philosophy"
-
----\
+- https://dagger.dev/dev-guide/
+- https://developer.android.com/training/dependency-injection/hilt-android
+- https://github.com/InsertKoinIO/koin/blob/master/README.md#koin-philosophy
+---
 # Вопрос (RU)
 > Сравните философию DI `Koin` и Dagger/Hilt: какие цели они решают, как формализуют граф зависимостей, и какие архитектурные компромиссы требуют? Проанализируйте влияние на тестирование, эволюцию продукта и командные практики.
 

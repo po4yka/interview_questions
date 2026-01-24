@@ -2,16 +2,12 @@
 anki_cards:
 - slug: q-debounce-search-coroutines--kotlin--medium-0-en
   language: en
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282455
+  synced_at: '2026-01-23T17:03:50.720793'
 - slug: q-debounce-search-coroutines--kotlin--medium-0-ru
   language: ru
-  difficulty: 0.5
-  tags:
-  - Kotlin
-  - difficulty::medium
+  anki_id: 1768326282480
+  synced_at: '2026-01-23T17:03:50.722405'
 ---
 # Question (EN)
 > How would you implement a search-as-you-type feature with debouncing using Kotlin coroutines?
