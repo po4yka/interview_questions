@@ -1,21 +1,46 @@
----\
+---
 id: android-253
 title: Testing Compose UI / Тестирование Compose UI
-aliases: [Testing Compose UI, Тестирование Compose UI]
+aliases:
+- Testing Compose UI
+- Тестирование Compose UI
 topic: android
-subtopics: [testing-ui, ui-compose]
+subtopics:
+- testing-ui
+- ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-testing, q-compose-core-components--android--medium, q-compose-testing--android--medium, q-compose-ui-testing-advanced--android--hard, q-what-is-diffutil-for--android--medium]
+related:
+- c-jetpack-compose
+- c-testing
+- q-compose-core-components--android--medium
+- q-compose-testing--android--medium
+- q-compose-ui-testing-advanced--android--hard
+- q-what-is-diffutil-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/testing-ui, android/ui-compose, difficulty/medium, testing, ui-testing]
-
----\
+tags:
+- android/testing-ui
+- android/ui-compose
+- difficulty/medium
+- testing
+- ui-testing
+anki_cards:
+- slug: android-253-0-ru
+  language: ru
+  anki_id: 1768420618970
+  synced_at: '2026-01-14 23:56:58.975169'
+- slug: android-253-0-en
+  language: en
+  anki_id: 1768420618943
+  synced_at: '2026-01-14 23:56:58.948511'
+---
 # Вопрос (RU)
 > Тестирование Compose UI
 

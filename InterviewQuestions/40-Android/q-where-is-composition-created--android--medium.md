@@ -1,4 +1,16 @@
----id: android-284
+---
+anki_cards:
+- slug: android-741-0-en
+  language: en
+- slug: android-741-0-ru
+  language: ru
+- slug: q-where-is-composition-created--android--medium-0-en
+  language: en
+- slug: q-where-is-composition-created--android--medium-0-ru
+  language: ru
+---
+
+id: android-284
 id: android-741
 title: "Где создается композиция / Where Is Composition Created"
 aliases: [ComposeView, Composition Creation, setContent]

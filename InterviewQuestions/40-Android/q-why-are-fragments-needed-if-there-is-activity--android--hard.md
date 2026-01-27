@@ -1,21 +1,44 @@
----\
+---
 id: android-235
-title: "Why Are Fragments Needed If There Is Activity / Зачем нужны Fragment если есть Activity"
-aliases: [Fragment Architecture, Fragments vs Activity, Зачем Fragment, Фрагменты против Activity]
+title: Why Are Fragments Needed If There Is Activity / Зачем нужны Fragment если есть
+  Activity
+aliases:
+- Fragment Architecture
+- Fragments vs Activity
+- Зачем Fragment
+- Фрагменты против Activity
 topic: android
-subtopics: [fragment, lifecycle]
+subtopics:
+- fragment
+- lifecycle
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-fragment-lifecycle, c-fragments, q-where-is-composition-created--android--medium]
+related:
+- c-fragment-lifecycle
+- c-fragments
+- q-where-is-composition-created--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/fragment, android/lifecycle, architecture, difficulty/hard, fragment, ui]
-
----\
+tags:
+- android
+- android/fragment
+- android/lifecycle
+- architecture
+- difficulty/hard
+- fragment
+- ui
+anki_cards:
+- slug: android-235-0-en
+  language: en
+- slug: android-235-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Для чего нужны фрагменты если есть `Activity`?

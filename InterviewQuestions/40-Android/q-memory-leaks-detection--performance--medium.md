@@ -1,19 +1,39 @@
 ---
-id: android-749
+id: android-perf-001
 title: Memory Leaks Detection / Обнаружение Утечек Памяти
-aliases: [LeakCanary, Memory Profiler, Обнаружение Утечек Памяти]
+aliases:
+- LeakCanary
+- Memory Profiler
+- Обнаружение Утечек Памяти
 topic: android
-subtopics: [performance, memory, debugging]
+subtopics:
+- performance
+- memory
+- debugging
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-strict-mode--performance--medium, q-profiler-tools--performance--medium]
+related:
+- q-strict-mode--performance--medium
+- q-profiler-tools--performance--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/performance, android/memory, difficulty/medium, leakcanary, memory-profiler]
+tags:
+- android/performance
+- android/memory
+- difficulty/medium
+- leakcanary
+- memory-profiler
+anki_cards:
+- slug: android-perf-001-0-en
+  language: en
+- slug: android-perf-001-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

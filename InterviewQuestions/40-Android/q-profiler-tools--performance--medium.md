@@ -1,19 +1,44 @@
 ---
-id: android-754
+id: android-perf-005
 title: Android Profiler Tools / Инструменты Android Profiler
-aliases: [Android Profiler, CPU Profiler, Memory Profiler, Network Profiler, Инструменты Профилирования]
+aliases:
+- Android Profiler
+- CPU Profiler
+- Memory Profiler
+- Network Profiler
+- Инструменты Профилирования
 topic: android
-subtopics: [performance, debugging, profiling]
+subtopics:
+- performance
+- debugging
+- profiling
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-memory-leaks-detection--performance--medium, q-anr-debugging--performance--hard, q-baseline-profiles--performance--hard]
+related:
+- q-memory-leaks-detection--performance--medium
+- q-anr-debugging--performance--hard
+- q-baseline-profiles--performance--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/performance, android/debugging, difficulty/medium, profiler, cpu, memory, network]
+tags:
+- android/performance
+- android/debugging
+- difficulty/medium
+- profiler
+- cpu
+- memory
+- network
+anki_cards:
+- slug: android-perf-005-0-en
+  language: en
+- slug: android-perf-005-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

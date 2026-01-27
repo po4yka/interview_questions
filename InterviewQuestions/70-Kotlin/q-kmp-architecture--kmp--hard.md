@@ -1,21 +1,45 @@
 ---
 id: kotlin-kmp-007
-title: "Clean Architecture in KMP / Clean Architecture в KMP"
-aliases: [KMP Architecture, Multiplatform Clean Architecture, KMP Layers]
+title: Clean Architecture in KMP / Clean Architecture в KMP
+aliases:
+- KMP Architecture
+- Multiplatform Clean Architecture
+- KMP Layers
 topic: kotlin
-subtopics: [kmp, multiplatform, architecture, clean-architecture]
+subtopics:
+- kmp
+- multiplatform
+- architecture
+- clean-architecture
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, architecture, clean-architecture, difficulty/hard]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- architecture
+- clean-architecture
+- difficulty/hard
+anki_cards:
+- slug: kotlin-kmp-007-0-en
+  language: en
+  anki_id: 1769344147566
+  synced_at: '2026-01-25T16:29:07.616816'
+- slug: kotlin-kmp-007-0-ru
+  language: ru
+  anki_id: 1769344147615
+  synced_at: '2026-01-25T16:29:07.618798'
 ---
-
 # Question (EN)
 > How do you implement Clean Architecture in Kotlin Multiplatform projects?
 

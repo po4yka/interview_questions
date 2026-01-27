@@ -1,20 +1,45 @@
 ---
 id: android-hilt-003
 title: Hilt Scopes / Области видимости Hilt
-aliases: [Hilt Scopes, Области видимости Hilt, Singleton, ViewModelScoped, ActivityScoped, FragmentScoped]
+aliases:
+- Hilt Scopes
+- Области видимости Hilt
+- Singleton
+- ViewModelScoped
+- ActivityScoped
+- FragmentScoped
 topic: android
-subtopics: [di-hilt, architecture, lifecycle]
+subtopics:
+- di-hilt
+- architecture
+- lifecycle
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-setup-annotations--hilt--medium, q-hilt-modules-provides--hilt--medium, q-hilt-custom-components--hilt--hard]
+related:
+- q-hilt-setup-annotations--hilt--medium
+- q-hilt-modules-provides--hilt--medium
+- q-hilt-custom-components--hilt--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/architecture, android/lifecycle, difficulty/hard, hilt, scopes, dependency-injection]
-
+tags:
+- android/di-hilt
+- android/architecture
+- android/lifecycle
+- difficulty/hard
+- hilt
+- scopes
+- dependency-injection
+anki_cards:
+- slug: android-hilt-003-0-en
+  language: en
+- slug: android-hilt-003-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Объясните систему scopes в Hilt: @Singleton, @ViewModelScoped, @ActivityScoped, @FragmentScoped. Как правильно выбрать scope для зависимости?

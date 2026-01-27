@@ -1,6 +1,7 @@
 ---
-id: sec-002
-title: EncryptedSharedPreferences and EncryptedFile / EncryptedSharedPreferences i EncryptedFile
+id: android-sec-002
+title: EncryptedSharedPreferences and EncryptedFile / EncryptedSharedPreferences i
+  EncryptedFile
 aliases:
 - EncryptedSharedPreferences
 - EncryptedFile
@@ -30,6 +31,11 @@ related:
 sources:
 - https://developer.android.com/topic/security/data
 - https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences
+anki_cards:
+- slug: android-sec-002-0-en
+  language: en
+- slug: android-sec-002-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kak ispol'zovat' EncryptedSharedPreferences i EncryptedFile dlya bezopasnogo hraneniya dannyh?

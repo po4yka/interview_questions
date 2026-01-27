@@ -1,21 +1,47 @@
 ---
 id: kotlin-kmp-006
-title: "KMP Persistence / Хранение данных в KMP"
-aliases: [SQLDelight KMP, DataStore KMP, Cross-Platform Storage]
+title: KMP Persistence / Хранение данных в KMP
+aliases:
+- SQLDelight KMP
+- DataStore KMP
+- Cross-Platform Storage
 topic: kotlin
-subtopics: [kmp, multiplatform, persistence, database, storage]
+subtopics:
+- kmp
+- multiplatform
+- persistence
+- database
+- storage
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, sqldelight, datastore, persistence, difficulty/medium]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- sqldelight
+- datastore
+- persistence
+- difficulty/medium
+anki_cards:
+- slug: kotlin-kmp-006-0-en
+  language: en
+  anki_id: 1769344151991
+  synced_at: '2026-01-25T16:29:12.042406'
+- slug: kotlin-kmp-006-0-ru
+  language: ru
+  anki_id: 1769344152040
+  synced_at: '2026-01-25T16:29:12.044197'
 ---
-
 # Question (EN)
 > How do you implement shared data persistence in Kotlin Multiplatform using SQLDelight and DataStore?
 

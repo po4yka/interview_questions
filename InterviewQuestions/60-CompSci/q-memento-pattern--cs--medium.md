@@ -1,45 +1,48 @@
----id: cs-012
-title: "Memento Pattern / Паттерн Хранитель"
-aliases: ["Memento Pattern", "Паттерн Хранитель"]
+---
+id: cs-012
+title: Memento Pattern / Паттерн Хранитель
+aliases:
+- Memento Pattern
+- Паттерн Хранитель
 topic: cs
-subtopics: [design-patterns, behavioral, memento, state-management, undo-redo]
+subtopics:
+- design-patterns
+- behavioral
+- memento
+- state-management
+- undo-redo
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-dao-pattern, q-memento-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- c-dao-pattern
+- q-memento-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral-patterns, design-patterns, difficulty/medium, memento, state-management, undo-redo]
-sources: ["https://refactoring.guru/design-patterns/memento"]
+tags:
+- behavioral-patterns
+- design-patterns
+- difficulty/medium
+- memento
+- state-management
+- undo-redo
+sources:
+- https://refactoring.guru/design-patterns/memento
 anki_cards:
 - slug: cs-012-0-en
-  front: |
-    What is the Memento pattern and what is it used for?
-  back: |
-    **Memento** is a behavioral pattern for capturing and restoring an object's internal state without violating encapsulation.
-    
-    **Components**: Originator (creates mementos), Memento (snapshot), Caretaker (manages history).
-    
-    **Use cases**: Undo/redo, checkpoints, transaction rollback.
   language: en
-  difficulty: 0.5
-  tags: [cs_patterns, difficulty::medium]
+  anki_id: 1769343686340
+  synced_at: '2026-01-25T16:21:26.442434'
 - slug: cs-012-0-ru
-  front: |
-    Что такое паттерн Хранитель (Memento) и для чего он используется?
-  back: |
-    **Хранитель** - поведенческий паттерн для сохранения и восстановления внутреннего состояния объекта без нарушения инкапсуляции.
-    
-    **Компоненты**: Originator (создаёт снимки), Memento (снимок), Caretaker (управляет историей).
-    
-    **Применение**: Undo/redo, контрольные точки, откат транзакций.
   language: ru
-  difficulty: 0.5
-  tags: [cs_patterns, difficulty::medium]
-
+  anki_id: 1769343686440
+  synced_at: '2026-01-25T16:21:26.444284'
 ---
 # Вопрос (RU)
 > Что такое паттерн Memento? Когда его использовать и как он работает?

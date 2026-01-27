@@ -1,5 +1,23 @@
----id: android-371
+---
+id: android-371
 id: android-729
+anki_cards:
+- slug: android-371-0-en
+  language: en
+  anki_id: 1768420618612
+  synced_at: '2026-01-14T23:56:58.616462'
+- slug: android-371-0-ru
+  language: ru
+  anki_id: 1768420618641
+  synced_at: '2026-01-14T23:56:58.643923'
+- slug: android-729-0-en
+  language: en
+- slug: android-729-0-ru
+  language: ru
+- slug: q-state-hoisting-compose--android--medium-0-en
+  language: en
+- slug: q-state-hoisting-compose--android--medium-0-ru
+  language: ru
 title: State Hoisting in Compose / Поднятие состояния в Compose
 aliases: [State Hoisting in Compose, Поднятие состояния в Compose]
 topic: android

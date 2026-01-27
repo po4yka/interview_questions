@@ -1,22 +1,49 @@
----\
+---
 id: android-484
-title: "StateFlow vs Flow vs SharedFlow vs LiveData / StateFlow против Flow, SharedFlow и LiveData"
-aliases: [SharedFlow и LiveData, StateFlow vs Flow vs SharedFlow vs LiveData, StateFlow против Flow]
+title: StateFlow vs Flow vs SharedFlow vs LiveData / StateFlow против Flow, SharedFlow
+  и LiveData
+aliases:
+- SharedFlow и LiveData
+- StateFlow vs Flow vs SharedFlow vs LiveData
+- StateFlow против Flow
 topic: android
-subtopics: [coroutines, flow, ui-state]
+subtopics:
+- coroutines
+- flow
+- ui-state
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, q-flow-vs-livedata-comparison--kotlin--medium, q-testing-coroutines-flow--android--hard]
+related:
+- c-coroutines
+- q-flow-vs-livedata-comparison--kotlin--medium
+- q-testing-coroutines-flow--android--hard
 created: 2025-10-26
 updated: 2025-11-10
-tags: [android/coroutines, android/flow, android/ui-state, difficulty/medium, state-management]
-sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", "https://developer.android.com/topic/libraries/architecture/livedata"]
-
----\
+tags:
+- android/coroutines
+- android/flow
+- android/ui-state
+- difficulty/medium
+- state-management
+sources:
+- https://developer.android.com/kotlin/flow/stateflow-and-sharedflow
+- https://developer.android.com/topic/libraries/architecture/livedata
+anki_cards:
+- slug: android-484-0-ru
+  language: ru
+  anki_id: 1768420618689
+  synced_at: '2026-01-14 23:56:58.692029'
+- slug: android-484-0-en
+  language: en
+  anki_id: 1768420618658
+  synced_at: '2026-01-14 23:56:58.660457'
+---
 # Вопрос (RU)
 > Когда в Android приложении стоит выбирать `StateFlow`, `SharedFlow`, обычный `Flow` или `LiveData` для доставки и наблюдения состояния UI?
 

@@ -1,37 +1,46 @@
 ---
 id: kotlin-flow-007
-title: "Testing Flows with Turbine / Тестирование Flow с Turbine"
+title: Testing Flows with Turbine / Тестирование Flow с Turbine
 aliases:
-  - Testing Flows Turbine
-  - Flow Testing
-  - Turbine Library
+- Testing Flows Turbine
+- Flow Testing
+- Turbine Library
 topic: kotlin
 subtopics:
-  - coroutines
-  - flow
-  - testing
+- coroutines
+- flow
+- testing
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: internal
 status: draft
 moc: moc-kotlin
 related:
-  - c-kotlin
-  - c-flow
-  - q-testing-stateflow-sharedflow--kotlin--medium
+- c-kotlin
+- c-flow
+- q-testing-stateflow-sharedflow--kotlin--medium
 created: 2026-01-23
 updated: 2026-01-23
 tags:
-  - coroutines
-  - difficulty/medium
-  - flow
-  - kotlin
-  - testing
-  - turbine
+- coroutines
+- difficulty/medium
+- flow
+- kotlin
+- testing
+- turbine
+anki_cards:
+- slug: kotlin-flow-007-0-en
+  language: en
+  anki_id: 1769344145790
+  synced_at: '2026-01-25T16:29:05.843743'
+- slug: kotlin-flow-007-0-ru
+  language: ru
+  anki_id: 1769344145841
+  synced_at: '2026-01-25T16:29:05.846308'
 ---
 # Vopros (RU)
 > Как тестировать Flow с библиотекой Turbine? Какие есть методы и паттерны?

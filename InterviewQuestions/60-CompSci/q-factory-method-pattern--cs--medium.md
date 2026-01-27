@@ -5,11 +5,11 @@ anki_cards:
 - slug: dp-005-0-en
   language: en
   anki_id: 1768454535064
-  synced_at: '2026-01-15T09:43:17.089318'
+  synced_at: '2026-01-25T13:01:16.918999'
 - slug: dp-005-0-ru
   language: ru
   anki_id: 1768454535088
-  synced_at: '2026-01-15T09:43:17.090961'
+  synced_at: '2026-01-25T13:01:16.920447'
 aliases:
 - Factory Method Pattern
 - Паттерн фабричный метод

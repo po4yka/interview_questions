@@ -1,21 +1,37 @@
----\
+---
 id: android-364
-title: "Android UI Drawing Setup / Подготовка UI к рисованию"
-aliases: [Android UI Setup, Подготовка UI]
+title: Android UI Drawing Setup / Подготовка UI к рисованию
+aliases:
+- Android UI Setup
+- Подготовка UI
 topic: android
-subtopics: [activity, ui-views]
+subtopics:
+- activity
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]
+related:
+- c-activity-lifecycle
+- q-what-is-activity-and-what-is-it-used-for--android--medium
+- q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/activity, android/ui-views, difficulty/medium]
-
----\
+tags:
+- android/activity
+- android/ui-views
+- difficulty/medium
+anki_cards:
+- slug: android-364-0-en
+  language: en
+- slug: android-364-0-ru
+  language: ru
+---
 # Вопрос (RU)
 > Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
 

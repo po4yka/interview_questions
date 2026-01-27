@@ -1,50 +1,60 @@
----id: android-064
+---
 id: android-706
 anki_cards:
-  - slug: android-064-0-en
-    front: "What are the core concepts of Jetpack Compose?"
-    back: |
-      **4 core concepts:**
-
-      1. **Composable functions** - `@Composable` annotated, emit UI
-      2. **State** - `remember { mutableStateOf() }` triggers recomposition
-      3. **Recomposition** - Re-execution when state changes
-      4. **Modifiers** - Chain to decorate composables
-
-      **Principle:** UI = f(state) - declarative, not imperative
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-064-0-ru
-    front: "Какие основные концепции Jetpack Compose?"
-    back: |
-      **4 основные концепции:**
-
-      1. **Composable-функции** - с аннотацией `@Composable`, генерируют UI
-      2. **Состояние** - `remember { mutableStateOf() }` вызывает рекомпозицию
-      3. **Рекомпозиция** - Повторное выполнение при изменении состояния
-      4. **Модификаторы** - Цепочка для декорирования composable
-
-      **Принцип:** UI = f(state) - декларативный, не императивный
-    tags:
-      - android_compose
-      - difficulty::medium
+- slug: android-064-0-en
+  language: en
+  anki_id: 1769330975540
+  synced_at: '2026-01-25T12:50:09.339455'
+- slug: android-064-0-ru
+  language: ru
+  anki_id: 1769330975560
+  synced_at: '2026-01-25T12:50:09.342694'
+- slug: android-706-0-en
+  language: en
+- slug: android-706-0-ru
+  language: ru
+- slug: q-jetpack-compose-basics--android--medium-0-en
+  language: en
+- slug: q-jetpack-compose-basics--android--medium-0-ru
+  language: ru
 title: Jetpack Compose Basics / Основы Jetpack Compose
-aliases: [Jetpack Compose Basics, Основы Jetpack Compose]
+aliases:
+- Jetpack Compose Basics
+- Основы Jetpack Compose
 topic: android
-subtopics: [ui-compose, ui-state, ui-theming]
+subtopics:
+- ui-compose
+- ui-state
+- ui-theming
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 source: internal
 source_note: Created for vault completeness
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-recomposition, q-compose-modifier-system--android--medium, q-compose-remember-derived-state--android--medium, q-compose-semantics--android--medium, q-how-does-jetpack-compose-work--android--medium, q-how-does-jetpackcompose-work--android--medium, q-how-jetpack-compose-works--android--medium]
+related:
+- c-compose-recomposition
+- c-compose-state
+- c-recomposition
+- q-compose-modifier-system--android--medium
+- q-compose-remember-derived-state--android--medium
+- q-compose-semantics--android--medium
+- q-how-does-jetpack-compose-work--android--medium
+- q-how-does-jetpackcompose-work--android--medium
+- q-how-jetpack-compose-works--android--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [android/ui-compose, android/ui-state, android/ui-theming, difficulty/medium, en, ru]
+tags:
+- android/ui-compose
+- android/ui-state
+- android/ui-theming
+- difficulty/medium
+- en
+- ru
 ---
 # Вопрос (RU)
 > Что такое Jetpack Compose? Объясните основные концепции: composable функции, управление состоянием, recomposition, модификаторы, макеты и жизненный цикл. Приведите подробные примеры построения UI.

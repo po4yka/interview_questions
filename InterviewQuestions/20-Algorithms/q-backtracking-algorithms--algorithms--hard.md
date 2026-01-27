@@ -38,19 +38,19 @@ anki_cards:
 - slug: algo-006-0-en
   language: en
   anki_id: 1768457298728
-  synced_at: '2026-01-23T15:48:41.128764'
+  synced_at: '2026-01-26T09:10:14.502883'
 - slug: algo-006-0-ru
   language: ru
   anki_id: 1768457298754
-  synced_at: '2026-01-23T15:48:41.130027'
+  synced_at: '2026-01-26T09:10:14.504201'
 - slug: algo-006-1-en
   language: en
   anki_id: 1768457298777
-  synced_at: '2026-01-23T15:48:41.131345'
+  synced_at: '2026-01-26T09:10:14.505319'
 - slug: algo-006-1-ru
   language: ru
   anki_id: 1768457298802
-  synced_at: '2026-01-23T15:48:41.132695'
+  synced_at: '2026-01-26T09:10:14.506562'
 ---
 # Вопрос (RU)
 > Что такое backtracking? Как решать задачи N-Queens, Sudoku, Permutations, Combinations и Subsets?

@@ -1,21 +1,41 @@
----\
+---
 id: android-308
-title: "What Is The Layout Called Where Objects Can Overlay Each Other / Как называется layout где объекты могут перекрывать друг друга"
-aliases: ["Layout для наложения элементов", "Overlay Layout"]
+title: What Is The Layout Called Where Objects Can Overlay Each Other / Как называется
+  layout где объекты могут перекрывать друг друга
+aliases:
+- Layout для наложения элементов
+- Overlay Layout
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics:
+- ui-compose
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-ui-composition, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- c-android-ui-composition
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, layouts]
----\
+tags:
+- android/ui-compose
+- android/ui-views
+- box
+- difficulty/easy
+- framelayout
+- layouts
+anki_cards:
+- slug: android-308-0-en
+  language: en
+- slug: android-308-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Как называется layout, в котором UI-элементы могут наслаиваться друг на друга?

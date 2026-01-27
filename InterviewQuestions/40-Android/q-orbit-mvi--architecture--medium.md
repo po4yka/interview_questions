@@ -1,6 +1,6 @@
 ---
-id: android-724
-title: "Orbit MVI Library / Библиотека Orbit MVI"
+id: android-arch-005
+title: Orbit MVI Library / Библиотека Orbit MVI
 aliases:
 - Orbit MVI
 - Orbit Framework
@@ -25,13 +25,18 @@ related:
 created: 2026-01-23
 updated: 2026-01-23
 sources:
-- "https://orbit-mvi.org/"
-- "https://github.com/orbit-mvi/orbit-mvi"
+- https://orbit-mvi.org/
+- https://github.com/orbit-mvi/orbit-mvi
 tags:
 - android/architecture
 - android/mvi-frameworks
 - difficulty/medium
 - orbit-mvi
+anki_cards:
+- slug: android-arch-005-0-en
+  language: en
+- slug: android-arch-005-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

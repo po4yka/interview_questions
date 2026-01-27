@@ -1,62 +1,44 @@
----id: cs-027
-title: "Zip Operator Parallel Requests / Оператор zip для параллельных запросов"
-aliases: ["Zip Operator", "Оператор zip"]
+---
+id: cs-027
+title: Zip Operator Parallel Requests / Оператор zip для параллельных запросов
+aliases:
+- Zip Operator
+- Оператор zip
 topic: cs
-subtopics: [parallel-processing]
+subtopics:
+- parallel-processing
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-concurrency, c-stateflow]
+related:
+- c-concurrency
+- c-stateflow
 created: 2025-10-15
 updated: 2025-11-11
-tags: [concurrency, coroutines, difficulty/medium, flow, kotlin, parallel-requests, zip-operator]
-sources: ["https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/zip.html"]
-
+tags:
+- concurrency
+- coroutines
+- difficulty/medium
+- flow
+- kotlin
+- parallel-requests
+- zip-operator
+sources:
+- https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/zip.html
 anki_cards:
-- slug: cs-zip-0-en
-  front: |
-    How do you make parallel requests and combine results in Kotlin coroutines?
-  back: |
-    **Parallel requests with coroutines**:
-    
-    ```kotlin
-    coroutineScope {
-      val a = async { fetchA() }
-      val b = async { fetchB() }
-      Result(a.await(), b.await())
-    }
-    ```
-    
-    **With Flow**: `zip` or `combine` operators.
-    
-    **Key**: `async` launches concurrently, `await` waits for result.
+- slug: cs-027-0-en
   language: en
-  difficulty: 0.5
-  tags: [cs_concurrency, difficulty::medium]
-- slug: cs-zip-0-ru
-  front: |
-    Как делать параллельные запросы и объединять результаты в Kotlin корутинах?
-  back: |
-    **Параллельные запросы с корутинами**:
-    
-    ```kotlin
-    coroutineScope {
-      val a = async { fetchA() }
-      val b = async { fetchB() }
-      Result(a.await(), b.await())
-    }
-    ```
-    
-    **С Flow**: операторы `zip` или `combine`.
-    
-    **Ключ**: `async` запускает параллельно, `await` ждёт результат.
+  anki_id: 1769343747914
+  synced_at: '2026-01-25T16:22:27.991554'
+- slug: cs-027-0-ru
   language: ru
-  difficulty: 0.5
-  tags: [cs_concurrency, difficulty::medium]
-
+  anki_id: 1769343747990
+  synced_at: '2026-01-25T16:22:27.993570'
 ---
 # Вопрос (RU)
 > Как использовать оператор zip для параллельных запросов?

@@ -1,36 +1,45 @@
 ---
 id: kotlin-flow-009
-title: "MutableStateFlow Usage Patterns / Паттерны использования MutableStateFlow"
+title: MutableStateFlow Usage Patterns / Паттерны использования MutableStateFlow
 aliases:
-  - MutableStateFlow Patterns
-  - StateFlow Usage
-  - MutableStateFlow Best Practices
+- MutableStateFlow Patterns
+- StateFlow Usage
+- MutableStateFlow Best Practices
 topic: kotlin
 subtopics:
-  - coroutines
-  - flow
-  - state-management
+- coroutines
+- flow
+- state-management
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: internal
 status: draft
 moc: moc-kotlin
 related:
-  - c-kotlin
-  - c-flow
-  - q-stateflow-vs-sharedflow--flow--medium
+- c-kotlin
+- c-flow
+- q-stateflow-vs-sharedflow--flow--medium
 created: 2026-01-23
 updated: 2026-01-23
 tags:
-  - coroutines
-  - difficulty/easy
-  - flow
-  - kotlin
-  - stateflow
+- coroutines
+- difficulty/easy
+- flow
+- kotlin
+- stateflow
+anki_cards:
+- slug: kotlin-flow-009-0-en
+  language: en
+  anki_id: 1769344156415
+  synced_at: '2026-01-25T16:29:16.468157'
+- slug: kotlin-flow-009-0-ru
+  language: ru
+  anki_id: 1769344156466
+  synced_at: '2026-01-25T16:29:16.470358'
 ---
 # Vopros (RU)
 > Как правильно использовать `MutableStateFlow`? Какие паттерны и best practices существуют?

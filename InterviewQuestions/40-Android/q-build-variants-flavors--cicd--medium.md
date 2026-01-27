@@ -1,21 +1,43 @@
 ---
 id: android-cicd-003
-title: "Build Variants, Product Flavors, Build Types / Варианты сборки, Product Flavors, Build Types"
-aliases: ["Build Variants and Product Flavors", "Варианты сборки и Product Flavors"]
+title: Build Variants, Product Flavors, Build Types / Варианты сборки, Product Flavors,
+  Build Types
+aliases:
+- Build Variants and Product Flavors
+- Варианты сборки и Product Flavors
 topic: android
-subtopics: [cicd, build-configuration, gradle]
+subtopics:
+- cicd
+- build-configuration
+- gradle
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-github-actions-android--cicd--medium, q-gradle-build-cache--cicd--medium, q-signing-in-ci--cicd--hard]
+related:
+- q-github-actions-android--cicd--medium
+- q-gradle-build-cache--cicd--medium
+- q-signing-in-ci--cicd--hard
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://developer.android.com/build/build-variants", "https://developer.android.com/build/configure-apk-splits"]
-tags: [android/cicd, android/build-configuration, difficulty/medium, gradle, build-variants]
-
+sources:
+- https://developer.android.com/build/build-variants
+- https://developer.android.com/build/configure-apk-splits
+tags:
+- android/cicd
+- android/build-configuration
+- difficulty/medium
+- gradle
+- build-variants
+anki_cards:
+- slug: android-cicd-003-0-en
+  language: en
+- slug: android-cicd-003-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

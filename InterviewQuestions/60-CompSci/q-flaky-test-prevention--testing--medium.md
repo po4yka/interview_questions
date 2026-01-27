@@ -5,11 +5,11 @@ anki_cards:
 - slug: test-001-0-en
   language: en
   anki_id: 1768454532351
-  synced_at: '2026-01-15T09:41:02.784952'
+  synced_at: '2026-01-25T13:01:16.804932'
 - slug: test-001-0-ru
   language: ru
   anki_id: 1768454532449
-  synced_at: '2026-01-15T09:41:02.787384'
+  synced_at: '2026-01-25T13:01:16.806604'
 aliases:
 - Flaky Test Prevention
 - Предотвращение нестабильных тестов

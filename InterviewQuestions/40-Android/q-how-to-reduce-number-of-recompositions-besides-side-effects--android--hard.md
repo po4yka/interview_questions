@@ -1,63 +1,57 @@
----id: android-281
+---
 id: android-703
 anki_cards:
-  - slug: android-281-0-en
-    front: "How to reduce recompositions in Compose besides using side effects?"
-    back: |
-      **Key techniques:**
-
-      1. **`remember`** - Cache expensive calculations
-      2. **`derivedStateOf`** - For derived state that filters/transforms
-      3. **Stable data models** - Use `@Immutable`/`@Stable` annotations
-      4. **Immutable collections** - `PersistentList` from kotlinx
-      5. **Proper state placement** - Keep state close to usage
-      6. **`key()`** - Stable keys in lists
-      7. **Stable lambdas** - Avoid recreating lambdas
-
-      ```kotlin
-      val filtered by remember {
-          derivedStateOf { items.filter { ... } }
-      }
-      ```
-    tags:
-      - android_compose
-      - difficulty::hard
-  - slug: android-281-0-ru
-    front: "Как уменьшить количество рекомпозиций в Compose кроме side effects?"
-    back: |
-      **Ключевые техники:**
-
-      1. **`remember`** - Кешировать дорогие вычисления
-      2. **`derivedStateOf`** - Для производного состояния
-      3. **Стабильные модели** - Аннотации `@Immutable`/`@Stable`
-      4. **Неизменяемые коллекции** - `PersistentList` из kotlinx
-      5. **Правильное размещение состояния** - Держать ближе к использованию
-      6. **`key()`** - Стабильные ключи в списках
-      7. **Стабильные лямбды** - Не пересоздавать лямбды
-
-      ```kotlin
-      val filtered by remember {
-          derivedStateOf { items.filter { ... } }
-      }
-      ```
-    tags:
-      - android_compose
-      - difficulty::hard
-title: "How To Reduce Number Of Recompositions Besides Side Effects / Как уменьшить количество рекомпозиций кроме побочных эффектов"
-aliases: ["Compose Performance", "Reduce Recompositions", "Производительность Compose", "Уменьшить рекомпозиции"]
+- slug: android-281-0-en
+  language: en
+  anki_id: 1769330979190
+  synced_at: '2026-01-25T12:50:09.450197'
+- slug: android-281-0-ru
+  language: ru
+  anki_id: 1769330979210
+  synced_at: '2026-01-25T12:50:09.452173'
+- slug: android-703-0-en
+  language: en
+- slug: android-703-0-ru
+  language: ru
+- slug: q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard-0-en
+  language: en
+- slug: q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard-0-ru
+  language: ru
+title: How To Reduce Number Of Recompositions Besides Side Effects / Как уменьшить
+  количество рекомпозиций кроме побочных эффектов
+aliases:
+- Compose Performance
+- Reduce Recompositions
+- Производительность Compose
+- Уменьшить рекомпозиции
 topic: android
-subtopics: [performance-rendering, ui-compose]
+subtopics:
+- performance-rendering
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-recomposition, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
+related:
+- c-compose-recomposition
+- c-recomposition
+- q-compose-performance-optimization--android--hard
+- q-compose-remember-derived-state--android--medium
+- q-compose-stability-skippability--android--hard
+- q-recomposition-compose--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/performance-rendering, android/ui-compose, difficulty/hard, recomposition]
+tags:
+- android
+- android/performance-rendering
+- android/ui-compose
+- difficulty/hard
+- recomposition
 ---
 # Вопрос (RU)
 

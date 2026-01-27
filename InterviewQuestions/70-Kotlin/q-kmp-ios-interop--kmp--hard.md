@@ -1,21 +1,48 @@
 ---
 id: kotlin-kmp-008
-title: "KMP iOS Interop / Взаимодействие KMP с iOS"
-aliases: [Kotlin Native iOS, Swift Kotlin Interop, KMP iOS Challenges]
+title: KMP iOS Interop / Взаимодействие KMP с iOS
+aliases:
+- Kotlin Native iOS
+- Swift Kotlin Interop
+- KMP iOS Challenges
 topic: kotlin
-subtopics: [kmp, multiplatform, ios, kotlin-native, interop]
+subtopics:
+- kmp
+- multiplatform
+- ios
+- kotlin-native
+- interop
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, ios, kotlin-native, swift, interop, difficulty/hard]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- ios
+- kotlin-native
+- swift
+- interop
+- difficulty/hard
+anki_cards:
+- slug: kotlin-kmp-008-0-en
+  language: en
+  anki_id: 1769344150215
+  synced_at: '2026-01-25T16:29:10.266552'
+- slug: kotlin-kmp-008-0-ru
+  language: ru
+  anki_id: 1769344150265
+  synced_at: '2026-01-25T16:29:10.268789'
 ---
-
 # Question (EN)
 > What are the challenges of Kotlin/Native and Swift interop in KMP, and how do you address them?
 

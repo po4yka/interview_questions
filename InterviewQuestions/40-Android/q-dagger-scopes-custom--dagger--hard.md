@@ -1,20 +1,40 @@
 ---
 id: android-dagger-004
 title: Dagger Scopes and Custom Scopes / Scopes и Custom Scopes в Dagger
-aliases: [Dagger Scopes, Custom Scopes, Области видимости Dagger]
+aliases:
+- Dagger Scopes
+- Custom Scopes
+- Области видимости Dagger
 topic: android
-subtopics: [dagger, di-dagger]
+subtopics:
+- dagger
+- di-dagger
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-dagger-component-module--dagger--medium, q-dagger-subcomponents--dagger--hard]
+related:
+- c-dependency-injection
+- q-dagger-component-module--dagger--medium
+- q-dagger-subcomponents--dagger--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-dagger, dependency-injection, difficulty/hard, dagger, scope, singleton]
-
+tags:
+- android/di-dagger
+- dependency-injection
+- difficulty/hard
+- dagger
+- scope
+- singleton
+anki_cards:
+- slug: android-dagger-004-0-en
+  language: en
+- slug: android-dagger-004-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Что такое @Scope в Dagger, как работают scopes и как создать custom scope?

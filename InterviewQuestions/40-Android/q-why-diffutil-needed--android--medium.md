@@ -1,21 +1,42 @@
----\
+---
 id: android-367
-title: "Why DiffUtil Needed / Зачем нужен DiffUtil"
-aliases: [AsyncListDiffer, DiffUtil, ListAdapter]
+title: Why DiffUtil Needed / Зачем нужен DiffUtil
+aliases:
+- AsyncListDiffer
+- DiffUtil
+- ListAdapter
 topic: android
-subtopics: [performance-rendering, ui-views]
+subtopics:
+- performance-rendering
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, c-recyclerview, q-android-app-components--android--easy]
+related:
+- c-android-components
+- c-recyclerview
+- q-android-app-components--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [adapter, android/performance-rendering, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
-
----\
+tags:
+- adapter
+- android/performance-rendering
+- android/ui-views
+- difficulty/medium
+- diffutil
+- performance
+- recyclerview
+anki_cards:
+- slug: android-367-0-en
+  language: en
+- slug: android-367-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Зачем нужен `DiffUtil` в Android? Какие проблемы он решает?

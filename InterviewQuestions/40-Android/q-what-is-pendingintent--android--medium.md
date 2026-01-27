@@ -1,22 +1,44 @@
----\
+---
 id: android-411
 title: What Is PendingIntent / Что такое PendingIntent
-aliases: [What is PendingIntent, Что такое PendingIntent]
+aliases:
+- What is PendingIntent
+- Что такое PendingIntent
 topic: android
-subtopics: [intents-deeplinks, notifications]
+subtopics:
+- intents-deeplinks
+- notifications
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-intent, c-permissions, q-anr-application-not-responding--android--medium, q-compose-core-components--android--medium, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-intent-filters-android--android--medium, q-what-unifies-android-components--android--easy]
+related:
+- c-intent
+- c-permissions
+- q-anr-application-not-responding--android--medium
+- q-compose-core-components--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-intent-filters-android--android--medium
+- q-what-unifies-android-components--android--easy
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android, android/intents-deeplinks, android/notifications, difficulty/medium]
-
----\
+tags:
+- android
+- android/intents-deeplinks
+- android/notifications
+- difficulty/medium
+anki_cards:
+- slug: android-411-0-en
+  language: en
+- slug: android-411-0-ru
+  language: ru
+---
 # Вопрос (RU)
 > Что такое PendingIntent?
 

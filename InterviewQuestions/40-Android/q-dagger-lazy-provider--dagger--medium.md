@@ -1,20 +1,40 @@
 ---
 id: android-dagger-006
 title: Dagger Lazy vs Provider / Lazy vs Provider в Dagger
-aliases: [Dagger Lazy, Dagger Provider, Lazy vs Provider]
+aliases:
+- Dagger Lazy
+- Dagger Provider
+- Lazy vs Provider
 topic: android
-subtopics: [dagger, di-dagger]
+subtopics:
+- dagger
+- di-dagger
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-dagger-component-module--dagger--medium, q-dagger-inject-provides--dagger--medium]
+related:
+- c-dependency-injection
+- q-dagger-component-module--dagger--medium
+- q-dagger-inject-provides--dagger--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-dagger, dependency-injection, difficulty/medium, dagger, lazy, provider]
-
+tags:
+- android/di-dagger
+- dependency-injection
+- difficulty/medium
+- dagger
+- lazy
+- provider
+anki_cards:
+- slug: android-dagger-006-0-en
+  language: en
+- slug: android-dagger-006-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > В чём разница между Lazy<T> и Provider<T> в Dagger?

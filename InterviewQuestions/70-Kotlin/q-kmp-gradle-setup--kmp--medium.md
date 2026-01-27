@@ -1,21 +1,45 @@
 ---
 id: kotlin-kmp-009
-title: "KMP Gradle Configuration / Настройка Gradle для KMP"
-aliases: [KMP Gradle Setup, Multiplatform Build Configuration, KMP Build Script]
+title: KMP Gradle Configuration / Настройка Gradle для KMP
+aliases:
+- KMP Gradle Setup
+- Multiplatform Build Configuration
+- KMP Build Script
 topic: kotlin
-subtopics: [kmp, multiplatform, gradle, build]
+subtopics:
+- kmp
+- multiplatform
+- gradle
+- build
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, gradle, build, difficulty/medium]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- gradle
+- build
+- difficulty/medium
+anki_cards:
+- slug: kotlin-kmp-009-0-en
+  language: en
+  anki_id: 1769344149315
+  synced_at: '2026-01-25T16:29:09.367260'
+- slug: kotlin-kmp-009-0-ru
+  language: ru
+  anki_id: 1769344149365
+  synced_at: '2026-01-25T16:29:09.369118'
 ---
-
 # Question (EN)
 > How do you configure Gradle for Kotlin Multiplatform projects?
 

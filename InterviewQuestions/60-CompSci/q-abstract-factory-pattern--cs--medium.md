@@ -36,11 +36,11 @@ anki_cards:
 - slug: cs-030-0-en
   language: en
   anki_id: 1768454033739
-  synced_at: '2026-01-15T09:43:17.106892'
+  synced_at: '2026-01-25T13:01:16.937557'
 - slug: cs-030-0-ru
   language: ru
   anki_id: 1768454033764
-  synced_at: '2026-01-15T09:43:17.108401'
+  synced_at: '2026-01-25T13:01:16.939034'
 ---
 # Вопрос (RU)
 > Что такое паттерн Abstract Factory? Когда и зачем его использовать?

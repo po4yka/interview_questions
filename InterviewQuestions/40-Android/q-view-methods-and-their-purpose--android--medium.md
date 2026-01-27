@@ -1,20 +1,43 @@
 ---
 id: android-303
 title: View Methods And Their Purpose / Методы View и их назначение
-aliases: [View Methods, Методы View]
+aliases:
+- View Methods
+- Методы View
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-view-system-basics, q-fragments-history-and-purpose--android--hard, q-viewgroup-vs-view-differences--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-methods-redraw-views--android--medium]
+related:
+- c-android-view-system-basics
+- q-fragments-history-and-purpose--android--hard
+- q-viewgroup-vs-view-differences--android--easy
+- q-what-is-known-about-methods-that-redraw-view--android--medium
+- q-what-methods-redraw-views--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/medium, drawing, rendering, view]
-
+tags:
+- android/ui-views
+- difficulty/medium
+- drawing
+- rendering
+- view
+anki_cards:
+- slug: android-303-0-ru
+  language: ru
+  anki_id: 1768420767714
+  synced_at: '2026-01-14 23:59:27.718277'
+- slug: android-303-0-en
+  language: en
+  anki_id: 1768420767691
+  synced_at: '2026-01-14 23:59:27.695659'
 ---
 # Вопрос (RU)
 > Методы `View` и их назначение

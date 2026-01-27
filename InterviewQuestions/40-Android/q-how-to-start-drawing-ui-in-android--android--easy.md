@@ -1,72 +1,54 @@
----id: android-137
+---
 id: android-704
 anki_cards:
-  - slug: android-137-0-en
-    front: "What needs to be done to start drawing UI in Android?"
-    back: |
-      **Create an Activity and set its content:**
-
-      **1. XML Layout (View-based):**
-      ```kotlin
-      setContentView(R.layout.activity_main)
-      ```
-
-      **2. Jetpack Compose:**
-      ```kotlin
-      setContent { Text("Hello") }
-      ```
-
-      **3. Custom View:**
-      ```kotlin
-      setContentView(CustomView(this))
-      ```
-
-      Activity is the entry point - it hosts the UI hierarchy.
-    tags:
-      - android_activities
-      - android_views
-      - difficulty::easy
-  - slug: android-137-0-ru
-    front: "Что нужно сделать чтобы начать рисовать UI в Android?"
-    back: |
-      **Создать Activity и задать содержимое:**
-
-      **1. XML Layout (View-based):**
-      ```kotlin
-      setContentView(R.layout.activity_main)
-      ```
-
-      **2. Jetpack Compose:**
-      ```kotlin
-      setContent { Text("Hello") }
-      ```
-
-      **3. Custom View:**
-      ```kotlin
-      setContentView(CustomView(this))
-      ```
-
-      Activity - точка входа, которая содержит иерархию UI.
-    tags:
-      - android_activities
-      - android_views
-      - difficulty::easy
-title: "How To Start Drawing UI In Android / Как начать рисовать UI в Android"
-aliases: ["How To Start Drawing UI In Android", "Как начать рисовать UI в Android"]
+- slug: android-137-0-en
+  language: en
+  anki_id: 1769330954291
+  synced_at: '2026-01-25T12:50:08.577578'
+- slug: android-137-0-ru
+  language: ru
+  anki_id: 1769330954310
+  synced_at: '2026-01-25T12:50:08.579405'
+- slug: android-704-0-en
+  language: en
+- slug: android-704-0-ru
+  language: ru
+- slug: q-how-to-start-drawing-ui-in-android--android--easy-0-en
+  language: en
+- slug: q-how-to-start-drawing-ui-in-android--android--easy-0-ru
+  language: ru
+title: How To Start Drawing UI In Android / Как начать рисовать UI в Android
+aliases:
+- How To Start Drawing UI In Android
+- Как начать рисовать UI в Android
 topic: android
-subtopics: [activity, ui-views]
+subtopics:
+- activity
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, c-compose-recomposition, c-recomposition, c-wear-compose, q-fragment-vs-activity-lifecycle--android--medium, q-retrofit-library--android--medium]
+related:
+- c-activity
+- c-compose-recomposition
+- c-recomposition
+- c-wear-compose
+- q-fragment-vs-activity-lifecycle--android--medium
+- q-retrofit-library--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/activity, android/ui-views, difficulty/easy, ui]
+tags:
+- android
+- android/activity
+- android/ui-views
+- difficulty/easy
+- ui
 sources: []
-
 ---
 # Вопрос (RU)
 

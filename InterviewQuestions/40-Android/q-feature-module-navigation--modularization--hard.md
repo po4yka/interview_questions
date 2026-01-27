@@ -1,21 +1,41 @@
 ---
 id: android-mod-003
-title: "Navigation Between Feature Modules / Навигация между feature-модулями"
-aliases: ["Feature Module Navigation", "Multi-module Navigation", "Навигация в модульном приложении"]
+title: Navigation Between Feature Modules / Навигация между feature-модулями
+aliases:
+- Feature Module Navigation
+- Multi-module Navigation
+- Навигация в модульном приложении
 topic: android
-subtopics: [modularization, navigation, architecture]
+subtopics:
+- modularization
+- navigation
+- architecture
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-module-types--modularization--medium, q-module-dependency-graph--modularization--hard]
+related:
+- c-android
+- q-module-types--modularization--medium
+- q-module-dependency-graph--modularization--hard
 created: 2026-01-23
 updated: 2026-01-23
 sources: []
-tags: [android/modularization, android/navigation, android/architecture, difficulty/hard, navigation-compose]
-
+tags:
+- android/modularization
+- android/navigation
+- android/architecture
+- difficulty/hard
+- navigation-compose
+anki_cards:
+- slug: android-mod-003-0-en
+  language: en
+- slug: android-mod-003-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

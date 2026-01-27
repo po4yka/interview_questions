@@ -1,20 +1,41 @@
 ---
 id: android-hilt-005
 title: Hilt Assisted Injection / Assisted Injection в Hilt
-aliases: [Assisted Injection, AssistedInject, AssistedFactory, Runtime Parameters DI]
+aliases:
+- Assisted Injection
+- AssistedInject
+- AssistedFactory
+- Runtime Parameters DI
 topic: android
-subtopics: [di-hilt, architecture]
+subtopics:
+- di-hilt
+- architecture
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-viewmodel-injection--hilt--medium, q-hilt-modules-provides--hilt--medium, q-hilt-scopes--hilt--hard]
+related:
+- q-hilt-viewmodel-injection--hilt--medium
+- q-hilt-modules-provides--hilt--medium
+- q-hilt-scopes--hilt--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/architecture, difficulty/hard, hilt, assisted-injection, dependency-injection]
-
+tags:
+- android/di-hilt
+- android/architecture
+- difficulty/hard
+- hilt
+- assisted-injection
+- dependency-injection
+anki_cards:
+- slug: android-hilt-005-0-en
+  language: en
+- slug: android-hilt-005-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Что такое Assisted Injection в Hilt? Когда и как использовать @AssistedInject и @AssistedFactory?

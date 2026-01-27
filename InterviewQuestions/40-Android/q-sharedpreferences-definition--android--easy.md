@@ -1,21 +1,41 @@
----\
+---
 id: android-133
-title: "SharedPreferences Definition / Определение SharedPreferences"
-aliases: ["SharedPreferences Definition", "Определение SharedPreferences"]
+title: SharedPreferences Definition / Определение SharedPreferences
+aliases:
+- SharedPreferences Definition
+- Определение SharedPreferences
 topic: android
-subtopics: [datastore]
+subtopics:
+- datastore
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, q-android-components-besides-activity--android--easy, q-how-to-break-text-by-screen-width--android--easy, q-workmanager-return-result--android--medium]
+related:
+- c-android-components
+- q-android-components-besides-activity--android--easy
+- q-how-to-break-text-by-screen-width--android--easy
+- q-workmanager-return-result--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/datastore, datastore, difficulty/easy, key-value, persistence, sharedpreferences]
----\
+tags:
+- android/datastore
+- datastore
+- difficulty/easy
+- key-value
+- persistence
+- sharedpreferences
+anki_cards:
+- slug: android-133-0-en
+  language: en
+- slug: android-133-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Что такое `SharedPreferences`?

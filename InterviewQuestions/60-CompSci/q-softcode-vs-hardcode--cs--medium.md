@@ -34,11 +34,11 @@ anki_cards:
 - slug: cs-soft-hard-0-en
   language: en
   anki_id: 1768455796644
-  synced_at: '2026-01-15T09:43:17.114486'
+  synced_at: '2026-01-25T13:01:16.943480'
 - slug: cs-soft-hard-0-ru
   language: ru
   anki_id: 1768455796669
-  synced_at: '2026-01-15T09:43:17.116683'
+  synced_at: '2026-01-25T13:01:16.944730'
 ---
 # Вопрос (RU)
 > Что такое софткод и чем он отличается от хардкода?

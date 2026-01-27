@@ -1,22 +1,42 @@
----\
+---
 id: android-437
-title: "Why Multithreading Tools / Зачем инструменты многопоточности"
-aliases: [Android Concurrency, Multithreading Tools, Инструменты многопоточности]
+title: Why Multithreading Tools / Зачем инструменты многопоточности
+aliases:
+- Android Concurrency
+- Multithreading Tools
+- Инструменты многопоточности
 topic: android
-subtopics: [background-execution, coroutines, threads-sync]
+subtopics:
+- background-execution
+- coroutines
+- threads-sync
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, c-workmanager]
+related:
+- c-coroutines
+- c-workmanager
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/easy]
-sources: ["https://developer.android.com/guide/background", "https://developer.android.com/kotlin/coroutines"]
-
----\
+tags:
+- android/background-execution
+- android/coroutines
+- android/threads-sync
+- difficulty/easy
+sources:
+- https://developer.android.com/guide/background
+- https://developer.android.com/kotlin/coroutines
+anki_cards:
+- slug: android-437-0-en
+  language: en
+- slug: android-437-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Для чего нужна многопоточность в Android и какие инструменты использовать?

@@ -1,19 +1,41 @@
 ---
-id: android-750
+id: android-perf-002
 title: StrictMode for Performance / StrictMode для Производительности
-aliases: [StrictMode, Thread Policy, VM Policy, StrictMode для Производительности]
+aliases:
+- StrictMode
+- Thread Policy
+- VM Policy
+- StrictMode для Производительности
 topic: android
-subtopics: [performance, debugging, threading]
+subtopics:
+- performance
+- debugging
+- threading
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-anr-debugging--performance--hard, q-memory-leaks-detection--performance--medium, q-strictmode-debugging--android--medium]
+related:
+- q-anr-debugging--performance--hard
+- q-memory-leaks-detection--performance--medium
+- q-strictmode-debugging--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/performance, android/debugging, difficulty/medium, strictmode, threading]
+tags:
+- android/performance
+- android/debugging
+- difficulty/medium
+- strictmode
+- threading
+anki_cards:
+- slug: android-perf-002-0-en
+  language: en
+- slug: android-perf-002-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

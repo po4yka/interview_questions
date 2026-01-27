@@ -1,49 +1,43 @@
----id: dp-001
-title: "Visitor Pattern / Visitor Паттерн"
-aliases: [Visitor Pattern, Visitor Паттерн]
+---
+id: dp-001
+title: Visitor Pattern / Visitor Паттерн
+aliases:
+- Visitor Pattern
+- Visitor Паттерн
 topic: cs
-subtopics: [double-dispatch, polymorphism]
+subtopics:
+- double-dispatch
+- polymorphism
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science, c-dao-pattern]
+related:
+- c-architecture-patterns
+- c-computer-science
+- c-dao-pattern
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral-patterns, design-patterns, difficulty/hard, double-dispatch, gof-patterns, visitor]
-
+tags:
+- behavioral-patterns
+- design-patterns
+- difficulty/hard
+- double-dispatch
+- gof-patterns
+- visitor
 anki_cards:
 - slug: dp-001-0-en
-  front: |
-    What is the Visitor pattern and what problem does it solve?
-  back: |
-    **Visitor**: Behavioral pattern adding operations to class hierarchy without modifying it.
-    
-    **How**: Double dispatch - element.accept(visitor) calls visitor.visit(element).
-    
-    **Use when**: Stable element hierarchy, varying operations.
-    
-    **Trade-off**: Easy to add operations, hard to add new element types.
   language: en
-  difficulty: 0.5
-  tags: [cs_patterns, difficulty::hard]
+  anki_id: 1769343697891
+  synced_at: '2026-01-25T16:21:37.991857'
 - slug: dp-001-0-ru
-  front: |
-    Что такое паттерн Посетитель и какую проблему он решает?
-  back: |
-    **Посетитель**: Поведенческий паттерн для добавления операций к иерархии без её изменения.
-    
-    **Как работает**: Двойная диспетчеризация - element.accept(visitor) вызывает visitor.visit(element).
-    
-    **Используйте когда**: Стабильная иерархия элементов, меняющиеся операции.
-    
-    **Компромисс**: Легко добавить операции, сложно добавить новые типы элементов.
   language: ru
-  difficulty: 0.5
-  tags: [cs_patterns, difficulty::hard]
-
+  anki_id: 1769343697990
+  synced_at: '2026-01-25T16:21:37.993796'
 ---
 # Вопрос (RU)
 > Что такое паттерн Visitor? Когда и зачем его следует использовать?

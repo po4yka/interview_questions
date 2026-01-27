@@ -5,11 +5,11 @@ anki_cards:
 - slug: cs-026-0-en
   language: en
   anki_id: 1768454534814
-  synced_at: '2026-01-15T09:43:17.077333'
+  synced_at: '2026-01-25T13:01:16.905563'
 - slug: cs-026-0-ru
   language: ru
   anki_id: 1768454534841
-  synced_at: '2026-01-15T09:43:17.078811'
+  synced_at: '2026-01-25T13:01:16.907075'
 aliases:
 - Delegates Java Compilation
 - Компиляция делегатов в Java

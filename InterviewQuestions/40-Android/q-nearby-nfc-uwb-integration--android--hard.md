@@ -1,56 +1,62 @@
----id: android-620
+---
 id: android-712
 anki_cards:
-  - slug: android-620-0-en
-    front: "How to design a hybrid proximity system using NFC, Nearby, and UWB?"
-    back: |
-      **3-layer approach:**
-
-      1. **NFC** - Bootstrap session (one tap, exchange keys/nonce)
-      2. **Nearby Connections** - Main encrypted data channel
-      3. **UWB** - Precise ranging when supported (fallback to BLE)
-
-      **Security:** Cryptographically bind all channels; mutual auth on Nearby.
-      **Compatibility:** Check FEATURE_NFC, FEATURE_UWB; graceful degradation.
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-620-0-ru
-    front: "Как спроектировать гибридную систему ближней связи с NFC, Nearby и UWB?"
-    back: |
-      **3-уровневый подход:**
-
-      1. **NFC** - Инициализация сессии (одно касание, обмен ключами/nonce)
-      2. **Nearby Connections** - Основной зашифрованный канал данных
-      3. **UWB** - Точное позиционирование при поддержке (fallback на BLE)
-
-      **Безопасность:** Криптографическая привязка всех каналов; взаимная аутентификация на Nearby.
-      **Совместимость:** Проверка FEATURE_NFC, FEATURE_UWB; graceful degradation.
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-620-0-en
+  language: en
+  anki_id: 1769330960610
+  synced_at: '2026-01-25T12:50:08.812977'
+- slug: android-620-0-ru
+  language: ru
+  anki_id: 1769330960635
+  synced_at: '2026-01-25T12:50:08.815261'
+- slug: android-712-0-en
+  language: en
+- slug: android-712-0-ru
+  language: ru
+- slug: q-nearby-nfc-uwb-integration--android--hard-0-en
+  language: en
+- slug: q-nearby-nfc-uwb-integration--android--hard-0-ru
+  language: ru
 title: Nearby, NFC & UWB Integration / Интеграция Nearby, NFC и UWB
-aliases: [Nearby NFC UWB Integration, NFC и UWB, Интеграция Nearby]
+aliases:
+- Nearby NFC UWB Integration
+- NFC и UWB
+- Интеграция Nearby
 topic: android
-subtopics: [networking-http, nfc, sensors]
+subtopics:
+- networking-http
+- nfc
+- sensors
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-android-ipc, c-nearby-uwb, q-android-auto-guidelines--android--hard, q-integration-testing-strategies--android--medium, q-room-paging3-integration--android--medium, q-wearos-health-connect-integration--android--hard]
+related:
+- c-android
+- c-android-ipc
+- c-nearby-uwb
+- q-android-auto-guidelines--android--hard
+- q-integration-testing-strategies--android--medium
+- q-room-paging3-integration--android--medium
+- q-wearos-health-connect-integration--android--hard
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/networking-http, android/nfc, android/sensors, difficulty/hard]
+tags:
+- android/networking-http
+- android/nfc
+- android/sensors
+- difficulty/hard
 sources:
-- url: "https://developer.android.com/guide/topics/connectivity/nfc"
+- url: https://developer.android.com/guide/topics/connectivity/nfc
   note: NFC developer guide
-- url: "https://developer.android.com/guide/topics/connectivity/uwb"
+- url: https://developer.android.com/guide/topics/connectivity/uwb
   note: UWB API overview
-- url: "https://developers.google.com/nearby/connections/overview"
+- url: https://developers.google.com/nearby/connections/overview
   note: Nearby Connections docs
-
 ---
 # Вопрос (RU)
 > Как спроектировать гибридную систему ближней связи на Android, комбинируя NFC для первичной инициализации, Nearby Connections для обмена данными и UWB для точного позиционирования? Какие ограничения безопасность и аппаратная совместимость накладывают?

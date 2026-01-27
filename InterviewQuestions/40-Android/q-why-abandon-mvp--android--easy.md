@@ -1,22 +1,47 @@
----\
+---
 id: android-379
-title: "Why Abandon MVP / Почему отказаться от MVP"
-aliases: [MVP problems, Why Abandon MVP, Почему отказаться от MVP, Проблемы MVP]
+title: Why Abandon MVP / Почему отказаться от MVP
+aliases:
+- MVP problems
+- Why Abandon MVP
+- Почему отказаться от MVP
+- Проблемы MVP
 topic: android
-subtopics: [architecture-mvvm]
+subtopics:
+- architecture-mvvm
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-architecture-patterns, q-android-architectural-patterns--android--medium, q-mvp-pattern--android--medium, q-mvvm-vs-mvp-differences--android--medium, q-why-separate-ui-and-business-logic--android--easy]
+related:
+- c-android
+- c-architecture-patterns
+- q-android-architectural-patterns--android--medium
+- q-mvp-pattern--android--medium
+- q-mvvm-vs-mvp-differences--android--medium
+- q-why-separate-ui-and-business-logic--android--easy
 created: 2024-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvvm, architecture-patterns, difficulty/easy, mvi, mvp, mvvm]
-sources: ["https://developer.android.com/jetpack/guide", "https://developer.android.com/topic/architecture"]
-
----\
+tags:
+- android/architecture-mvvm
+- architecture-patterns
+- difficulty/easy
+- mvi
+- mvp
+- mvvm
+sources:
+- https://developer.android.com/jetpack/guide
+- https://developer.android.com/topic/architecture
+anki_cards:
+- slug: android-379-0-en
+  language: en
+- slug: android-379-0-ru
+  language: ru
+---
 # Вопрос (RU)
 > Почему многие отказываются от MVP?
 

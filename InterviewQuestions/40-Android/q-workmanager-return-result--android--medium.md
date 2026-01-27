@@ -1,22 +1,40 @@
----\
+---
 id: android-414
-title: "Workmanager Return Result / Возврат результата WorkManager"
-aliases: ["Workmanager Return Result", "Возврат результата WorkManager"]
+title: Workmanager Return Result / Возврат результата WorkManager
+aliases:
+- Workmanager Return Result
+- Возврат результата WorkManager
 topic: android
-subtopics: [background-execution, coroutines]
+subtopics:
+- background-execution
+- coroutines
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-background-tasks, c-concurrency, q-android-architectural-patterns--android--medium]
+related:
+- c-android
+- c-background-tasks
+- c-concurrency
+- q-android-architectural-patterns--android--medium
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [android/background-execution, android/coroutines, difficulty/medium, workmanager]
-
----\
+tags:
+- android/background-execution
+- android/coroutines
+- difficulty/medium
+- workmanager
+anki_cards:
+- slug: android-414-0-en
+  language: en
+- slug: android-414-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Как вернуть результат работы `WorkManager` в приложение?

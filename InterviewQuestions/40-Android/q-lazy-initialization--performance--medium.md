@@ -1,19 +1,39 @@
 ---
-id: android-753
+id: android-perf-004
 title: Lazy Initialization Patterns / Паттерны Ленивой Инициализации
-aliases: [Lazy Loading, Lazy Initialization, Ленивая Инициализация]
+aliases:
+- Lazy Loading
+- Lazy Initialization
+- Ленивая Инициализация
 topic: android
-subtopics: [performance, initialization, patterns]
+subtopics:
+- performance
+- initialization
+- patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-app-startup-optimization--performance--hard, q-memory-leaks-detection--performance--medium]
+related:
+- q-app-startup-optimization--performance--hard
+- q-memory-leaks-detection--performance--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/performance, android/initialization, difficulty/medium, lazy, patterns]
+tags:
+- android/performance
+- android/initialization
+- difficulty/medium
+- lazy
+- patterns
+anki_cards:
+- slug: android-perf-004-0-en
+  language: en
+- slug: android-perf-004-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

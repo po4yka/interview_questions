@@ -1,3 +1,8 @@
+---
+date created: Wednesday, December 3rd 2025, 1:51:57 pm
+date modified: Monday, January 26th 2026, 1:24:55 pm
+---
+
 # HTML Tag Checker - Quick Reference
 
 ## Purpose

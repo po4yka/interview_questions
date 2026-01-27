@@ -1,20 +1,42 @@
 ---
 id: android-acc-002
 title: TalkBack Support / Poderzhka TalkBack
-aliases: [TalkBack Support, Screen Reader, Poderzhka TalkBack, Programma chteniya ekrana]
+aliases:
+- TalkBack Support
+- Screen Reader
+- Poderzhka TalkBack
+- Programma chteniya ekrana
 topic: android
-subtopics: [accessibility, ui-views, ui-compose]
+subtopics:
+- accessibility
+- ui-views
+- ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-content-descriptions--accessibility--medium, q-compose-semantics--accessibility--medium]
+related:
+- c-jetpack-compose
+- q-content-descriptions--accessibility--medium
+- q-compose-semantics--accessibility--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/accessibility, android/ui-views, android/ui-compose, difficulty/medium, accessibility, talkback]
-
+tags:
+- android/accessibility
+- android/ui-views
+- android/ui-compose
+- difficulty/medium
+- accessibility
+- talkback
+anki_cards:
+- slug: android-acc-002-0-en
+  language: en
+- slug: android-acc-002-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Chto takoe TalkBack i kak obespechit' podderzhku programmy chteniya ekrana v Android-prilozhenii?

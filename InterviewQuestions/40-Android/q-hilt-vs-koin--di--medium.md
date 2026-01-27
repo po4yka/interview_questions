@@ -1,5 +1,5 @@
 ---
-id: android-748
+id: android-di-002
 title: Hilt vs Koin Performance and Compose / Производительность Hilt vs Koin и Compose
 aliases:
 - Hilt vs Koin 2026
@@ -34,6 +34,11 @@ tags:
 - hilt
 - koin
 - performance
+anki_cards:
+- slug: android-di-002-0-en
+  language: en
+- slug: android-di-002-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Сравните `Hilt` и `Koin` с точки зрения производительности: compile-time vs runtime DI, влияние на старт приложения, и интеграция с Jetpack Compose. Учитывайте улучшения Koin 4.x.

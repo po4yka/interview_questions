@@ -1,22 +1,42 @@
----\
+---
 id: android-234
-title: "WorkManager Execution Guarantee / Гарантия выполнения WorkManager"
-aliases: ["WorkManager Execution Guarantee", "Гарантия выполнения WorkManager"]
+title: WorkManager Execution Guarantee / Гарантия выполнения WorkManager
+aliases:
+- WorkManager Execution Guarantee
+- Гарантия выполнения WorkManager
 topic: android
-subtopics: [background-execution]
+subtopics:
+- background-execution
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-background-tasks, q-background-tasks-decision-guide--android--medium, q-background-vs-foreground-service--android--medium, q-service-restrictions-why--android--medium]
+related:
+- c-background-tasks
+- q-background-tasks-decision-guide--android--medium
+- q-background-vs-foreground-service--android--medium
+- q-service-restrictions-why--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-sources: ["https://developer.android.com/topic/libraries/architecture/workmanager", "https://developer.android.com/topic/libraries/architecture/workmanager/advanced"]
-tags: [android/background-execution, background-tasks, difficulty/medium, reliability, workmanager]
-
----\
+sources:
+- https://developer.android.com/topic/libraries/architecture/workmanager
+- https://developer.android.com/topic/libraries/architecture/workmanager/advanced
+tags:
+- android/background-execution
+- background-tasks
+- difficulty/medium
+- reliability
+- workmanager
+anki_cards:
+- slug: android-234-0-en
+  language: en
+- slug: android-234-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Как `WorkManager` гарантирует выполнение задач?

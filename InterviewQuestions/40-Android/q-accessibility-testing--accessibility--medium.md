@@ -1,20 +1,40 @@
 ---
 id: android-acc-005
 title: Accessibility Testing Tools / Instrumenty testirovaniya dostupnosti
-aliases: [Accessibility Testing, Accessibility Scanner, Testirovanie dostupnosti]
+aliases:
+- Accessibility Testing
+- Accessibility Scanner
+- Testirovanie dostupnosti
 topic: android
-subtopics: [accessibility, testing]
+subtopics:
+- accessibility
+- testing
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-content-descriptions--accessibility--medium, q-talkback-support--accessibility--medium, q-testing-compose-ui--android--medium]
+related:
+- c-jetpack-compose
+- q-content-descriptions--accessibility--medium
+- q-talkback-support--accessibility--medium
+- q-testing-compose-ui--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/accessibility, android/testing, difficulty/medium, accessibility, testing]
-
+tags:
+- android/accessibility
+- android/testing
+- difficulty/medium
+- accessibility
+- testing
+anki_cards:
+- slug: android-acc-005-0-en
+  language: en
+- slug: android-acc-005-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kakie instrumenty suschestvuyut dlya testirovaniya dostupnosti Android-prilozhenij?

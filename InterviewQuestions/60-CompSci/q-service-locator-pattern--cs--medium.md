@@ -1,54 +1,45 @@
----id: cs-023
-title: "Service Locator Pattern / Паттерн Локатор Служб"
-aliases: ["Service Locator", "Локатор Служб"]
+---
+id: cs-023
+title: Service Locator Pattern / Паттерн Локатор Служб
+aliases:
+- Service Locator
+- Локатор Служб
 topic: cs
-subtopics: [dependency-management, design-patterns, service-discovery]
+subtopics:
+- dependency-management
+- design-patterns
+- service-discovery
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-dao-pattern, q-abstract-factory-pattern--cs--medium]
+related:
+- c-computer-science
+- c-dao-pattern
+- q-abstract-factory-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [dependency-management, design-patterns, difficulty/medium, service-discovery, service-locator]
-sources: ["https://martinfowler.com/articles/injection.html"]
-
+tags:
+- dependency-management
+- design-patterns
+- difficulty/medium
+- service-discovery
+- service-locator
+sources:
+- https://martinfowler.com/articles/injection.html
 anki_cards:
 - slug: cs-023-0-en
-  front: |
-    What is Service Locator pattern and why is it considered an anti-pattern?
-  back: |
-    **Service Locator**: Central registry providing access to dependencies.
-    
-    **Why anti-pattern**:
-    - Hidden dependencies (not visible in constructor)
-    - Global state
-    - Hard to test
-    - Violates explicit dependency principle
-    
-    **Prefer**: Dependency Injection with explicit constructor parameters.
   language: en
-  difficulty: 0.5
-  tags: [cs_patterns, difficulty::medium]
+  anki_id: 1769343694590
+  synced_at: '2026-01-25T16:21:34.697838'
 - slug: cs-023-0-ru
-  front: |
-    Что такое паттерн Service Locator и почему он считается анти-паттерном?
-  back: |
-    **Service Locator**: Центральный реестр для доступа к зависимостям.
-    
-    **Почему анти-паттерн**:
-    - Скрытые зависимости (не видны в конструкторе)
-    - Глобальное состояние
-    - Сложно тестировать
-    - Нарушает принцип явных зависимостей
-    
-    **Предпочитайте**: Dependency Injection с явными параметрами конструктора.
   language: ru
-  difficulty: 0.5
-  tags: [cs_patterns, difficulty::medium]
-
+  anki_id: 1769343694690
+  synced_at: '2026-01-25T16:21:34.700430'
 ---
 # Вопрос (RU)
 > Что такое паттерн `Service` Locator? Когда его использовать и как он работает?

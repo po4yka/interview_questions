@@ -1,22 +1,46 @@
----\
+---
 id: android-486
 title: Design TikTok-style Short-Video Feed / Проектирование коротких видео (TikTok-стиль)
-aliases: [Design TikTok-style Short-Video Feed, Проектирование коротких видео (TikTok-стиль)]
+aliases:
+- Design TikTok-style Short-Video Feed
+- Проектирование коротких видео (TikTok-стиль)
 topic: android
-subtopics: [media, performance-rendering, service]
+subtopics:
+- media
+- performance-rendering
+- service
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-workmanager, q-design-instagram-stories--android--hard, q-design-uber-app--android--hard, q-implement-voice-video-call--android--hard]
+related:
+- c-workmanager
+- q-design-instagram-stories--android--hard
+- q-design-uber-app--android--hard
+- q-implement-voice-video-call--android--hard
 sources: []
 created: 2025-10-29
 updated: 2025-11-11
-tags: [android/media, android/performance-rendering, android/service, difficulty/hard, topic/android]
-
----\
+tags:
+- android/media
+- android/performance-rendering
+- android/service
+- difficulty/hard
+- topic/android
+anki_cards:
+- slug: android-486-0-ru
+  language: ru
+  anki_id: 1768420767286
+  synced_at: '2026-01-14 23:59:27.291550'
+- slug: android-486-0-en
+  language: en
+  anki_id: 1768420767257
+  synced_at: '2026-01-14 23:59:27.263881'
+---
 # Вопрос (RU)
 
 > Как спроектировать ленту коротких видео (TikTok-стиль) для Android?

@@ -1,6 +1,6 @@
 ---
-id: android-725
-title: "Circuit Framework by Slack / Фреймворк Circuit от Slack"
+id: android-arch-006
+title: Circuit Framework by Slack / Фреймворк Circuit от Slack
 aliases:
 - Circuit
 - Circuit Framework
@@ -26,14 +26,19 @@ related:
 created: 2026-01-23
 updated: 2026-01-23
 sources:
-- "https://slackhq.github.io/circuit/"
-- "https://github.com/slackhq/circuit"
+- https://slackhq.github.io/circuit/
+- https://github.com/slackhq/circuit
 tags:
 - android/architecture
 - android/compose-frameworks
 - difficulty/medium
 - circuit
 - compose
+anki_cards:
+- slug: android-arch-006-0-en
+  language: en
+- slug: android-arch-006-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

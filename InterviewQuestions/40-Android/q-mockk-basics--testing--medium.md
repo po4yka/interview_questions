@@ -1,20 +1,40 @@
 ---
-id: android-401
-title: "MockK Basics / Основы MockK"
-aliases: ["MockK Basics", "Основы MockK"]
+id: android-test-001
+title: MockK Basics / Основы MockK
+aliases:
+- MockK Basics
+- Основы MockK
 topic: android
-subtopics: [testing-unit, testing]
+subtopics:
+- testing-unit
+- testing
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-testing, q-mockk-vs-mockito--testing--medium, q-test-doubles-dependency-injection--android--medium, q-coroutines-testing--testing--medium]
+related:
+- c-testing
+- q-mockk-vs-mockito--testing--medium
+- q-test-doubles-dependency-injection--android--medium
+- q-coroutines-testing--testing--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/testing-unit, difficulty/medium, mockk, mocking, kotlin, test-doubles]
-
+tags:
+- android/testing-unit
+- difficulty/medium
+- mockk
+- mocking
+- kotlin
+- test-doubles
+anki_cards:
+- slug: android-test-001-0-en
+  language: en
+- slug: android-test-001-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

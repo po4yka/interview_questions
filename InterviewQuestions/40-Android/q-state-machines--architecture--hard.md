@@ -1,6 +1,6 @@
 ---
-id: android-722
-title: "Finite State Machines for UI / Конечные автоматы для UI"
+id: android-arch-003
+title: Finite State Machines for UI / Конечные автоматы для UI
 aliases:
 - FSM
 - State Machine
@@ -26,13 +26,18 @@ related:
 created: 2026-01-23
 updated: 2026-01-23
 sources:
-- "https://developer.android.com/topic/architecture/ui-layer/stateholders"
-- "https://statecharts.dev/"
+- https://developer.android.com/topic/architecture/ui-layer/stateholders
+- https://statecharts.dev/
 tags:
 - android/architecture
 - android/state-management
 - difficulty/hard
 - state-machine
+anki_cards:
+- slug: android-arch-003-0-en
+  language: en
+- slug: android-arch-003-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

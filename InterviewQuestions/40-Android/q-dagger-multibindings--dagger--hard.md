@@ -1,20 +1,41 @@
 ---
 id: android-dagger-005
 title: Dagger Multibindings / Multibindings в Dagger
-aliases: [Dagger Multibindings, IntoSet, IntoMap]
+aliases:
+- Dagger Multibindings
+- IntoSet
+- IntoMap
 topic: android
-subtopics: [dagger, di-dagger]
+subtopics:
+- dagger
+- di-dagger
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-dagger-component-module--dagger--medium, q-dagger-scopes-custom--dagger--hard]
+related:
+- c-dependency-injection
+- q-dagger-component-module--dagger--medium
+- q-dagger-scopes-custom--dagger--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-dagger, dependency-injection, difficulty/hard, dagger, multibindings, into-set, into-map]
-
+tags:
+- android/di-dagger
+- dependency-injection
+- difficulty/hard
+- dagger
+- multibindings
+- into-set
+- into-map
+anki_cards:
+- slug: android-dagger-005-0-en
+  language: en
+- slug: android-dagger-005-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Что такое Multibindings в Dagger и как использовать @IntoSet и @IntoMap?

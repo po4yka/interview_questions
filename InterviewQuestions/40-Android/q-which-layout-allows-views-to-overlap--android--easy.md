@@ -1,21 +1,46 @@
----\
+---
 id: android-304
 title: Which Layout Allows Views To Overlap / Какой layout позволяет View перекрываться
-aliases: [Which Layout Allows Views To Overlap, Какой layout позволяет View перекрываться]
+aliases:
+- Which Layout Allows Views To Overlap
+- Какой layout позволяет View перекрываться
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics:
+- ui-compose
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-jetpack-compose-lazy-column--android--easy, q-touch-event-handling-custom-views--android--medium, q-viewgroup-vs-view-differences--android--easy, q-what-is-layout-types-and-when-to-use--android--easy, q-which-class-to-use-for-rendering-view-in-background-thread--android--hard, q-which-layout-for-large-list--android--easy]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-jetpack-compose-lazy-column--android--easy
+- q-touch-event-handling-custom-views--android--medium
+- q-viewgroup-vs-view-differences--android--easy
+- q-what-is-layout-types-and-when-to-use--android--easy
+- q-which-class-to-use-for-rendering-view-in-background-thread--android--hard
+- q-which-layout-for-large-list--android--easy
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android, android/ui-compose, android/ui-views, difficulty/easy, framelayout, layouts]
----\
+tags:
+- android
+- android/ui-compose
+- android/ui-views
+- difficulty/easy
+- framelayout
+- layouts
+anki_cards:
+- slug: android-304-0-en
+  language: en
+- slug: android-304-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Какой layout в Android позволяет `View` перекрываться друг с другом?

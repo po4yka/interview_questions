@@ -28,11 +28,11 @@ anki_cards:
 - slug: cs-003-0-en
   language: en
   anki_id: 1768454343139
-  synced_at: '2026-01-15T09:41:02.833879'
+  synced_at: '2026-01-25T13:01:16.846998'
 - slug: cs-003-0-ru
   language: ru
   anki_id: 1768454343165
-  synced_at: '2026-01-15T09:41:02.836993'
+  synced_at: '2026-01-25T13:01:16.848825'
 ---
 # Вопрос (RU)
 > Что такое concurrency vs parallelism? Что такое race conditions и как их предотвратить? Что такое mutexes, semaphores и monitors? Как избежать deadlocks?

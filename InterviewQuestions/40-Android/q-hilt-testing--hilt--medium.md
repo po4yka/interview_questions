@@ -1,20 +1,44 @@
 ---
 id: android-hilt-009
 title: Hilt Testing / Тестирование с Hilt
-aliases: [Hilt Testing, HiltAndroidTest, UninstallModules, Test Dependencies, Hilt Test]
+aliases:
+- Hilt Testing
+- HiltAndroidTest
+- UninstallModules
+- Test Dependencies
+- Hilt Test
 topic: android
-subtopics: [di-hilt, testing-unit, testing-integration]
+subtopics:
+- di-hilt
+- testing-unit
+- testing-integration
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-setup-annotations--hilt--medium, q-hilt-modules-provides--hilt--medium, q-test-doubles-dependency-injection--android--medium]
+related:
+- q-hilt-setup-annotations--hilt--medium
+- q-hilt-modules-provides--hilt--medium
+- q-test-doubles-dependency-injection--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/testing-unit, android/testing-integration, difficulty/medium, hilt, testing, dependency-injection]
-
+tags:
+- android/di-hilt
+- android/testing-unit
+- android/testing-integration
+- difficulty/medium
+- hilt
+- testing
+- dependency-injection
+anki_cards:
+- slug: android-hilt-009-0-en
+  language: en
+- slug: android-hilt-009-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как тестировать приложение с Hilt? Объясните @HiltAndroidTest, @UninstallModules, @BindValue и замену зависимостей в тестах.

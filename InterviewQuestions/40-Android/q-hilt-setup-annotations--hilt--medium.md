@@ -1,20 +1,42 @@
 ---
 id: android-hilt-001
 title: Hilt Setup Annotations / Аннотации настройки Hilt
-aliases: [Hilt Setup Annotations, Аннотации настройки Hilt, HiltAndroidApp, AndroidEntryPoint, HiltViewModel]
+aliases:
+- Hilt Setup Annotations
+- Аннотации настройки Hilt
+- HiltAndroidApp
+- AndroidEntryPoint
+- HiltViewModel
 topic: android
-subtopics: [di-hilt, architecture]
+subtopics:
+- di-hilt
+- architecture
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-modules-provides--hilt--medium, q-hilt-scopes--hilt--hard, q-hilt-viewmodel-injection--hilt--medium, q-test-doubles-dependency-injection--android--medium]
+related:
+- q-hilt-modules-provides--hilt--medium
+- q-hilt-scopes--hilt--hard
+- q-hilt-viewmodel-injection--hilt--medium
+- q-test-doubles-dependency-injection--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/architecture, difficulty/medium, hilt, dependency-injection]
-
+tags:
+- android/di-hilt
+- android/architecture
+- difficulty/medium
+- hilt
+- dependency-injection
+anki_cards:
+- slug: android-hilt-001-0-en
+  language: en
+- slug: android-hilt-001-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Какие основные аннотации используются для настройки Hilt в Android-приложении? Объясните @HiltAndroidApp, @AndroidEntryPoint и @HiltViewModel.

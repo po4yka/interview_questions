@@ -1,31 +1,42 @@
----\
+---
 id: android-241
 title: When to Use PNG, WebP, or SVG / Когда использовать PNG, WebP или SVG
-aliases: [Image Formats Android, PNG vs WebP vs SVG, Форматы изображений Android]
-
-# Classification
+aliases:
+- Image Formats Android
+- PNG vs WebP vs SVG
+- Форматы изображений Android
 topic: android
-subtopics: [performance-rendering, ui-graphics]
+subtopics:
+- performance-rendering
+- ui-graphics
 question_kind: android
 difficulty: easy
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-sources: ["https://developer.android.com/develop/ui/views/graphics/drawables"]
-
-# Workflow & relations
+language_tags:
+- en
+- ru
+sources:
+- https://developer.android.com/develop/ui/views/graphics/drawables
 status: draft
 moc: moc-android
-related: [q-compose-ui-testing-advanced--android--hard, q-dagger-build-time-optimization--android--medium, q-dagger-purpose--android--easy]
-
-# Timestamps
+related:
+- q-compose-ui-testing-advanced--android--hard
+- q-dagger-build-time-optimization--android--medium
+- q-dagger-purpose--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-
-# Tags (EN only; no leading #)
-tags: [android/performance-rendering, android/ui-graphics, difficulty/easy, image-formats, ui]
----\
+tags:
+- android/performance-rendering
+- android/ui-graphics
+- difficulty/easy
+- image-formats
+- ui
+anki_cards:
+- slug: android-241-0-en
+  language: en
+- slug: android-241-0-ru
+  language: ru
+---
 # Вопрос (RU)
 > Когда лучше использовать PNG и WebP, а когда SVG?
 

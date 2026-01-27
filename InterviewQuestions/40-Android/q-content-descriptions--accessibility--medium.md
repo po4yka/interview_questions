@@ -34,6 +34,11 @@ tags:
 - difficulty/medium
 - talkback
 - contentDescription
+anki_cards:
+- slug: android-accessibility-001-0-en
+  language: en
+- slug: android-accessibility-001-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kak pravilno ispolzovat contentDescription i importantForAccessibility dlya dostupnosti v Android?

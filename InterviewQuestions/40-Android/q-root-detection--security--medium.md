@@ -27,6 +27,11 @@ related:
 sources:
 - https://developer.android.com/privacy-and-security/risks/device-rooting
 - https://owasp.org/www-project-mobile-security-testing-guide/
+anki_cards:
+- slug: sec-005-0-en
+  language: en
+- slug: sec-005-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kakie metody obnaruzheniya root sushchestvuyut i kakovy ih ogranicheniya?

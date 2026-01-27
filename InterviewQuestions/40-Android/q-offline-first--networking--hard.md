@@ -1,21 +1,46 @@
 ---
 id: android-755
-title: "Offline-First Architecture on Android / Offline-First архитектура на Android"
-aliases: ["Offline-First Architecture on Android", "Offline-First архитектура на Android"]
+title: Offline-First Architecture on Android / Offline-First архитектура на Android
+aliases:
+- Offline-First Architecture on Android
+- Offline-First архитектура на Android
 topic: android
-subtopics: [networking, architecture-clean]
+subtopics:
+- networking
+- architecture-clean
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-networking, q-data-sync-unstable-network--android--hard, q-network-connectivity--networking--medium, q-cache-implementation-strategies--android--medium]
+related:
+- c-networking
+- q-data-sync-unstable-network--android--hard
+- q-network-connectivity--networking--medium
+- q-cache-implementation-strategies--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://developer.android.com/topic/architecture/data-layer/offline-first", "https://developer.android.com/training/data-storage/room", "https://developer.android.com/topic/libraries/architecture/workmanager"]
-tags: [android/networking, android/architecture-clean, difficulty/hard, offline-first, room, sync, workmanager, conflict-resolution]
-
+sources:
+- https://developer.android.com/topic/architecture/data-layer/offline-first
+- https://developer.android.com/training/data-storage/room
+- https://developer.android.com/topic/libraries/architecture/workmanager
+tags:
+- android/networking
+- android/architecture-clean
+- difficulty/hard
+- offline-first
+- room
+- sync
+- workmanager
+- conflict-resolution
+anki_cards:
+- slug: android-755-0-en
+  language: en
+- slug: android-755-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

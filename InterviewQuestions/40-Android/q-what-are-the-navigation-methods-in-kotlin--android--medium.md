@@ -1,21 +1,51 @@
----\
+---
 id: android-407
 title: What Are The Navigation Methods In Kotlin / Какие методы навигации в Kotlin
-aliases: [Navigation Methods in Kotlin, Методы навигации в Kotlin]
+aliases:
+- Navigation Methods in Kotlin
+- Методы навигации в Kotlin
 topic: android
-subtopics: [activity, fragment, ui-navigation]
+subtopics:
+- activity
+- fragment
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, c-compose-navigation, c-fragments, q-android-modularization--android--medium, q-dagger-purpose--android--easy, q-inject-router-to-presenter--android--medium, q-navigation-methods-in-kotlin--android--medium, q-what-navigation-methods-do-you-know--android--medium, q-what-navigation-methods-exist-in-kotlin--android--medium]
+related:
+- c-activity
+- c-compose-navigation
+- c-fragments
+- q-android-modularization--android--medium
+- q-dagger-purpose--android--easy
+- q-inject-router-to-presenter--android--medium
+- q-navigation-methods-in-kotlin--android--medium
+- q-what-navigation-methods-do-you-know--android--medium
+- q-what-navigation-methods-exist-in-kotlin--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation]
----\
+tags:
+- android/activity
+- android/fragment
+- android/ui-navigation
+- difficulty/medium
+- navigation
+anki_cards:
+- slug: android-407-0-en
+  language: en
+  anki_id: 1769330101178
+  synced_at: '2026-01-25T13:02:18.612923'
+- slug: android-407-0-ru
+  language: ru
+  anki_id: 1769330101202
+  synced_at: '2026-01-25T13:02:18.615218'
+---
 # Вопрос (RU)
 
 > Какие существуют способы навигации в Android-приложениях на Kotlin?

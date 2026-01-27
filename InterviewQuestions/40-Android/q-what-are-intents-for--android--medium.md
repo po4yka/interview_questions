@@ -1,22 +1,46 @@
----\
+---
 id: android-250
-title: "What Are Intents For / Для чего нужны Intent"
-aliases: ["What Are Intents For", "Для чего нужны Intent"]
+title: What Are Intents For / Для чего нужны Intent
+aliases:
+- What Are Intents For
+- Для чего нужны Intent
 topic: android
-subtopics: [activity, intents-deeplinks, service]
+subtopics:
+- activity
+- intents-deeplinks
+- service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-intent, q-android-components-besides-activity--android--easy, q-annotation-processing--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
+related:
+- c-intent
+- q-android-components-besides-activity--android--easy
+- q-annotation-processing--android--medium
+- q-what-is-layout-types-and-when-to-use--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/activity, android/intents-deeplinks, android/service, difficulty/medium]
-
----\
+tags:
+- android
+- android/activity
+- android/intents-deeplinks
+- android/service
+- difficulty/medium
+anki_cards:
+- slug: android-250-0-en
+  language: en
+  anki_id: 1769330076328
+  synced_at: '2026-01-25T13:02:16.662902'
+- slug: android-250-0-ru
+  language: ru
+  anki_id: 1769330076349
+  synced_at: '2026-01-25T13:02:16.664546'
+---
 # Вопрос (RU)
 
 > Для чего нужны `Intent` в Android?

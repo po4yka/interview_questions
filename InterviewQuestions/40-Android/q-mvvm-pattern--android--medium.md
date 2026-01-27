@@ -1,46 +1,62 @@
----id: android-125
+---
 id: android-711
 anki_cards:
-  - slug: android-125-0-en
-    front: "What are the three components of MVVM pattern in Android?"
-    back: |
-      **Model** - Data layer (Repository, Use Cases)
-      **View** - UI layer (Activity, Fragment, Composable)
-      **ViewModel** - Manages UI state, survives config changes
-
-      **Key:** ViewModel exposes observable state (LiveData/StateFlow), View subscribes and updates UI. ViewModel never holds View references.
-    tags:
-      - android_architecture
-      - android_viewmodel
-      - difficulty::medium
-  - slug: android-125-0-ru
-    front: "Каковы три компонента паттерна MVVM в Android?"
-    back: |
-      **Model** - Слой данных (Repository, Use Cases)
-      **View** - Слой UI (Activity, Fragment, Composable)
-      **ViewModel** - Управляет UI-состоянием, переживает изменения конфигурации
-
-      **Ключевое:** ViewModel предоставляет observable-состояние (LiveData/StateFlow), View подписывается и обновляет UI. ViewModel никогда не хранит ссылки на View.
-    tags:
-      - android_architecture
-      - android_viewmodel
-      - difficulty::medium
-title: "MVVM Pattern / Паттерн MVVM"
-aliases: ["Model-View-ViewModel", "MVVM Pattern", "Паттерн MVVM"]
+- slug: android-125-0-en
+  language: en
+  anki_id: 1769330952985
+  synced_at: '2026-01-25T12:50:08.530938'
+- slug: android-125-0-ru
+  language: ru
+  anki_id: 1769330953010
+  synced_at: '2026-01-25T12:50:08.533168'
+- slug: android-711-0-en
+  language: en
+- slug: android-711-0-ru
+  language: ru
+- slug: q-mvvm-pattern--android--medium-0-en
+  language: en
+- slug: q-mvvm-pattern--android--medium-0-ru
+  language: ru
+title: MVVM Pattern / Паттерн MVVM
+aliases:
+- Model-View-ViewModel
+- MVVM Pattern
+- Паттерн MVVM
 topic: android
-subtopics: [architecture-mvvm, coroutines, lifecycle]
+subtopics:
+- architecture-mvvm
+- coroutines
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-builder-pattern, c-ci-cd-patterns, c-command-pattern, c-dao-pattern, c-declarative-programming-patterns, c-decorator-pattern, c-factory-pattern, c-mvvm-pattern, c-viewmodel, q-what-is-viewmodel--android--medium]
+related:
+- c-builder-pattern
+- c-ci-cd-patterns
+- c-command-pattern
+- c-dao-pattern
+- c-declarative-programming-patterns
+- c-decorator-pattern
+- c-factory-pattern
+- c-mvvm-pattern
+- c-viewmodel
+- q-what-is-viewmodel--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-mvvm, android/coroutines, android/lifecycle, architecture-patterns, difficulty/medium, mvvm, viewmodel]
-
+tags:
+- android/architecture-mvvm
+- android/coroutines
+- android/lifecycle
+- architecture-patterns
+- difficulty/medium
+- mvvm
+- viewmodel
 ---
 # Вопрос (RU)
 

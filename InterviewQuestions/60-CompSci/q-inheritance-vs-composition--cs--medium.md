@@ -5,11 +5,11 @@ anki_cards:
 - slug: oop-001-0-en
   language: en
   anki_id: 1768454534763
-  synced_at: '2026-01-15T09:43:17.074151'
+  synced_at: '2026-01-25T13:01:16.902378'
 - slug: oop-001-0-ru
   language: ru
   anki_id: 1768454534791
-  synced_at: '2026-01-15T09:43:17.075761'
+  synced_at: '2026-01-25T13:01:16.903978'
 aliases:
 - Inheritance Vs Composition
 - Наследование против композиции

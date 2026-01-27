@@ -1,21 +1,50 @@
----\
+---
 id: android-316
-title: Why Is ViewModel Needed And What Happens In It / Зачем нужен ViewModel и что в нем происходит
-aliases: [ViewModel Purpose, ViewModel Responsibilities, Назначение ViewModel, Обязанности ViewModel]
+title: Why Is ViewModel Needed And What Happens In It / Зачем нужен ViewModel и что
+  в нем происходит
+aliases:
+- ViewModel Purpose
+- ViewModel Responsibilities
+- Назначение ViewModel
+- Обязанности ViewModel
 topic: android
-subtopics: [architecture-mvvm, lifecycle, ui-state]
+subtopics:
+- architecture-mvvm
+- lifecycle
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, c-lifecycle, c-mvvm, q-how-to-save-activity-state--android--medium, q-mvvm-pattern--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-what-is-viewmodel--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
+related:
+- c-compose-state
+- c-lifecycle
+- c-mvvm
+- q-how-to-save-activity-state--android--medium
+- q-mvvm-pattern--android--medium
+- q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+- q-what-is-viewmodel--android--medium
+- q-why-are-fragments-needed-if-there-is-activity--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, difficulty/medium, jetpack, mvvm, viewmodel]
-
----\
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- android/ui-state
+- difficulty/medium
+- jetpack
+- mvvm
+- viewmodel
+anki_cards:
+- slug: android-316-0-en
+  language: en
+- slug: android-316-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Зачем нужен `ViewModel` и что в нем происходит?

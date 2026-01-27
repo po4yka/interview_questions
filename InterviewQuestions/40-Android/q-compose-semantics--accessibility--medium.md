@@ -1,20 +1,41 @@
 ---
 id: android-acc-004
 title: Semantics in Jetpack Compose / Semantika v Jetpack Compose
-aliases: [Compose Semantics, Modifier.semantics, Semantika Compose]
+aliases:
+- Compose Semantics
+- Modifier.semantics
+- Semantika Compose
 topic: android
-subtopics: [accessibility, ui-compose]
+subtopics:
+- accessibility
+- ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-content-descriptions--accessibility--medium, q-talkback-support--accessibility--medium, q-testing-compose-ui--android--medium]
+related:
+- c-jetpack-compose
+- q-content-descriptions--accessibility--medium
+- q-talkback-support--accessibility--medium
+- q-testing-compose-ui--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/accessibility, android/ui-compose, difficulty/medium, accessibility, semantics, compose]
-
+tags:
+- android/accessibility
+- android/ui-compose
+- difficulty/medium
+- accessibility
+- semantics
+- compose
+anki_cards:
+- slug: android-acc-004-0-en
+  language: en
+- slug: android-acc-004-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Chto takoe Semantics v Jetpack Compose i kak ispol'zovat' Modifier.semantics dlya dostupnosti?

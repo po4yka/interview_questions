@@ -1,20 +1,42 @@
 ---
-id: android-404
-title: "Compose Testing Semantics / Семантика тестирования Compose"
-aliases: ["Compose Testing Semantics", "Семантика тестирования Compose"]
+id: android-test-004
+title: Compose Testing Semantics / Семантика тестирования Compose
+aliases:
+- Compose Testing Semantics
+- Семантика тестирования Compose
 topic: android
-subtopics: [testing-ui, ui-compose, testing]
+subtopics:
+- testing-ui
+- ui-compose
+- testing
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-testing, c-jetpack-compose, q-testing-compose-ui--android--medium, q-jetpack-compose-basics--android--medium]
+related:
+- c-testing
+- c-jetpack-compose
+- q-testing-compose-ui--android--medium
+- q-jetpack-compose-basics--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/testing-ui, android/ui-compose, difficulty/medium, compose, semantics, test-tags, accessibility]
-
+tags:
+- android/testing-ui
+- android/ui-compose
+- difficulty/medium
+- compose
+- semantics
+- test-tags
+- accessibility
+anki_cards:
+- slug: android-test-004-0-en
+  language: en
+- slug: android-test-004-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

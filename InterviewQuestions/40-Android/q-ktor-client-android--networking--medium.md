@@ -1,21 +1,41 @@
 ---
 id: android-746
-title: "Ktor Client on Android / Ktor Client на Android"
-aliases: ["Ktor Client on Android", "Ktor Client на Android"]
+title: Ktor Client on Android / Ktor Client на Android
+aliases:
+- Ktor Client on Android
+- Ktor Client на Android
 topic: android
-subtopics: [networking]
+subtopics:
+- networking
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-networking, q-network-resilience--networking--medium, q-http-caching--networking--medium]
+related:
+- c-networking
+- q-network-resilience--networking--medium
+- q-http-caching--networking--medium
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://ktor.io/docs/client-overview.html", "https://ktor.io/docs/client-engines.html"]
-tags: [android/networking, difficulty/medium, http-client, ktor, kotlin-multiplatform, serialization]
-
+sources:
+- https://ktor.io/docs/client-overview.html
+- https://ktor.io/docs/client-engines.html
+tags:
+- android/networking
+- difficulty/medium
+- http-client
+- ktor
+- kotlin-multiplatform
+- serialization
+anki_cards:
+- slug: android-746-0-en
+  language: en
+- slug: android-746-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

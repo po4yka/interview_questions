@@ -1,6 +1,6 @@
 ---
-id: android-721
-title: "Unidirectional Data Flow / Однонаправленный поток данных"
+id: android-arch-002
+title: Unidirectional Data Flow / Однонаправленный поток данных
 aliases:
 - UDF
 - Unidirectional Data Flow
@@ -26,13 +26,18 @@ related:
 created: 2026-01-23
 updated: 2026-01-23
 sources:
-- "https://developer.android.com/topic/architecture/ui-layer#udf"
-- "https://developer.android.com/jetpack/compose/state"
+- https://developer.android.com/topic/architecture/ui-layer#udf
+- https://developer.android.com/jetpack/compose/state
 tags:
 - android/architecture
 - android/state-management
 - difficulty/medium
 - unidirectional-data-flow
+anki_cards:
+- slug: android-arch-002-0-en
+  language: en
+- slug: android-arch-002-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

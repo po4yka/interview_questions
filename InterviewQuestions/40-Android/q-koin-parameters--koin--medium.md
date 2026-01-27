@@ -1,19 +1,38 @@
 ---
 id: android-koin-005
 title: Koin parametersOf / Параметры в Koin
-aliases: [Koin Parameters, parametersOf, Runtime Dependencies]
+aliases:
+- Koin Parameters
+- parametersOf
+- Runtime Dependencies
 topic: android
-subtopics: [di-koin, dependency-injection]
+subtopics:
+- di-koin
+- dependency-injection
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-koin-setup-modules--koin--medium, q-koin-inject-get--koin--medium, q-koin-viewmodel--koin--medium]
+related:
+- q-koin-setup-modules--koin--medium
+- q-koin-inject-get--koin--medium
+- q-koin-viewmodel--koin--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-koin, dependency-injection, difficulty/medium, koin]
+tags:
+- android/di-koin
+- dependency-injection
+- difficulty/medium
+- koin
+anki_cards:
+- slug: android-koin-005-0-en
+  language: en
+- slug: android-koin-005-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как передавать runtime-параметры в зависимости Koin с помощью parametersOf?

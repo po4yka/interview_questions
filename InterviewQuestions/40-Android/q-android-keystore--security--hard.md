@@ -28,6 +28,11 @@ related:
 sources:
 - https://developer.android.com/training/articles/keystore
 - https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec
+anki_cards:
+- slug: sec-010-0-en
+  language: en
+- slug: sec-010-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kak nastroit' KeyGenParameterSpec dlya maksimal'noj bezopasnosti s privyazkoj k biometrii i apparatnoj zashchitoj?

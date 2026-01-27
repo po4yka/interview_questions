@@ -1,21 +1,41 @@
----\
+---
 id: android-226
-title: "What Is Workmanager / Что такое WorkManager"
-aliases: ["What Is WorkManager", "Что такое WorkManager"]
+title: What Is Workmanager / Что такое WorkManager
+aliases:
+- What Is WorkManager
+- Что такое WorkManager
 topic: android
-subtopics: [background-execution, coroutines]
+subtopics:
+- background-execution
+- coroutines
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-background-tasks, c-coroutines, c-workmanager]
+related:
+- c-background-tasks
+- c-coroutines
+- c-workmanager
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/background-execution, android/coroutines, difficulty/medium, jetpack, scheduled-tasks, workmanager]
----\
+tags:
+- android/background-execution
+- android/coroutines
+- difficulty/medium
+- jetpack
+- scheduled-tasks
+- workmanager
+anki_cards:
+- slug: android-226-0-en
+  language: en
+- slug: android-226-0-ru
+  language: ru
+---
 # Вопрос (RU)
 > Что такое `WorkManager` и когда его следует использовать?
 

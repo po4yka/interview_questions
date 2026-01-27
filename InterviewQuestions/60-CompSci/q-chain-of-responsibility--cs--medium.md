@@ -32,11 +32,11 @@ anki_cards:
 - slug: dp-012-0-en
   language: en
   anki_id: 1768454033689
-  synced_at: '2026-01-15T09:43:17.085490'
+  synced_at: '2026-01-25T13:01:16.916234'
 - slug: dp-012-0-ru
   language: ru
   anki_id: 1768454033713
-  synced_at: '2026-01-15T09:43:17.087309'
+  synced_at: '2026-01-25T13:01:16.917561'
 ---
 # Вопрос (RU)
 > Что такое паттерн Chain of Responsibility? Когда и зачем его использовать?

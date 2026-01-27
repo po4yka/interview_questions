@@ -1,21 +1,42 @@
 ---
 id: android-mod-005
-title: "Build Time Optimization with Modularization / Оптимизация времени сборки через модуляризацию"
-aliases: ["Build Time Optimization", "Modularization Build Performance", "Ускорение сборки модуляризацией"]
+title: Build Time Optimization with Modularization / Оптимизация времени сборки через
+  модуляризацию
+aliases:
+- Build Time Optimization
+- Modularization Build Performance
+- Ускорение сборки модуляризацией
 topic: android
-subtopics: [modularization, gradle, build-optimization]
+subtopics:
+- modularization
+- gradle
+- build-optimization
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-module-types--modularization--medium, q-api-vs-implementation--modularization--medium]
+related:
+- c-android
+- q-module-types--modularization--medium
+- q-api-vs-implementation--modularization--medium
 created: 2026-01-23
 updated: 2026-01-23
 sources: []
-tags: [android/modularization, android/gradle, android/build-optimization, difficulty/medium, incremental-build]
-
+tags:
+- android/modularization
+- android/gradle
+- android/build-optimization
+- difficulty/medium
+- incremental-build
+anki_cards:
+- slug: android-mod-005-0-en
+  language: en
+- slug: android-mod-005-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

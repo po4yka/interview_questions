@@ -1,21 +1,41 @@
----\
+---
 id: android-422
-title: "Where Does The Repeated Call Of Composable Function Come From / Откуда берется повторный вызов Composable функции"
-aliases: ["Recomposition in Compose", "Where Does The Repeated Call Of Composable Function Come From", "Откуда берется повторный вызов Composable функции", "Рекомпозиция в Compose"]
+title: Where Does The Repeated Call Of Composable Function Come From / Откуда берется
+  повторный вызов Composable функции
+aliases:
+- Recomposition in Compose
+- Where Does The Repeated Call Of Composable Function Come From
+- Откуда берется повторный вызов Composable функции
+- Рекомпозиция в Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, q-how-does-jetpackcompose-work--android--medium]
+related:
+- c-compose-recomposition
+- q-how-does-jetpackcompose-work--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/ui-compose, android/ui-state, difficulty/medium, recomposition]
----\
+tags:
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
+- recomposition
+anki_cards:
+- slug: android-422-0-en
+  language: en
+- slug: android-422-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Откуда происходит повторный вызов composable функции в Jetpack Compose?

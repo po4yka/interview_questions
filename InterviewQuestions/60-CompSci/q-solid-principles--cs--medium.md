@@ -36,11 +36,11 @@ anki_cards:
 - slug: sd-002-0-en
   language: en
   anki_id: 1768455794995
-  synced_at: '2026-01-15T09:43:17.062772'
+  synced_at: '2026-01-25T13:01:16.891170'
 - slug: sd-002-0-ru
   language: ru
   anki_id: 1768455795019
-  synced_at: '2026-01-15T09:43:17.064792'
+  synced_at: '2026-01-25T13:01:16.893248'
 ---
 # Вопрос (RU)
 > Что такое принципы SOLID?

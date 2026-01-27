@@ -1,55 +1,53 @@
----id: android-295
+---
 id: android-714
 anki_cards:
-  - slug: android-295-0-en
-    front: "What is the difference between remember and rememberSaveable in Compose?"
-    back: |
-      **remember:**
-      - Survives recomposition only
-      - Lost on config change/process death
-      - No serialization overhead
-      - Use for: ephemeral state, expensive objects
-
-      **rememberSaveable:**
-      - Survives recomposition + config changes + process death
-      - Requires Bundle-compatible types or Saver
-      - ~1MB Bundle limit
-      - Use for: user input, selections, expanded/collapsed
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-295-0-ru
-    front: "В чём разница между remember и rememberSaveable в Compose?"
-    back: |
-      **remember:**
-      - Переживает только рекомпозицию
-      - Теряется при config change/смерти процесса
-      - Без накладных расходов на сериализацию
-      - Для: эфемерного состояния, дорогих объектов
-
-      **rememberSaveable:**
-      - Переживает рекомпозицию + config changes + смерть процесса
-      - Требует Bundle-совместимые типы или Saver
-      - Лимит Bundle ~1MB
-      - Для: пользовательского ввода, выбора, expanded/collapsed
-    tags:
-      - android_compose
-      - difficulty::medium
+- slug: android-295-0-en
+  language: en
+  anki_id: 1768419459362
+  synced_at: '2026-01-14T23:38:11.557621'
+- slug: android-295-0-ru
+  language: ru
+  anki_id: 1768419459312
+  synced_at: '2026-01-14T23:38:11.581253'
+- slug: android-714-0-en
+  language: en
+- slug: android-714-0-ru
+  language: ru
+- slug: q-remember-vs-remembersaveable-compose--android--medium-0-en
+  language: en
+- slug: q-remember-vs-remembersaveable-compose--android--medium-0-ru
+  language: ru
 title: Remember vs RememberSaveable in Compose / Remember vs RememberSaveable в Compose
-aliases: [Remember vs RememberSaveable in Compose, Remember vs RememberSaveable в Compose]
+aliases:
+- Remember vs RememberSaveable in Compose
+- Remember vs RememberSaveable в Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-recomposition, q-compose-core-components--android--medium, q-compose-remember-derived-state--android--medium, q-handler-looper-main-thread--android--medium, q-remember-remembersaveable--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related:
+- c-compose-recomposition
+- c-compose-state
+- c-recomposition
+- q-compose-core-components--android--medium
+- q-compose-remember-derived-state--android--medium
+- q-handler-looper-main-thread--android--medium
+- q-remember-remembersaveable--android--medium
+- q-what-are-the-most-important-components-of-compose--android--medium
 created: 2023-10-15
 updated: 2025-11-11
-tags: [android/ui-compose, android/ui-state, difficulty/medium]
-
+tags:
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
 ---
 # Вопрос (RU)
 > Remember vs RememberSaveable в Compose

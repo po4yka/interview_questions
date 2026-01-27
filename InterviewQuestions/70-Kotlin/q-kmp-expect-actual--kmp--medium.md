@@ -1,21 +1,43 @@
 ---
 id: kotlin-kmp-001
-title: "Expect/Actual Mechanism / Механизм expect/actual"
-aliases: [KMP Expect Actual, Platform Specific Code, Kotlin Multiplatform Declarations]
+title: Expect/Actual Mechanism / Механизм expect/actual
+aliases:
+- KMP Expect Actual
+- Platform Specific Code
+- Kotlin Multiplatform Declarations
 topic: kotlin
-subtopics: [kmp, multiplatform, platform-specific]
+subtopics:
+- kmp
+- multiplatform
+- platform-specific
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, expect-actual, difficulty/medium]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- expect-actual
+- difficulty/medium
+anki_cards:
+- slug: kotlin-kmp-001-0-en
+  language: en
+  anki_id: 1769344148440
+  synced_at: '2026-01-25T16:29:08.491820'
+- slug: kotlin-kmp-001-0-ru
+  language: ru
+  anki_id: 1769344148490
+  synced_at: '2026-01-25T16:29:08.493639'
 ---
-
 # Question (EN)
 > What is the expect/actual mechanism in Kotlin Multiplatform and how does it work?
 

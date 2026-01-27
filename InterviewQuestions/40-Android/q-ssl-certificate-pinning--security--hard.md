@@ -29,6 +29,11 @@ related:
 sources:
 - https://developer.android.com/privacy-and-security/security-config
 - https://square.github.io/okhttp/features/https/
+anki_cards:
+- slug: sec-003-0-en
+  language: en
+- slug: sec-003-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Chto takoe certificate pinning i kak ego realizovat' v Android s OkHttp?

@@ -1,20 +1,41 @@
 ---
 id: android-dagger-003
-title: Dagger Subcomponents and Component Dependencies / Subcomponents и Component Dependencies в Dagger
-aliases: [Dagger Subcomponents, Component Dependencies, Subcomponents]
+title: Dagger Subcomponents and Component Dependencies / Subcomponents и Component
+  Dependencies в Dagger
+aliases:
+- Dagger Subcomponents
+- Component Dependencies
+- Subcomponents
 topic: android
-subtopics: [dagger, di-dagger]
+subtopics:
+- dagger
+- di-dagger
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-dagger-component-module--dagger--medium, q-dagger-scopes-custom--dagger--hard]
+related:
+- c-dependency-injection
+- q-dagger-component-module--dagger--medium
+- q-dagger-scopes-custom--dagger--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-dagger, dependency-injection, difficulty/hard, dagger, subcomponent, component-dependencies]
-
+tags:
+- android/di-dagger
+- dependency-injection
+- difficulty/hard
+- dagger
+- subcomponent
+- component-dependencies
+anki_cards:
+- slug: android-dagger-003-0-en
+  language: en
+- slug: android-dagger-003-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > В чём разница между Subcomponents и Component Dependencies в Dagger?

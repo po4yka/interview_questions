@@ -1,36 +1,45 @@
 ---
 id: kotlin-flow-005
-title: "Flow Exception Handling / Обработка исключений в Flow"
+title: Flow Exception Handling / Обработка исключений в Flow
 aliases:
-  - Flow Exception Handling
-  - catch retry retryWhen
-  - Обработка ошибок Flow
+- Flow Exception Handling
+- catch retry retryWhen
+- Обработка ошибок Flow
 topic: kotlin
 subtopics:
-  - coroutines
-  - flow
-  - error-handling
+- coroutines
+- flow
+- error-handling
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: internal
 status: draft
 moc: moc-kotlin
 related:
-  - c-kotlin
-  - c-flow
-  - q-catch-operator-flow--kotlin--medium
+- c-kotlin
+- c-flow
+- q-catch-operator-flow--kotlin--medium
 created: 2026-01-23
 updated: 2026-01-23
 tags:
-  - coroutines
-  - difficulty/medium
-  - flow
-  - kotlin
-  - error-handling
+- coroutines
+- difficulty/medium
+- flow
+- kotlin
+- error-handling
+anki_cards:
+- slug: kotlin-flow-005-0-en
+  language: en
+  anki_id: 1769344143140
+  synced_at: '2026-01-25T16:29:03.192175'
+- slug: kotlin-flow-005-0-ru
+  language: ru
+  anki_id: 1769344143190
+  synced_at: '2026-01-25T16:29:03.193907'
 ---
 # Vopros (RU)
 > Как обрабатывать исключения в Flow? Объясните операторы `catch`, `retry`, `retryWhen`.

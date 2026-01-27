@@ -1,5 +1,5 @@
 ---
-id: android-748
+id: android-compose-002
 title: Compose Performance Tools / Инструменты анализа производительности Compose
 aliases:
 - Compose Performance Tools
@@ -36,6 +36,11 @@ tags:
 sources:
 - https://developer.android.com/develop/ui/compose/performance
 - https://developer.android.com/develop/ui/compose/tooling/layout-inspector
+anki_cards:
+- slug: android-compose-002-0-en
+  language: en
+- slug: android-compose-002-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Какие инструменты используются для анализа производительности Jetpack Compose? Как интерпретировать отчёты компилятора и данные Layout Inspector?

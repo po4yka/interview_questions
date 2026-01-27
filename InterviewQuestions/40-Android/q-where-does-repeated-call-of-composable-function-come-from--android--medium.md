@@ -1,4 +1,16 @@
----id: android-327
+---
+anki_cards:
+- slug: android-740-0-en
+  language: en
+- slug: android-740-0-ru
+  language: ru
+- slug: q-where-does-repeated-call-of-composable-function-come-from--android--medium-0-en
+  language: en
+- slug: q-where-does-repeated-call-of-composable-function-come-from--android--medium-0-ru
+  language: ru
+---
+
+id: android-327
 id: android-740
 title: Where Does Repeated Call Of Composable Function Come From / Откуда берется
   повторный вызов Composable функции

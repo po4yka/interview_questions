@@ -1,21 +1,43 @@
 ---
 id: android-cicd-004
-title: "Firebase App Distribution and Internal Testing / Firebase App Distribution и Внутреннее Тестирование"
-aliases: ["Firebase App Distribution", "Firebase App Distribution и Внутреннее Тестирование"]
+title: Firebase App Distribution and Internal Testing / Firebase App Distribution
+  и Внутреннее Тестирование
+aliases:
+- Firebase App Distribution
+- Firebase App Distribution и Внутреннее Тестирование
 topic: android
-subtopics: [cicd, app-distribution, testing]
+subtopics:
+- cicd
+- app-distribution
+- testing
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-github-actions-android--cicd--medium, q-play-store-deployment--cicd--medium, q-signing-in-ci--cicd--hard]
+related:
+- q-github-actions-android--cicd--medium
+- q-play-store-deployment--cicd--medium
+- q-signing-in-ci--cicd--hard
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://firebase.google.com/docs/app-distribution", "https://developer.android.com/distribute/best-practices/launch/test-tracks"]
-tags: [android/cicd, android/app-distribution, difficulty/medium, firebase, testing]
-
+sources:
+- https://firebase.google.com/docs/app-distribution
+- https://developer.android.com/distribute/best-practices/launch/test-tracks
+tags:
+- android/cicd
+- android/app-distribution
+- difficulty/medium
+- firebase
+- testing
+anki_cards:
+- slug: android-cicd-004-0-en
+  language: en
+- slug: android-cicd-004-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

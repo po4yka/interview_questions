@@ -1,21 +1,49 @@
----\
+---
 id: android-382
 title: Android Components / Компоненты Android
-aliases: [Android Components, Компоненты Android]
+aliases:
+- Android Components
+- Компоненты Android
 topic: android
-subtopics: [activity, broadcast-receiver, service]
+subtopics:
+- activity
+- broadcast-receiver
+- service
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, c-broadcast-receiver, q-android-components-besides-activity--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-is-broadcastreceiver--android--easy, q-what-unifies-android-components--android--easy, q-what-unites-the-main-components-of-an-android-application--android--medium]
+related:
+- c-android-components
+- c-broadcast-receiver
+- q-android-components-besides-activity--android--easy
+- q-what-is-activity-and-what-is-it-used-for--android--medium
+- q-what-is-broadcastreceiver--android--easy
+- q-what-unifies-android-components--android--easy
+- q-what-unites-the-main-components-of-an-android-application--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/broadcast-receiver, android/service, components, difficulty/easy, intent]
-
----\
+tags:
+- android/activity
+- android/broadcast-receiver
+- android/service
+- components
+- difficulty/easy
+- intent
+anki_cards:
+- slug: android-382-0-en
+  language: en
+  anki_id: 1769330096955
+  synced_at: '2026-01-25T13:02:24.362755'
+- slug: android-382-0-ru
+  language: ru
+  anki_id: 1769330096974
+  synced_at: '2026-01-25T13:02:24.364665'
+---
 # Вопрос (RU)
 > Компоненты Android
 

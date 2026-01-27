@@ -1,35 +1,44 @@
 ---
 id: kotlin-flow-003
-title: "Flow Operators / Операторы Flow"
+title: Flow Operators / Операторы Flow
 aliases:
-  - Flow Operators
-  - map filter combine zip flatMapLatest
-  - Операторы Flow
+- Flow Operators
+- map filter combine zip flatMapLatest
+- Операторы Flow
 topic: kotlin
 subtopics:
-  - coroutines
-  - flow
+- coroutines
+- flow
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: internal
 status: draft
 moc: moc-kotlin
 related:
-  - c-kotlin
-  - c-flow
-  - q-flow-operators-map-filter--kotlin--medium
+- c-kotlin
+- c-flow
+- q-flow-operators-map-filter--kotlin--medium
 created: 2026-01-23
 updated: 2026-01-23
 tags:
-  - coroutines
-  - difficulty/medium
-  - flow
-  - kotlin
-  - operators
+- coroutines
+- difficulty/medium
+- flow
+- kotlin
+- operators
+anki_cards:
+- slug: kotlin-flow-003-0-en
+  language: en
+  anki_id: 1769344144941
+  synced_at: '2026-01-25T16:29:04.992215'
+- slug: kotlin-flow-003-0-ru
+  language: ru
+  anki_id: 1769344144990
+  synced_at: '2026-01-25T16:29:04.994280'
 ---
 # Vopros (RU)
 > Какие ключевые операторы Flow существуют? Объясните `map`, `filter`, `combine`, `zip`, `flatMapLatest`, `flatMapMerge`.

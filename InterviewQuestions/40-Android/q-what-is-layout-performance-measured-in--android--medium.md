@@ -1,4 +1,16 @@
----id: android-249
+---
+anki_cards:
+- slug: android-737-0-en
+  language: en
+- slug: android-737-0-ru
+  language: ru
+- slug: q-what-is-layout-performance-measured-in--android--medium-0-en
+  language: en
+- slug: q-what-is-layout-performance-measured-in--android--medium-0-ru
+  language: ru
+---
+
+id: android-249
 id: android-737
 title: "What Is Layout Performance Measured In / В чем измеряется производительность layout"
 aliases: ["Layout Performance Measurement", "Измерение производительности layout"]

@@ -5,11 +5,11 @@ anki_cards:
 - slug: dp-009-0-en
   language: en
   anki_id: 1768454534215
-  synced_at: '2026-01-15T09:41:02.855618'
+  synced_at: '2026-01-25T13:01:16.861562'
 - slug: dp-009-0-ru
   language: ru
   anki_id: 1768454534239
-  synced_at: '2026-01-15T09:41:02.858248'
+  synced_at: '2026-01-25T13:01:16.863439'
 aliases:
 - Facade Pattern
 - Паттерн фасад

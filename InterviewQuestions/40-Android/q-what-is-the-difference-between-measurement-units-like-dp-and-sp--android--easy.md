@@ -1,21 +1,43 @@
----\
+---
 id: android-264
-title: "Measurement Units: dp vs sp / Единицы измерения: dp vs sp"
-aliases: ["Measurement Units: dp vs sp", "Единицы измерения: dp vs sp"]
+title: 'Measurement Units: dp vs sp / Единицы измерения: dp vs sp'
+aliases:
+- 'Measurement Units: dp vs sp'
+- 'Единицы измерения: dp vs sp'
 topic: android
-subtopics: [ui-accessibility, ui-widgets]
+subtopics:
+- ui-accessibility
+- ui-widgets
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-accessibility, c-android-resources, c-android-views]
+related:
+- c-accessibility
+- c-android-resources
+- c-android-views
 created: 2025-10-15
 updated: 2025-11-10
-tags: [accessibility, android/ui-accessibility, android/ui-widgets, difficulty/easy, dp, sp, ui]
-sources: ["https://developer.android.com/guide/topics/resources/more-resources#Dimension"]
----\
+tags:
+- accessibility
+- android/ui-accessibility
+- android/ui-widgets
+- difficulty/easy
+- dp
+- sp
+- ui
+sources:
+- https://developer.android.com/guide/topics/resources/more-resources#Dimension
+anki_cards:
+- slug: android-264-0-en
+  language: en
+- slug: android-264-0-ru
+  language: ru
+---
 # Вопрос (RU)
 > В чем разница между единицами измерения dp и sp?
 

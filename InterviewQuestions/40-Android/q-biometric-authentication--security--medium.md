@@ -28,6 +28,11 @@ related:
 sources:
 - https://developer.android.com/identity/sign-in/biometric-auth
 - https://developer.android.com/reference/androidx/biometric/BiometricPrompt
+anki_cards:
+- slug: sec-008-0-en
+  language: en
+- slug: sec-008-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kak realizovat' biometricheskuyu autentifikaciyu s BiometricPrompt i CryptoObject?

@@ -1,21 +1,41 @@
 ---
 id: android-mod-004
-title: "Designing Module Dependency Graph / Проектирование графа зависимостей модулей"
-aliases: ["Module Dependency Graph", "Dependency Graph Design", "Граф зависимостей модулей"]
+title: Designing Module Dependency Graph / Проектирование графа зависимостей модулей
+aliases:
+- Module Dependency Graph
+- Dependency Graph Design
+- Граф зависимостей модулей
 topic: android
-subtopics: [modularization, architecture, gradle]
+subtopics:
+- modularization
+- architecture
+- gradle
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-module-types--modularization--medium, q-api-vs-implementation--modularization--medium]
+related:
+- c-android
+- q-module-types--modularization--medium
+- q-api-vs-implementation--modularization--medium
 created: 2026-01-23
 updated: 2026-01-23
 sources: []
-tags: [android/modularization, android/architecture, android/gradle, difficulty/hard, dependency-graph]
-
+tags:
+- android/modularization
+- android/architecture
+- android/gradle
+- difficulty/hard
+- dependency-graph
+anki_cards:
+- slug: android-mod-004-0-en
+  language: en
+- slug: android-mod-004-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

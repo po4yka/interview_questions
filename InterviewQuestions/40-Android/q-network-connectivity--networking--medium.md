@@ -1,21 +1,42 @@
 ---
 id: android-754
-title: "Network Connectivity on Android / Сетевое подключение на Android"
-aliases: ["Network Connectivity on Android", "Сетевое подключение на Android"]
+title: Network Connectivity on Android / Сетевое подключение на Android
+aliases:
+- Network Connectivity on Android
+- Сетевое подключение на Android
 topic: android
-subtopics: [networking]
+subtopics:
+- networking
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-networking, q-network-operations-android--android--medium, q-data-sync-unstable-network--android--hard]
+related:
+- c-networking
+- q-network-operations-android--android--medium
+- q-data-sync-unstable-network--android--hard
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://developer.android.com/training/monitoring-device-state/connectivity-status-type", "https://developer.android.com/reference/android/net/ConnectivityManager", "https://developer.android.com/training/basics/network-ops/reading-network-state"]
-tags: [android/networking, difficulty/medium, connectivity-manager, network-callback, network-state, flow]
-
+sources:
+- https://developer.android.com/training/monitoring-device-state/connectivity-status-type
+- https://developer.android.com/reference/android/net/ConnectivityManager
+- https://developer.android.com/training/basics/network-ops/reading-network-state
+tags:
+- android/networking
+- difficulty/medium
+- connectivity-manager
+- network-callback
+- network-state
+- flow
+anki_cards:
+- slug: android-754-0-en
+  language: en
+- slug: android-754-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

@@ -1,38 +1,47 @@
 ---
 id: kotlin-flow-008
-title: "Flow vs LiveData / Flow vs LiveData"
+title: Flow vs LiveData / Flow vs LiveData
 aliases:
-  - Flow vs LiveData
-  - LiveData Migration
-  - Flow LiveData Comparison
+- Flow vs LiveData
+- LiveData Migration
+- Flow LiveData Comparison
 topic: kotlin
 subtopics:
-  - coroutines
-  - flow
-  - android
-  - livedata
+- coroutines
+- flow
+- android
+- livedata
 question_kind: comparison
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: internal
 status: draft
 moc: moc-kotlin
 related:
-  - c-kotlin
-  - c-flow
-  - q-stateflow-vs-sharedflow--flow--medium
+- c-kotlin
+- c-flow
+- q-stateflow-vs-sharedflow--flow--medium
 created: 2026-01-23
 updated: 2026-01-23
 tags:
-  - coroutines
-  - difficulty/medium
-  - flow
-  - kotlin
-  - android
-  - livedata
+- coroutines
+- difficulty/medium
+- flow
+- kotlin
+- android
+- livedata
+anki_cards:
+- slug: kotlin-flow-008-0-en
+  language: en
+  anki_id: 1769344146666
+  synced_at: '2026-01-25T16:29:06.717065'
+- slug: kotlin-flow-008-0-ru
+  language: ru
+  anki_id: 1769344146715
+  synced_at: '2026-01-25T16:29:06.718313'
 ---
 # Vopros (RU)
 > Чем Flow отличается от LiveData? Какие стратегии миграции существуют?

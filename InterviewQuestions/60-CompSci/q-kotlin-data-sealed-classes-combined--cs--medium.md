@@ -1,58 +1,35 @@
----id: lang-210
-title: "Kotlin Data Sealed Classes Combined / Kotlin Data и Sealed классы вместе"
+---
+id: lang-210
+title: Kotlin Data Sealed Classes Combined / Kotlin Data и Sealed классы вместе
 aliases: []
 topic: cs
-subtopics: [types]
+subtopics:
+- types
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-kotlin, q-channels-basics-types--kotlin--medium]
+related:
+- c-computer-science
+- c-kotlin
+- q-channels-basics-types--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [difficulty/medium]
+tags:
+- difficulty/medium
 anki_cards:
 - slug: lang-210-0-en
-  front: |
-    How do data classes and sealed classes work together in Kotlin?
-  back: |
-    **Data classes**: Auto-generate `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`.
-    
-    **Sealed classes**: Restricted class hierarchies - all subclasses known at compile time.
-    
-    **Combined**: Type-safe state hierarchies with exhaustive `when` expressions.
-    
-    ```kotlin
-    sealed class Result<T> {
-      data class Success<T>(val data: T): Result<T>()
-      data class Error(val msg: String): Result<Nothing>()
-    }
-    ```
   language: en
-  difficulty: 0.5
-  tags: [cs_types, difficulty::medium]
+  anki_id: 1769343671590
+  synced_at: '2026-01-25T16:21:11.692022'
 - slug: lang-210-0-ru
-  front: |
-    Как data-классы и sealed-классы работают вместе в Kotlin?
-  back: |
-    **Data-классы**: Автогенерация `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`.
-    
-    **Sealed-классы**: Ограниченные иерархии - все подклассы известны компилятору.
-    
-    **Вместе**: Типобезопасные иерархии состояний с исчерпывающим `when`.
-    
-    ```kotlin
-    sealed class Result<T> {
-      data class Success<T>(val data: T): Result<T>()
-      data class Error(val msg: String): Result<Nothing>()
-    }
-    ```
   language: ru
-  difficulty: 0.5
-  tags: [cs_types, difficulty::medium]
-
+  anki_id: 1769343671689
+  synced_at: '2026-01-25T16:21:11.694498'
 ---
 # Вопрос (RU)
 > Расскажи про data классы и sealed классы и как их сочетать

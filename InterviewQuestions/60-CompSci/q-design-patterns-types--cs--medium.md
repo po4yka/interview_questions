@@ -5,11 +5,11 @@ anki_cards:
 - slug: dp-010-0-en
   language: en
   anki_id: 1768454532913
-  synced_at: '2026-01-15T09:41:02.803453'
+  synced_at: '2026-01-25T13:01:16.820256'
 - slug: dp-010-0-ru
   language: ru
   anki_id: 1768454532939
-  synced_at: '2026-01-15T09:41:02.805770'
+  synced_at: '2026-01-25T13:01:16.822453'
 aliases:
 - Design Patterns Types
 - Типы паттернов проектирования

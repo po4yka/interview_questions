@@ -1,21 +1,46 @@
----\
+---
 id: android-239
 title: ViewGroup vs View Differences / Различия ViewGroup и View
-aliases: [ViewGroup vs View, Различия ViewGroup и View]
+aliases:
+- ViewGroup vs View
+- Различия ViewGroup и View
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-android-views, q-custom-view-attributes--android--medium, q-viewmodel-pattern--android--easy, q-what-does-viewgroup-inherit-from--android--easy, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- c-android
+- c-android-views
+- q-custom-view-attributes--android--medium
+- q-viewmodel-pattern--android--easy
+- q-what-does-viewgroup-inherit-from--android--easy
+- q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/ui-views, difficulty/easy, view, view-hierarchy, viewgroup]
-
----\
+tags:
+- android/ui-views
+- difficulty/easy
+- view
+- view-hierarchy
+- viewgroup
+anki_cards:
+- slug: android-239-0-en
+  language: en
+  anki_id: 1769330074530
+  synced_at: '2026-01-25T13:02:09.713127'
+- slug: android-239-0-ru
+  language: ru
+  anki_id: 1769330074549
+  synced_at: '2026-01-25T13:02:09.715750'
+---
 # Вопрос (RU)
 > Различия `ViewGroup` и `View`
 

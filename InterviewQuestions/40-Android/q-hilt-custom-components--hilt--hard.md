@@ -1,20 +1,41 @@
 ---
 id: android-hilt-010
 title: Hilt Custom Components / Кастомные компоненты Hilt
-aliases: [Hilt Custom Components, Custom Component Hierarchy, DefineComponent, Custom Scopes Hilt]
+aliases:
+- Hilt Custom Components
+- Custom Component Hierarchy
+- DefineComponent
+- Custom Scopes Hilt
 topic: android
-subtopics: [di-hilt, architecture]
+subtopics:
+- di-hilt
+- architecture
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-scopes--hilt--hard, q-hilt-modules-provides--hilt--medium, q-hilt-entry-points--hilt--hard]
+related:
+- q-hilt-scopes--hilt--hard
+- q-hilt-modules-provides--hilt--medium
+- q-hilt-entry-points--hilt--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/architecture, difficulty/hard, hilt, custom-components, dependency-injection]
-
+tags:
+- android/di-hilt
+- android/architecture
+- difficulty/hard
+- hilt
+- custom-components
+- dependency-injection
+anki_cards:
+- slug: android-hilt-010-0-en
+  language: en
+- slug: android-hilt-010-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как создавать кастомные компоненты и scopes в Hilt? Когда это необходимо и как правильно организовать иерархию?

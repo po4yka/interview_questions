@@ -36,11 +36,11 @@ anki_cards:
 - slug: cs-006-0-en
   language: en
   anki_id: 1768454343989
-  synced_at: '2026-01-15T09:43:17.097928'
+  synced_at: '2026-01-25T13:01:16.926749'
 - slug: cs-006-0-ru
   language: ru
   anki_id: 1768454344014
-  synced_at: '2026-01-15T09:43:17.099595'
+  synced_at: '2026-01-25T13:01:16.927885'
 ---
 # Вопрос (RU)
 > В чем разница между Default и IO dispatcher? Когда использовать каждый из них?

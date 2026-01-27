@@ -1,21 +1,45 @@
 ---
 id: kotlin-kmp-005
-title: "KMP Networking with Ktor / Работа с сетью в KMP через Ktor"
-aliases: [Ktor KMP, Shared Networking, Cross-Platform HTTP Client]
+title: KMP Networking with Ktor / Работа с сетью в KMP через Ktor
+aliases:
+- Ktor KMP
+- Shared Networking
+- Cross-Platform HTTP Client
 topic: kotlin
-subtopics: [kmp, multiplatform, networking, ktor]
+subtopics:
+- kmp
+- multiplatform
+- networking
+- ktor
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, ktor, networking, difficulty/medium]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- ktor
+- networking
+- difficulty/medium
+anki_cards:
+- slug: kotlin-kmp-005-0-en
+  language: en
+  anki_id: 1769344151115
+  synced_at: '2026-01-25T16:29:11.166816'
+- slug: kotlin-kmp-005-0-ru
+  language: ru
+  anki_id: 1769344151165
+  synced_at: '2026-01-25T16:29:11.169020'
 ---
-
 # Question (EN)
 > How do you implement shared networking in Kotlin Multiplatform using Ktor?
 

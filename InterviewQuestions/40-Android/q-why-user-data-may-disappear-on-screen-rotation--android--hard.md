@@ -1,22 +1,42 @@
----\
+---
 id: android-417
-title: "Why User Data May Disappear On Screen Rotation / Почему данные пользователя могут пропасть при повороте экрана"
-aliases: ["Why User Data May Disappear On Screen Rotation", "Почему данные пользователя могут пропасть при повороте экрана"]
+title: Why User Data May Disappear On Screen Rotation / Почему данные пользователя
+  могут пропасть при повороте экрана
+aliases:
+- Why User Data May Disappear On Screen Rotation
+- Почему данные пользователя могут пропасть при повороте экрана
 topic: android
-subtopics: [activity, architecture-mvvm, lifecycle]
+subtopics:
+- activity
+- architecture-mvvm
+- lifecycle
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-viewmodel]
+related:
+- c-activity-lifecycle
+- c-viewmodel
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/activity, android/architecture-mvvm, android/lifecycle, configuration-change, difficulty/hard, state-preservation]
-
----\
+tags:
+- android/activity
+- android/architecture-mvvm
+- android/lifecycle
+- configuration-change
+- difficulty/hard
+- state-preservation
+anki_cards:
+- slug: android-417-0-en
+  language: en
+- slug: android-417-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Почему пользовательские данные могут исчезнуть при повороте экрана?

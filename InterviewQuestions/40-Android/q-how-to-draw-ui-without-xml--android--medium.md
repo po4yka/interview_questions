@@ -1,70 +1,63 @@
----id: android-240
+---
 id: android-701
 anki_cards:
-  - slug: android-240-0-en
-    front: "Compare Jetpack Compose vs Programmatic Views for building UI without XML"
-    back: |
-      | Aspect | Compose | Programmatic Views |
-      |--------|---------|-------------------|
-      | **Syntax** | Declarative | Imperative |
-      | **State** | Built-in reactive | Manual handling |
-      | **Preview** | `@Preview` support | No preview |
-      | **Boilerplate** | Less | More |
-
-      **Compose example:**
-      ```kotlin
-      setContent { Text("Hello") }
-      ```
-
-      **Views example:**
-      ```kotlin
-      val tv = TextView(this)
-      setContentView(tv)
-      ```
-    tags:
-      - android_compose
-      - android_views
-      - difficulty::medium
-  - slug: android-240-0-ru
-    front: "Сравните Jetpack Compose и программные Views для создания UI без XML"
-    back: |
-      | Аспект | Compose | Программные Views |
-      |--------|---------|-------------------|
-      | **Синтаксис** | Декларативный | Императивный |
-      | **Состояние** | Встроенное реактивное | Ручное управление |
-      | **Превью** | Поддержка `@Preview` | Нет превью |
-      | **Шаблонный код** | Меньше | Больше |
-
-      **Compose пример:**
-      ```kotlin
-      setContent { Text("Hello") }
-      ```
-
-      **Views пример:**
-      ```kotlin
-      val tv = TextView(this)
-      setContentView(tv)
-      ```
-    tags:
-      - android_compose
-      - android_views
-      - difficulty::medium
+- slug: android-240-0-en
+  language: en
+  anki_id: 1769330971988
+  synced_at: '2026-01-25T12:50:09.205111'
+- slug: android-240-0-ru
+  language: ru
+  anki_id: 1769330972010
+  synced_at: '2026-01-25T12:50:09.206629'
+- slug: android-701-0-en
+  language: en
+- slug: android-701-0-ru
+  language: ru
+- slug: q-how-to-draw-ui-without-xml--android--medium-0-en
+  language: en
+- slug: q-how-to-draw-ui-without-xml--android--medium-0-ru
+  language: ru
 title: How To Draw UI Without XML / Как рисовать UI без XML
-aliases: [Drawing UI without XML, Jetpack Compose UI, Programmatic UI, Программный UI, Рисование UI без XML]
+aliases:
+- Drawing UI without XML
+- Jetpack Compose UI
+- Programmatic UI
+- Программный UI
+- Рисование UI без XML
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics:
+- ui-compose
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-jetpack-compose, c-recomposition, c-wear-compose, q-android-manifest-file--android--easy, q-dagger-build-time-optimization--android--medium, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-how-to-draw-ui-without-xml--android--easy, q-how-to-start-drawing-ui-in-android--android--easy, q-testing-compose-ui--android--medium]
+related:
+- c-compose-recomposition
+- c-compose-state
+- c-jetpack-compose
+- c-recomposition
+- c-wear-compose
+- q-android-manifest-file--android--easy
+- q-dagger-build-time-optimization--android--medium
+- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+- q-how-to-draw-ui-without-xml--android--easy
+- q-how-to-start-drawing-ui-in-android--android--easy
+- q-testing-compose-ui--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/ui-compose, android/ui-views, difficulty/medium, programmatic-views, ui]
-
+tags:
+- android
+- android/ui-compose
+- android/ui-views
+- difficulty/medium
+- programmatic-views
+- ui
 ---
 # Вопрос (RU)
 

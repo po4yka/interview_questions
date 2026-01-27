@@ -1,21 +1,45 @@
----\
+---
 id: android-232
 title: DiffUtil / Компонент DiffUtil
-aliases: [DiffUtil, Компонент DiffUtil]
+aliases:
+- DiffUtil
+- Компонент DiffUtil
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-recyclerview-diffutil-advanced--android--medium, q-what-is-known-about-recyclerview--android--easy, q-what-layout-allows-overlapping-objects--android--easy, q-why-diffutil-needed--android--medium, q-why-use-diffutil--android--medium]
+related:
+- q-recyclerview-diffutil-advanced--android--medium
+- q-what-is-known-about-recyclerview--android--easy
+- q-what-layout-allows-overlapping-objects--android--easy
+- q-why-diffutil-needed--android--medium
+- q-why-use-diffutil--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/medium, diffutil, optimization, performance, recyclerview]
-
----\
+tags:
+- android/ui-views
+- difficulty/medium
+- diffutil
+- optimization
+- performance
+- recyclerview
+anki_cards:
+- slug: android-232-0-en
+  language: en
+  anki_id: 1769330073578
+  synced_at: '2026-01-25T13:02:28.938168'
+- slug: android-232-0-ru
+  language: ru
+  anki_id: 1769330073599
+  synced_at: '2026-01-25T13:02:28.940654'
+---
 # Вопрос (RU)
 
 > Зачем нужен `DiffUtil`?

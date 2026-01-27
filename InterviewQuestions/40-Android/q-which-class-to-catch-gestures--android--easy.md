@@ -1,4 +1,16 @@
----id: android-149
+---
+anki_cards:
+- slug: android-743-0-en
+  language: en
+- slug: android-743-0-ru
+  language: ru
+- slug: q-which-class-to-catch-gestures--android--easy-0-en
+  language: en
+- slug: q-which-class-to-catch-gestures--android--easy-0-ru
+  language: ru
+---
+
+id: android-149
 id: android-743
 title: Which Class To Catch Gestures / Какой класс для ловли жестов
 aliases: [Which Class To Catch Gestures, Какой класс для ловли жестов]

@@ -1,22 +1,46 @@
----\
+---
 id: android-432
-title: "Vector Graphics Animations / Анимации векторной графики"
-aliases: ["Vector Graphics Animations", "Анимации векторной графики"]
+title: Vector Graphics Animations / Анимации векторной графики
+aliases:
+- Vector Graphics Animations
+- Анимации векторной графики
 topic: android
-subtopics: [performance-rendering, ui-animation, ui-graphics]
+subtopics:
+- performance-rendering
+- ui-animation
+- ui-graphics
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-graphics, c-animation-framework, q-animated-visibility-vs-content--android--medium]
+related:
+- c-android-graphics
+- c-animation-framework
+- q-animated-visibility-vs-content--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/performance-rendering, android/ui-animation, android/ui-graphics, animated-vector-drawable, difficulty/medium, vector-graphics]
-
----\
+tags:
+- android/performance-rendering
+- android/ui-animation
+- android/ui-graphics
+- animated-vector-drawable
+- difficulty/medium
+- vector-graphics
+anki_cards:
+- slug: android-432-0-ru
+  language: ru
+  anki_id: 1768420767613
+  synced_at: '2026-01-14 23:59:27.622232'
+- slug: android-432-0-en
+  language: en
+  anki_id: 1768420767573
+  synced_at: '2026-01-14 23:59:27.578571'
+---
 # Вопрос (RU)
 
 > Как работать с векторной графикой и `AnimatedVectorDrawable` в Android? Каковы лучшие практики для импорта SVG, морфинга путей и оптимизации производительности?

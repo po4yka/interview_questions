@@ -1,22 +1,38 @@
----\
+---
 id: android-390
-title: "Why Use Fragments When We Have Activities / Зачем использовать Fragment когда есть Activity"
-aliases: ["Why Use Fragments When We Have Activities", "Зачем использовать Fragment когда есть Activity"]
+title: Why Use Fragments When We Have Activities / Зачем использовать Fragment когда
+  есть Activity
+aliases:
+- Why Use Fragments When We Have Activities
+- Зачем использовать Fragment когда есть Activity
 topic: android
-subtopics: [activity, fragment]
+subtopics:
+- activity
+- fragment
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, q-fragment-vs-activity-lifecycle--android--medium]
+related:
+- c-activity-lifecycle
+- q-fragment-vs-activity-lifecycle--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/fragment, difficulty/medium]
-
----\
+tags:
+- android/activity
+- android/fragment
+- difficulty/medium
+anki_cards:
+- slug: android-390-0-en
+  language: en
+- slug: android-390-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Зачем использовать Fragments, если есть Activities?

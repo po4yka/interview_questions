@@ -1,54 +1,56 @@
----id: android-078
+---
 id: android-708
 anki_cards:
-  - slug: android-078-0-en
-    front: "What are key differences between Material 2 and Material 3?"
-    back: |
-      | Feature | M2 | M3 |
-      |---------|----|----|
-      | Colors | Fixed palette | Dynamic color from wallpaper |
-      | Elevation | Shadow-based | Tonal surfaces |
-      | Personalization | Static | User-customized |
-
-      **Migration:**
-      - `BottomNavigation` -> `NavigationBar`
-      - `Card(elevation=4.dp)` -> `CardDefaults.cardElevation()`
-      - Use `MaterialTheme.colorScheme` roles
-    tags:
-      - android_compose
-      - difficulty::easy
-  - slug: android-078-0-ru
-    front: "Какие ключевые различия между Material 2 и Material 3?"
-    back: |
-      | Функция | M2 | M3 |
-      |---------|----|----|
-      | Цвета | Фиксированная палитра | Динамические из обоев |
-      | Elevation | На основе теней | Тональные поверхности |
-      | Персонализация | Статическая | Пользовательская |
-
-      **Миграция:**
-      - `BottomNavigation` -> `NavigationBar`
-      - `Card(elevation=4.dp)` -> `CardDefaults.cardElevation()`
-      - Используйте роли `MaterialTheme.colorScheme`
-    tags:
-      - android_compose
-      - difficulty::easy
+- slug: android-078-0-en
+  language: en
+  anki_id: 1769330962264
+  synced_at: '2026-01-25T12:51:25.864832'
+- slug: android-078-0-ru
+  language: ru
+  anki_id: 1769330962285
+  synced_at: '2026-01-25T12:51:25.867054'
+- slug: android-708-0-en
+  language: en
+- slug: android-708-0-ru
+  language: ru
+- slug: q-material3-components--android--easy-0-en
+  language: en
+- slug: q-material3-components--android--easy-0-ru
+  language: ru
 title: Material3 Components / Компоненты Material3
-aliases: [Material3 Components, Компоненты Material3]
+aliases:
+- Material3 Components
+- Компоненты Material3
 topic: android
-subtopics: [ui-compose, ui-theming]
+subtopics:
+- ui-compose
+- ui-theming
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-jetpack-compose, c-recomposition, q-compose-core-components--android--medium, q-material3-dynamic-color-theming--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related:
+- c-compose-recomposition
+- c-compose-state
+- c-jetpack-compose
+- c-recomposition
+- q-compose-core-components--android--medium
+- q-material3-dynamic-color-theming--android--medium
+- q-what-are-the-most-important-components-of-compose--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android, android/ui-compose, android/ui-theming, design-system, difficulty/easy, material3]
+tags:
+- android
+- android/ui-compose
+- android/ui-theming
+- design-system
+- difficulty/easy
+- material3
 sources: []
-
 ---
 # Вопрос (RU)
 > Каковы ключевые различия между Material 2 и Material 3? Перечислите основные компоненты Material 3 и их сценарии использования. Как мигрировать с Material 2 на Material 3?

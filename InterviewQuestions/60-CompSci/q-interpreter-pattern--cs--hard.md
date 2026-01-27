@@ -5,11 +5,11 @@ anki_cards:
 - slug: cs-031-0-en
   language: en
   anki_id: 1768454535363
-  synced_at: '2026-01-15T09:43:17.110334'
+  synced_at: '2026-01-25T13:01:16.940655'
 - slug: cs-031-0-ru
   language: ru
   anki_id: 1768454535389
-  synced_at: '2026-01-15T09:43:17.112224'
+  synced_at: '2026-01-25T13:01:16.942039'
 aliases:
 - Interpreter Pattern
 - Паттерн Интерпретатор

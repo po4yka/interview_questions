@@ -5,11 +5,11 @@ anki_cards:
 - slug: cs-037-0-en
   language: en
   anki_id: 1768454534514
-  synced_at: '2026-01-15T09:43:17.059410'
+  synced_at: '2026-01-25T13:01:16.886925'
 - slug: cs-037-0-ru
   language: ru
   anki_id: 1768454534540
-  synced_at: '2026-01-15T09:43:17.061162'
+  synced_at: '2026-01-25T13:01:16.889009'
 aliases:
 - Design Patterns Fundamentals
 - Фундаментальные паттерны проектирования

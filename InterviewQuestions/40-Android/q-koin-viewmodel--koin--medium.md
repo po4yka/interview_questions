@@ -1,19 +1,40 @@
 ---
 id: android-koin-004
 title: Koin ViewModel Injection / Инъекция ViewModel в Koin
-aliases: [Koin ViewModel, viewModel DSL, koinViewModel]
+aliases:
+- Koin ViewModel
+- viewModel DSL
+- koinViewModel
 topic: android
-subtopics: [di-koin, dependency-injection, architecture]
+subtopics:
+- di-koin
+- dependency-injection
+- architecture
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-koin-setup-modules--koin--medium, q-koin-inject-get--koin--medium, q-koin-compose--koin--medium]
+related:
+- q-koin-setup-modules--koin--medium
+- q-koin-inject-get--koin--medium
+- q-koin-compose--koin--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-koin, android/viewmodel, dependency-injection, difficulty/medium, koin]
+tags:
+- android/di-koin
+- android/viewmodel
+- dependency-injection
+- difficulty/medium
+- koin
+anki_cards:
+- slug: android-koin-004-0-en
+  language: en
+- slug: android-koin-004-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как использовать Koin для инъекции ViewModel? Объясните viewModel DSL и интеграцию с Activity/Fragment и Compose.

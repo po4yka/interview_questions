@@ -1,5 +1,5 @@
 ---
-id: android-747
+id: android-di-001
 title: Hilt vs Dagger Simplifications / Упрощения Hilt по сравнению с Dagger
 aliases:
 - Hilt vs Dagger
@@ -34,6 +34,11 @@ tags:
 - difficulty/medium
 - hilt
 - dagger
+anki_cards:
+- slug: android-di-001-0-en
+  language: en
+- slug: android-di-001-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Какие упрощения предоставляет `Hilt` по сравнению с чистым `Dagger`? Когда имеет смысл использовать чистый `Dagger` вместо `Hilt`?

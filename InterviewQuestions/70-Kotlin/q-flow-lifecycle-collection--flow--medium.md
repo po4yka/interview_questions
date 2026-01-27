@@ -1,38 +1,47 @@
 ---
 id: kotlin-flow-006
-title: "Flow Lifecycle Collection / Сбор Flow с учётом жизненного цикла"
+title: Flow Lifecycle Collection / Сбор Flow с учётом жизненного цикла
 aliases:
-  - Flow Lifecycle Collection
-  - flowWithLifecycle repeatOnLifecycle
-  - Lifecycle-aware Flow collection
+- Flow Lifecycle Collection
+- flowWithLifecycle repeatOnLifecycle
+- Lifecycle-aware Flow collection
 topic: kotlin
 subtopics:
-  - coroutines
-  - flow
-  - android
-  - lifecycle
+- coroutines
+- flow
+- android
+- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: internal
 status: draft
 moc: moc-kotlin
 related:
-  - c-kotlin
-  - c-flow
-  - c-android-lifecycle
+- c-kotlin
+- c-flow
+- c-android-lifecycle
 created: 2026-01-23
 updated: 2026-01-23
 tags:
-  - coroutines
-  - difficulty/medium
-  - flow
-  - kotlin
-  - android
-  - lifecycle
+- coroutines
+- difficulty/medium
+- flow
+- kotlin
+- android
+- lifecycle
+anki_cards:
+- slug: kotlin-flow-006-0-en
+  language: en
+  anki_id: 1769344144041
+  synced_at: '2026-01-25T16:29:04.096966'
+- slug: kotlin-flow-006-0-ru
+  language: ru
+  anki_id: 1769344144091
+  synced_at: '2026-01-25T16:29:04.098806'
 ---
 # Vopros (RU)
 > Как безопасно собирать Flow с учётом жизненного цикла Android? Объясните `flowWithLifecycle` и `repeatOnLifecycle`.

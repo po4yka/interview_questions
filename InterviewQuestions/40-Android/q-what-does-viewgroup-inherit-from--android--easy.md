@@ -1,4 +1,20 @@
----id: android-255
+---
+anki_cards:
+- slug: android-255-0-en
+  language: en
+- slug: android-255-0-ru
+  language: ru
+- slug: android-735-0-en
+  language: en
+- slug: android-735-0-ru
+  language: ru
+- slug: q-what-does-viewgroup-inherit-from--android--easy-0-en
+  language: en
+- slug: q-what-does-viewgroup-inherit-from--android--easy-0-ru
+  language: ru
+---
+
+id: android-255
 id: android-735
 title: ViewGroup Inheritance / Наследование ViewGroup
 aliases: [ViewGroup Inheritance, Наследование ViewGroup]

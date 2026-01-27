@@ -1,5 +1,5 @@
 ---
-id: sec-010
+id: android-sec-001
 title: App Signing and Play App Signing / Podpis' prilozhenij i Play App Signing
 aliases:
 - App Signing
@@ -28,6 +28,11 @@ related:
 sources:
 - https://developer.android.com/studio/publish/app-signing
 - https://developer.android.com/build/building-cmdline#sign_cmdline
+anki_cards:
+- slug: android-sec-001-0-en
+  language: en
+- slug: android-sec-001-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kak rabotaet podpis' Android prilozhenij i chto takoe Play App Signing?

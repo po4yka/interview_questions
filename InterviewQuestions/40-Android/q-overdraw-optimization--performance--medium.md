@@ -1,19 +1,39 @@
 ---
-id: android-752
+id: android-perf-003
 title: GPU Overdraw Optimization / Оптимизация GPU Overdraw
-aliases: [GPU Overdraw, Layout Inspector, Оптимизация Overdraw]
+aliases:
+- GPU Overdraw
+- Layout Inspector
+- Оптимизация Overdraw
 topic: android
-subtopics: [performance, rendering, ui]
+subtopics:
+- performance
+- rendering
+- ui
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-profiler-tools--performance--medium, q-lazy-initialization--performance--medium]
+related:
+- q-profiler-tools--performance--medium
+- q-lazy-initialization--performance--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/performance, android/rendering, difficulty/medium, overdraw, layout-inspector]
+tags:
+- android/performance
+- android/rendering
+- difficulty/medium
+- overdraw
+- layout-inspector
+anki_cards:
+- slug: android-perf-003-0-en
+  language: en
+- slug: android-perf-003-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

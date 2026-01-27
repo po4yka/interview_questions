@@ -1,22 +1,47 @@
----\
+---
 id: android-225
-title: "View Fundamentals / Основы View"
-aliases: ["View Fundamentals", "Основы View"]
+title: View Fundamentals / Основы View
+aliases:
+- View Fundamentals
+- Основы View
 topic: android
-subtopics: [ui-views, ui-widgets]
+subtopics:
+- ui-views
+- ui-widgets
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-views, q-fragments-and-activity-relationship--android--hard, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
-sources: ["https://developer.android.com/develop/ui/views/layout/custom-views/custom-components", "https://developer.android.com/reference/android/view/View"]
+related:
+- c-android-views
+- q-fragments-and-activity-relationship--android--hard
+- q-what-is-known-about-methods-that-redraw-view--android--medium
+- q-what-is-the-main-application-execution-thread--android--easy
+sources:
+- https://developer.android.com/develop/ui/views/layout/custom-views/custom-components
+- https://developer.android.com/reference/android/view/View
 created: 2024-10-15
 updated: 2025-11-10
-tags: [android/ui-views, android/ui-widgets, difficulty/easy, view, view-hierarchy]
-
----\
+tags:
+- android/ui-views
+- android/ui-widgets
+- difficulty/easy
+- view
+- view-hierarchy
+anki_cards:
+- slug: android-225-0-ru
+  language: ru
+  anki_id: 1768420767664
+  synced_at: '2026-01-14 23:59:27.669344'
+- slug: android-225-0-en
+  language: en
+  anki_id: 1768420767641
+  synced_at: '2026-01-14 23:59:27.645212'
+---
 # Вопрос (RU)
 
 > Что такое `View` в Android?

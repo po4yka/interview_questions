@@ -1,20 +1,43 @@
 ---
 id: android-hilt-004
 title: Hilt ViewModel Injection / Инъекция ViewModel в Hilt
-aliases: [Hilt ViewModel, ViewModel Injection, HiltViewModel, ViewModel DI]
+aliases:
+- Hilt ViewModel
+- ViewModel Injection
+- HiltViewModel
+- ViewModel DI
 topic: android
-subtopics: [di-hilt, architecture, viewmodel]
+subtopics:
+- di-hilt
+- architecture
+- viewmodel
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-setup-annotations--hilt--medium, q-hilt-assisted-injection--hilt--hard, q-viewmodel-pattern--android--easy]
+related:
+- q-hilt-setup-annotations--hilt--medium
+- q-hilt-assisted-injection--hilt--hard
+- q-viewmodel-pattern--android--easy
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/architecture, android/viewmodel, difficulty/medium, hilt, viewmodel, dependency-injection]
-
+tags:
+- android/di-hilt
+- android/architecture
+- android/viewmodel
+- difficulty/medium
+- hilt
+- viewmodel
+- dependency-injection
+anki_cards:
+- slug: android-hilt-004-0-en
+  language: en
+- slug: android-hilt-004-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как работает инъекция ViewModel с Hilt? Объясните @HiltViewModel и различные способы получения ViewModel.

@@ -1,52 +1,54 @@
----id: cs-029
-title: "MVP Pattern / Паттерн MVP (Model-View-Presenter)"
-aliases: ["MVP Pattern", "Паттерн MVP"]
+---
+id: cs-029
+title: MVP Pattern / Паттерн MVP (Model-View-Presenter)
+aliases:
+- MVP Pattern
+- Паттерн MVP
 topic: cs
-subtopics: [architecture-patterns, separation-of-concerns, testability]
+subtopics:
+- architecture-patterns
+- separation-of-concerns
+- testability
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-builder-pattern, c-ci-cd-patterns, c-command-pattern, c-dao-pattern, c-declarative-programming-patterns, c-decorator-pattern, c-factory-pattern, q-abstract-factory-pattern--cs--medium, q-adapter-pattern--cs--medium]
+related:
+- c-architecture-patterns
+- c-builder-pattern
+- c-ci-cd-patterns
+- c-command-pattern
+- c-dao-pattern
+- c-declarative-programming-patterns
+- c-decorator-pattern
+- c-factory-pattern
+- q-abstract-factory-pattern--cs--medium
+- q-adapter-pattern--cs--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [architecture-patterns, difficulty/medium, mvi, mvp, mvvm, separation-of-concerns, testability]
-sources: ["https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter"]
-
+tags:
+- architecture-patterns
+- difficulty/medium
+- mvi
+- mvp
+- mvvm
+- separation-of-concerns
+- testability
+sources:
+- https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter
 anki_cards:
 - slug: cs-029-0-en
-  front: |
-    What is MVP architecture and what are its key characteristics?
-  back: |
-    **MVP** (Model-View-Presenter): Architecture separating presentation logic from UI.
-    
-    **Key traits**:
-    - Passive View (only renders, no business logic)
-    - Presenter handles all logic and updates View via interface
-    - High testability (Presenter has no Android dependencies)
-    
-    **Contract interface** defines View-Presenter communication.
   language: en
-  difficulty: 0.5
-  tags: [cs_architecture, difficulty::medium]
+  anki_id: 1769343689641
+  synced_at: '2026-01-25T16:21:29.741637'
 - slug: cs-029-0-ru
-  front: |
-    Что такое архитектура MVP и каковы её ключевые характеристики?
-  back: |
-    **MVP** (Model-View-Presenter): Архитектура, отделяющая логику представления от UI.
-    
-    **Ключевые черты**:
-    - Пассивный View (только отображение, без бизнес-логики)
-    - Presenter управляет логикой и обновляет View через интерфейс
-    - Высокая тестируемость (Presenter без Android-зависимостей)
-    
-    **Contract interface** определяет связь View-Presenter.
   language: ru
-  difficulty: 0.5
-  tags: [cs_architecture, difficulty::medium]
-
+  anki_id: 1769343689739
+  synced_at: '2026-01-25T16:21:29.743579'
 ---
 # Вопрос (RU)
 > Что такое паттерн MVP? Когда его использовать и как он работает?

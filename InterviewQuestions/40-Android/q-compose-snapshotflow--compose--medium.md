@@ -1,5 +1,5 @@
 ---
-id: android-747
+id: android-compose-001
 title: Compose snapshotFlow / snapshotFlow в Compose
 aliases:
 - Compose snapshotFlow
@@ -33,6 +33,11 @@ tags:
 - difficulty/medium
 sources:
 - https://developer.android.com/develop/ui/compose/side-effects#snapshotflow
+anki_cards:
+- slug: android-compose-001-0-en
+  language: en
+- slug: android-compose-001-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Что такое snapshotFlow в Jetpack Compose и как он преобразует Compose State в Flow?

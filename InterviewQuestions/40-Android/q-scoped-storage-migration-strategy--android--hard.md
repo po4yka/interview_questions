@@ -1,66 +1,53 @@
----id: android-632
+---
 id: android-716
 anki_cards:
-  - slug: android-632-0-en
-    front: "How do you migrate a legacy app to scoped storage?"
-    back: |
-      **Migration steps:**
-      1. **Audit:** Classify files (app-private, app-specific external, shared media, documents)
-      2. **Move data:** To `filesDir`, `getExternalFilesDir()`, or MediaStore
-      3. **MediaStore:** For shared photos/videos/audio with `RELATIVE_PATH`
-      4. **SAF:** For user documents via `ACTION_OPEN_DOCUMENT_TREE`
-
-      **Permissions (Android 13+):**
-      - Replace `WRITE_EXTERNAL_STORAGE` with `READ_MEDIA_IMAGES/VIDEO/AUDIO`
-      - Use URIs instead of file paths
-
-      **Best practices:**
-      - Run migration once on first launch after update
-      - Delete legacy files after successful migration
-      - `requestLegacyExternalStorage=true` is temporary (Android 10 only)
-    tags:
-      - android_storage
-      - android_permissions
-      - difficulty::hard
-  - slug: android-632-0-ru
-    front: "Как мигрировать legacy-приложение на scoped storage?"
-    back: |
-      **Шаги миграции:**
-      1. **Аудит:** Классифицировать файлы (app-private, app-specific external, общие медиа, документы)
-      2. **Переместить данные:** В `filesDir`, `getExternalFilesDir()` или MediaStore
-      3. **MediaStore:** Для общих фото/видео/аудио с `RELATIVE_PATH`
-      4. **SAF:** Для документов пользователя через `ACTION_OPEN_DOCUMENT_TREE`
-
-      **Разрешения (Android 13+):**
-      - Замените `WRITE_EXTERNAL_STORAGE` на `READ_MEDIA_IMAGES/VIDEO/AUDIO`
-      - Используйте URI вместо путей к файлам
-
-      **Best practices:**
-      - Запускайте миграцию один раз при первом запуске после обновления
-      - Удаляйте legacy-файлы после успешной миграции
-      - `requestLegacyExternalStorage=true` временное решение (только Android 10)
-    tags:
-      - android_storage
-      - android_permissions
-      - difficulty::hard
+- slug: android-632-0-en
+  language: en
+  anki_id: 1769330983613
+  synced_at: '2026-01-25T12:50:09.603222'
+- slug: android-632-0-ru
+  language: ru
+  anki_id: 1769330983636
+  synced_at: '2026-01-25T12:50:09.604964'
+- slug: android-716-0-en
+  language: en
+- slug: android-716-0-ru
+  language: ru
+- slug: q-scoped-storage-migration-strategy--android--hard-0-en
+  language: en
+- slug: q-scoped-storage-migration-strategy--android--hard-0-ru
+  language: ru
 title: Scoped Storage Migration Strategy / Стратегия миграции на Scoped Storage
-aliases: [Scoped Storage Migration Strategy, Стратегия миграции на Scoped Storage]
+aliases:
+- Scoped Storage Migration Strategy
+- Стратегия миграции на Scoped Storage
 topic: android
-subtopics: [files-media, permissions]
+subtopics:
+- files-media
+- permissions
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-storage-options, c-scoped-storage, q-android-storage-types--android--medium, q-global-localization-strategy--android--hard, q-media3-migration-strategy--android--hard]
+related:
+- c-android-storage-options
+- c-scoped-storage
+- q-android-storage-types--android--medium
+- q-global-localization-strategy--android--hard
+- q-media3-migration-strategy--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags: [android/files-media, android/permissions, difficulty/hard]
+tags:
+- android/files-media
+- android/permissions
+- difficulty/hard
 sources:
-  - "https://developer.android.com/about/versions/11/privacy/storage"
-  - "https://developer.android.com/training/data-storage"
-
+- https://developer.android.com/about/versions/11/privacy/storage
+- https://developer.android.com/training/data-storage
 ---
 # Вопрос (RU)
 > Как мигрировать legacy-приложение на scoped storage, сохранив данные пользователей, обеспечив приватность и совместимость с бэкапом/экспортом?

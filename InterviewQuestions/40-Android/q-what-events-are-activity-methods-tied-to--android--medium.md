@@ -1,21 +1,45 @@
----\
+---
 id: android-290
 title: Activity Methods and Events / Методы Activity и события
-aliases: [Activity Methods Events, Методы Activity]
+aliases:
+- Activity Methods Events
+- Методы Activity
 topic: android
-subtopics: [activity, lifecycle]
+subtopics:
+- activity
+- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, q-activity-lifecycle-methods--android--medium, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- c-activity-lifecycle
+- q-activity-lifecycle-methods--android--medium
+- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/lifecycle, difficulty/medium, events, lifecycle]
-
----\
+tags:
+- android/activity
+- android/lifecycle
+- difficulty/medium
+- events
+- lifecycle
+anki_cards:
+- slug: android-290-0-en
+  language: en
+  anki_id: 1769330082651
+  synced_at: '2026-01-25T13:02:25.717028'
+- slug: android-290-0-ru
+  language: ru
+  anki_id: 1769330082674
+  synced_at: '2026-01-25T13:02:25.719254'
+---
 # Вопрос (RU)
 > К каким событиям привязаны методы `Activity`?
 

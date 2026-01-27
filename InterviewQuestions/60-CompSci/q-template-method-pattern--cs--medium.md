@@ -1,53 +1,42 @@
----id: dp-003
-title: "Template Method Pattern / Template Method Паттерн"
-aliases: [Template Method Pattern, Template Method Паттерн]
+---
+id: dp-003
+title: Template Method Pattern / Template Method Паттерн
+aliases:
+- Template Method Pattern
+- Template Method Паттерн
 topic: cs
-subtopics: [inheritance, patterns]
+subtopics:
+- inheritance
+- patterns
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-dao-pattern]
+related:
+- c-architecture-patterns
+- c-dao-pattern
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, hook-method, template-method]
-
+tags:
+- behavioral-patterns
+- design-patterns
+- difficulty/medium
+- gof-patterns
+- hook-method
+- template-method
 anki_cards:
 - slug: dp-003-0-en
-  front: |
-    What is the Template Method pattern and how does it work?
-  back: |
-    **Template Method**: Behavioral pattern defining algorithm skeleton in base class.
-    
-    **Structure**:
-    - Base class: `final` template method + abstract/hook methods
-    - Subclasses: Override steps, NOT the template
-    
-    **Use when**: Common algorithm with varying steps.
-    
-    **Example**: File processing (open, process, close).
   language: en
-  difficulty: 0.5
-  tags: [cs_patterns, difficulty::medium]
+  anki_id: 1769343696264
+  synced_at: '2026-01-25T16:21:36.366822'
 - slug: dp-003-0-ru
-  front: |
-    Что такое паттерн Шаблонный метод и как он работает?
-  back: |
-    **Шаблонный метод**: Поведенческий паттерн, определяющий скелет алгоритма в базовом классе.
-    
-    **Структура**:
-    - Базовый класс: `final` шаблонный метод + абстрактные/hook методы
-    - Подклассы: Переопределяют шаги, НЕ шаблон
-    
-    **Используйте когда**: Общий алгоритм с варьируемыми шагами.
-    
-    **Пример**: Обработка файлов (открыть, обработать, закрыть).
   language: ru
-  difficulty: 0.5
-  tags: [cs_patterns, difficulty::medium]
-
+  anki_id: 1769343696364
+  synced_at: '2026-01-25T16:21:36.369458'
 ---
 # Вопрос (RU)
 > Что такое паттерн Template Method? Когда и зачем его следует использовать?

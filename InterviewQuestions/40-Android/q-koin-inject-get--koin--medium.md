@@ -1,19 +1,38 @@
 ---
 id: android-koin-002
 title: Koin by inject() vs get() / Koin by inject() против get()
-aliases: [Koin inject, Koin get, Lazy Injection Koin]
+aliases:
+- Koin inject
+- Koin get
+- Lazy Injection Koin
 topic: android
-subtopics: [di-koin, dependency-injection]
+subtopics:
+- di-koin
+- dependency-injection
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-koin-setup-modules--koin--medium, q-koin-scopes--koin--medium, q-koin-viewmodel--koin--medium]
+related:
+- q-koin-setup-modules--koin--medium
+- q-koin-scopes--koin--medium
+- q-koin-viewmodel--koin--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-koin, dependency-injection, difficulty/medium, koin]
+tags:
+- android/di-koin
+- dependency-injection
+- difficulty/medium
+- koin
+anki_cards:
+- slug: android-koin-002-0-en
+  language: en
+- slug: android-koin-002-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > В чем разница между by inject() и get() в Koin? Когда использовать каждый способ?

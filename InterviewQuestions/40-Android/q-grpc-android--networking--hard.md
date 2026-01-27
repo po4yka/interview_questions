@@ -1,21 +1,43 @@
 ---
 id: android-752
-title: "gRPC on Android / gRPC на Android"
-aliases: ["gRPC on Android", "gRPC на Android"]
+title: gRPC on Android / gRPC на Android
+aliases:
+- gRPC on Android
+- gRPC на Android
 topic: android
-subtopics: [networking]
+subtopics:
+- networking
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-networking, q-http-protocols-comparison--android--medium, q-retrofit-library--android--medium]
+related:
+- c-networking
+- q-http-protocols-comparison--android--medium
+- q-retrofit-library--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://grpc.io/docs/languages/kotlin/", "https://developer.android.com/guide/topics/connectivity/grpc", "https://github.com/grpc/grpc-kotlin"]
-tags: [android/networking, difficulty/hard, grpc, protobuf, http2, streaming, rpc]
-
+sources:
+- https://grpc.io/docs/languages/kotlin/
+- https://developer.android.com/guide/topics/connectivity/grpc
+- https://github.com/grpc/grpc-kotlin
+tags:
+- android/networking
+- difficulty/hard
+- grpc
+- protobuf
+- http2
+- streaming
+- rpc
+anki_cards:
+- slug: android-752-0-en
+  language: en
+- slug: android-752-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

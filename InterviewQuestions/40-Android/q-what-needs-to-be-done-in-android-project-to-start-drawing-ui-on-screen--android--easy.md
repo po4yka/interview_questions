@@ -1,4 +1,16 @@
----id: android-113
+---
+anki_cards:
+- slug: android-739-0-en
+  language: en
+- slug: android-739-0-ru
+  language: ru
+- slug: q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy-0-en
+  language: en
+- slug: q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy-0-ru
+  language: ru
+---
+
+id: android-113
 id: android-739
 title: UI Setup in Android Project / Настройка UI в проекте Android
 aliases: [UI Setup, Настройка UI]

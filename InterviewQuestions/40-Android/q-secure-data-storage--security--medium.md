@@ -30,6 +30,11 @@ related:
 sources:
 - https://developer.android.com/topic/security/data
 - https://developer.android.com/privacy-and-security/security-tips
+anki_cards:
+- slug: sec-007-0-en
+  language: en
+- slug: sec-007-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Gde i kak bezopasno hranit' chuvstvitel'nye dannye v Android?

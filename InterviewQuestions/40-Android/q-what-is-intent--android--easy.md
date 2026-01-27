@@ -1,22 +1,44 @@
 ---
 id: android-405
 title: Intent в Android / What Is Intent
-aliases: [Android Intent, Intent, Неявный Intent, Явный Intent]
+aliases:
+- Android Intent
+- Intent
+- Неявный Intent
+- Явный Intent
 topic: android
-subtopics: [intents-deeplinks]
+subtopics:
+- intents-deeplinks
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-intent, q-android-components-besides-activity--android--easy, q-android-lint-tool--android--medium, q-intent-filters-android--android--medium, q-main-thread-android--android--medium, q-parsing-optimization-android--android--medium, q-what-are-services-for--android--easy]
+related:
+- c-intent
+- q-android-components-besides-activity--android--easy
+- q-android-lint-tool--android--medium
+- q-intent-filters-android--android--medium
+- q-main-thread-android--android--medium
+- q-parsing-optimization-android--android--medium
+- q-what-are-services-for--android--easy
 created: 2025-10-15
 updated: 2025-10-27
 sources:
-  - "https://developer.android.com/guide/components/intents-filters"
-tags: [android/intents-deeplinks, difficulty/easy, explicit-intent, implicit-intent]
-
+- https://developer.android.com/guide/components/intents-filters
+tags:
+- android/intents-deeplinks
+- difficulty/easy
+- explicit-intent
+- implicit-intent
+anki_cards:
+- slug: android-405-0-en
+  language: en
+- slug: android-405-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

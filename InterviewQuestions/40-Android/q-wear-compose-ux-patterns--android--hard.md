@@ -1,4 +1,31 @@
----id: android-630
+---
+anki_cards:
+- slug: android-630-0-en
+  language: en
+  anki_id: 1769330066377
+  synced_at: '2026-01-25T13:02:12.939668'
+- slug: android-630-0-ru
+  language: ru
+  anki_id: 1769330066398
+  synced_at: '2026-01-25T13:02:12.941278'
+- slug: android-731-0-en
+  language: en
+  anki_id: 1769330066423
+  synced_at: '2026-01-25T13:02:12.942509'
+- slug: android-731-0-ru
+  language: ru
+  anki_id: 1769330066449
+  synced_at: '2026-01-25T13:02:12.943961'
+- slug: q-wear-compose-ux-patterns--android--hard-0-en
+  language: en
+  anki_id: 1769330066474
+  synced_at: '2026-01-25T13:02:12.945300'
+- slug: q-wear-compose-ux-patterns--android--hard-0-ru
+  language: ru
+  anki_id: 1769330066500
+  synced_at: '2026-01-25T13:02:12.946561'
+---
+id: android-630
 id: android-731
 title: Wear Compose UX Patterns / UX-паттерны Wear Compose
 aliases: [UX-паттерны Wear Compose, Wear Compose UX Patterns]

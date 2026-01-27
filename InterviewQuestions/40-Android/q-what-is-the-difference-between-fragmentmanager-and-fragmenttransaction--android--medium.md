@@ -1,22 +1,48 @@
----\
+---
 id: android-356
 title: What Is The Difference Between FragmentManager And FragmentTransaction
-aliases: [FragmentManager vs FragmentTransaction, Разница между FragmentManager и FragmentTransaction]
+aliases:
+- FragmentManager vs FragmentTransaction
+- Разница между FragmentManager и FragmentTransaction
 topic: android
-subtopics: [fragment, lifecycle, ui-views]
+subtopics:
+- fragment
+- lifecycle
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-fragments, c-lifecycle, q-can-state-loss-be-related-to-a-fragment--android--medium, q-dagger-build-time-optimization--android--medium, q-fragmentmanager-vs-fragmenttransaction--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-pass-large-data-between-activities--android--hard]
+related:
+- c-fragments
+- c-lifecycle
+- q-can-state-loss-be-related-to-a-fragment--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-fragmentmanager-vs-fragmenttransaction--android--medium
+- q-how-to-choose-layout-for-fragment--android--easy
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-pass-large-data-between-activities--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/fragment, android/lifecycle, android/ui-views, difficulty/medium, fragmentmanager, fragments, fragmenttransaction]
-
----\
+tags:
+- android/fragment
+- android/lifecycle
+- android/ui-views
+- difficulty/medium
+- fragmentmanager
+- fragments
+- fragmenttransaction
+anki_cards:
+- slug: android-356-0-en
+  language: en
+- slug: android-356-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > В чём разница между FragmentManager и FragmentTransaction?

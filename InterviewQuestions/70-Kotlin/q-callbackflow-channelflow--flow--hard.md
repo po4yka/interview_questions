@@ -1,37 +1,46 @@
 ---
 id: kotlin-flow-004
-title: "callbackFlow vs channelFlow / callbackFlow vs channelFlow"
+title: callbackFlow vs channelFlow / callbackFlow vs channelFlow
 aliases:
-  - callbackFlow channelFlow
-  - Callback to Flow
-  - Channel Flow
+- callbackFlow channelFlow
+- Callback to Flow
+- Channel Flow
 topic: kotlin
 subtopics:
-  - coroutines
-  - flow
-  - channels
+- coroutines
+- flow
+- channels
 question_kind: comparison
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: internal
 status: draft
 moc: moc-kotlin
 related:
-  - c-kotlin
-  - c-flow
-  - q-channelflow-callbackflow-flow--kotlin--medium
+- c-kotlin
+- c-flow
+- q-channelflow-callbackflow-flow--kotlin--medium
 created: 2026-01-23
 updated: 2026-01-23
 tags:
-  - coroutines
-  - difficulty/hard
-  - flow
-  - kotlin
-  - channels
-  - callbacks
+- coroutines
+- difficulty/hard
+- flow
+- kotlin
+- channels
+- callbacks
+anki_cards:
+- slug: kotlin-flow-004-0-en
+  language: en
+  anki_id: 1769344130573
+  synced_at: '2026-01-25T16:29:00.515685'
+- slug: kotlin-flow-004-0-ru
+  language: ru
+  anki_id: 1769344130614
+  synced_at: '2026-01-25T16:29:00.517403'
 ---
 # Vopros (RU)
 > Когда использовать `callbackFlow` vs `channelFlow`? В чём разница?

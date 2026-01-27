@@ -1,21 +1,43 @@
 ---
 id: android-cicd-005
-title: "Play Store Deployment and Staged Rollout / Публикация в Play Store и Поэтапное Развёртывание"
-aliases: ["Play Store Deployment", "Публикация в Play Store и Поэтапное Развёртывание"]
+title: Play Store Deployment and Staged Rollout / Публикация в Play Store и Поэтапное
+  Развёртывание
+aliases:
+- Play Store Deployment
+- Публикация в Play Store и Поэтапное Развёртывание
 topic: android
-subtopics: [cicd, deployment, play-store]
+subtopics:
+- cicd
+- deployment
+- play-store
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-github-actions-android--cicd--medium, q-app-distribution--cicd--medium, q-signing-in-ci--cicd--hard]
+related:
+- q-github-actions-android--cicd--medium
+- q-app-distribution--cicd--medium
+- q-signing-in-ci--cicd--hard
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://developer.android.com/distribute", "https://support.google.com/googleplay/android-developer/answer/6346149"]
-tags: [android/cicd, android/deployment, difficulty/medium, play-store, staged-rollout]
-
+sources:
+- https://developer.android.com/distribute
+- https://support.google.com/googleplay/android-developer/answer/6346149
+tags:
+- android/cicd
+- android/deployment
+- difficulty/medium
+- play-store
+- staged-rollout
+anki_cards:
+- slug: android-cicd-005-0-en
+  language: en
+- slug: android-cicd-005-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

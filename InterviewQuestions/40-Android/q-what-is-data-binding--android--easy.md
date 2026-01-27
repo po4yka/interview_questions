@@ -1,4 +1,31 @@
----id: android-141
+---
+anki_cards:
+- slug: android-141-0-en
+  language: en
+  anki_id: 1769330058701
+  synced_at: '2026-01-25T13:02:28.213657'
+- slug: android-141-0-ru
+  language: ru
+  anki_id: 1769330058723
+  synced_at: '2026-01-25T13:02:28.216568'
+- slug: android-736-0-en
+  language: en
+  anki_id: 1769330058748
+  synced_at: '2026-01-25T13:02:28.218823'
+- slug: android-736-0-ru
+  language: ru
+  anki_id: 1769330058773
+  synced_at: '2026-01-25T13:02:28.220392'
+- slug: q-what-is-data-binding--android--easy-0-en
+  language: en
+  anki_id: 1769330058798
+  synced_at: '2026-01-25T13:02:28.222274'
+- slug: q-what-is-data-binding--android--easy-0-ru
+  language: ru
+  anki_id: 1769330058823
+  synced_at: '2026-01-25T13:02:28.224321'
+---
+id: android-141
 id: android-736
 title: What Is Data Binding / Что такое Data Binding
 aliases: [Android Data Binding, Data Binding, Что такое Data Binding]

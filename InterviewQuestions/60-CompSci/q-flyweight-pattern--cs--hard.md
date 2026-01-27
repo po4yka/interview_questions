@@ -5,11 +5,11 @@ anki_cards:
 - slug: dp-002-0-en
   language: en
   anki_id: 1768454532864
-  synced_at: '2026-01-15T09:41:02.798845'
+  synced_at: '2026-01-25T13:01:16.816043'
 - slug: dp-002-0-ru
   language: ru
   anki_id: 1768454532889
-  synced_at: '2026-01-15T09:41:02.801031'
+  synced_at: '2026-01-25T13:01:16.817904'
 aliases:
 - Flyweight Pattern
 - Паттерн легкий вес

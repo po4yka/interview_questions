@@ -30,6 +30,11 @@ related:
 sources:
 - https://developer.android.com/build/shrink-code
 - https://www.guardsquare.com/manual/configuration/usage
+anki_cards:
+- slug: sec-006-0-en
+  language: en
+- slug: sec-006-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kak nastroit' R8/ProGuard dlya obfuskacii koda i kakie pravila keep ispol'zovat'?

@@ -1,21 +1,43 @@
----\
+---
 id: android-329
 title: RecyclerView / Компонент RecyclerView
-aliases: [RecyclerView, Компонент RecyclerView]
+aliases:
+- RecyclerView
+- Компонент RecyclerView
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-recyclerview, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy, q-recyclerview-itemdecoration-advanced--android--medium, q-what-is-diffutil-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+- c-recyclerview
+- q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+- q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+- q-recyclerview-itemdecoration-advanced--android--medium
+- q-what-is-diffutil-for--android--medium
+- q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/easy, layoutmanager, performance, recyclerview, ui, viewholder]
-
----\
+tags:
+- android/ui-views
+- difficulty/easy
+- layoutmanager
+- performance
+- recyclerview
+- ui
+- viewholder
+anki_cards:
+- slug: android-329-0-en
+  language: en
+- slug: android-329-0-ru
+  language: ru
+---
 # Вопрос (RU)
 > Компонент `RecyclerView`
 

@@ -28,6 +28,11 @@ related:
 sources:
 - https://developer.android.com/google/play/integrity
 - https://developer.android.com/google/play/integrity/verdicts
+anki_cards:
+- slug: sec-004-0-en
+  language: en
+- slug: sec-004-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Chto takoe Play Integrity API i kak ego ispol'zovat' dlya proverki podlinnosti ustroystva i prilozheniya?

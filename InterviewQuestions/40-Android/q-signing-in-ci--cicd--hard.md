@@ -1,21 +1,42 @@
 ---
 id: android-cicd-006
-title: "Secure Signing in CI / Безопасное Подписание в CI"
-aliases: ["Secure Signing in CI", "Безопасное Подписание в CI"]
+title: Secure Signing in CI / Безопасное Подписание в CI
+aliases:
+- Secure Signing in CI
+- Безопасное Подписание в CI
 topic: android
-subtopics: [cicd, security, signing]
+subtopics:
+- cicd
+- security
+- signing
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-github-actions-android--cicd--medium, q-play-store-deployment--cicd--medium, q-build-variants-flavors--cicd--medium]
+related:
+- q-github-actions-android--cicd--medium
+- q-play-store-deployment--cicd--medium
+- q-build-variants-flavors--cicd--medium
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://developer.android.com/studio/publish/app-signing", "https://docs.github.com/en/actions/security-guides/encrypted-secrets"]
-tags: [android/cicd, android/security, difficulty/hard, signing, secrets-management]
-
+sources:
+- https://developer.android.com/studio/publish/app-signing
+- https://docs.github.com/en/actions/security-guides/encrypted-secrets
+tags:
+- android/cicd
+- android/security
+- difficulty/hard
+- signing
+- secrets-management
+anki_cards:
+- slug: android-cicd-006-0-en
+  language: en
+- slug: android-cicd-006-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

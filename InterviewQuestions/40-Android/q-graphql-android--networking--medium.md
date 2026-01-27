@@ -1,21 +1,44 @@
 ---
 id: android-753
-title: "Apollo GraphQL Client on Android / Apollo GraphQL клиент на Android"
-aliases: ["Apollo GraphQL Client on Android", "Apollo GraphQL клиент на Android"]
+title: Apollo GraphQL Client on Android / Apollo GraphQL клиент на Android
+aliases:
+- Apollo GraphQL Client on Android
+- Apollo GraphQL клиент на Android
 topic: android
-subtopics: [networking]
+subtopics:
+- networking
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-networking, q-retrofit-library--android--medium, q-graphql-apollo-android--android--medium]
+related:
+- c-networking
+- q-retrofit-library--android--medium
+- q-graphql-apollo-android--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://www.apollographql.com/docs/kotlin/", "https://graphql.org/learn/", "https://www.apollographql.com/docs/kotlin/caching/normalized-caches"]
-tags: [android/networking, difficulty/medium, graphql, apollo, queries, mutations, subscriptions, caching]
-
+sources:
+- https://www.apollographql.com/docs/kotlin/
+- https://graphql.org/learn/
+- https://www.apollographql.com/docs/kotlin/caching/normalized-caches
+tags:
+- android/networking
+- difficulty/medium
+- graphql
+- apollo
+- queries
+- mutations
+- subscriptions
+- caching
+anki_cards:
+- slug: android-753-0-en
+  language: en
+- slug: android-753-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

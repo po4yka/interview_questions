@@ -1,20 +1,41 @@
 ---
-id: android-402
-title: "MockK vs Mockito / MockK против Mockito"
-aliases: ["MockK vs Mockito", "MockK против Mockito"]
+id: android-test-002
+title: MockK vs Mockito / MockK против Mockito
+aliases:
+- MockK vs Mockito
+- MockK против Mockito
 topic: android
-subtopics: [testing-unit, testing]
+subtopics:
+- testing-unit
+- testing
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-testing, q-mockk-basics--testing--medium, q-test-doubles--testing--medium, q-coroutines-testing--testing--medium]
+related:
+- c-testing
+- q-mockk-basics--testing--medium
+- q-test-doubles--testing--medium
+- q-coroutines-testing--testing--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/testing-unit, difficulty/medium, mockk, mockito, kotlin, mocking, comparison]
-
+tags:
+- android/testing-unit
+- difficulty/medium
+- mockk
+- mockito
+- kotlin
+- mocking
+- comparison
+anki_cards:
+- slug: android-test-002-0-en
+  language: en
+- slug: android-test-002-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

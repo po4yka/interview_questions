@@ -1,19 +1,39 @@
 ---
 id: android-748
 title: App Startup Optimization / Оптимизация Запуска Приложения
-aliases: [App Startup Library, Cold Warm Hot Start, Оптимизация Запуска]
+aliases:
+- App Startup Library
+- Cold Warm Hot Start
+- Оптимизация Запуска
 topic: android
-subtopics: [performance, startup, initialization]
+subtopics:
+- performance
+- startup
+- initialization
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-baseline-profiles--performance--hard, q-lazy-initialization--performance--medium]
+related:
+- q-baseline-profiles--performance--hard
+- q-lazy-initialization--performance--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/performance, android/startup, difficulty/hard, app-startup, initialization]
+tags:
+- android/performance
+- android/startup
+- difficulty/hard
+- app-startup
+- initialization
+anki_cards:
+- slug: android-748-0-en
+  language: en
+- slug: android-748-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

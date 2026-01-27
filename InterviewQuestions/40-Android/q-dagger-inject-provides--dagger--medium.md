@@ -1,20 +1,9 @@
 ---
-id: android-dagger-002
-title: Dagger @Inject vs @Provides / @Inject vs @Provides в Dagger
-aliases: [Inject vs Provides, @Inject @Provides]
-topic: android
-subtopics: [dagger, di-dagger]
-question_kind: theory
-difficulty: medium
-original_language: en
-language_tags: [en, ru]
-status: draft
-moc: moc-android
-related: [c-dependency-injection, q-dagger-component-module--dagger--medium, q-dagger-subcomponents--dagger--hard]
-created: 2026-01-23
-updated: 2026-01-23
-tags: [android/di-dagger, dependency-injection, difficulty/medium, dagger, inject, provides]
-
+anki_cards:
+- slug: q-dagger-inject-provides--dagger--medium-0-en
+  language: en
+- slug: q-dagger-inject-provides--dagger--medium-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Когда использовать @Inject, а когда @Provides в Dagger?

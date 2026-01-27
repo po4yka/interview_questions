@@ -1,34 +1,43 @@
 ---
 id: kotlin-flow-002
-title: "Cold vs Hot Flows / Холодные и горячие Flow"
+title: Cold vs Hot Flows / Холодные и горячие Flow
 aliases:
-  - Cold vs Hot Flows
-  - Cold Flow Hot Flow
-  - Холодные горячие потоки
+- Cold vs Hot Flows
+- Cold Flow Hot Flow
+- Холодные горячие потоки
 topic: kotlin
 subtopics:
-  - coroutines
-  - flow
+- coroutines
+- flow
 question_kind: comparison
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: internal
 status: draft
 moc: moc-kotlin
 related:
-  - c-kotlin
-  - c-flow
-  - q-stateflow-vs-sharedflow--flow--medium
+- c-kotlin
+- c-flow
+- q-stateflow-vs-sharedflow--flow--medium
 created: 2026-01-23
 updated: 2026-01-23
 tags:
-  - coroutines
-  - difficulty/medium
-  - flow
-  - kotlin
+- coroutines
+- difficulty/medium
+- flow
+- kotlin
+anki_cards:
+- slug: kotlin-flow-002-0-en
+  language: en
+  anki_id: 1769344141365
+  synced_at: '2026-01-25T16:29:01.417019'
+- slug: kotlin-flow-002-0-ru
+  language: ru
+  anki_id: 1769344141415
+  synced_at: '2026-01-25T16:29:01.420038'
 ---
 # Vopros (RU)
 > Чем отличаются холодные и горячие Flow? Приведите примеры каждого типа.

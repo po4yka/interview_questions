@@ -1,76 +1,59 @@
----id: android-243
+---
 id: android-702
 anki_cards:
-  - slug: android-243-0-en
-    front: "How to implement View behavior when it's added to the view tree?"
-    back: |
-      Override **`onAttachedToWindow()`** - called when View attaches to Window.
-
-      ```kotlin
-      override fun onAttachedToWindow() {
-          super.onAttachedToWindow()
-          startAnimation()
-          registerListeners()
-      }
-
-      override fun onDetachedFromWindow() {
-          stopAnimation()
-          unregisterListeners()
-          super.onDetachedFromWindow()
-      }
-      ```
-
-      **Key points:**
-      - Always call `super`
-      - Clean up in `onDetachedFromWindow()`
-      - May be called multiple times if View is moved
-    tags:
-      - android_views
-      - android_lifecycle
-      - difficulty::easy
-  - slug: android-243-0-ru
-    front: "Как реализовать поведение View при добавлении в дерево?"
-    back: |
-      Переопределите **`onAttachedToWindow()`** - вызывается при прикреплении View к Window.
-
-      ```kotlin
-      override fun onAttachedToWindow() {
-          super.onAttachedToWindow()
-          startAnimation()
-          registerListeners()
-      }
-
-      override fun onDetachedFromWindow() {
-          stopAnimation()
-          unregisterListeners()
-          super.onDetachedFromWindow()
-      }
-      ```
-
-      **Ключевые моменты:**
-      - Всегда вызывайте `super`
-      - Очищайте ресурсы в `onDetachedFromWindow()`
-      - Может вызываться несколько раз при перемещении View
-    tags:
-      - android_views
-      - android_lifecycle
-      - difficulty::easy
-title: How To Implement View Behavior When It Is Added To The Tree / Как реализовать поведение View при добавлении в дерево
-aliases: [How To Implement View Behavior When It Is Added To The Tree, Как реализовать поведение View при добавлении в дерево]
+- slug: android-243-0-en
+  language: en
+  anki_id: 1769330972440
+  synced_at: '2026-01-25T12:50:09.224854'
+- slug: android-243-0-ru
+  language: ru
+  anki_id: 1769330972461
+  synced_at: '2026-01-25T12:50:09.226795'
+- slug: android-702-0-en
+  language: en
+- slug: android-702-0-ru
+  language: ru
+- slug: q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy-0-en
+  language: en
+- slug: q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy-0-ru
+  language: ru
+title: How To Implement View Behavior When It Is Added To The Tree / Как реализовать
+  поведение View при добавлении в дерево
+aliases:
+- How To Implement View Behavior When It Is Added To The Tree
+- Как реализовать поведение View при добавлении в дерево
 topic: android
-subtopics: [lifecycle, ui-views]
+subtopics:
+- lifecycle
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-lifecycle, c-recomposition, c-wear-compose, q-custom-view-attributes--android--medium, q-recyclerview-sethasfixedsize--android--easy, q-viewmodel-pattern--android--easy, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- c-compose-recomposition
+- c-lifecycle
+- c-recomposition
+- c-wear-compose
+- q-custom-view-attributes--android--medium
+- q-recyclerview-sethasfixedsize--android--easy
+- q-viewmodel-pattern--android--easy
+- q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/lifecycle, android/ui-views, custom-view, difficulty/easy, ui, view-lifecycle]
-
+tags:
+- android/lifecycle
+- android/ui-views
+- custom-view
+- difficulty/easy
+- ui
+- view-lifecycle
 ---
 # Вопрос (RU)
 

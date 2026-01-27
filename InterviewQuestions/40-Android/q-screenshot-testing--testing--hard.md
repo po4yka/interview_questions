@@ -1,20 +1,40 @@
 ---
-id: android-405
-title: "Screenshot Testing / Скриншот-тестирование"
-aliases: ["Screenshot Testing", "Скриншот-тестирование"]
+id: android-test-005
+title: Screenshot Testing / Скриншот-тестирование
+aliases:
+- Screenshot Testing
+- Скриншот-тестирование
 topic: android
-subtopics: [testing-ui, testing]
+subtopics:
+- testing-ui
+- testing
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-testing, q-testing-compose-ui--android--medium, q-compose-testing-semantics--testing--medium]
+related:
+- c-testing
+- q-testing-compose-ui--android--medium
+- q-compose-testing-semantics--testing--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/testing-ui, difficulty/hard, screenshot-testing, paparazzi, shot, compose, visual-regression]
-
+tags:
+- android/testing-ui
+- difficulty/hard
+- screenshot-testing
+- paparazzi
+- shot
+- compose
+- visual-regression
+anki_cards:
+- slug: android-test-005-0-en
+  language: en
+- slug: android-test-005-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

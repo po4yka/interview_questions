@@ -1,21 +1,43 @@
 ---
 id: android-129
 title: Why Separate UI and Business Logic / Зачем разделять UI и бизнес-логику
-aliases: [Why Separate UI and Business Logic, Зачем разделять UI и бизнес-логику]
+aliases:
+- Why Separate UI and Business Logic
+- Зачем разделять UI и бизнес-логику
 topic: android
-subtopics: [architecture-clean, architecture-mvvm]
+subtopics:
+- architecture-clean
+- architecture-mvvm
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-clean-architecture, c-mvvm, c-viewmodel, q-compose-testing--android--medium, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-mvvm-vs-mvp-differences--android--medium, q-separate-ui-business-logic--android--easy, q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]
+related:
+- c-clean-architecture
+- c-mvvm
+- c-viewmodel
+- q-compose-testing--android--medium
+- q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy
+- q-mvvm-vs-mvp-differences--android--medium
+- q-separate-ui-business-logic--android--easy
+- q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-clean, android/architecture-mvvm, difficulty/easy, separation-of-concerns]
-
+tags:
+- android/architecture-clean
+- android/architecture-mvvm
+- difficulty/easy
+- separation-of-concerns
+anki_cards:
+- slug: android-129-0-en
+  language: en
+- slug: android-129-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

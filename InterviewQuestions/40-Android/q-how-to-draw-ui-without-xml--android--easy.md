@@ -1,58 +1,57 @@
----id: android-342
+---
 id: android-700
 anki_cards:
-  - slug: android-342-0-en
-    front: "What are the two main ways to create UI without XML in Android?"
-    back: |
-      **1. Jetpack Compose** (modern, declarative):
-      - Declarative syntax with `setContent { }`
-      - Automatic state updates
-      - Less boilerplate
-
-      **2. Programmatic View creation** (traditional):
-      - Create Views in code with `LinearLayout(this)`, `TextView(this)`
-      - Imperative style, more verbose
-      - Use `setContentView(layout)`
-
-      **Recommendation:** Compose for new projects.
-    tags:
-      - android_compose
-      - android_views
-      - difficulty::easy
-  - slug: android-342-0-ru
-    front: "Какие два основных способа создания UI без XML в Android?"
-    back: |
-      **1. Jetpack Compose** (современный, декларативный):
-      - Декларативный синтаксис с `setContent { }`
-      - Автоматическое обновление состояния
-      - Меньше шаблонного кода
-
-      **2. Программное создание View** (традиционный):
-      - Создание Views в коде: `LinearLayout(this)`, `TextView(this)`
-      - Императивный стиль, больше кода
-      - Используется `setContentView(layout)`
-
-      **Рекомендация:** Compose для новых проектов.
-    tags:
-      - android_compose
-      - android_views
-      - difficulty::easy
-title: "How To Draw UI Without XML / Как рисовать UI без XML"
-aliases: [Draw UI Without XML, Jetpack Compose, Programmatic Views, Рисовать UI без XML]
+- slug: android-342-0-en
+  language: en
+  anki_id: 1769330989288
+  synced_at: '2026-01-25T12:50:09.821117'
+- slug: android-342-0-ru
+  language: ru
+  anki_id: 1769330989311
+  synced_at: '2026-01-25T12:50:09.823170'
+- slug: android-700-0-en
+  language: en
+- slug: android-700-0-ru
+  language: ru
+- slug: q-how-to-draw-ui-without-xml--android--easy-0-en
+  language: en
+- slug: q-how-to-draw-ui-without-xml--android--easy-0-ru
+  language: ru
+title: How To Draw UI Without XML / Как рисовать UI без XML
+aliases:
+- Draw UI Without XML
+- Jetpack Compose
+- Programmatic Views
+- Рисовать UI без XML
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics:
+- ui-compose
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-ui-composition-basics, c-compose-recomposition, c-jetpack-compose, c-recomposition, c-views, c-wear-compose, q-what-each-android-component-represents--android--easy]
+related:
+- c-android-ui-composition-basics
+- c-compose-recomposition
+- c-jetpack-compose
+- c-recomposition
+- c-views
+- c-wear-compose
+- q-what-each-android-component-represents--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-views, difficulty/easy, ui, views]
+tags:
+- android/ui-compose
+- android/ui-views
+- difficulty/easy
+- ui
+- views
 sources: []
-
 ---
 # Вопрос (RU)
 

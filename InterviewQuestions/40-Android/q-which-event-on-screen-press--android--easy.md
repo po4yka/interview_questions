@@ -1,20 +1,40 @@
 ---
 id: android-256
-title: "Which Event On Screen Press / Какое событие при нажатии на экран"
-aliases: ["MotionEvent", "Touch Events", "Which Event On Screen Press", "Какое событие при нажатии на экран", "События касания"]
+title: Which Event On Screen Press / Какое событие при нажатии на экран
+aliases:
+- MotionEvent
+- Touch Events
+- Which Event On Screen Press
+- Какое событие при нажатии на экран
+- События касания
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-custom-views, c-touch-events, c-gesture-detection]
+related:
+- c-custom-views
+- c-touch-events
+- c-gesture-detection
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-views, difficulty/easy, event-handling, motionevent, touch-events]
-
+tags:
+- android/ui-views
+- difficulty/easy
+- event-handling
+- motionevent
+- touch-events
+anki_cards:
+- slug: android-256-0-en
+  language: en
+- slug: android-256-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

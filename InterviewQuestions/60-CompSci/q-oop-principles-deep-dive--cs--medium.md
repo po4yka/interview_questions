@@ -1,51 +1,46 @@
----id: cs-002
-title: "OOP Principles Deep Dive / Глубокое погружение в принципы ООП"
-aliases: ["OOP Principles", "Принципы ООП"]
+---
+id: cs-002
+title: OOP Principles Deep Dive / Глубокое погружение в принципы ООП
+aliases:
+- OOP Principles
+- Принципы ООП
 topic: cs
-subtopics: [abstraction, encapsulation, inheritance]
+subtopics:
+- abstraction
+- encapsulation
+- inheritance
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-oop-principles]
+related:
+- c-architecture-patterns
+- c-oop-principles
 created: 2025-10-12
 updated: 2025-11-11
-tags: [abstraction, composition, difficulty/medium, encapsulation, inheritance, oop, polymorphism]
-sources: ["https://en.wikipedia.org/wiki/Object-oriented_programming"]
+tags:
+- abstraction
+- composition
+- difficulty/medium
+- encapsulation
+- inheritance
+- oop
+- polymorphism
+sources:
+- https://en.wikipedia.org/wiki/Object-oriented_programming
 anki_cards:
 - slug: cs-002-0-en
-  front: |
-    What are the four pillars of OOP?
-  back: |
-    **Four OOP pillars**:
-    
-    1. **Encapsulation**: Bundle data + methods, control access via modifiers
-    2. **Inheritance**: IS-A relationship, code reuse via class hierarchies
-    3. **Polymorphism**: Same interface, different implementations
-    4. **Abstraction**: Hide complexity, expose essential features
-    
-    **Key principle**: Prefer composition over inheritance.
   language: en
-  difficulty: 0.5
-  tags: [cs_oop, difficulty::medium]
+  anki_id: 1769343691290
+  synced_at: '2026-01-25T16:21:31.393183'
 - slug: cs-002-0-ru
-  front: |
-    Каковы четыре столпа ООП?
-  back: |
-    **Четыре столпа ООП**:
-    
-    1. **Инкапсуляция**: Объединение данных и методов, контроль доступа через модификаторы
-    2. **Наследование**: Отношение IS-A, переиспользование кода через иерархии
-    3. **Полиморфизм**: Один интерфейс, разные реализации
-    4. **Абстракция**: Скрытие сложности, выставление только важного
-    
-    **Ключевой принцип**: Предпочитайте композицию наследованию.
   language: ru
-  difficulty: 0.5
-  tags: [cs_oop, difficulty::medium]
-
+  anki_id: 1769343691391
+  synced_at: '2026-01-25T16:21:31.396006'
 ---
 # Вопрос (RU)
 > Каковы четыре столпа ООП? Как работают инкапсуляция, наследование, полиморфизм и абстракция?

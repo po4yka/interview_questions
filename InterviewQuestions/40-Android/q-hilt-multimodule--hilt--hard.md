@@ -1,20 +1,43 @@
 ---
 id: android-hilt-008
 title: Hilt in Multi-module Projects / Hilt в многомодульных проектах
-aliases: [Hilt Multimodule, Multi-module DI, Hilt Gradle Modules, Feature Modules Hilt]
+aliases:
+- Hilt Multimodule
+- Multi-module DI
+- Hilt Gradle Modules
+- Feature Modules Hilt
 topic: android
-subtopics: [di-hilt, architecture, modularization]
+subtopics:
+- di-hilt
+- architecture
+- modularization
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-setup-annotations--hilt--medium, q-hilt-modules-provides--hilt--medium, q-hilt-custom-components--hilt--hard]
+related:
+- q-hilt-setup-annotations--hilt--medium
+- q-hilt-modules-provides--hilt--medium
+- q-hilt-custom-components--hilt--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/architecture, android/modularization, difficulty/hard, hilt, multimodule, dependency-injection]
-
+tags:
+- android/di-hilt
+- android/architecture
+- android/modularization
+- difficulty/hard
+- hilt
+- multimodule
+- dependency-injection
+anki_cards:
+- slug: android-hilt-008-0-en
+  language: en
+- slug: android-hilt-008-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как организовать Hilt в многомодульном Android-проекте? Какие паттерны и best practices существуют?

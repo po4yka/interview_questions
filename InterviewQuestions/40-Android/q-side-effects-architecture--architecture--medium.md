@@ -1,6 +1,6 @@
 ---
-id: android-723
-title: "Side Effects in Reactive Architecture / Побочные эффекты в реактивной архитектуре"
+id: android-arch-004
+title: Side Effects in Reactive Architecture / Побочные эффекты в реактивной архитектуре
 aliases:
 - Side Effects
 - Effects in MVI
@@ -25,13 +25,18 @@ related:
 created: 2026-01-23
 updated: 2026-01-23
 sources:
-- "https://developer.android.com/topic/architecture/ui-layer/events"
-- "https://orbit-mvi.org/Core/side-effects"
+- https://developer.android.com/topic/architecture/ui-layer/events
+- https://orbit-mvi.org/Core/side-effects
 tags:
 - android/architecture
 - android/state-management
 - difficulty/medium
 - side-effects
+anki_cards:
+- slug: android-arch-004-0-en
+  language: en
+- slug: android-arch-004-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

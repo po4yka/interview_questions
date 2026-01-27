@@ -1,19 +1,39 @@
 ---
 id: android-751
 title: ANR Debugging and Prevention / Отладка и Предотвращение ANR
-aliases: [ANR, Application Not Responding, Отладка ANR]
+aliases:
+- ANR
+- Application Not Responding
+- Отладка ANR
 topic: android
-subtopics: [performance, debugging, threading]
+subtopics:
+- performance
+- debugging
+- threading
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-strict-mode--performance--medium, q-profiler-tools--performance--medium]
+related:
+- q-strict-mode--performance--medium
+- q-profiler-tools--performance--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/performance, android/debugging, difficulty/hard, anr, threading]
+tags:
+- android/performance
+- android/debugging
+- difficulty/hard
+- anr
+- threading
+anki_cards:
+- slug: android-751-0-en
+  language: en
+- slug: android-751-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

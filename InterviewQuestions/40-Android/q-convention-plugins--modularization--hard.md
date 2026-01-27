@@ -1,21 +1,41 @@
 ---
 id: android-mod-006
-title: "Gradle Convention Plugins / Gradle Convention плагины"
-aliases: ["Convention Plugins", "Build Logic", "Convention плагины Gradle"]
+title: Gradle Convention Plugins / Gradle Convention плагины
+aliases:
+- Convention Plugins
+- Build Logic
+- Convention плагины Gradle
 topic: android
-subtopics: [modularization, gradle, build-logic]
+subtopics:
+- modularization
+- gradle
+- build-logic
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-module-types--modularization--medium, q-build-time-optimization--modularization--medium]
+related:
+- c-android
+- q-module-types--modularization--medium
+- q-build-time-optimization--modularization--medium
 created: 2026-01-23
 updated: 2026-01-23
 sources: []
-tags: [android/modularization, android/gradle, android/build-logic, difficulty/hard, convention-plugins]
-
+tags:
+- android/modularization
+- android/gradle
+- android/build-logic
+- difficulty/hard
+- convention-plugins
+anki_cards:
+- slug: android-mod-006-0-en
+  language: en
+- slug: android-mod-006-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

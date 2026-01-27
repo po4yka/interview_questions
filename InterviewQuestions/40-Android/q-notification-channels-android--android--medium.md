@@ -1,50 +1,57 @@
----id: android-013
+---
 id: android-713
 anki_cards:
-  - slug: android-013-0-en
-    front: "What are notification channels in Android and why are they required?"
-    back: |
-      **Notification channels** (API 26+) group notifications by type, giving users control over sound/vibration/importance.
-
-      **Required:** Every notification must specify a channel ID on Android 8.0+.
-
-      **Key points:**
-      - App cannot change importance after channel creation
-      - User preferences cannot be overridden
-      - IMPORTANCE_HIGH = heads-up display
-    tags:
-      - android_general
-      - difficulty::medium
-  - slug: android-013-0-ru
-    front: "Что такое каналы уведомлений в Android и почему они обязательны?"
-    back: |
-      **Каналы уведомлений** (API 26+) группируют уведомления по типам, давая пользователям контроль над звуком/вибрацией/важностью.
-
-      **Обязательно:** Каждое уведомление должно указывать ID канала на Android 8.0+.
-
-      **Ключевые моменты:**
-      - Приложение не может изменить важность после создания канала
-      - Настройки пользователя нельзя переопределить
-      - IMPORTANCE_HIGH = heads-up отображение
-    tags:
-      - android_general
-      - difficulty::medium
+- slug: android-013-0-en
+  language: en
+  anki_id: 1769331005139
+  synced_at: '2026-01-25T12:50:10.345842'
+- slug: android-013-0-ru
+  language: ru
+  anki_id: 1769331005160
+  synced_at: '2026-01-25T12:50:10.347584'
+- slug: android-713-0-en
+  language: en
+- slug: android-713-0-ru
+  language: ru
+- slug: q-notification-channels-android--android--medium-0-en
+  language: en
+- slug: q-notification-channels-android--android--medium-0-ru
+  language: ru
 title: Notification Channels / Каналы уведомлений
-aliases: [Notification Channels, Каналы уведомлений]
+aliases:
+- Notification Channels
+- Каналы уведомлений
 topic: android
-subtopics: [notifications, ui-widgets]
+subtopics:
+- notifications
+- ui-widgets
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-communication-surfaces, c-permissions, q-android-app-components--android--easy, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-push-notification-navigation--android--medium]
+related:
+- c-communication-surfaces
+- c-permissions
+- q-android-app-components--android--easy
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-push-notification-navigation--android--medium
 created: 2025-10-05
 updated: 2025-11-10
-tags: [android/notifications, android/ui-widgets, android8, difficulty/medium, importance, notification-channels, notifications]
+tags:
+- android/notifications
+- android/ui-widgets
+- android8
+- difficulty/medium
+- importance
+- notification-channels
+- notifications
 sources:
-  - "https://developer.android.com/guide/topics/ui/notifiers/notifications"
+- https://developer.android.com/guide/topics/ui/notifiers/notifications
 ---
 # Вопрос (RU)
 > Что такое каналы уведомлений в Android?

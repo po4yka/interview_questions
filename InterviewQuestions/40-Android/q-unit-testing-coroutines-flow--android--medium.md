@@ -1,22 +1,52 @@
----\
-id: android-425
-title: "Unit Testing Coroutines and Flow / Юнит-тестирование корутин и Flow"
-aliases: ["Unit Testing Coroutines Flow", "Юнит-тестирование корутин и Flow"]
+---
+id: android-test-006
+title: Unit Testing Coroutines and Flow / Юнит-тестирование корутин и Flow
+aliases:
+- Unit Testing Coroutines Flow
+- Юнит-тестирование корутин и Flow
 topic: android
-subtopics: [coroutines, flow, testing-unit]
+subtopics:
+- coroutines
+- flow
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-coroutines, c-flow, c-testing]
+related:
+- c-coroutines
+- c-flow
+- c-testing
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, mockk, testing, turbine, testing-unit]
-
----\
+tags:
+- android/coroutines
+- android/flow
+- android/testing-unit
+- difficulty/medium
+- mockk
+- testing
+- turbine
+- testing-unit
+anki_cards:
+- slug: android-test-006-0-en
+  language: en
+- slug: android-test-006-0-ru
+  language: ru
+- slug: android-425-0-ru
+  language: ru
+  anki_id: 1768420767387
+  synced_at: '2026-01-14 23:59:27.391565'
+- slug: android-425-0-en
+  language: en
+  anki_id: 1768420767364
+  synced_at: '2026-01-14 23:59:27.369446'
+---
 # Вопрос (RU)
 
 > Как писать юнит-тесты для Kotlin Coroutines и `Flow`? Какие есть best practices и распространённые ошибки?

@@ -1,37 +1,46 @@
 ---
 id: kotlin-flow-010
-title: "SharedFlow Replay and Buffer Configuration / Настройка replay и buffer в SharedFlow"
+title: SharedFlow Replay and Buffer Configuration / Настройка replay и buffer в SharedFlow
 aliases:
-  - SharedFlow Replay Buffer
-  - SharedFlow Configuration
-  - MutableSharedFlow Setup
+- SharedFlow Replay Buffer
+- SharedFlow Configuration
+- MutableSharedFlow Setup
 topic: kotlin
 subtopics:
-  - coroutines
-  - flow
-  - sharedflow
+- coroutines
+- flow
+- sharedflow
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: internal
 status: draft
 moc: moc-kotlin
 related:
-  - c-kotlin
-  - c-flow
-  - q-stateflow-vs-sharedflow--flow--medium
+- c-kotlin
+- c-flow
+- q-stateflow-vs-sharedflow--flow--medium
 created: 2026-01-23
 updated: 2026-01-23
 tags:
-  - coroutines
-  - difficulty/medium
-  - flow
-  - kotlin
-  - sharedflow
-  - buffer
+- coroutines
+- difficulty/medium
+- flow
+- kotlin
+- sharedflow
+- buffer
+anki_cards:
+- slug: kotlin-flow-010-0-en
+  language: en
+  anki_id: 1769344155540
+  synced_at: '2026-01-25T16:29:15.592071'
+- slug: kotlin-flow-010-0-ru
+  language: ru
+  anki_id: 1769344155590
+  synced_at: '2026-01-25T16:29:15.593873'
 ---
 # Vopros (RU)
 > Как настроить `SharedFlow` с replay и buffer? Объясните параметры конфигурации.

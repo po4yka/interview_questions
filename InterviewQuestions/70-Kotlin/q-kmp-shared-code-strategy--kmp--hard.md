@@ -1,21 +1,45 @@
 ---
 id: kotlin-kmp-003
-title: "KMP Shared Code Strategy / Стратегия разделения кода в KMP"
-aliases: [What to Share KMP, KMP Code Sharing Strategy, Platform vs Shared Code]
+title: KMP Shared Code Strategy / Стратегия разделения кода в KMP
+aliases:
+- What to Share KMP
+- KMP Code Sharing Strategy
+- Platform vs Shared Code
 topic: kotlin
-subtopics: [kmp, multiplatform, architecture, code-sharing]
+subtopics:
+- kmp
+- multiplatform
+- architecture
+- code-sharing
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, architecture, code-sharing, difficulty/hard]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- architecture
+- code-sharing
+- difficulty/hard
+anki_cards:
+- slug: kotlin-kmp-003-0-en
+  language: en
+  anki_id: 1769344153740
+  synced_at: '2026-01-25T16:29:13.792672'
+- slug: kotlin-kmp-003-0-ru
+  language: ru
+  anki_id: 1769344153791
+  synced_at: '2026-01-25T16:29:13.795646'
 ---
-
 # Question (EN)
 > What code should you share in KMP vs keep platform-specific? How do you decide?
 

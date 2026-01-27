@@ -1,22 +1,44 @@
----\
+---
 id: android-228
 title: What Is ViewStub / Что такое ViewStub
-aliases: [ViewStub, ViewStub Android]
+aliases:
+- ViewStub
+- ViewStub Android
 topic: android
-subtopics: [performance-rendering, ui-views]
+subtopics:
+- performance-rendering
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-performance, q-compose-core-components--android--medium, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-recyclerview-sethasfixedsize--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- c-performance
+- q-compose-core-components--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-recyclerview-sethasfixedsize--android--easy
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [android/performance-rendering, android/ui-views, difficulty/medium, lazy-loading, optimization, viewstub]
-
----\
+tags:
+- android/performance-rendering
+- android/ui-views
+- difficulty/medium
+- lazy-loading
+- optimization
+- viewstub
+anki_cards:
+- slug: android-228-0-en
+  language: en
+- slug: android-228-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Что такое ViewStub и когда его следует использовать?

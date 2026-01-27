@@ -41,11 +41,11 @@ anki_cards:
 - slug: algo-019-0-en
   language: en
   anki_id: 1769168920326
-  synced_at: '2026-01-23T15:48:41.158513'
+  synced_at: '2026-01-26T09:10:14.528023'
 - slug: algo-019-0-ru
   language: ru
   anki_id: 1769168920348
-  synced_at: '2026-01-23T15:48:41.160303'
+  synced_at: '2026-01-26T09:10:14.530187'
 ---
 # Вопрос (RU)
 > Объясни обходы бинарного дерева (inorder, preorder, postorder, level-order). Как найти LCA (наименьшего общего предка)? Какие типичные задачи на деревья?

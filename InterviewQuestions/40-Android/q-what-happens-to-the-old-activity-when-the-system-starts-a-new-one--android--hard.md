@@ -1,21 +1,46 @@
----\
+---
 id: android-401
 title: Activity Lifecycle on New Activity / Жизненный цикл при запуске новой Activity
-aliases: [Activity Lifecycle on New Activity, Жизненный цикл при запуске новой Activity]
+aliases:
+- Activity Lifecycle on New Activity
+- Жизненный цикл при запуске новой Activity
 topic: android
-subtopics: [activity, lifecycle]
+subtopics:
+- activity
+- lifecycle
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, q-activity-lifecycle-methods--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related:
+- c-activity-lifecycle
+- q-activity-lifecycle-methods--android--medium
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+- q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/lifecycle, difficulty/hard, lifecycle, memory]
-
----\
+tags:
+- android/activity
+- android/lifecycle
+- difficulty/hard
+- lifecycle
+- memory
+anki_cards:
+- slug: android-401-0-en
+  language: en
+  anki_id: 1769330100302
+  synced_at: '2026-01-25T13:02:26.438334'
+- slug: android-401-0-ru
+  language: ru
+  anki_id: 1769330100327
+  synced_at: '2026-01-25T13:02:26.440228'
+---
 # Вопрос (RU)
 > Жизненный цикл при запуске новой `Activity`
 

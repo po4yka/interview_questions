@@ -1,4 +1,16 @@
----id: android-186
+---
+anki_cards:
+- slug: android-738-0-en
+  language: en
+- slug: android-738-0-ru
+  language: ru
+- slug: q-what-layout-allows-overlapping-objects--android--easy-0-en
+  language: en
+- slug: q-what-layout-allows-overlapping-objects--android--easy-0-ru
+  language: ru
+---
+
+id: android-186
 id: android-738
 title: Layout Overlapping Objects / Макет для перекрывающихся объектов
 aliases: [Overlapping Layout, Макет для перекрывания]

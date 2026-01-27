@@ -1,22 +1,38 @@
----\
+---
 id: android-372
-title: "Which Layout For Large List / Какой layout для большого списка"
-aliases: ["Which Layout For Large List", "Какой layout для большого списка"]
+title: Which Layout For Large List / Какой layout для большого списка
+aliases:
+- Which Layout For Large List
+- Какой layout для большого списка
 topic: android
-subtopics: [performance-memory, ui-views]
+subtopics:
+- performance-memory
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-recyclerview, q-recyclerview-sethasfixedsize--android--easy]
+related:
+- c-recyclerview
+- q-recyclerview-sethasfixedsize--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/performance-memory, android/ui-views, difficulty/easy, recyclerview]
-
----\
+tags:
+- android/performance-memory
+- android/ui-views
+- difficulty/easy
+- recyclerview
+anki_cards:
+- slug: android-372-0-en
+  language: en
+- slug: android-372-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Какой layout выбрать для списка из большого количества элементов?

@@ -1,20 +1,40 @@
 ---
 id: android-dagger-008
 title: Understanding Dagger Generated Code / Понимание сгенерированного кода Dagger
-aliases: [Dagger Generated Code, DaggerComponent, Factory Generated]
+aliases:
+- Dagger Generated Code
+- DaggerComponent
+- Factory Generated
 topic: android
-subtopics: [dagger, di-dagger]
+subtopics:
+- dagger
+- di-dagger
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-dagger-component-module--dagger--medium, q-dagger-scopes-custom--dagger--hard]
+related:
+- c-dependency-injection
+- q-dagger-component-module--dagger--medium
+- q-dagger-scopes-custom--dagger--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-dagger, dependency-injection, difficulty/hard, dagger, generated-code, code-generation]
-
+tags:
+- android/di-dagger
+- dependency-injection
+- difficulty/hard
+- dagger
+- generated-code
+- code-generation
+anki_cards:
+- slug: android-dagger-008-0-en
+  language: en
+- slug: android-dagger-008-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Как работает сгенерированный код Dagger и что полезно знать о нём?

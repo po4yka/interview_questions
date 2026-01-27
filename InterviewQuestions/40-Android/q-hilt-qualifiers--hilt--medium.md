@@ -1,20 +1,42 @@
 ---
 id: android-hilt-006
 title: Hilt Qualifiers / Квалификаторы в Hilt
-aliases: [Hilt Qualifiers, Квалификаторы Hilt, Named, Qualifier, Multiple Bindings]
+aliases:
+- Hilt Qualifiers
+- Квалификаторы Hilt
+- Named
+- Qualifier
+- Multiple Bindings
 topic: android
-subtopics: [di-hilt, architecture]
+subtopics:
+- di-hilt
+- architecture
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-modules-provides--hilt--medium, q-hilt-scopes--hilt--hard, q-hilt-setup-annotations--hilt--medium]
+related:
+- q-hilt-modules-provides--hilt--medium
+- q-hilt-scopes--hilt--hard
+- q-hilt-setup-annotations--hilt--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/architecture, difficulty/medium, hilt, qualifiers, dependency-injection]
-
+tags:
+- android/di-hilt
+- android/architecture
+- difficulty/medium
+- hilt
+- qualifiers
+- dependency-injection
+anki_cards:
+- slug: android-hilt-006-0-en
+  language: en
+- slug: android-hilt-006-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как использовать @Qualifier и @Named в Hilt для предоставления нескольких реализаций одного типа?

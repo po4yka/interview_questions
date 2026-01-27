@@ -1,19 +1,39 @@
 ---
 id: android-747
 title: Baseline Profiles and Macrobenchmark / Baseline Profiles и Macrobenchmark
-aliases: [Baseline Profiles, Macrobenchmark Library, Baseline Profiles и Macrobenchmark]
+aliases:
+- Baseline Profiles
+- Macrobenchmark Library
+- Baseline Profiles и Macrobenchmark
 topic: android
-subtopics: [performance, startup, aot-compilation]
+subtopics:
+- performance
+- startup
+- aot-compilation
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-app-startup-optimization--performance--hard, q-profiler-tools--performance--medium]
+related:
+- q-app-startup-optimization--performance--hard
+- q-profiler-tools--performance--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/performance, android/startup, difficulty/hard, baseline-profiles, macrobenchmark]
+tags:
+- android/performance
+- android/startup
+- difficulty/hard
+- baseline-profiles
+- macrobenchmark
+anki_cards:
+- slug: android-747-0-en
+  language: en
+- slug: android-747-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

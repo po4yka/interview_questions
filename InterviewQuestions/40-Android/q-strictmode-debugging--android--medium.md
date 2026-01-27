@@ -1,21 +1,44 @@
----\
+---
 id: android-331
 title: StrictMode Debugging / Отладка StrictMode
-aliases: [StrictMode Debugging, Отладка StrictMode]
+aliases:
+- StrictMode Debugging
+- Отладка StrictMode
 topic: android
-subtopics: [performance-rendering]
+subtopics:
+- performance-rendering
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-performance, q-compose-core-components--android--medium, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-migration-to-compose--android--medium, q-real-time-updates-android--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium]
+related:
+- c-performance
+- q-compose-core-components--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-migration-to-compose--android--medium
+- q-real-time-updates-android--android--medium
+- q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/performance-rendering, difficulty/medium]
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md"
----\
+tags:
+- android/performance-rendering
+- difficulty/medium
+source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
+anki_cards:
+- slug: android-331-0-ru
+  language: ru
+  anki_id: 1768420618793
+  synced_at: '2026-01-14 23:56:58.797492'
+- slug: android-331-0-en
+  language: en
+  anki_id: 1768420618765
+  synced_at: '2026-01-14 23:56:58.768125'
+---
 # Вопрос (RU)
 > Отладка StrictMode
 

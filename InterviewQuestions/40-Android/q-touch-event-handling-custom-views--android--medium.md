@@ -1,22 +1,49 @@
----\
+---
 id: android-378
 title: Touch Event Handling Custom Views / Обработка касаний в пользовательских View
-aliases: [Touch Event Handling Custom Views, Обработка касаний в пользовательских View]
+aliases:
+- Touch Event Handling Custom Views
+- Обработка касаний в пользовательских View
 topic: android
-subtopics: [ui-state, ui-views]
+subtopics:
+- ui-state
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-state, c-viewmodel, q-custom-view-accessibility--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium, q-modularization-patterns--android--hard, q-what-does-itemdecoration-do--android--medium]
+related:
+- c-compose-state
+- c-viewmodel
+- q-custom-view-accessibility--android--medium
+- q-custom-view-attributes--android--medium
+- q-custom-view-lifecycle--android--medium
+- q-modularization-patterns--android--hard
+- q-what-does-itemdecoration-do--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events, views]
-
----\
+tags:
+- android/ui-state
+- android/ui-views
+- difficulty/medium
+- gestures
+- touch-events
+- views
+anki_cards:
+- slug: android-378-0-ru
+  language: ru
+  anki_id: 1768420767340
+  synced_at: '2026-01-14 23:59:27.345083'
+- slug: android-378-0-en
+  language: en
+  anki_id: 1768420767314
+  synced_at: '2026-01-14 23:59:27.319740'
+---
 # Вопрос (RU)
 > Как обрабатывать события касания в пользовательских `View`? Объясните механизм диспетчеризации, разницу между `onTouchEvent()` и `onInterceptTouchEvent()`, и как реализовать пользовательские жесты.
 

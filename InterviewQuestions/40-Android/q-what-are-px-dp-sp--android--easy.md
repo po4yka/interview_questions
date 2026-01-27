@@ -1,22 +1,45 @@
----\
+---
 id: android-268
-title: "What Are Px Dp Sp / Что такое px dp и sp"
-aliases: ["What Are Px Dp Sp", "Что такое px dp и sp"]
+title: What Are Px Dp Sp / Что такое px dp и sp
+aliases:
+- What Are Px Dp Sp
+- Что такое px dp и sp
 topic: android
-subtopics: [ui-theming, ui-views]
+subtopics:
+- ui-theming
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [q-accessibility-text-scaling--android--medium, q-android-app-components--android--easy]
+related:
+- q-accessibility-text-scaling--android--medium
+- q-android-app-components--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags: [accessibility, android/ui-theming, android/ui-views, difficulty/easy, dp, measurement-units, sp]
-
----\
+tags:
+- accessibility
+- android/ui-theming
+- android/ui-views
+- difficulty/easy
+- dp
+- measurement-units
+- sp
+anki_cards:
+- slug: android-268-0-en
+  language: en
+  anki_id: 1769330078876
+  synced_at: '2026-01-25T13:02:17.337323'
+- slug: android-268-0-ru
+  language: ru
+  anki_id: 1769330078899
+  synced_at: '2026-01-25T13:02:17.339200'
+---
 # Вопрос (RU)
 
 > Что такое px, dp и sp в Android?

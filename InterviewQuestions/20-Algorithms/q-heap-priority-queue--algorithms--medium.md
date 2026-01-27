@@ -40,11 +40,11 @@ anki_cards:
 - slug: algo-017-0-en
   language: en
   anki_id: 1769168919869
-  synced_at: '2026-01-23T15:48:41.133831'
+  synced_at: '2026-01-26T09:10:14.508118'
 - slug: algo-017-0-ru
   language: ru
   anki_id: 1769168919896
-  synced_at: '2026-01-23T15:48:41.135201'
+  synced_at: '2026-01-26T09:10:14.509443'
 ---
 # Вопрос (RU)
 > Объясни структуру данных "куча" и приоритетную очередь. Как решать задачи Top K, Merge K Sorted Lists и Median from Data Stream?

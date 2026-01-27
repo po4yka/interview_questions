@@ -1,23 +1,67 @@
----id: android-629
+---
 id: android-730
+anki_cards:
+- slug: android-629-0-en
+  language: en
+  anki_id: 1769330056148
+  synced_at: '2026-01-25T13:02:06.513310'
+- slug: android-629-0-ru
+  language: ru
+  anki_id: 1769330056173
+  synced_at: '2026-01-25T13:02:06.515921'
+- slug: android-730-0-en
+  language: en
+  anki_id: 1769330056198
+  synced_at: '2026-01-25T13:02:06.517624'
+- slug: android-730-0-ru
+  language: ru
+  anki_id: 1769330056223
+  synced_at: '2026-01-25T13:02:06.519335'
+- slug: q-tflite-acceleration-strategies--android--hard-0-en
+  language: en
+  anki_id: 1769330056248
+  synced_at: '2026-01-25T13:02:06.521246'
+- slug: q-tflite-acceleration-strategies--android--hard-0-ru
+  language: ru
+  anki_id: 1769330056272
+  synced_at: '2026-01-25T13:02:06.523178'
 title: TFLite Acceleration Strategies / Стратегии ускорения TFLite
-aliases: [TFLite Acceleration Strategies, Стратегии ускорения TFLite]
+aliases:
+- TFLite Acceleration Strategies
+- Стратегии ускорения TFLite
 topic: android
-subtopics: [performance-battery, performance-memory, threads-sync]
+subtopics:
+- performance-battery
+- performance-memory
+- threads-sync
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-profiling, c-compose-recomposition, c-perfetto, c-power-profiling, q-android-performance-measurement-tools--android--medium, q-android-testing-strategies--android--medium, q-cache-implementation-strategies--android--medium, q-integration-testing-strategies--android--medium]
+related:
+- c-android-profiling
+- c-compose-recomposition
+- c-perfetto
+- c-power-profiling
+- q-android-performance-measurement-tools--android--medium
+- q-android-testing-strategies--android--medium
+- q-cache-implementation-strategies--android--medium
+- q-integration-testing-strategies--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/performance-battery, android/performance-memory, android/threads-sync, difficulty/hard, performance]
+tags:
+- android/performance-battery
+- android/performance-memory
+- android/threads-sync
+- difficulty/hard
+- performance
 sources:
-  - "https://firebase.google.com/docs/ml/manage-hosted-models"
-  - "https://www.tensorflow.org/lite/performance/delegates"
-
+- https://firebase.google.com/docs/ml/manage-hosted-models
+- https://www.tensorflow.org/lite/performance/delegates
 ---
 # Вопрос (RU)
 > Как построить высокопроизводительный pipeline on-device ML на Android: подготовить модель, включить NNAPI/GPU delegate, организовать поток выполнения и обновлять модель по воздуху?

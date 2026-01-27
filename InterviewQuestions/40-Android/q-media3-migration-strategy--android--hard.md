@@ -1,58 +1,52 @@
----id: android-615
+---
 id: android-709
 anki_cards:
-  - slug: android-615-0-en
-    front: "What are key steps to migrate from ExoPlayer to Media3?"
-    back: |
-      **Migration steps:**
-
-      1. **Dependencies:** `exoplayer` -> `media3-exoplayer`
-      2. **Player:** `SimpleExoPlayer` removed, use `ExoPlayer.Builder`
-      3. **Session:** `MediaSessionService` + `MediaSession`
-      4. **UI:** `PlayerView` -> `StyledPlayerView`
-      5. **Listener:** Multiple interfaces -> unified `Player.Listener`
-
-      **Key changes:**
-      - Namespace: `com.google.android.exoplayer2.*` -> `androidx.media3.*`
-      - Use `MediaItem.Builder` for DRM config
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-615-0-ru
-    front: "Какие ключевые шаги миграции с ExoPlayer на Media3?"
-    back: |
-      **Шаги миграции:**
-
-      1. **Зависимости:** `exoplayer` -> `media3-exoplayer`
-      2. **Плеер:** `SimpleExoPlayer` удален, используйте `ExoPlayer.Builder`
-      3. **Сессия:** `MediaSessionService` + `MediaSession`
-      4. **UI:** `PlayerView` -> `StyledPlayerView`
-      5. **Listener:** Несколько интерфейсов -> единый `Player.Listener`
-
-      **Ключевые изменения:**
-      - Namespace: `com.google.android.exoplayer2.*` -> `androidx.media3.*`
-      - Используйте `MediaItem.Builder` для DRM конфигурации
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-615-0-en
+  language: en
+  anki_id: 1769330984465
+  synced_at: '2026-01-25T12:50:09.640868'
+- slug: android-615-0-ru
+  language: ru
+  anki_id: 1769330984486
+  synced_at: '2026-01-25T12:50:09.642792'
+- slug: android-709-0-en
+  language: en
+- slug: android-709-0-ru
+  language: ru
+- slug: q-media3-migration-strategy--android--hard-0-en
+  language: en
+- slug: q-media3-migration-strategy--android--hard-0-ru
+  language: ru
 title: Media3 Migration Strategy / Стратегия миграции на Media3
-aliases: [Media3 Migration Strategy, Стратегия миграции на Media3]
+aliases:
+- Media3 Migration Strategy
+- Стратегия миграции на Media3
 topic: android
-subtopics: [media]
+subtopics:
+- media
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-surfaces, c-android-tv, c-media3, q-global-localization-strategy--android--hard, q-media3-transformer-workflows--android--hard, q-scoped-storage-migration-strategy--android--hard]
+related:
+- c-android-surfaces
+- c-android-tv
+- c-media3
+- q-global-localization-strategy--android--hard
+- q-media3-transformer-workflows--android--hard
+- q-scoped-storage-migration-strategy--android--hard
 created: 2024-11-02
 updated: 2025-11-10
-tags: [android/media, difficulty/hard]
+tags:
+- android/media
+- difficulty/hard
 sources:
-  - "https://developer.android.com/guide/topics/media/media3/getting-started"
-  - "https://medium.com/androiddevelopers/media3-from-exoplayer-migration"
-
+- https://developer.android.com/guide/topics/media/media3/getting-started
+- https://medium.com/androiddevelopers/media3-from-exoplayer-migration
 ---
 # Вопрос (RU)
 > Как мигрировать с ExoPlayer на Media3: перестроить архитектуру плеера, перенести UI, сессии и офлайн-функциональность, не ломая авто/TV интеграцию?

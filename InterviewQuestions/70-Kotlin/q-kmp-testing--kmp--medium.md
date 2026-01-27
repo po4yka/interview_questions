@@ -1,21 +1,43 @@
 ---
 id: kotlin-kmp-010
-title: "Testing Shared Code in KMP / Тестирование общего кода в KMP"
-aliases: [KMP Testing, Multiplatform Testing, Cross-Platform Tests]
+title: Testing Shared Code in KMP / Тестирование общего кода в KMP
+aliases:
+- KMP Testing
+- Multiplatform Testing
+- Cross-Platform Tests
 topic: kotlin
-subtopics: [kmp, multiplatform, testing]
+subtopics:
+- kmp
+- multiplatform
+- testing
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, testing, difficulty/medium]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- testing
+- difficulty/medium
+anki_cards:
+- slug: kotlin-kmp-010-0-en
+  language: en
+  anki_id: 1769344154640
+  synced_at: '2026-01-25T16:29:14.693150'
+- slug: kotlin-kmp-010-0-ru
+  language: ru
+  anki_id: 1769344154691
+  synced_at: '2026-01-25T16:29:14.696707'
 ---
-
 # Question (EN)
 > How do you test shared code across platforms in Kotlin Multiplatform?
 

@@ -1,65 +1,61 @@
----id: android-061
+---
 id: android-707
 anki_cards:
-  - slug: android-061-0-en
-    front: "What are DSL builders in Kotlin and how to create them?"
-    back: |
-      **DSL builders create type-safe, declarative APIs.**
-
-      **Key concepts:**
-      - **Lambda with receiver** `T.() -> Unit` - `this` is T inside block
-      - **@DslMarker** - prevents accessing wrong receiver
-      - **Extension functions** - add builder methods
-
-      ```kotlin
-      fun html(init: HTML.() -> Unit): HTML {
-          return HTML().apply(init)
-      }
-      ```
-
-      **Examples:** Gradle Kotlin DSL, Jetpack Compose
-    tags:
-      - android_compose
-      - kotlin_functions
-      - difficulty::hard
-  - slug: android-061-0-ru
-    front: "Что такое DSL строители в Kotlin и как их создавать?"
-    back: |
-      **DSL строители создают типобезопасные, декларативные API.**
-
-      **Ключевые концепции:**
-      - **Лямбда с получателем** `T.() -> Unit` - `this` равен T внутри блока
-      - **@DslMarker** - предотвращает доступ к неправильному получателю
-      - **Функции-расширения** - добавляют методы строителя
-
-      ```kotlin
-      fun html(init: HTML.() -> Unit): HTML {
-          return HTML().apply(init)
-      }
-      ```
-
-      **Примеры:** Gradle Kotlin DSL, Jetpack Compose
-    tags:
-      - android_compose
-      - kotlin_functions
-      - difficulty::hard
+- slug: android-061-0-en
+  language: en
+  anki_id: 1769330969465
+  synced_at: '2026-01-25T12:50:09.115947'
+- slug: android-061-0-ru
+  language: ru
+  anki_id: 1769330969485
+  synced_at: '2026-01-25T12:50:09.117760'
+- slug: android-707-0-en
+  language: en
+- slug: android-707-0-ru
+  language: ru
+- slug: q-kotlin-dsl-builders--android--hard-0-en
+  language: en
+- slug: q-kotlin-dsl-builders--android--hard-0-ru
+  language: ru
 title: Kotlin DSL Builders / Kotlin DSL строители
-aliases: [Kotlin DSL Builders, Kotlin DSL строители]
+aliases:
+- Kotlin DSL Builders
+- Kotlin DSL строители
 topic: android
-subtopics: [coroutines, ui-compose]
+subtopics:
+- coroutines
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-dsl-builders, c-gradle, c-kotlin, c-kotlin-dsl, c-recomposition, q-gradle-kotlin-dsl-vs-groovy--android--medium, q-kotlin-context-receivers--android--hard, q-kotlin-lambda-expressions--kotlin--medium, q-navigation-methods-in-kotlin--android--medium]
+related:
+- c-compose-recomposition
+- c-dsl-builders
+- c-gradle
+- c-kotlin
+- c-kotlin-dsl
+- c-recomposition
+- q-gradle-kotlin-dsl-vs-groovy--android--medium
+- q-kotlin-context-receivers--android--hard
+- q-kotlin-lambda-expressions--kotlin--medium
+- q-navigation-methods-in-kotlin--android--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags: [android/coroutines, android/ui-compose, api-design, builders, difficulty/hard, dsl, lambdas]
+tags:
+- android/coroutines
+- android/ui-compose
+- api-design
+- builders
+- difficulty/hard
+- dsl
+- lambdas
 sources:
-  - "https://kotlinlang.org/docs/type-safe-builders.html"
-
+- https://kotlinlang.org/docs/type-safe-builders.html
 ---
 # Вопрос (RU)
 > Что такое DSL строители в Kotlin и как их создавать?

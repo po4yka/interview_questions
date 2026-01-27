@@ -1,21 +1,41 @@
 ---
 id: android-mod-002
-title: "API vs Implementation Dependency / API vs Implementation зависимость"
-aliases: ["API vs Implementation", "Gradle Dependencies", "API vs Implementation в Gradle"]
+title: API vs Implementation Dependency / API vs Implementation зависимость
+aliases:
+- API vs Implementation
+- Gradle Dependencies
+- API vs Implementation в Gradle
 topic: android
-subtopics: [modularization, gradle, dependencies]
+subtopics:
+- modularization
+- gradle
+- dependencies
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-module-types--modularization--medium, q-build-time-optimization--modularization--medium]
+related:
+- c-android
+- q-module-types--modularization--medium
+- q-build-time-optimization--modularization--medium
 created: 2026-01-23
 updated: 2026-01-23
 sources: []
-tags: [android/modularization, android/gradle, android/dependencies, difficulty/medium, api-implementation]
-
+tags:
+- android/modularization
+- android/gradle
+- android/dependencies
+- difficulty/medium
+- api-implementation
+anki_cards:
+- slug: android-mod-002-0-en
+  language: en
+- slug: android-mod-002-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

@@ -1,20 +1,43 @@
 ---
-id: android-403
-title: "Turbine Flow Testing / Тестирование Flow с Turbine"
-aliases: ["Turbine Flow Testing", "Тестирование Flow с Turbine"]
+id: android-test-003
+title: Turbine Flow Testing / Тестирование Flow с Turbine
+aliases:
+- Turbine Flow Testing
+- Тестирование Flow с Turbine
 topic: android
-subtopics: [testing-unit, testing, flow]
+subtopics:
+- testing-unit
+- testing
+- flow
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-testing, c-coroutines, q-coroutines-testing--testing--medium, q-testing-coroutines-flow--android--hard, q-stateflow-flow-sharedflow-livedata--android--medium]
+related:
+- c-testing
+- c-coroutines
+- q-coroutines-testing--testing--medium
+- q-testing-coroutines-flow--android--hard
+- q-stateflow-flow-sharedflow-livedata--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/testing-unit, android/flow, difficulty/medium, turbine, flow, coroutines, kotlin]
-
+tags:
+- android/testing-unit
+- android/flow
+- difficulty/medium
+- turbine
+- flow
+- coroutines
+- kotlin
+anki_cards:
+- slug: android-test-003-0-en
+  language: en
+- slug: android-test-003-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

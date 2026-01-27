@@ -1,22 +1,44 @@
----\
+---
 id: android-104
-title: "Why List Scrolling Lags / Почему тормозит скроллинг списка"
-aliases: ["RecyclerView Performance", "Why List Scrolling Lags", "Почему тормозит скроллинг списка"]
+title: Why List Scrolling Lags / Почему тормозит скроллинг списка
+aliases:
+- RecyclerView Performance
+- Why List Scrolling Lags
+- Почему тормозит скроллинг списка
 topic: android
-subtopics: [performance-rendering, threads-sync, ui-views]
+subtopics:
+- performance-rendering
+- threads-sync
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/performance-rendering, android/threads-sync, android/ui-views, difficulty/medium, optimization, performance, recyclerview]
+tags:
+- android/performance-rendering
+- android/threads-sync
+- android/ui-views
+- difficulty/medium
+- optimization
+- performance
+- recyclerview
 moc: moc-android
-related: [c-android-profiler, q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium]
+related:
+- c-android-profiler
+- q-android-app-lag-analysis--android--medium
+- q-android-performance-measurement-tools--android--medium
 sources: []
-
----\
+anki_cards:
+- slug: android-104-0-en
+  language: en
+- slug: android-104-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Почему при скролле может тормозить список?

@@ -1,60 +1,58 @@
----id: android-204
+---
 id: android-710
 anki_cards:
-  - slug: android-204-0-en
-    front: "What is MutableState in Jetpack Compose and why use remember?"
-    back: |
-      **MutableState<T>** - wrapper that triggers recomposition on value change.
-
-      **With remember (correct):**
-      ```kotlin
-      var count by remember { mutableStateOf(0) }
-      ```
-
-      **Without remember (wrong):**
-      ```kotlin
-      var count by mutableStateOf(0) // Resets on recomposition!
-      ```
-
-      `remember` preserves state across recompositions.
-    tags:
-      - android_compose
-      - difficulty::medium
-  - slug: android-204-0-ru
-    front: "Что такое MutableState в Jetpack Compose и зачем нужен remember?"
-    back: |
-      **MutableState<T>** - обертка, вызывающая рекомпозицию при изменении значения.
-
-      **С remember (правильно):**
-      ```kotlin
-      var count by remember { mutableStateOf(0) }
-      ```
-
-      **Без remember (неправильно):**
-      ```kotlin
-      var count by mutableStateOf(0) // Сбрасывается при рекомпозиции!
-      ```
-
-      `remember` сохраняет состояние между рекомпозициями.
-    tags:
-      - android_compose
-      - difficulty::medium
-title: "MutableState в Compose / MutableState in Compose"
-aliases: ["Compose State Management", "MutableState in Compose", "MutableState в Compose", "Изменяемое состояние Compose"]
+- slug: android-204-0-en
+  language: en
+  anki_id: 1769330966014
+  synced_at: '2026-01-25T12:50:08.993888'
+- slug: android-204-0-ru
+  language: ru
+  anki_id: 1769330966037
+  synced_at: '2026-01-25T12:50:08.995451'
+- slug: android-710-0-en
+  language: en
+- slug: android-710-0-ru
+  language: ru
+- slug: q-mutable-state-compose--android--medium-0-en
+  language: en
+- slug: q-mutable-state-compose--android--medium-0-ru
+  language: ru
+title: MutableState в Compose / MutableState in Compose
+aliases:
+- Compose State Management
+- MutableState in Compose
+- MutableState в Compose
+- Изменяемое состояние Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-jetpack-compose, c-mutablestate, c-recomposition, q-compose-remember-derived-state--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-state-hoisting-compose--android--medium]
+related:
+- c-compose-recomposition
+- c-compose-state
+- c-jetpack-compose
+- c-mutablestate
+- c-recomposition
+- q-compose-remember-derived-state--android--medium
+- q-remember-vs-remembersaveable-compose--android--medium
+- q-state-hoisting-compose--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-state, difficulty/medium, recomposition, state-management]
+tags:
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
+- recomposition
+- state-management
 sources: []
-
 ---
 # Вопрос (RU)
 

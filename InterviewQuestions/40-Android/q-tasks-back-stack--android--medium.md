@@ -1,21 +1,47 @@
----\
+---
 id: android-227
 title: Tasks and Back Stack / Задачи и стек возврата
-aliases: [Tasks and Back Stack, Задачи и стек возврата]
+aliases:
+- Tasks and Back Stack
+- Задачи и стек возврата
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, q-background-tasks-decision-guide--android--medium, q-dagger-build-time-optimization--android--medium, q-stack-heap-memory-multiple-threads--android--medium, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related:
+- c-activity-lifecycle
+- q-background-tasks-decision-guide--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-stack-heap-memory-multiple-threads--android--medium
+- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/ui-navigation, back-stack, difficulty/medium, launch-mode, tasks]
-
----\
+tags:
+- android/activity
+- android/ui-navigation
+- back-stack
+- difficulty/medium
+- launch-mode
+- tasks
+anki_cards:
+- slug: android-227-0-ru
+  language: ru
+  anki_id: 1768420618914
+  synced_at: '2026-01-14 23:56:58.918874'
+- slug: android-227-0-en
+  language: en
+  anki_id: 1768420618869
+  synced_at: '2026-01-14 23:56:58.874247'
+---
 # Вопрос (RU)
 > Что вы знаете о задачах и стеке возврата?
 

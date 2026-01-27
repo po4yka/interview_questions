@@ -1,20 +1,47 @@
----\
+---
 id: android-291
 title: Fragments vs Activity / Фрагменты vs Activity
-aliases: [Fragments vs Activity, Фрагменты vs Activity]
+aliases:
+- Fragments vs Activity
+- Фрагменты vs Activity
 topic: android
-subtopics: [activity, fragment, ui-navigation]
+subtopics:
+- activity
+- fragment
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-fragments, q-fragments-and-activity-relationship--android--hard, q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard, q-what-is-activity-and-what-is-it-used-for--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-why-use-fragments-when-we-have-activities--android--medium]
+related:
+- c-activity-lifecycle
+- c-fragments
+- q-fragments-and-activity-relationship--android--hard
+- q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard
+- q-what-is-activity-and-what-is-it-used-for--android--medium
+- q-why-are-fragments-needed-if-there-is-activity--android--hard
+- q-why-use-fragments-when-we-have-activities--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium]
----\
+tags:
+- android/activity
+- android/fragment
+- android/ui-navigation
+- difficulty/medium
+anki_cards:
+- slug: android-291-0-en
+  language: en
+  anki_id: 1769330082698
+  synced_at: '2026-01-25T13:02:15.938207'
+- slug: android-291-0-ru
+  language: ru
+  anki_id: 1769330082723
+  synced_at: '2026-01-25T13:02:15.939947'
+---
 # Вопрос (RU)
 
 > Для чего нужны фрагменты, если есть `Activity`?

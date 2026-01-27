@@ -37,6 +37,11 @@ tags:
 - dependency-injection
 - difficulty/medium
 - architecture
+anki_cards:
+- slug: android-749-0-en
+  language: en
+- slug: android-749-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Как выбрать DI-фреймворк для нового Android-проекта в 2026 году? Какие факторы учитывать?

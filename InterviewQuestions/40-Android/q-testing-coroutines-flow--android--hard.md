@@ -1,22 +1,51 @@
----\
+---
 id: android-312
-title: "Testing Coroutines Flow / Тестирование Coroutines Flow"
-aliases: ["Testing Coroutines Flow", "Тестирование Coroutines Flow"]
+title: Testing Coroutines Flow / Тестирование Coroutines Flow
+aliases:
+- Testing Coroutines Flow
+- Тестирование Coroutines Flow
 topic: android
-subtopics: [coroutines, flow, testing-unit]
+subtopics:
+- coroutines
+- flow
+- testing-unit
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, c-coroutines, q-singleton-scope-binding--android--medium, q-test-coverage-quality-metrics--android--medium, q-what-design-systems-in-android-have-you-worked-with--android--medium]
+related:
+- c-android
+- c-coroutines
+- q-singleton-scope-binding--android--medium
+- q-test-coverage-quality-metrics--android--medium
+- q-what-design-systems-in-android-have-you-worked-with--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/coroutines, android/flow, android/testing-unit, async, coroutines, difficulty/hard, flow, test-dispatcher, turbine]
-
----\
+tags:
+- android/coroutines
+- android/flow
+- android/testing-unit
+- async
+- coroutines
+- difficulty/hard
+- flow
+- test-dispatcher
+- turbine
+anki_cards:
+- slug: android-312-0-ru
+  language: ru
+  anki_id: 1768420619039
+  synced_at: '2026-01-14 23:56:59.043589'
+- slug: android-312-0-en
+  language: en
+  anki_id: 1768420619016
+  synced_at: '2026-01-14 23:56:59.020419'
+---
 # Вопрос (RU)
 
 > Как тестировать suspend функции, `StateFlow` и `SharedFlow`? Объясните TestDispatcher, runTest и библиотеку turbine.

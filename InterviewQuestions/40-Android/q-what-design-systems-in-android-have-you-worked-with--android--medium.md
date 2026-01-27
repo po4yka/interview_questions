@@ -1,4 +1,31 @@
----id: android-361
+---
+anki_cards:
+- slug: android-361-0-en
+  language: en
+  anki_id: 1769330092803
+  synced_at: '2026-01-25T13:02:19.712257'
+- slug: android-361-0-ru
+  language: ru
+  anki_id: 1769330092823
+  synced_at: '2026-01-25T13:02:19.714558'
+- slug: android-732-0-en
+  language: en
+  anki_id: 1769330092848
+  synced_at: '2026-01-25T13:02:19.716110'
+- slug: android-732-0-ru
+  language: ru
+  anki_id: 1769330092874
+  synced_at: '2026-01-25T13:02:19.717922'
+- slug: q-what-design-systems-in-android-have-you-worked-with--android--medium-0-en
+  language: en
+  anki_id: 1769330092898
+  synced_at: '2026-01-25T13:02:19.720160'
+- slug: q-what-design-systems-in-android-have-you-worked-with--android--medium-0-ru
+  language: ru
+  anki_id: 1769330092925
+  synced_at: '2026-01-25T13:02:19.721833'
+---
+id: android-361
 id: android-732
 title: "What Design Systems In Android Have You Worked With / С какими дизайн-системами Android вы работали"
 aliases: ["What Design Systems In Android Have You Worked With", "С какими дизайн-системами Android вы работали"]

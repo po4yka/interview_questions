@@ -130,11 +130,11 @@ anki_cards:
 - slug: cs-010-0-en
   language: en
   anki_id: 1768454342339
-  synced_at: '2026-01-15T09:43:17.024737'
+  synced_at: '2026-01-25T13:01:16.808169'
 - slug: cs-010-0-ru
   language: ru
   anki_id: 1768454342365
-  synced_at: '2026-01-15T09:43:17.026476'
+  synced_at: '2026-01-25T13:01:16.810052'
 ---
 # Вопрос (RU)
 > Зачем нужны Data Class и Sealed Classes? Какие проблемы они решают?

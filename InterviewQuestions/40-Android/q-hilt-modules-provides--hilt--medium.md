@@ -1,20 +1,42 @@
 ---
 id: android-hilt-002
 title: Hilt Modules @Provides @Binds / Модули Hilt @Provides @Binds
-aliases: [Hilt Modules, Модули Hilt, Provides, Binds, Hilt Module]
+aliases:
+- Hilt Modules
+- Модули Hilt
+- Provides
+- Binds
+- Hilt Module
 topic: android
-subtopics: [di-hilt, architecture]
+subtopics:
+- di-hilt
+- architecture
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-setup-annotations--hilt--medium, q-hilt-scopes--hilt--hard, q-hilt-qualifiers--hilt--medium]
+related:
+- q-hilt-setup-annotations--hilt--medium
+- q-hilt-scopes--hilt--hard
+- q-hilt-qualifiers--hilt--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/architecture, difficulty/medium, hilt, dependency-injection, dagger-module]
-
+tags:
+- android/di-hilt
+- android/architecture
+- difficulty/medium
+- hilt
+- dependency-injection
+- dagger-module
+anki_cards:
+- slug: android-hilt-002-0-en
+  language: en
+- slug: android-hilt-002-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как работают модули в Hilt? Объясните разницу между @Module, @Provides и @Binds.

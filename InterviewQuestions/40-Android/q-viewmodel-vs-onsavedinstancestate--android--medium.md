@@ -1,27 +1,49 @@
 ---
 id: android-389
 title: ViewModel vs OnSavedInstanceState / ViewModel против OnSavedInstanceState
-aliases: [ViewModel fefdfb OnSavedInstanceState, ViewModel vs
-      OnSavedInstanceState]
+aliases:
+- ViewModel fefdfb OnSavedInstanceState
+- ViewModel vs OnSavedInstanceState
 topic: android
-subtopics: [architecture-mvvm, lifecycle]
+subtopics:
+- architecture-mvvm
+- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, q-activity-lifecycle-methods--android--medium, q-testing-viewmodels-turbine--android--medium, q-what-is-viewmodel--android--medium, q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]
+related:
+- c-activity-lifecycle
+- q-activity-lifecycle-methods--android--medium
+- q-testing-viewmodels-turbine--android--medium
+- q-what-is-viewmodel--android--medium
+- q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium
 created: 2024-10-15
 updated: 2025-11-11
-tags: [android/architecture-mvvm, android/lifecycle, difficulty/medium,
-      state-management, viewmodel]
-
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- difficulty/medium
+- state-management
+- viewmodel
 anki_synced: true
 anki_slugs:
-  - 40-android-q-viewmodel-vs-onsavedinstancestate-android-medium-p01-en
-  - 40-android-q-viewmodel-vs-onsavedinstancestate-android-medium-p01-ru
+- 40-android-q-viewmodel-vs-onsavedinstancestate-android-medium-p01-en
+- 40-android-q-viewmodel-vs-onsavedinstancestate-android-medium-p01-ru
 anki_last_sync: '2025-11-26T22:32:40.783101'
+anki_cards:
+- slug: android-389-0-en
+  language: en
+  anki_id: 1769330098553
+  synced_at: '2026-01-25T13:02:11.137061'
+- slug: android-389-0-ru
+  language: ru
+  anki_id: 1769330098577
+  synced_at: '2026-01-25T13:02:11.138899'
 ---
 # Вопрос (RU)
 > `ViewModel` vs `onSaveInstanceState`: когда что использовать для сохранения состояния в `Activity`/`Fragment`?

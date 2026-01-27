@@ -27,6 +27,11 @@ related:
 - q-ssl-certificate-pinning--security--hard
 sources:
 - https://developer.android.com/privacy-and-security/security-config
+anki_cards:
+- slug: sec-009-0-en
+  language: en
+- slug: sec-009-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kak nastroit' network_security_config.xml dlya upravleniya setevoj bezopasnost'yu?

@@ -1,6 +1,6 @@
 ---
-id: android-720
-title: "MVI Pattern Deep Dive / Глубокое погружение в MVI"
+id: android-arch-001
+title: MVI Pattern Deep Dive / Глубокое погружение в MVI
 aliases:
 - MVI Components
 - Intent Model View Reducer
@@ -26,14 +26,19 @@ related:
 created: 2026-01-23
 updated: 2026-01-23
 sources:
-- "https://developer.android.com/topic/architecture"
-- "https://hannesdorfmann.com/android/mosby3-mvi-1/"
+- https://developer.android.com/topic/architecture
+- https://hannesdorfmann.com/android/mosby3-mvi-1/
 tags:
 - android/architecture-mvi
 - android/architecture
 - difficulty/hard
 - state-management
 - unidirectional-data-flow
+anki_cards:
+- slug: android-arch-001-0-en
+  language: en
+- slug: android-arch-001-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

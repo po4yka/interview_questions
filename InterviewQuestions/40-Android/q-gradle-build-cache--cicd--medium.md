@@ -1,21 +1,42 @@
 ---
 id: android-cicd-002
-title: "Gradle Build Cache and Configuration Cache / Gradle Build Cache и Configuration Cache"
-aliases: ["Gradle Build Cache", "Gradle Build Cache и Configuration Cache"]
+title: Gradle Build Cache and Configuration Cache / Gradle Build Cache и Configuration
+  Cache
+aliases:
+- Gradle Build Cache
+- Gradle Build Cache и Configuration Cache
 topic: android
-subtopics: [cicd, build-optimization, gradle]
+subtopics:
+- cicd
+- build-optimization
+- gradle
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-github-actions-android--cicd--medium, q-build-variants-flavors--cicd--medium]
+related:
+- q-github-actions-android--cicd--medium
+- q-build-variants-flavors--cicd--medium
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://docs.gradle.org/current/userguide/build_cache.html", "https://docs.gradle.org/current/userguide/configuration_cache.html"]
-tags: [android/cicd, android/build-optimization, difficulty/medium, gradle, build-cache]
-
+sources:
+- https://docs.gradle.org/current/userguide/build_cache.html
+- https://docs.gradle.org/current/userguide/configuration_cache.html
+tags:
+- android/cicd
+- android/build-optimization
+- difficulty/medium
+- gradle
+- build-cache
+anki_cards:
+- slug: android-cicd-002-0-en
+  language: en
+- slug: android-cicd-002-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

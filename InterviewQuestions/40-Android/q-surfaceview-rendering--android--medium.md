@@ -1,21 +1,46 @@
----\
+---
 id: android-346
 title: SurfaceView Rendering / Рендеринг SurfaceView
-aliases: [SurfaceView Rendering, Рендеринг SurfaceView]
+aliases:
+- SurfaceView Rendering
+- Рендеринг SurfaceView
 topic: android
-subtopics: [performance-rendering, ui-views]
+subtopics:
+- performance-rendering
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-surfaces, q-opengl-advanced-rendering--android--medium, q-overdraw-gpu-rendering--android--medium, q-viewgroup-vs-view-differences--android--easy, q-what-methods-redraw-views--android--medium, q-which-class-to-use-for-rendering-view-in-background-thread--android--hard]
+related:
+- c-android-surfaces
+- q-opengl-advanced-rendering--android--medium
+- q-overdraw-gpu-rendering--android--medium
+- q-viewgroup-vs-view-differences--android--easy
+- q-what-methods-redraw-views--android--medium
+- q-which-class-to-use-for-rendering-view-in-background-thread--android--hard
 created: 2023-10-15
 updated: 2025-11-11
-tags: [android/performance-rendering, android/ui-views, difficulty/medium, rendering, surfaceview]
-
----\
+tags:
+- android/performance-rendering
+- android/ui-views
+- difficulty/medium
+- rendering
+- surfaceview
+anki_cards:
+- slug: android-346-0-ru
+  language: ru
+  anki_id: 1768420618838
+  synced_at: '2026-01-14 23:56:58.842579'
+- slug: android-346-0-en
+  language: en
+  anki_id: 1768420618811
+  synced_at: '2026-01-14 23:56:58.814926'
+---
 # Вопрос (RU)
 > Рендеринг SurfaceView
 

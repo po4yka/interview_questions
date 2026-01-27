@@ -1,21 +1,49 @@
----\
+---
 id: android-491
 title: Тестирование ViewModel с Turbine / Testing ViewModels with Turbine
-aliases: [2535414238403e32303d3835 ViewModels, Testing ViewModels, Turbine, Turbine Library]
+aliases:
+- 2535414238403e32303d3835 ViewModels
+- Testing ViewModels
+- Turbine
+- Turbine Library
 topic: android
-subtopics: [coroutines, testing-unit]
+subtopics:
+- coroutines
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-flow, q-accessibility-testing--android--medium, q-android-testing-strategies--android--medium, q-flow-testing-turbine--android--medium, q-integration-testing-strategies--android--medium]
+related:
+- c-flow
+- q-accessibility-testing--android--medium
+- q-android-testing-strategies--android--medium
+- q-flow-testing-turbine--android--medium
+- q-integration-testing-strategies--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/coroutines, android/testing-unit, coroutines, difficulty/medium, flow, testing, turbine]
-
----\
+tags:
+- android/coroutines
+- android/testing-unit
+- coroutines
+- difficulty/medium
+- flow
+- testing
+- turbine
+anki_cards:
+- slug: android-491-0-ru
+  language: ru
+  anki_id: 1768420767144
+  synced_at: '2026-01-14 23:59:27.147172'
+- slug: android-491-0-en
+  language: en
+  anki_id: 1768420767114
+  synced_at: '2026-01-14 23:59:27.121045'
+---
 # Вопрос (RU)
 > Как тестировать `ViewModel`, которые отдают `Flow`/`StateFlow`, с помощью библиотеки Turbine?
 

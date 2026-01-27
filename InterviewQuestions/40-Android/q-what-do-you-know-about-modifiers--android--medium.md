@@ -1,4 +1,31 @@
----id: android-202
+---
+anki_cards:
+- slug: android-202-0-en
+  language: en
+  anki_id: 1769330069028
+  synced_at: '2026-01-25T13:02:21.863384'
+- slug: android-202-0-ru
+  language: ru
+  anki_id: 1769330069048
+  synced_at: '2026-01-25T13:02:21.866889'
+- slug: android-734-0-en
+  language: en
+  anki_id: 1769330069073
+  synced_at: '2026-01-25T13:02:21.868933'
+- slug: android-734-0-ru
+  language: ru
+  anki_id: 1769330069099
+  synced_at: '2026-01-25T13:02:21.870662'
+- slug: q-what-do-you-know-about-modifiers--android--medium-0-en
+  language: en
+  anki_id: 1769330069123
+  synced_at: '2026-01-25T13:02:21.872639'
+- slug: q-what-do-you-know-about-modifiers--android--medium-0-ru
+  language: ru
+  anki_id: 1769330069149
+  synced_at: '2026-01-25T13:02:21.874385'
+---
+id: android-202
 id: android-734
 title: "What Do You Know About Modifiers / Что вы знаете о модификаторах"
 aliases: ["Compose Modifiers", "Модификаторы Compose"]

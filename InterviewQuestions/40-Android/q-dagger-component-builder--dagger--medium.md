@@ -1,20 +1,42 @@
 ---
 id: android-dagger-007
-title: Dagger Component.Builder and Component.Factory / Component.Builder и Component.Factory в Dagger
-aliases: [Component Builder, Component Factory, BindsInstance]
+title: Dagger Component.Builder and Component.Factory / Component.Builder и Component.Factory
+  в Dagger
+aliases:
+- Component Builder
+- Component Factory
+- BindsInstance
 topic: android
-subtopics: [dagger, di-dagger]
+subtopics:
+- dagger
+- di-dagger
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-dagger-component-module--dagger--medium, q-dagger-inject-provides--dagger--medium]
+related:
+- c-dependency-injection
+- q-dagger-component-module--dagger--medium
+- q-dagger-inject-provides--dagger--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-dagger, dependency-injection, difficulty/medium, dagger, component-builder, component-factory, binds-instance]
-
+tags:
+- android/di-dagger
+- dependency-injection
+- difficulty/medium
+- dagger
+- component-builder
+- component-factory
+- binds-instance
+anki_cards:
+- slug: android-dagger-007-0-en
+  language: en
+- slug: android-dagger-007-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Что такое @Component.Builder и @Component.Factory в Dagger и когда что использовать?

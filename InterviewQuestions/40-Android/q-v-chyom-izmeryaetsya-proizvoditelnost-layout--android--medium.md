@@ -1,21 +1,43 @@
 ---
 id: android-391
-title: "В чём измеряется производительность layout / How is layout performance measured"
-aliases: ["How is layout performance measured", "Layout performance metrics", "В чём измеряется производительность layout", "Метрики производительности layout"]
+title: В чём измеряется производительность layout / How is layout performance measured
+aliases:
+- How is layout performance measured
+- Layout performance metrics
+- В чём измеряется производительность layout
+- Метрики производительности layout
 topic: android
-subtopics: [performance-rendering, ui-views]
+subtopics:
+- performance-rendering
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-android-performance-measurement-tools--android--medium]
+related:
+- c-android
+- q-android-performance-measurement-tools--android--medium
 created: 2024-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/performance-rendering, android/ui-views, difficulty/medium, performance/rendering]
-
+tags:
+- android/performance-rendering
+- android/ui-views
+- difficulty/medium
+- performance/rendering
+anki_cards:
+- slug: android-391-0-ru
+  language: ru
+  anki_id: 1768420767522
+  synced_at: '2026-01-14 23:59:27.525571'
+- slug: android-391-0-en
+  language: en
+  anki_id: 1768420767478
+  synced_at: '2026-01-14 23:59:27.482144'
 ---
 # Вопрос (RU)
 

@@ -37,11 +37,11 @@ anki_cards:
 - slug: sec-002-0-en
   language: en
   anki_id: 1768454033640
-  synced_at: '2026-01-15T09:43:17.082954'
+  synced_at: '2026-01-25T13:01:16.912619'
 - slug: sec-002-0-ru
   language: ru
   anki_id: 1768454033665
-  synced_at: '2026-01-15T09:43:17.084229'
+  synced_at: '2026-01-25T13:01:16.914291'
 ---
 # Вопрос (RU)
 > Что такое закрепление сертификатов, зачем оно нужно и как безопасно реализовать его в Android (`OkHttp` и Network Security Config)?

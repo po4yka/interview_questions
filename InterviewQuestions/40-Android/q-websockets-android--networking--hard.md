@@ -1,21 +1,42 @@
 ---
-id: android-751
-title: "WebSocket Implementation on Android / Реализация WebSocket на Android"
-aliases: ["WebSocket Implementation on Android", "Реализация WebSocket на Android"]
+id: android-net-001
+title: WebSocket Implementation on Android / Реализация WebSocket на Android
+aliases:
+- WebSocket Implementation on Android
+- Реализация WebSocket на Android
 topic: android
-subtopics: [networking]
+subtopics:
+- networking
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-networking, q-real-time-updates-android--android--medium, q-ktor-client--networking--medium]
+related:
+- c-networking
+- q-real-time-updates-android--android--medium
+- q-ktor-client--networking--medium
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://square.github.io/okhttp/features/websockets/", "https://ktor.io/docs/client-websockets.html", "https://developer.android.com/guide/background/persistent/getting-started/using-ws"]
-tags: [android/networking, difficulty/hard, websocket, okhttp, real-time, bidirectional-communication]
-
+sources:
+- https://square.github.io/okhttp/features/websockets/
+- https://ktor.io/docs/client-websockets.html
+- https://developer.android.com/guide/background/persistent/getting-started/using-ws
+tags:
+- android/networking
+- difficulty/hard
+- websocket
+- okhttp
+- real-time
+- bidirectional-communication
+anki_cards:
+- slug: android-net-001-0-en
+  language: en
+- slug: android-net-001-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

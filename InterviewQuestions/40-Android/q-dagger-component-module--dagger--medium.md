@@ -1,20 +1,40 @@
 ---
 id: android-dagger-001
 title: Dagger Component and Module Basics / Основы Component и Module в Dagger
-aliases: [Dagger Component, Dagger Module, Component и Module]
+aliases:
+- Dagger Component
+- Dagger Module
+- Component и Module
 topic: android
-subtopics: [dagger, di-dagger]
+subtopics:
+- dagger
+- di-dagger
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, q-dagger-inject-provides--dagger--medium, q-dagger-subcomponents--dagger--hard]
+related:
+- c-dependency-injection
+- q-dagger-inject-provides--dagger--medium
+- q-dagger-subcomponents--dagger--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-dagger, dependency-injection, difficulty/medium, dagger, component, module]
-
+tags:
+- android/di-dagger
+- dependency-injection
+- difficulty/medium
+- dagger
+- component
+- module
+anki_cards:
+- slug: android-dagger-001-0-en
+  language: en
+- slug: android-dagger-001-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Что такое @Component и @Module в Dagger и как они работают вместе?

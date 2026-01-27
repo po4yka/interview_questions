@@ -1,4 +1,20 @@
----id: android-298
+---
+anki_cards:
+- slug: android-298-0-en
+  language: en
+- slug: android-298-0-ru
+  language: ru
+- slug: android-733-0-en
+  language: en
+- slug: android-733-0-ru
+  language: ru
+- slug: q-what-do-you-know-about-modifications--android--medium-0-en
+  language: en
+- slug: q-what-do-you-know-about-modifications--android--medium-0-ru
+  language: ru
+---
+
+id: android-298
 id: android-733
 title: Compose Modifiers / Модификаторы в Compose
 aliases: [Compose Modifiers, Jetpack Compose Modifiers, Модификаторы в Compose]

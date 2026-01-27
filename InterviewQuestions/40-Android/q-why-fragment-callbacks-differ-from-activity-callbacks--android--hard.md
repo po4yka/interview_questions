@@ -1,21 +1,40 @@
----\
+---
 id: android-428
-title: "Почему колбэки Fragment отличаются от колбэков Activity / Why Fragment Callbacks Differ From Activity Callbacks"
-aliases: [Fragment Callbacks, Fragment Lifecycle Differences]
+title: Почему колбэки Fragment отличаются от колбэков Activity / Why Fragment Callbacks
+  Differ From Activity Callbacks
+aliases:
+- Fragment Callbacks
+- Fragment Lifecycle Differences
 topic: android
-subtopics: [activity, fragment, lifecycle]
+subtopics:
+- activity
+- fragment
+- lifecycle
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity, q-fragment-vs-activity-lifecycle--android--medium, q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]
+related:
+- c-activity
+- q-fragment-vs-activity-lifecycle--android--medium
+- q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard]
-
----\
+tags:
+- android/activity
+- android/fragment
+- android/lifecycle
+- difficulty/hard
+anki_cards:
+- slug: android-428-0-en
+  language: en
+- slug: android-428-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Почему колбэки `Fragment` отличаются от колбэков `Activity`?

@@ -1,4 +1,16 @@
----id: android-376
+---
+anki_cards:
+- slug: android-744-0-en
+  language: en
+- slug: android-744-0-ru
+  language: ru
+- slug: q-which-event-is-triggered-when-user-presses-screen--android--medium-0-en
+  language: en
+- slug: q-which-event-is-triggered-when-user-presses-screen--android--medium-0-ru
+  language: ru
+---
+
+id: android-376
 id: android-744
 title: "Which Event Is Triggered When User Presses Screen / Какое событие срабатывает когда пользователь нажимает на экран"
 aliases: ["Touch Events in Android", "События касания в Android"]

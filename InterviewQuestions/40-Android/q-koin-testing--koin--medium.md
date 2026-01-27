@@ -1,19 +1,40 @@
 ---
 id: android-koin-006
 title: Koin Testing / Тестирование с Koin
-aliases: [Koin Testing, checkModules, KoinTest]
+aliases:
+- Koin Testing
+- checkModules
+- KoinTest
 topic: android
-subtopics: [di-koin, testing-unit, dependency-injection]
+subtopics:
+- di-koin
+- testing-unit
+- dependency-injection
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-koin-setup-modules--koin--medium, q-koin-inject-get--koin--medium, q-test-doubles-dependency-injection--android--medium]
+related:
+- q-koin-setup-modules--koin--medium
+- q-koin-inject-get--koin--medium
+- q-test-doubles-dependency-injection--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-koin, android/testing-unit, dependency-injection, difficulty/medium, koin]
+tags:
+- android/di-koin
+- android/testing-unit
+- dependency-injection
+- difficulty/medium
+- koin
+anki_cards:
+- slug: android-koin-006-0-en
+  language: en
+- slug: android-koin-006-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как тестировать приложение с Koin? Объясните checkModules, mock-и и изоляцию тестов.

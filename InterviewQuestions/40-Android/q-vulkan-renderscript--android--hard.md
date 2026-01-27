@@ -1,20 +1,38 @@
----\
+---
 id: android-380
-title: "Vulkan RenderScript / Vulkan и RenderScript"
-aliases: ["Vulkan RenderScript / Vulkan и RenderScript", "Vulkan RenderScript"]
+title: Vulkan RenderScript / Vulkan и RenderScript
+aliases:
+- Vulkan RenderScript / Vulkan и RenderScript
+- Vulkan RenderScript
 topic: android
-subtopics: [performance-rendering]
+subtopics:
+- performance-rendering
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-performance, q-surfaceview-rendering--android--medium]
+related:
+- c-performance
+- q-surfaceview-rendering--android--medium
 created: 2024-10-15
 updated: 2025-11-10
-tags: [android/performance-rendering, difficulty/hard]
----\
+tags:
+- android/performance-rendering
+- difficulty/hard
+anki_cards:
+- slug: android-380-0-en
+  language: en
+  anki_id: 1769330096399
+  synced_at: '2026-01-25T13:02:11.838237'
+- slug: android-380-0-ru
+  language: ru
+  anki_id: 1769330096424
+  synced_at: '2026-01-25T13:02:11.840087'
+---
 # Вопрос (RU)
 > Как использовать Vulkan для низкоуровневых операций на GPU в Android? Какие существуют альтернативы устаревшему RenderScript? Как реализовать compute-шейдеры и GPU-ускоренную обработку изображений?
 

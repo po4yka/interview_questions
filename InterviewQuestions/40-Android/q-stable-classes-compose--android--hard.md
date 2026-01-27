@@ -1,5 +1,23 @@
----id: android-263
+---
+id: android-263
 id: android-728
+anki_cards:
+- slug: android-263-0-en
+  language: en
+  anki_id: 1768420618563
+  synced_at: '2026-01-14T23:56:58.567528'
+- slug: android-263-0-ru
+  language: ru
+  anki_id: 1768420618590
+  synced_at: '2026-01-14T23:56:58.593335'
+- slug: android-728-0-en
+  language: en
+- slug: android-728-0-ru
+  language: ru
+- slug: q-stable-classes-compose--android--hard-0-en
+  language: en
+- slug: q-stable-classes-compose--android--hard-0-ru
+  language: ru
 title: "Stable Classes Compose / Stable Классы Compose"
 aliases: ["Stable Classes Compose", "Stable Классы Compose"]
 topic: android

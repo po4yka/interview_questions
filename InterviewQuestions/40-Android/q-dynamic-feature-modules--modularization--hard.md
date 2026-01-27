@@ -1,21 +1,41 @@
 ---
 id: android-mod-007
-title: "Dynamic Feature Modules / Динамические feature-модули"
-aliases: ["Dynamic Feature Modules", "Play Feature Delivery", "Динамическая доставка модулей"]
+title: Dynamic Feature Modules / Динамические feature-модули
+aliases:
+- Dynamic Feature Modules
+- Play Feature Delivery
+- Динамическая доставка модулей
 topic: android
-subtopics: [modularization, play-feature-delivery, on-demand]
+subtopics:
+- modularization
+- play-feature-delivery
+- on-demand
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-module-types--modularization--medium, q-feature-module-navigation--modularization--hard]
+related:
+- c-android
+- q-module-types--modularization--medium
+- q-feature-module-navigation--modularization--hard
 created: 2026-01-23
 updated: 2026-01-23
 sources: []
-tags: [android/modularization, android/play-feature-delivery, android/on-demand, difficulty/hard, dynamic-features]
-
+tags:
+- android/modularization
+- android/play-feature-delivery
+- android/on-demand
+- difficulty/hard
+- dynamic-features
+anki_cards:
+- slug: android-mod-007-0-en
+  language: en
+- slug: android-mod-007-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

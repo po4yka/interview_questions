@@ -1,21 +1,44 @@
 ---
 id: android-434
-title: "Until What Point Does ViewModel Guarantee State Preservation / До какого момента ViewModel гарантирует сохранение состояния"
-aliases: ["Until What Point Does ViewModel Guarantee State Preservation", "До какого момента ViewModel гарантирует сохранение состояния"]
+title: Until What Point Does ViewModel Guarantee State Preservation / До какого момента
+  ViewModel гарантирует сохранение состояния
+aliases:
+- Until What Point Does ViewModel Guarantee State Preservation
+- До какого момента ViewModel гарантирует сохранение состояния
 topic: android
-subtopics: [lifecycle]
+subtopics:
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-lifecycle, q-mvvm-pattern--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-viewmodel--android--medium]
+related:
+- c-android-lifecycle
+- q-mvvm-pattern--android--medium
+- q-viewmodel-vs-onsavedinstancestate--android--medium
+- q-what-is-viewmodel--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/lifecycle, difficulty/medium, savedstatehandle, viewmodel]
-
+tags:
+- android
+- android/lifecycle
+- difficulty/medium
+- savedstatehandle
+- viewmodel
+anki_cards:
+- slug: android-434-0-ru
+  language: ru
+  anki_id: 1768420767449
+  synced_at: '2026-01-14 23:59:27.454542'
+- slug: android-434-0-en
+  language: en
+  anki_id: 1768420767415
+  synced_at: '2026-01-14 23:59:27.418964'
 ---
 # Вопрос (RU)
 

@@ -30,11 +30,11 @@ anki_cards:
 - slug: cs-suspend-0-en
   language: en
   anki_id: 1768455796694
-  synced_at: '2026-01-15T09:43:17.118861'
+  synced_at: '2026-01-25T13:01:16.947389'
 - slug: cs-suspend-0-ru
   language: ru
   anki_id: 1768455796720
-  synced_at: '2026-01-15T09:43:17.121024'
+  synced_at: '2026-01-25T13:01:16.949601'
 ---
 # Вопрос (RU)
 > Где можно вызывать suspend-функции?

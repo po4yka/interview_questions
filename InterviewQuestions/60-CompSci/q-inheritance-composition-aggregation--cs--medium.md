@@ -5,11 +5,11 @@ anki_cards:
 - slug: oop-002-0-en
   language: en
   anki_id: 1768454534265
-  synced_at: '2026-01-15T09:43:17.045195'
+  synced_at: '2026-01-25T13:01:16.871939'
 - slug: oop-002-0-ru
   language: ru
   anki_id: 1768454534290
-  synced_at: '2026-01-15T09:43:17.046931'
+  synced_at: '2026-01-25T13:01:16.873658'
 aliases:
 - Inheritance Composition Aggregation
 - композиция и агрегация

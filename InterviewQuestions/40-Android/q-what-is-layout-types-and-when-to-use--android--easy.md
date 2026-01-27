@@ -1,22 +1,40 @@
----\
+---
 id: android-134
-title: "What Is Layout Types And When To Use / Типы Layout и когда их использовать"
-aliases: ["What Is Layout Types And When To Use", "What Is Layout Types и When To Use"]
+title: What Is Layout Types And When To Use / Типы Layout и когда их использовать
+aliases:
+- What Is Layout Types And When To Use
+- What Is Layout Types и When To Use
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-layouts, q-annotation-processing--android--medium, q-play-feature-delivery--android--medium]
+related:
+- c-layouts
+- q-annotation-processing--android--medium
+- q-play-feature-delivery--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/ui-views, difficulty/easy, layouts, ui, xml]
-
----\
+tags:
+- android
+- android/ui-views
+- difficulty/easy
+- layouts
+- ui
+- xml
+anki_cards:
+- slug: android-134-0-en
+  language: en
+- slug: android-134-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Что такое layout, какие их виды бывают и когда их использовать?

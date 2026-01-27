@@ -1,5 +1,5 @@
 ---
-id: android-750
+id: android-di-003
 title: Manual DI vs Framework / Ручной DI против фреймворка
 aliases:
 - Manual DI vs Framework
@@ -31,6 +31,11 @@ tags:
 - dependency-injection
 - difficulty/medium
 - architecture
+anki_cards:
+- slug: android-di-003-0-en
+  language: en
+- slug: android-di-003-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 > Когда стоит использовать ручной DI (Manual DI) вместо фреймворка? Какие преимущества и недостатки у каждого подхода?

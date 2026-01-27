@@ -1,58 +1,46 @@
----id: cs-005
-title: "When Inheritance Useful / Когда полезно наследование"
-aliases: ["Inheritance Use Cases", "Когда использовать наследование"]
+---
+id: cs-005
+title: When Inheritance Useful / Когда полезно наследование
+aliases:
+- Inheritance Use Cases
+- Когда использовать наследование
 topic: cs
-subtopics: [composition, inheritance, oop]
+subtopics:
+- composition
+- inheritance
+- oop
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-inheritance]
+related:
+- c-computer-science
+- c-inheritance
 created: 2025-10-13
 updated: 2025-11-11
-tags: [composition, difficulty/medium, has-a, inheritance, is-a, oop, polymorphism]
-sources: ["https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)"]
-
+tags:
+- composition
+- difficulty/medium
+- has-a
+- inheritance
+- is-a
+- oop
+- polymorphism
+sources:
+- https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)
 anki_cards:
-- slug: cs-inherit-0-en
-  front: |
-    When is inheritance useful and when should you prefer composition?
-  back: |
-    **Use inheritance when**:
-    - True IS-A relationship
-    - Need polymorphism
-    - Extending framework classes
-    
-    **Prefer composition when**:
-    - HAS-A relationship
-    - Need flexibility to change behavior
-    - Avoiding tight coupling
-    
-    **Rule**: Favor composition over inheritance.
+- slug: cs-005-0-en
   language: en
-  difficulty: 0.5
-  tags: [cs_oop, difficulty::medium]
-- slug: cs-inherit-0-ru
-  front: |
-    Когда полезно наследование и когда лучше использовать композицию?
-  back: |
-    **Используйте наследование когда**:
-    - Истинное отношение IS-A
-    - Нужен полиморфизм
-    - Расширяете классы фреймворка
-    
-    **Предпочитайте композицию когда**:
-    - Отношение HAS-A
-    - Нужна гибкость смены поведения
-    - Избегаете тесной связанности
-    
-    **Правило**: Предпочитайте композицию наследованию.
+  anki_id: 1769343746614
+  synced_at: '2026-01-25T16:22:26.692824'
+- slug: cs-005-0-ru
   language: ru
-  difficulty: 0.5
-  tags: [cs_oop, difficulty::medium]
-
+  anki_id: 1769343746690
+  synced_at: '2026-01-25T16:22:26.695914'
 ---
 # Вопрос (RU)
 > Когда наследование полезно, а когда нет?

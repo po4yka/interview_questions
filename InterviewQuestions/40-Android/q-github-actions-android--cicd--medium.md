@@ -1,21 +1,42 @@
 ---
 id: android-cicd-001
-title: "GitHub Actions for Android Builds / GitHub Actions для сборки Android"
-aliases: ["GitHub Actions for Android Builds", "GitHub Actions для сборки Android"]
+title: GitHub Actions for Android Builds / GitHub Actions для сборки Android
+aliases:
+- GitHub Actions for Android Builds
+- GitHub Actions для сборки Android
 topic: android
-subtopics: [cicd, build-automation, continuous-integration]
+subtopics:
+- cicd
+- build-automation
+- continuous-integration
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-gradle-build-cache--cicd--medium, q-build-variants-flavors--cicd--medium, q-signing-in-ci--cicd--hard]
+related:
+- q-gradle-build-cache--cicd--medium
+- q-build-variants-flavors--cicd--medium
+- q-signing-in-ci--cicd--hard
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://docs.github.com/en/actions", "https://developer.android.com/build"]
-tags: [android/cicd, android/build-automation, difficulty/medium, github-actions, continuous-integration]
-
+sources:
+- https://docs.github.com/en/actions
+- https://developer.android.com/build
+tags:
+- android/cicd
+- android/build-automation
+- difficulty/medium
+- github-actions
+- continuous-integration
+anki_cards:
+- slug: android-cicd-001-0-en
+  language: en
+- slug: android-cicd-001-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

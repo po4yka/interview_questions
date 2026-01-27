@@ -1,21 +1,44 @@
 ---
 id: kotlin-kmp-002
-title: "KMP Project Structure / Структура KMP проекта"
-aliases: [KMP Source Sets, commonMain androidMain iosMain, Kotlin Multiplatform Structure]
+title: KMP Project Structure / Структура KMP проекта
+aliases:
+- KMP Source Sets
+- commonMain androidMain iosMain
+- Kotlin Multiplatform Structure
 topic: kotlin
-subtopics: [kmp, multiplatform, project-structure]
+subtopics:
+- kmp
+- multiplatform
+- project-structure
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, source-sets, project-structure, difficulty/medium]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- source-sets
+- project-structure
+- difficulty/medium
+anki_cards:
+- slug: kotlin-kmp-002-0-en
+  language: en
+  anki_id: 1769344152865
+  synced_at: '2026-01-25T16:29:12.916943'
+- slug: kotlin-kmp-002-0-ru
+  language: ru
+  anki_id: 1769344152915
+  synced_at: '2026-01-25T16:29:12.919568'
 ---
-
 # Question (EN)
 > What is the source set structure in Kotlin Multiplatform projects (commonMain, androidMain, iosMain)?
 

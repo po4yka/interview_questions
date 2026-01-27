@@ -1,22 +1,40 @@
----\
+---
 id: android-373
-title: "What Are Services For / Для чего нужны Service"
-aliases: ["What Are Services For", "Для чего нужны Service"]
+title: What Are Services For / Для чего нужны Service
+aliases:
+- What Are Services For
+- Для чего нужны Service
 topic: android
-subtopics: [background-execution, service]
+subtopics:
+- background-execution
+- service
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
 status: draft
 moc: moc-android
-related: [c-service, c-workmanager, q-raise-process-priority--android--medium]
+related:
+- c-service
+- c-workmanager
+- q-raise-process-priority--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/background-execution, android/service, background-execution, difficulty/easy, service]
-
----\
+tags:
+- android/background-execution
+- android/service
+- background-execution
+- difficulty/easy
+- service
+anki_cards:
+- slug: android-373-0-en
+  language: en
+- slug: android-373-0-ru
+  language: ru
+---
 # Вопрос (RU)
 
 > Для чего нужны сервисы (Services)?

@@ -1,19 +1,39 @@
 ---
 id: android-koin-001
 title: Koin Setup and Modules / Настройка Koin и модули
-aliases: [Koin Setup, Koin Modules, startKoin, module DSL]
+aliases:
+- Koin Setup
+- Koin Modules
+- startKoin
+- module DSL
 topic: android
-subtopics: [di-koin, dependency-injection]
+subtopics:
+- di-koin
+- dependency-injection
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-koin-inject-get--koin--medium, q-koin-scopes--koin--medium, q-koin-viewmodel--koin--medium]
+related:
+- q-koin-inject-get--koin--medium
+- q-koin-scopes--koin--medium
+- q-koin-viewmodel--koin--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-koin, dependency-injection, difficulty/medium, koin]
+tags:
+- android/di-koin
+- dependency-injection
+- difficulty/medium
+- koin
+anki_cards:
+- slug: android-koin-001-0-en
+  language: en
+- slug: android-koin-001-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Как настроить Koin в Android-приложении? Объясните startKoin, module DSL, single, factory и другие определения.

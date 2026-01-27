@@ -1,5 +1,23 @@
----id: android-429
+---
+id: android-429
 id: android-727
+anki_cards:
+- slug: android-429-0-en
+  language: en
+  anki_id: 1768420618513
+  synced_at: '2026-01-14T23:56:58.518017'
+- slug: android-429-0-ru
+  language: ru
+  anki_id: 1768420618539
+  synced_at: '2026-01-14T23:56:58.542633'
+- slug: android-727-0-en
+  language: en
+- slug: android-727-0-ru
+  language: ru
+- slug: q-stable-annotation-compose--android--hard-0-en
+  language: en
+- slug: q-stable-annotation-compose--android--hard-0-ru
+  language: ru
 title: "Stable Annotation Compose / Stable Compose"
 aliases: ["Stable Annotation Compose", "Stable Compose"]
 topic: android

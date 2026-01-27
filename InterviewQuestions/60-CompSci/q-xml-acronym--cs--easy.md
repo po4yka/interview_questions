@@ -34,11 +34,11 @@ anki_cards:
 - slug: cs-xml-0-en
   language: en
   anki_id: 1768455796343
-  synced_at: '2026-01-15T09:43:17.101096'
+  synced_at: '2026-01-25T13:01:16.929189'
 - slug: cs-xml-0-ru
   language: ru
   anki_id: 1768455796369
-  synced_at: '2026-01-15T09:43:17.102479'
+  synced_at: '2026-01-25T13:01:16.930983'
 ---
 # Вопрос (RU)
 > Как расшифровывается аббревиатура XML?

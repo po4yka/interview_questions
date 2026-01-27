@@ -1,57 +1,55 @@
----id: android-110
+---
 id: android-705
 anki_cards:
-  - slug: android-110-0-en
-    front: "How are VSYNC and recomposition events related in Jetpack Compose?"
-    back: |
-      **VSYNC synchronizes frame rendering with display refresh rate.**
-
-      **Mechanism:**
-      1. State change marks composables for recomposition
-      2. Recomposition scheduled on next frame callback (Choreographer)
-      3. VSYNC-synced frame processes: Composition -> Layout -> Draw
-      4. CPU work must fit frame budget (~16.6ms at 60Hz)
-
-      **Key points:**
-      - State batching: multiple changes -> single recomposition
-      - Intermediate states may be skipped if updates > refresh rate
-      - Use `derivedStateOf`, `drawWithContent` to optimize
-    tags:
-      - android_compose
-      - difficulty::hard
-  - slug: android-110-0-ru
-    front: "Как связаны VSYNC и события рекомпозиции в Jetpack Compose?"
-    back: |
-      **VSYNC синхронизирует рендеринг с частотой обновления экрана.**
-
-      **Механизм:**
-      1. Изменение состояния помечает composable для рекомпозиции
-      2. Рекомпозиция планируется на следующий frame callback (Choreographer)
-      3. VSYNC-синхронизированный кадр выполняет: Composition -> Layout -> Draw
-      4. CPU-работа должна уложиться в бюджет кадра (~16.6мс при 60Hz)
-
-      **Ключевые моменты:**
-      - Батчинг состояний: несколько изменений -> одна рекомпозиция
-      - Промежуточные состояния могут пропускаться при частых обновлениях
-      - Используйте `derivedStateOf`, `drawWithContent` для оптимизации
-    tags:
-      - android_compose
-      - difficulty::hard
-title: How VSYNC and Recomposition Events Are Related / Как связаны VSYNC и события рекомпозиции
-aliases: [VSYNC Recomposition, VSYNC и рекомпозиция]
+- slug: android-110-0-en
+  language: en
+  anki_id: 1769331004489
+  synced_at: '2026-01-25T12:50:10.319828'
+- slug: android-110-0-ru
+  language: ru
+  anki_id: 1769331004510
+  synced_at: '2026-01-25T12:50:10.321413'
+- slug: android-705-0-en
+  language: en
+- slug: android-705-0-ru
+  language: ru
+- slug: q-how-vsync-and-recomposition-events-are-related--android--hard-0-en
+  language: en
+- slug: q-how-vsync-and-recomposition-events-are-related--android--hard-0-ru
+  language: ru
+title: How VSYNC and Recomposition Events Are Related / Как связаны VSYNC и события
+  рекомпозиции
+aliases:
+- VSYNC Recomposition
+- VSYNC и рекомпозиция
 topic: android
-subtopics: [performance-rendering, ui-compose]
+subtopics:
+- performance-rendering
+- ui-compose
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-recomposition, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-mvi-one-time-events--android--medium, q-recomposition-choreographer--android--hard, q-recomposition-compose--android--medium]
+related:
+- c-compose-recomposition
+- c-compose-state
+- c-recomposition
+- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+- q-mvi-one-time-events--android--medium
+- q-recomposition-choreographer--android--hard
+- q-recomposition-compose--android--medium
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags: [android, android/performance-rendering, android/ui-compose, difficulty/hard]
+tags:
+- android
+- android/performance-rendering
+- android/ui-compose
+- difficulty/hard
 ---
 # Вопрос (RU)
 

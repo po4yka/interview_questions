@@ -36,11 +36,11 @@ anki_cards:
 - slug: cs-011-0-en
   language: en
   anki_id: 1768454342388
-  synced_at: '2026-01-15T09:43:17.028132'
+  synced_at: '2026-01-25T13:01:16.812124'
 - slug: cs-011-0-ru
   language: ru
   anki_id: 1768454342414
-  synced_at: '2026-01-15T09:43:17.029670'
+  synced_at: '2026-01-25T13:01:16.814158'
 ---
 # Вопрос (RU)
 > В чем разница между `coroutineScope` и `supervisorScope`? Когда использовать каждый из них?

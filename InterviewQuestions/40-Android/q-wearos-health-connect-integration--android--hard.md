@@ -1,24 +1,46 @@
----\
+---
 id: android-617
 title: Wear OS Health Integration / Интеграция Health Services и Health Connect
-aliases: [Wear OS Health Integration, Интеграция Health Services и Health Connect]
+aliases:
+- Wear OS Health Integration
+- Интеграция Health Services и Health Connect
 topic: android
-subtopics: [sensors, wear]
+subtopics:
+- sensors
+- wear
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-android-auto-guidelines--android--hard, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-integration-testing-strategies--android--medium, q-nearby-nfc-uwb-integration--android--hard]
+related:
+- c-android
+- q-android-auto-guidelines--android--hard
+- q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+- q-integration-testing-strategies--android--medium
+- q-nearby-nfc-uwb-integration--android--hard
 created: 2025-11-02
 updated: 2025-11-11
-tags: [android/sensors, android/wear, difficulty/hard]
+tags:
+- android/sensors
+- android/wear
+- difficulty/hard
 sources:
-  - "https://developer.android.com/guide/health-and-fitness/health-connect"
-  - "https://developer.android.com/training/wearables/health-services"
-
----\
+- https://developer.android.com/guide/health-and-fitness/health-connect
+- https://developer.android.com/training/wearables/health-services
+anki_cards:
+- slug: android-617-0-en
+  language: en
+  anki_id: 1769330076373
+  synced_at: '2026-01-25T13:02:13.612113'
+- slug: android-617-0-ru
+  language: ru
+  anki_id: 1769330076398
+  synced_at: '2026-01-25T13:02:13.614324'
+---
 # Вопрос (RU)
 > Как построить систему сбора и синхронизации данных здоровья на Wear OS: комбинировать Health Services (онлайн измерения, batching) и Health Connect (шаринг на телефон), не нарушая энергобюджет и политику разрешений?
 

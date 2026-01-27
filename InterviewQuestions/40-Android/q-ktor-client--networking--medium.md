@@ -1,21 +1,42 @@
 ---
 id: android-750
-title: "Ktor Client for Android / Ktor Client для Android"
-aliases: ["Ktor Client for Android", "Ktor Client для Android"]
+title: Ktor Client for Android / Ktor Client для Android
+aliases:
+- Ktor Client for Android
+- Ktor Client для Android
 topic: android
-subtopics: [networking]
+subtopics:
+- networking
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-networking, q-retrofit-library--android--medium, q-kmm-ktor-networking--android--medium]
+related:
+- c-networking
+- q-retrofit-library--android--medium
+- q-kmm-ktor-networking--android--medium
 created: 2026-01-23
 updated: 2026-01-23
-sources: ["https://ktor.io/docs/client-overview.html", "https://ktor.io/docs/client-engines.html", "https://ktor.io/docs/client-multiplatform.html"]
-tags: [android/networking, difficulty/medium, http-client, ktor, kotlin-multiplatform, coroutines]
-
+sources:
+- https://ktor.io/docs/client-overview.html
+- https://ktor.io/docs/client-engines.html
+- https://ktor.io/docs/client-multiplatform.html
+tags:
+- android/networking
+- difficulty/medium
+- http-client
+- ktor
+- kotlin-multiplatform
+- coroutines
+anki_cards:
+- slug: android-750-0-en
+  language: en
+- slug: android-750-0-ru
+  language: ru
 ---
 # Vopros (RU)
 

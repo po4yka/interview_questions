@@ -1,4 +1,16 @@
----id: android-062
+---
+anki_cards:
+- slug: android-745-0-en
+  language: en
+- slug: android-745-0-ru
+  language: ru
+- slug: q-windowinsets-edge-to-edge--android--medium-0-en
+  language: en
+- slug: q-windowinsets-edge-to-edge--android--medium-0-ru
+  language: ru
+---
+
+id: android-062
 id: android-745
 title: "WindowInsets & Edge-to-Edge / WindowInsets и Edge-to-Edge"
 aliases: ["WindowInsets & Edge-to-Edge", "WindowInsets и Edge-to-Edge"]

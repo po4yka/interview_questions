@@ -1,20 +1,41 @@
 ---
 id: android-hilt-007
 title: Hilt Entry Points / Точки входа Hilt
-aliases: [Hilt Entry Points, EntryPoint, EntryPointAccessors, Non-Android Classes DI]
+aliases:
+- Hilt Entry Points
+- EntryPoint
+- EntryPointAccessors
+- Non-Android Classes DI
 topic: android
-subtopics: [di-hilt, architecture]
+subtopics:
+- di-hilt
+- architecture
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-setup-annotations--hilt--medium, q-hilt-modules-provides--hilt--medium, q-hilt-custom-components--hilt--hard]
+related:
+- q-hilt-setup-annotations--hilt--medium
+- q-hilt-modules-provides--hilt--medium
+- q-hilt-custom-components--hilt--hard
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/di-hilt, android/architecture, difficulty/hard, hilt, entry-point, dependency-injection]
-
+tags:
+- android/di-hilt
+- android/architecture
+- difficulty/hard
+- hilt
+- entry-point
+- dependency-injection
+anki_cards:
+- slug: android-hilt-007-0-en
+  language: en
+- slug: android-hilt-007-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Что такое @EntryPoint в Hilt? Когда и как использовать EntryPointAccessors для получения зависимостей в классах, не поддерживающих стандартную инъекцию?

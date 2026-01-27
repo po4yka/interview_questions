@@ -1,21 +1,41 @@
 ---
 id: android-mod-001
-title: "Module Types in Android / Типы модулей в Android"
-aliases: ["Module Types", "Android Module Types", "Типы модулей Android"]
+title: Module Types in Android / Типы модулей в Android
+aliases:
+- Module Types
+- Android Module Types
+- Типы модулей Android
 topic: android
-subtopics: [modularization, architecture, gradle]
+subtopics:
+- modularization
+- architecture
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android, q-api-vs-implementation--modularization--medium, q-module-dependency-graph--modularization--hard]
+related:
+- c-android
+- q-api-vs-implementation--modularization--medium
+- q-module-dependency-graph--modularization--hard
 created: 2026-01-23
 updated: 2026-01-23
 sources: []
-tags: [android/modularization, android/architecture, android/gradle, difficulty/medium, module-types]
-
+tags:
+- android/modularization
+- android/architecture
+- android/gradle
+- difficulty/medium
+- module-types
+anki_cards:
+- slug: android-mod-001-0-en
+  language: en
+- slug: android-mod-001-0-ru
+  language: ru
 ---
 # Вопрос (RU)
 

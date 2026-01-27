@@ -1,68 +1,56 @@
----id: android-642
+---
 id: android-715
 anki_cards:
-  - slug: android-642-0-en
-    front: "What are key practices for RTL support in Android apps?"
-    back: |
-      **Enable RTL:**
-      - `android:supportsRtl="true"` in manifest (API 17+)
-      - Use system locale for layout direction
-
-      **Layouts:**
-      - Use `start`/`end` instead of `left`/`right`
-      - `Modifier.padding(start = ...)` in Compose
-      - `android:autoMirrored="true"` for directional icons
-
-      **BiDi text:**
-      - Use `BidiFormatter` for mixed LTR/RTL content
-      - Avoid string concatenation with mixed directions
-
-      **Testing:**
-      - Test with real RTL locales (ar, he, fa)
-      - Screenshot tests for LTR vs RTL comparison
-    tags:
-      - android_general
-      - difficulty::hard
-  - slug: android-642-0-ru
-    front: "Какие ключевые практики для поддержки RTL в Android-приложениях?"
-    back: |
-      **Включение RTL:**
-      - `android:supportsRtl="true"` в манифесте (API 17+)
-      - Используйте системную локаль для направления разметки
-
-      **Разметка:**
-      - Используйте `start`/`end` вместо `left`/`right`
-      - `Modifier.padding(start = ...)` в Compose
-      - `android:autoMirrored="true"` для направленных иконок
-
-      **BiDi текст:**
-      - Используйте `BidiFormatter` для смешанного LTR/RTL контента
-      - Избегайте конкатенации строк с разным направлением
-
-      **Тестирование:**
-      - Тестируйте с реальными RTL-локалями (ar, he, fa)
-      - Скриншотные тесты для сравнения LTR и RTL
-    tags:
-      - android_general
-      - difficulty::hard
+- slug: android-642-0-en
+  language: en
+  anki_id: 1769330982464
+  synced_at: '2026-01-25T12:50:09.559582'
+- slug: android-642-0-ru
+  language: ru
+  anki_id: 1769330982485
+  synced_at: '2026-01-25T12:50:09.561209'
+- slug: android-715-0-en
+  language: en
+- slug: android-715-0-ru
+  language: ru
+- slug: q-rtl-support-best-practices--android--hard-0-en
+  language: en
+- slug: q-rtl-support-best-practices--android--hard-0-ru
+  language: ru
 title: RTL Support Best Practices / Лучшие практики поддержки RTL
-aliases: [1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL, RTL Support Best Practices]
+aliases:
+- 1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL
+- RTL Support Best Practices
 topic: android
-subtopics: [i18n-l10n, ui-views]
+subtopics:
+- i18n-l10n
+- ui-views
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-accessibility, c-android, c-android-resources, c-globalization, q-app-security-best-practices--android--medium, q-multi-module-best-practices--android--hard, q-runtime-permissions-best-practices--android--medium]
+related:
+- c-accessibility
+- c-android
+- c-android-resources
+- c-globalization
+- q-app-security-best-practices--android--medium
+- q-multi-module-best-practices--android--hard
+- q-runtime-permissions-best-practices--android--medium
 created: 2025-10-02
 updated: 2025-11-11
-tags: [accessibility, android/i18n-l10n, android/ui-views, difficulty/hard]
+tags:
+- accessibility
+- android/i18n-l10n
+- android/ui-views
+- difficulty/hard
 sources:
-  - "https://developer.android.com/guide/topics/resources/layout-direction"
-  - "https://material.io/design/usability/bidirectionality.html"
-
+- https://developer.android.com/guide/topics/resources/layout-direction
+- https://material.io/design/usability/bidirectionality.html
 ---
 # Вопрос (RU)
 > Как обеспечить поддержку RTL (справа налево) в Android-приложении: макеты `View`/Compose, зеркалирование ресурсов, BiDi-текст, тестирование и интеграция с локалями?

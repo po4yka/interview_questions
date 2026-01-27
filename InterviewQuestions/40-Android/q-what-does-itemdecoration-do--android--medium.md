@@ -1,21 +1,46 @@
----\
+---
 id: android-309
 title: What Does ItemDecoration Do / Что делает ItemDecoration
-aliases: [ItemDecoration, Что делает ItemDecoration]
+aliases:
+- ItemDecoration
+- Что делает ItemDecoration
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-ui-composition, c-android-view-system, c-recyclerview, q-android-app-components--android--easy, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-recyclerview-itemdecoration-advanced--android--medium]
+related:
+- c-android-ui-composition
+- c-android-view-system
+- c-recyclerview
+- q-android-app-components--android--easy
+- q-dagger-build-time-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-recyclerview-itemdecoration-advanced--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/ui-views, difficulty/medium, itemdecoration, recyclerview]
----\
+tags:
+- android/ui-views
+- difficulty/medium
+- itemdecoration
+- recyclerview
+anki_cards:
+- slug: android-309-0-en
+  language: en
+  anki_id: 1769330084950
+  synced_at: '2026-01-25T13:02:22.586759'
+- slug: android-309-0-ru
+  language: ru
+  anki_id: 1769330084975
+  synced_at: '2026-01-25T13:02:22.588551'
+---
 # Вопрос (RU)
 
 > Что позволяет делать ItemDecoration в `RecyclerView`?

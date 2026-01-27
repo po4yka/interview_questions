@@ -1,21 +1,45 @@
 ---
 id: kotlin-kmp-004
-title: "Compose Multiplatform / Compose Multiplatform"
-aliases: [Compose Multiplatform, Shared UI KMP, Cross-Platform Compose]
+title: Compose Multiplatform / Compose Multiplatform
+aliases:
+- Compose Multiplatform
+- Shared UI KMP
+- Cross-Platform Compose
 topic: kotlin
-subtopics: [kmp, multiplatform, compose, ui]
+subtopics:
+- kmp
+- multiplatform
+- compose
+- ui
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-kotlin
-related: [c-kotlin]
+related:
+- c-kotlin
 created: 2026-01-23
 updated: 2026-01-23
-tags: [kotlin, kmp, multiplatform, compose, ui, difficulty/medium]
+tags:
+- kotlin
+- kmp
+- multiplatform
+- compose
+- ui
+- difficulty/medium
+anki_cards:
+- slug: kotlin-kmp-004-0-en
+  language: en
+  anki_id: 1769344142240
+  synced_at: '2026-01-25T16:29:02.292369'
+- slug: kotlin-kmp-004-0-ru
+  language: ru
+  anki_id: 1769344142290
+  synced_at: '2026-01-25T16:29:02.294059'
 ---
-
 # Question (EN)
 > What is Compose Multiplatform and how does it enable UI sharing in KMP projects?
 

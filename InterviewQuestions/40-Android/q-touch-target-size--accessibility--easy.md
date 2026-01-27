@@ -1,20 +1,41 @@
 ---
 id: android-acc-003
 title: Minimum Touch Target Size / Minimal'nyj razmer oblasti kasaniya
-aliases: [Touch Target Size, 48dp minimum, Razmer oblasti kasaniya]
+aliases:
+- Touch Target Size
+- 48dp minimum
+- Razmer oblasti kasaniya
 topic: android
-subtopics: [accessibility, ui-views, ui-compose]
+subtopics:
+- accessibility
+- ui-views
+- ui-compose
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-what-is-dp--android--easy, q-content-descriptions--accessibility--medium]
+related:
+- c-jetpack-compose
+- q-what-is-dp--android--easy
+- q-content-descriptions--accessibility--medium
 created: 2026-01-23
 updated: 2026-01-23
-tags: [android/accessibility, android/ui-views, android/ui-compose, difficulty/easy, accessibility, touch-target]
-
+tags:
+- android/accessibility
+- android/ui-views
+- android/ui-compose
+- difficulty/easy
+- accessibility
+- touch-target
+anki_cards:
+- slug: android-acc-003-0-en
+  language: en
+- slug: android-acc-003-0-ru
+  language: ru
 ---
 # Vopros (RU)
 > Kakoj minimal'nyj razmer oblasti kasaniya rekomendovan dlya dostupnosti v Android?

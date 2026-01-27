@@ -1,4 +1,16 @@
----id: android-410
+---
+anki_cards:
+- slug: android-742-0-en
+  language: en
+- slug: android-742-0-ru
+  language: ru
+- slug: q-where-is-composition-created-for-calling-composable-function--android--medium-0-en
+  language: en
+- slug: q-where-is-composition-created-for-calling-composable-function--android--medium-0-ru
+  language: ru
+---
+
+id: android-410
 id: android-742
 title: "Где создается Composition для вызова composable функции / Where Is Composition Created For Calling Composable Function"
 aliases: ["Where Is Composition Created", "Где создается Composition"]
