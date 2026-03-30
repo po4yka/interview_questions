@@ -94,8 +94,7 @@ jobs:
           EOF
 
           # Add vault statistics
-          cd automation
-          uv run vault graph-stats >> ../reports/VAULT-HEALTH-SUMMARY.md
+          (cd automation && uv run vault graph-stats) >> reports/VAULT-HEALTH-SUMMARY.md
 
           cat >> reports/VAULT-HEALTH-SUMMARY.md << 'EOF'
 
