@@ -1,0 +1,61 @@
+================================================================================
+Vault Network Statistics
+================================================================================
+
+Basic Metrics:
+  Total Notes:          1897
+  Total Links:          10283
+  Average Degree:       10.84
+  Network Density:      0.0029
+  Connected Components: 329
+
+Link Quality:
+  Reciprocal Links:     862
+  Unidirectional Links: 8559
+  Orphaned Notes:       325 (17.1%)
+  Isolated Notes:       617 (32.5%)
+
+Top 20 Hub Notes (Most Outgoing Links):
+  moc-android: 179 outgoing
+  moc-kotlin: 118 outgoing
+  moc-performance: 92 outgoing
+  c-coroutines: 82 outgoing
+  q-kotlin-flow-basics--kotlin--medium: 78 outgoing
+  moc-testing: 66 outgoing
+  q-kotlin-coroutines-introduction--kotlin--medium: 46 outgoing
+  moc-algorithms: 44 outgoing
+  q-flow-combining-zip-combine--kotlin--medium: 34 outgoing
+  q-jetpack-compose-basics--android--medium: 34 outgoing
+  q-coroutine-builders-basics--kotlin--easy: 33 outgoing
+  q-coroutine-scope-basics--kotlin--easy: 32 outgoing
+  q-flow-cold-flow-fundamentals--kotlin--easy: 32 outgoing
+  q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium: 32 outgoing
+  moc-system-design: 31 outgoing
+  q-how-to-create-list-like-recyclerview-in-compose--android--medium: 28 outgoing
+  00-MOC-Start-Here: 28 outgoing
+  q-sharedflow-replay-buffer-config--kotlin--medium: 26 outgoing
+  q-navigation-methods-in-android--android--medium: 26 outgoing
+  q-save-markdown-structure-database--android--medium: 26 outgoing
+
+Top 20 Authority Notes (Most Incoming Links):
+  c-kotlin: 434 incoming
+  c-coroutines: 221 incoming
+  q-android-app-components--android--easy: 93 incoming
+  c-flow: 90 incoming
+  c-android: 80 incoming
+  c-lifecycle: 79 incoming
+  c-dependency-injection: 78 incoming
+  c-jetpack-compose: 77 incoming
+  q-compose-performance-optimization--android--hard: 77 incoming
+  q-android-performance-measurement-tools--android--medium: 74 incoming
+  q-kotlin-flow-basics--kotlin--medium: 63 incoming
+  c-architecture-patterns: 62 incoming
+  c-android-components: 61 incoming
+  moc-android: 61 incoming
+  q-recyclerview-sethasfixedsize--android--easy: 59 incoming
+  c-compose-state: 58 incoming
+  moc-backend: 54 incoming
+  q-compose-custom-layout--android--hard: 51 incoming
+  q-testing-flow-operators--kotlin--hard: 48 incoming
+  moc-kotlin: 46 incoming
+
